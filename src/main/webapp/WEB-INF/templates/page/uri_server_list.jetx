@@ -1,0 +1,88 @@
+#set(title="服务状况")
+#set(navbar="page")
+#tag layout_block("headContent")
+<style>
+	.table td:nth-child(n+2) {
+		text-align: right;
+	}
+
+	.table td:nth-child(1) {
+		max-width: 200px;
+	}
+
+	input.day {
+		width: 80px;
+	}
+
+	.hchart {
+		margin-left: 5px;
+		width: 98%;
+		height: 250px;
+	}
+</style>
+#end
+#tag layout_block("bodyContent")
+<div class="row headbar">
+	<ol class="breadcrumb">
+		<li><a href="${CONTEXT_PATH}/page/"><span class="glyphicon glyphicon-home"></span></a></li>
+        <li><a href="${CONTEXT_PATH}/page?uri=${uri}&last=${last}&server=${server}&day=${day}">$!{uri}</a></li>
+    	<li><a href="${CONTEXT_PATH}/uri?uri=${uri}&last=${last}&app=${app}&server=${server}&day=${day}">$!{app}</a></li>
+		<li class="active">$!{server}</li>
+	</ol>
+</div>
+
+#if (highcharts)
+<div id="highcharts" class="row"></div>
+#end
+
+<div class="row">
+	<table id="datatable" class="datatable table table-striped table-bordered table-condensed">
+		<thead>
+		<tr>
+			<th>时间</th>
+			<th>总PV</th>
+			<th>PV20X</th>
+			<th>PV30X</th>
+			<th>PV40X</th>
+			<th>PV50X</th>
+			<th>耗时(ms)</th>
+			<th>失败数</th>
+			<th>失败率%</th>
+			<th>爬虫率%</th>
+		</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+#end
+#tag layout_block("scriptContent")
+
+
+#if (highcharts)#include("/include/highcharts.jetx") #end
+<script>
+	var data = ${data};
+	$(document).ready(function () {
+		$('#datatable').dataTable({
+			searching:false,
+			paging: false,
+			info: true,
+			fixedHeader: fixedHeaderObject,
+			language: lang,
+			dom: bootstrapDom,
+			order: [[0, 'desc']],
+			lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
+			data: data,
+
+			createdRow: function (row, data, dataIndex) {
+				if (data[8] >= 1.0) {
+					$(row).addClass('danger');
+				} else if (data[8] >= 0.1) {
+					$(row).addClass('warning')
+				}
+			}
+		});
+	});
+</script>
+#end
+#include("/include/layout.jetx")

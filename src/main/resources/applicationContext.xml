@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!-- Root Context: defines shared resources visible to all other web components -->
+    <context:component-scan base-package="com.github.trace.service,com.github.trace.intern"/>
+
+    <!-- blocked autowire -->
+    <context:annotation-config/>
+
+    <bean class="com.fxiaoke.metrics.MetricsConfiguration"/>
+
+    <import resource="classpath:spring/spring-guava.xml"/>
+    <import resource="classpath:spring/spring-db.xml"/>
+<!--    <import resource="classpath:spring/spring-shiro.xml"/>-->
+    <import resource="classpath:spring/spring-scheduler.xml"/>
+
+    <bean id="redisCache" class="com.github.jedis.support.JedisFactoryBean" p:configName="oss-web-redis"/>
+
+    <!-- 使用全局的日期格式化 -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="registerDefaultFormatters" value="false"/>
+        <property name="formatters">
+            <set>
+                <bean class="org.springframework.format.number.NumberFormatAnnotationFormatterFactory"/>
+            </set>
+        </property>
+        <property name="formatterRegistrars">
+            <set>
+                <bean class="org.springframework.format.datetime.joda.JodaTimeFormatterRegistrar">
+                    <property name="dateFormatter">
+                        <bean class="org.springframework.format.datetime.joda.DateTimeFormatterFactoryBean">
+                            <property name="pattern" value="yyyyMMdd"/>
+                        </bean>
+                    </property>
+                </bean>
+            </set>
+        </property>
+    </bean>
+
+    <!-- 启用@AspectJ注解 -->
+    <aop:aspectj-autoproxy/>
+
+    <bean id="serviceProfiler" class="com.github.trace.aop.ServiceProfiler"/>
+    <aop:config>
+        <aop:aspect ref="serviceProfiler">
+            <aop:around method="profile" pointcut="execution(* com.github.trace.service.Influx*.*(..))"/>
+            <aop:around method="profile" pointcut="execution(* com.github.trace.service.ElasticSearch.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+    <beans profile="default">
+        <context:property-placeholder ignore-resource-not-found="true" location="classpath:application.properties"/>
+    </beans>
+
+    <beans profile="foneshare">
+        <context:property-placeholder ignore-resource-not-found="true" location="classpath:application-foneshare.properties"/>
+    </beans>
+</beans>

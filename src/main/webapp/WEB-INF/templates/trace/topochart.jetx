@@ -1,0 +1,170 @@
+#set(title="分布式调用跟踪")
+#set(navbar="trace")
+#tag layout_block("headContent")
+<style>
+	#accessInfo td:nth-child(n+3) {
+		text-align: right
+	}
+
+	#rpcInfo td:nth-child(2) {
+		text-align: right
+	}
+
+	.table td {
+		white-space: normal;
+	}
+
+	#rpcInfo th:nth-child(4) {
+		max-width: 300px;
+	}
+
+	@media (min-width: 768px) {
+		.form-control {
+			width: 300px !important;
+		}
+	}
+    #treemap{
+        margin-left: 10px;
+    }
+</style>
+<script src="//www.fspage.com/oss/echart/js/echarts.js"></script>
+<script type="text/javascript">
+    // 路径配置
+    require.config({
+                       paths: {
+                           echarts: '//www.fspage.com/oss/echart/js'
+                       }
+                   });
+
+
+</script>
+#end
+#tag layout_block("bodyContent")
+<div class="row headbar">
+	<ol class="breadcrumb">
+		<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+		<li class="active">调用跟踪</li>
+	</ol>
+</div>
+
+<div class="row" style="padding:8px 0px 0px 10px;">
+	<form class="form-inline">
+		<div class="form-group input-group">
+			<span class="input-group-addon">TraceId</span>
+			<input class="form-control" name="traceId" value="$!{traceId}" type="text">
+		</div>
+		<input id="submit_btn" class="btn btn-primary btn-small" type="submit" value="查看"/>
+	</form>
+	<br/>
+</div>
+<br/>
+<div id="treemapDiv" class="row">
+    <legend>RPC调用拓扑图</legend>
+    <div id="treemap" style="width:800px;height: 600px;">
+
+    </div>
+</div>
+
+
+#end
+#tag layout_block("scriptContent")
+<script>
+    var treemapHeight;
+    var treemapWidth;
+  $(document).ready(function () {
+
+      treemapHeight = ($(window).height()-210)>500?($(window).height()-210):500;
+      treemapWidth = $('#treemapDiv').width()-30;
+      $('#treemap').css('width',treemapWidth+'px');
+      $('#treemap').css('height',treemapHeight+'px');
+
+
+  });
+
+  var echarts;
+  var myChart;
+  var treemapdata = ${treemapdata};
+
+  function requireCallback (ec, defaultTheme) {
+      echarts = ec;
+      refresh();
+      window.onresize = myChart.resize;
+  }
+
+  require(
+          [
+              'echarts',
+              'echarts/chart/treemap',
+              'echarts/chart/tree'
+          ],requireCallback
+  );
+
+  function refresh(){
+      var  option = {
+          title : {
+              text: ''
+          },
+          tooltip : {
+              trigger: 'item',
+              formatter: "花费:{c}ms"
+          },
+          toolbox: {
+              show : false,
+              feature : {
+                  mark : {show: true},
+                  dataView : {show: true, readOnly: false},
+                  restore : {show: true},
+                  saveAsImage : {show: true}
+              }
+          },
+          series : [
+              {
+                  name:'树图',
+                  type:'tree',
+                  orient: 'horizontal',  // vertical horizontal
+                  rootLocation: {x: 100,y: 'top'}, // 根节点位置  {x: 100, y: 'center'}
+                  nodePadding: 18,
+                  layerPadding: 150,
+                  hoverable: false,
+                  roam: true,
+                  itemStyle: {
+                      normal: {
+                          label: {
+                              position:'right',
+                              show: true,
+                              formatter: "{b}",
+                              textStyle: {
+                                  color: '#000',
+                                  fontSize: 5
+                              }
+                          },
+                          lineStyle: {
+                              color: '#48b',
+                              shadowColor: '#000',
+                              shadowBlur: 3,
+                              shadowOffsetX: 3,
+                              shadowOffsetY: 5,
+                              type: 'curve' // 'curve'|'broken'|'solid'|'dotted'|'dashed'
+                          }
+                      },
+                      emphasis: {
+                          label: {
+                              show: true
+                          }
+                      }
+                  },
+
+                  data: treemapdata
+              }
+          ]
+      };
+
+      var curTheme = {};
+      var domMain = document.getElementById('treemap');
+      myChart = echarts.init(domMain,curTheme);
+      myChart.setOption(option, true);
+  }
+  refresh();
+</script>
+#end
+#include("/include/layout.jetx")

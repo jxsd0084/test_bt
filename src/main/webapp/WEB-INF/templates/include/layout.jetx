@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>${title}</title>
+    <link href="//www.fspage.com/oss/datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//www.fspage.com/oss/css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="./img/zTreeStyle.css" rel="stylesheet" type="text/css">
+    <style>
+        #include("/include/global.min.css")
+        td.highlight {
+            font-weight: bold;
+            color: red;
+        }
+        .highlight {
+            background-color: #FFFF88 !important;
+        }
+        .highlightrow {
+            background-color: #FFFF88 !important;
+        }
+    </style>
+	#tag layout_block_default("headContent")#end
+</head>
+<body>
+    #include("nav.inc.jetx")
+<div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2"
+     id="main-body">
+     <IFRAME ID="demoFrame" FRAMEBORDER=0 SCROLLING=AUTO SRC=""></IFRAME>
+    <div>
+        #include("alert.inc.jetx")
+        #tag layout_block_default("bodyContent")#end
+        #tag layout_block("mark")#end
+    </div>
+</div>
+<script src="//www.fspage.com/oss/datatables.min.js"></script>
+<script src="//www.fspage.com/oss/my97datepicker/WdatePicker.js"></script>
+<script src="//static.fs.cn/static/jquery.highlight-5.closure.js"></script>
+<script src="./img/jquery.ztree.core.js"></script>
+
+<script>
+	window._gtag = {traceId: '${requestScope.PV_TRACE_ID}', ajaxCount: 0};
+                #include("/include/global.min.js")
+<!--
+	var zTree;
+	var demoDiv;
+    var setting = {
+  		view: {
+  			dblClickExpand: false,
+  			showLine: true,
+  			selectedMulti: false
+  		},
+  		data: {
+  			simpleData: {
+  				enable:true,
+  				idKey: "id",
+  				pIdKey: "pId",
+  				rootPId: ""
+  			}
+  		},
+  		callback: {
+  			beforeClick: function(treeId, treeNode) {
+  				var zTree = $.fn.zTree.getZTreeObj("tree");
+  				if (treeNode.isParent) {
+  					zTree.expandNode(treeNode);
+  					return false;
+  				} else {
+  					demoDiv.attr("src",treeNode.file);
+  					return true;
+  				}
+  			}
+  		}
+  	};
+	var zNodes =[
+		{id:1, pId:0, name:"前端埋点", open:true},
+		{id:101, pId:1, name:"WEB", file:"${CONTEXT_PATH}/service"},
+		{id:102, pId:1, name:"Andriod-IOS", file:"${CONTEXT_PATH}/service"},
+
+		{id:2, pId:0, name:"后端埋点", open:true},
+		{id:201, pId:2, name:"企信", file:"${CONTEXT_PATH}/service"},
+		{id:206, pId:2, name:"协同", file:"${CONTEXT_PATH}/service"},
+		{id:207, pId:2, name:"CRM", file:"${CONTEXT_PATH}/service"}
+	];
+
+	$(document).ready(function(){
+		var t = $("#tree");
+		t = $.fn.zTree.init(t, setting, zNodes);
+				demoDiv = $("demoFrame");
+        		var zTree = $.fn.zTree.getZTreeObj("tree");
+        		zTree.selectNode(zTree.getNodeByParam("id", 101));
+	});
+-->
+
+</script>
+#tag layout_block_default("scriptContent")#end
+</body>
+</html>

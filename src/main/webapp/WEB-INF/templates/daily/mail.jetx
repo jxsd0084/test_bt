@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <style type="text/css">
+    table {
+      font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+      width: 90%;
+      border-collapse: collapse;
+    }
+
+    table, td, th {
+      border: 1px solid black;
+    }
+
+    table td:nth-child(n+4) {
+      max-width: 120px;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .danger {
+      background-color: #f08080
+    }
+
+    .warning {
+      background-color: #f7e1b5
+    }
+  </style>
+</head>
+<body>
+  #define(List data)
+  <table align='center'>
+    <tr>
+      <td>序号</td>
+      <td>服务名</td>
+      <td>说明</td>
+      <td>调用量</td>
+      <td>失败数</td>
+      <td>失败率</td>
+      <td>超时率</td>
+      <td>平均耗时</td>
+    </tr>
+    #for (Oss oss : data)
+    #if (oss.fail > 1.0)
+    <tr class="danger">
+    #elseif  (oss.fail > 0.1)
+    <tr class="warning">
+    #else
+    <tr>
+    #end
+    <td>${for.index}</td>
+    <td>
+		    <a href="http://oss.foneshare.cn/oss/detail?name=${oss.name.escapeUrl()}${parameter}" target="_blank">$!{oss.name}</a>
+    </td>
+	  <td>${oss.desc}</td>
+    <td>${oss.total}</td>
+    <td>${oss.failNum}</td>
+    <td>${oss.fail}</td>
+    <td>${oss.slow}</td>
+    <td>${oss.cost}</td>
+  </tr>
+  #end
+</table>
+<div align="center"><a href="http://oss.foneshare.cn/oss/daily/?day=${day}">了解详情？</a></div>
+</body>
+</html>

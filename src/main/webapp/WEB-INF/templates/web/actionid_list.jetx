@@ -1,0 +1,133 @@
+#set(title="WEB访问详情")
+#set(navbar="web")
+#tag layout_block("headContent")
+<style>
+  .table td:nth-child(n) {
+    text-align: right;
+  }
+
+  .hchart {
+    margin-left: 5px;
+    width: 98%;
+    height: 250px;
+  }
+  input.day {
+    width: 80px;
+  }
+</style>
+#end
+#tag layout_block("bodyContent")
+
+<div class="row headbar">
+  <ol class="breadcrumb">
+    <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+    <li class="active"><a href="?actionid=${actionid}&browser=${browser}&last=${last}">$!{actionid}</a></li>
+  </ol>
+  <div class="sel_list">
+    <div>
+      <select class="pull-right form-control input-sm" id="selectTime">
+        #for (t : times)
+        <option value="${t}"#if(t==last) selected="selected"#end>Last ${t}</option>
+      #end
+      </select>
+      <select class="pull-right" id="selectBrowser">
+        #for (t : browserList)
+        <option value="${t}"#if(t==browser) selected="selected"#end>浏览器版本 ${t}</option>
+      #end
+      </select>
+
+      <div class="input-prepend pull-right" style="margin: -8px 20px">
+			<span style="margin-right: 20px">
+				<a class="btn btn-default btn-xs"
+           href="?actionid=${actionid}&browser=${browser}&day=${lastWeek}&last=${last}">上周</a>
+				<a class="btn btn-default btn-xs" href="?actionid=${actionid}&browser=${browser}&last=${last}&day=${lastDay}">前一天</a>
+				<a class="btn btn-info btn-xs" href="?actionid=${actionid}&browser=${browser}&last=${last}&day=${now}">今天</a>
+			</span>
+        <input class="day input-xs" name="day" value="${day?:now}" id="dNow" type="text"/>
+        <span class="glyphicon glyphicon-calendar" onclick="WdatePicker({el:'dNow', maxDate:'${now}', onpicked:function(dp){$('#dNow').change()}})"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div>
+    <a class="btn btn-primary btn-sm">${day?:now}</a>
+    <a class="btn btn-default btn-sm"
+       href="actionid_cmp?last=${last}&actionid=${actionid}&browser=${browser}&day=${day?:now}&cmp=${lastDay}">对比前一天</a>
+    <a class="btn btn-default btn-sm"
+       href="actionid_cmp?last=${last}&actionid=${actionid}&browser=${browser}&day=${day?:now}&cmp=${lastWeek}">对比上周</a>
+  </div>
+  #if (highcharts)
+    <div id="highcharts" class="hchart"></div>
+  #end
+
+  <div class="row">
+    <div>
+      <table id="datatable" class="datatable table table-striped table-bordered table-condensed">
+        <thead>
+        <tr>
+          <th width="100px">时间</th>
+          #if (actionid=="domload")
+            <th>HEAD耗时(ms)</th>
+            <th>BODY耗时(ms)</th>
+            <th>DOM耗时(ms)</th>
+          #end
+          <th>平均耗时(ms)</th>
+          <th>PV</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+#end
+  #tag layout_block("scriptContent")
+
+  #if (highcharts)
+    #if (actionid=="domload")
+      #include("/include/domloadhighcharts.jetx")
+    #else
+      #include("/include/actionidhighcharts.jetx")
+    #end
+  #end
+  <script>
+    var data = ${data};
+    $(document).ready(function () {
+      $('#datatable').dataTable({
+        stateSave: false,
+        searching: false,
+        autowidth: true,
+        paging: false,
+        info: true,
+        fixedHeader: fixedHeaderObject,
+        language: lang,
+        dom: bootstrapDom,
+        order: [[0, 'desc']],
+        lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
+        data: data,
+
+        createdRow: function (row, data, dataIndex) {
+          if (data[5] >= 1000) {
+            $(row).addClass('danger');
+          } else if (data[5] >= 200) {
+            $(row).addClass('warning')
+          }
+        }
+      });
+      var prefix = "${urlPrefix}";
+      $("#selectTime").on('change', function () {
+        window.location.href = '?last=' + this.value + prefix.replace(/&last=\d+[hdmwus]/, "");
+      });
+      $("#selectBrowser").on('change', function () {
+        window.location.href = '?browser=' + this.value + prefix.replace(/&browser=\d+/, "");
+      });
+      $("#dNow").on('change', function () {
+        window.location.href = '?day=' + this.value + '&' + prefix.replace(/&day=[\w\d-]+/, "");
+      });
+    });
+  </script>
+#end
+  #include("/include/layout.jetx")

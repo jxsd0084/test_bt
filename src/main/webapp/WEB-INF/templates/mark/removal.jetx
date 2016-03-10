@@ -1,0 +1,11 @@
+#set(title="备注数据迁移")
+#set(navbar="service")
+#tag layout_block("headContent")
+
+#end
+#tag layout_block("bodyContent")
+	<h1>返回码：$!{code}</h1>
+	<h1>信息：$!{info}</h1>
+#end
+
+#include("/include/layout.jetx")

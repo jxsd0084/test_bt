@@ -1,0 +1,39 @@
+#set(title="测试发送日报")
+#set(navbar="daily")
+#tag layout_block("headContent")
+#end
+#tag layout_block("bodyContent")
+<div class="container-fluid">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">测试发送日报</h3>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal" method="POST" action="${CONTEXT_PATH}/daily/sendmail">
+        <div class="form-group">
+          <label for="mail" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-4">
+            <input type="email" class="form-control" name="receiver" value="${receiver}" id="mail" placeholder="Email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="day" class="col-sm-2 control-label">日期</label>
+          <div class="col-sm-4">
+            <input class="day input-xs" name="day" value="${day?:now}" id="dNow" type="text">
+            <span class="glyphicon glyphicon-calendar" onclick="WdatePicker({el:'dNow', maxDate:'${now}'})"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-6">
+            <button type="submit" class="btn btn-default btn-primary">发送</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script src="//www.fspage.com/oss/my97datepicker/WdatePicker.js"></script
+#end
+#include("/include/form-layout.jetx")
