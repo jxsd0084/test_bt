@@ -30,9 +30,7 @@
 </head>
 <body>
     #include("nav.inc.jetx")
-<div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2"
-     id="main-body">
-     <IFRAME ID="demoFrame" FRAMEBORDER=0 SCROLLING=AUTO SRC=""></IFRAME>
+<div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 col-lg-10 col-lg-offset-2" id="main-body">
     <div>
         #include("alert.inc.jetx")
         #tag layout_block_default("bodyContent")#end
@@ -71,7 +69,7 @@
   					zTree.expandNode(treeNode);
   					return false;
   				} else {
-  					demoDiv.attr("src",treeNode.file);
+  					<!--demoDiv.attr("src",treeNode.file);-->
   					return true;
   				}
   			}
@@ -91,9 +89,8 @@
 	$(document).ready(function(){
 		var t = $("#tree");
 		t = $.fn.zTree.init(t, setting, zNodes);
-				demoDiv = $("demoFrame");
-        		var zTree = $.fn.zTree.getZTreeObj("tree");
-        		zTree.selectNode(zTree.getNodeByParam("id", 101));
+   		var zTree = $.fn.zTree.getZTreeObj("tree");
+   		zTree.selectNode(zTree.getNodeByParam("id", 101));
 	});
 -->
 

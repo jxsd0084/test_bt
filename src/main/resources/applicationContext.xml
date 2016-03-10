@@ -18,7 +18,7 @@
 
     <import resource="classpath:spring/spring-guava.xml"/>
     <import resource="classpath:spring/spring-db.xml"/>
-<!--    <import resource="classpath:spring/spring-shiro.xml"/>-->
+    <import resource="classpath:spring/spring-shiro.xml"/>
     <import resource="classpath:spring/spring-scheduler.xml"/>
 
     <bean id="redisCache" class="com.github.jedis.support.JedisFactoryBean" p:configName="oss-web-redis"/>
