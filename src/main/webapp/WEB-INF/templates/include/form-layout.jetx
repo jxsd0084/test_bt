@@ -8,6 +8,8 @@
   <title>${title}</title>
   <link href="//www.fspage.com/oss/datatables.min.css" rel="stylesheet" type="text/css"/>
   <link href="//www.fspage.com/oss/css/styles.css" rel="stylesheet" type="text/css"/>
+  <link href="${CONTEXT_PATH}/img/css/bootstrap.css" rel="stylesheet">
+  <link href="${CONTEXT_PATH}/img/css/tree.css" rel="stylesheet">
   #tag layout_block_default("headContent")#end
   <style>
     body {
@@ -58,6 +60,8 @@
     #tag layout_block_default("bodyContent")#end
   </div>
 </div>
+<script src="${CONTEXT_PATH}/img/js/jquery.js"></script>
+<script src="${CONTEXT_PATH}/img/js/bootstrap.js"></script>
 <script src="//www.fspage.com/oss/datatables.min.js"></script>
 <script src="//www.fspage.com/oss/jquery/jquery.validate.min.js"></script>
 <script src="//www.fspage.com/oss/jquery/jquery.validate-messages_cn.js"></script>
