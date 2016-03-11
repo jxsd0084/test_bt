@@ -1,8 +1,8 @@
 package com.github.trace.mapper;
 
 import com.github.mybatis.mapper.ICrudMapper;
-import com.github.trace.entity.navigationItem;
+import com.github.trace.entity.NavigationItem;
 
-public interface navigationItemMapper extends ICrudMapper<navigationItem> {
+public interface NavigationItemMapper extends ICrudMapper<NavigationItem> {
 
 }

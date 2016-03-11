@@ -1,8 +1,8 @@
 package com.github.trace.mapper;
 
 import com.github.mybatis.mapper.ICrudMapper;
-import com.github.trace.entity.buriedPoint;
+import com.github.trace.entity.BuriedPoint;
 
-public interface buriedPointMapper extends ICrudMapper<buriedPoint> {
+public interface BuriedPointMapper extends ICrudMapper<BuriedPoint> {
 
 }
