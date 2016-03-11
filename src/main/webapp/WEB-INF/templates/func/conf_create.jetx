@@ -2,7 +2,7 @@
 #set(navbar="createConfig")
 #tag layout_block("bodyContent")
 <div class="container">
-  <legend>新建配置</legend>
+  <legend>新建埋点配置项</legend>
 
   <form class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>

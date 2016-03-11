@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 0px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='{CONTEXT_PATH}/cep/new'">
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/new'">
 </div>
 <br/>
 <div class="row">
@@ -28,8 +28,7 @@
 				<th>字段名称</th>
                 <th>字段描述</th>
 				<th>是否必填</th>
-                <th>2123操作</th>
-
+                <th>操作</th>
 			</tr>
 			</thead>
 			<tbody>
