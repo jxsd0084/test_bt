@@ -7,7 +7,7 @@
 #tag layout_block("bodyContent")
 <div class="container-fluid">
   <p>
-    埋点数据类型 - 埋点配置 - 数据源配置
+    埋点数据类型 - 埋点配置 - 数据源配置_home.jetx
   </p>
 </div>
 #end

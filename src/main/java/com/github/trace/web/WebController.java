@@ -21,29 +21,32 @@ import java.util.Map;
  */
 @Controller
 public class WebController {
+
   @Autowired
   private InfluxUriService influxUriService;
 
   @RequestMapping("/web")
   public String webList(@RequestParam(defaultValue = "最近1小时") String last, @RequestParam(defaultValue = "now() - 1h") String start, @RequestParam(defaultValue = "now()") String end, Model model) {
-    model.addAttribute("start", start);
-    model.addAttribute("end", end);
-    model.addAttribute("last", last);
-    List<Map> webList = ImmutableList.of();
-    List<Map> browserList = ImmutableList.of();
-    try {
-      webList = influxUriService.recentWeb(start, end);
-      browserList = influxUriService.recentBrowser(start, end);
-    } catch (Exception e) {
-      model.addAttribute("message", "查询InfluxDB找不到信息");
-    }
-    model.addAttribute("data", InnerUtil.toJson7(webList));
-    model.addAttribute("browser", InnerUtil.toJson71(browserList));
-    return "web/web_list";
+
+      model.addAttribute("start", start);
+      model.addAttribute("end", end);
+      model.addAttribute("last", last);
+      List<Map> webList = ImmutableList.of();
+      List<Map> browserList = ImmutableList.of();
+      try {
+        webList = influxUriService.recentWeb(start, end);
+        browserList = influxUriService.recentBrowser(start, end);
+      } catch (Exception e) {
+        model.addAttribute("message", "查询InfluxDB找不到信息");
+      }
+      model.addAttribute("data", InnerUtil.toJson7(webList));
+      model.addAttribute("browser", InnerUtil.toJson71(browserList));
+      return "web/web_list";
   }
 
   @RequestMapping("/actionid_list")
   public String actionIdList(@RequestParam(defaultValue = "") String browser, @RequestParam(defaultValue = "1h") String last, @RequestParam(required = true) String actionid, @RequestParam(required = false) String day, Model model) {
+
     long now = System.currentTimeMillis();
     long dayStamp = InnerUtil.parse(day, now);
     model.addAttribute("last", last);
@@ -52,7 +55,7 @@ public class WebController {
     List<Map> actionIdList = ImmutableList.of();
     List<String> browserList = ImmutableList.of();
     try {
-      browserList = influxUriService.getTags("web", "browser", "oss_web");
+        browserList = influxUriService.getTags("web", "browser", "oss_web");
       if (browser.equals("") && browserList.size() > 0) {
         browser = browserList.get(0);
       }
