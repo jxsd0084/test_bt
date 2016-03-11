@@ -25,7 +25,7 @@
    	<div class="tree">
                <ul>
                    <li>
-                        <span><i class="icon-folder-open"></i> <a href="">前端埋点</a></span>
+                        <span><i class="icon-folder-open"></i> <a href="#">前端埋点</a></span>
                            <ul>
                                <li>
                                 <span><i class="icon-leaf"></i><a href=""> Ping-back </a></span>
@@ -38,10 +38,10 @@
                            </ul>
                    </li>
                    <li>
-                        <span><i class="icon-folder-open"></i> <a href="">后端埋点</a></span>
+                        <span><i class="icon-folder-open"></i> <a href="#">后端埋点</a></span>
                           <ul>
                                <li>
-                                 <span><i class="icon-leaf"></i><a href="">协同</a></span>
+                                 <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list">CEP</a></span>
                                </li>
                           </ul>
                           <ul>
