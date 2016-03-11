@@ -6,7 +6,7 @@
         <property name="dataSource" ref="commentDataSource"/>
     </bean>
     <bean id="commentDataSource" class="com.github.mybatis.spring.DynamicDataSource">
-        <property name="configName" value="db-oss"/>
+        <property name="configName" value="db-buried-point"/>
     </bean>
     <!-- define the SqlSessionFactory -->
     <bean id="commentSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
