@@ -20,6 +20,17 @@ public class InfluxRpcService extends InfluxDBService {
     return "influxdb-rpc";
   }
 
+
+  public List<Map> configuration(String start, String end, String name, String where) {
+    String fmt = "select sum(total) as total, " +
+            "sum(sumCost) as cost, " +
+            "sum(slow) as slow, " +
+            "sum(fail) as fail " +
+            "from \"rpc.%s\" where %s %s %s fill(none)";
+    String command = String.format(fmt, name, timeRange(start, end), where, IntervalInterceptor.getTimeInterval());
+    return queryTable(command, "oss_rpc");
+  }
+
   public List<Map> recentRpc(String start, String end, String name, String where) {
     String fmt = "select sum(total) as total, " +
       "sum(sumCost) as cost, " +
