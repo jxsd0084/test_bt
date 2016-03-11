@@ -12,8 +12,8 @@
     <title>${title}</title>
     <link href="//www.fspage.com/oss/datatables.min.css" rel="stylesheet" type="text/css"/>
     <link href="//www.fspage.com/oss/css/styles.css" rel="stylesheet" type="text/css"/>
-    <link href="./img/css/bootstrap.css" rel="stylesheet">
-    <link href="./img/css/tree.css" rel="stylesheet">
+    <link href="/img/css/bootstrap.css" rel="stylesheet">
+    <link href="/img/css/tree.css" rel="stylesheet">
 
     <style>
         #include("/include/global.min.css")
