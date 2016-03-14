@@ -54,33 +54,41 @@
 			order: [[2, 'desc'], [3, 'desc']],
 			lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
 			data: data,
-			columnDefs: [{
-				targets: 0, render: function (data, type, full, meta) {
-					var link = full;
-					//return data;
-					return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
-				}
-			},
+			columnDefs: [
+				{
+					targets: 0, render: function (data, type, full, meta) {
+//						var link = full;
+						return data;
+##						return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
+					}
+				},
+                {
+                    targets: 1, render: function (data, type, full, meta) {
+						return  '<select style="width: 100px">' +
+									'<option default>' + data + '</option>' +
+									#if (data == "String")
+									'<option>' + 'Int' + '</option>' +
+									#end
+									#if (data == "Int")
+									'<option>' + "String" + '</option>' +
+									#end
+                                '<select/>'
+                	}
+                },
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                    var link = full;
-                    //return data;
-                    if(data){
-                        return '<input type="checkbox" checked>'
-					}else {
-						return '<input type="checkbox">'
+						if(data){
+							return '<input type="checkbox" checked> 必填项'
+						}else {
+							return '<input type="checkbox"> 必填项'
 
-					}
-
-
-                }
+						}
+                	}
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                    var link = full;
-
-                    return '<input type="button" name="修改"><input type="button" name="刪除">'
-                }
+                    	return '<input style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input style="width: 40px" type="button" value="刪除">'
+                	}
                 }
 
 			]
