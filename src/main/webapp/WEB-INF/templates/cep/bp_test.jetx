@@ -1,0 +1,111 @@
+#set(title="CEP埋点配置管理")
+#set(navbar="servicelog")
+#tag layout_block("headContent")
+<style>
+	#datatable td:nth-child(n+3) {
+		text-align: right;
+		width: 40px;
+	}
+</style>
+#end
+#tag layout_block("bodyContent")
+<br/>
+<div class="row">
+	<div>
+		<table id="datatable" class="table table-striped table-bordered table-condensed">
+			<thead>
+			<tr>
+				<td>
+                    <button>预览埋点结果</button>
+                </td>
+                <td>
+                    <button>添加埋点项</button>
+                </td>
+				<td>
+                    <div>日志分隔类型</div>
+                </td>
+                <td>
+                    <select>
+                        <option>Json格式</option>
+                        <option>KV格式</option>
+                    </select>
+                </td>
+			</tr>
+            <tr>
+                <td colspan="4">期待埋点样例</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <textarea>请输入something...</textarea>
+                </td>
+            </tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="row">
+    <div>
+        <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>VS</th>
+            </tr>
+            <tr>
+                <th>实际发布日志</th>
+            </tr>
+            <tr>
+                <td>
+                    <textarea></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <td colspan="4">
+                    <button>验证/对比埋点内容</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div>
+        结果对比表格
+    </div>
+</div>
+<div>
+    <div>
+        <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <td colspan="2">
+                    <select>
+                        <option>目标选择</option>
+                    </select>
+                </td>
+                <td colspan="2">
+                    <button>发布埋点配置</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button>生成一级仓库</button>
+                </td>
+                <td>
+                    <button>预览报表结果</button>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script>
+</script>
+#end
+#include("/include/layout.jetx")
