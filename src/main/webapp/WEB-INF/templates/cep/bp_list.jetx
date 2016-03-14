@@ -3,7 +3,7 @@
 #tag layout_block("headContent")
 <style>
 	#datatable td:nth-child(n+3) {
-		text-align: right;
+		text-align: center;
 		width: 40px;
 	}
 </style>
@@ -64,15 +64,18 @@
 				},
                 {
                     targets: 1, render: function (data, type, full, meta) {
-						return  '<select style="width: 100px">' +
+						if(data == 'String'){
+							return  '<select style="width: 100px">' +
 									'<option default>' + data + '</option>' +
-									#if (data == "String")
 									'<option>' + 'Int' + '</option>' +
-									#end
-									#if (data == "Int")
+                                	'<select/>'
+						}else{
+							return  '<select style="width: 100px">' +
+									'<option default>' + data + '</option>' +
 									'<option>' + "String" + '</option>' +
-									#end
-                                '<select/>'
+                                	'<select/>'
+						}
+
                 	}
                 },
                 {
