@@ -37,34 +37,25 @@ public class CEPTraceController {
 
         List<BuriedPoint> caller = cepService.getConfiguration();
 
-        System.out.println(caller);
-
-        String temp;
-
         JSONArray ja1 =  new JSONArray();
-
-
 
         //data, type, full, meta
         for (BuriedPoint br:caller) {
-
-//            JSONObject jo1 =  new JSONObject();
-//            JSONObject jo2 =  new JSONObject();
-//            JSONObject jo3 =  new JSONObject();
-//            JSONObject jo4 =  new JSONObject();
-//            jo1.put("data",br.getId());
-//            jo2.put("type",br.getId());
-//            jo3.put("full",br.getId());
-//            jo4.put("meta",br.getId());
-//            ja2.add(jo1);
-//            ja2.add(jo2);
-//            ja2.add(jo3);
-//            ja2.add(jo4);
             JSONArray ja2 =  new JSONArray();
-            ja2.add(br.getKey());
-            ja2.add(br.getValue());
-            ja2.add(br.getKeyType());
-            ja2.add(br.getValueType());
+
+            //埋点字段
+            ja2.add(br.getBpName());
+
+            //埋点数据类型
+            ja2.add(br.getBpValue());
+
+            //埋点字段描述
+            ja2.add(br.getBpValueDesc());
+
+            //是否必填项
+            ja2.add(br.getIsChecked());
+
+            //操作
 
             ja1.add(ja2);
         }

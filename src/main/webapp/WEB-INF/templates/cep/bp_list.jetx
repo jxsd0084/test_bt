@@ -52,15 +52,38 @@
 			language: lang,
 			dom: bootstrapDom,
 			order: [[2, 'desc'], [3, 'desc']],
-			lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
+			lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
 			data: data,
 			columnDefs: [{
 				targets: 0, render: function (data, type, full, meta) {
 					var link = full;
-					return "";
-##					return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
+					//return data;
+					return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
 				}
-			}]
+			},
+                {
+                    targets: 3, render: function (data, type, full, meta) {
+                    var link = full;
+                    //return data;
+                    if(data){
+                        return '<input type="checkbox" checked>'
+					}else {
+						return '<input type="checkbox">'
+
+					}
+
+
+                }
+                },
+                {
+                    targets: 4, render: function (data, type, full, meta) {
+                    var link = full;
+
+                    return '<input type="button" name="修改"><input type="button" name="刪除">'
+                }
+                }
+
+			]
 		});
 	});
 </script>
