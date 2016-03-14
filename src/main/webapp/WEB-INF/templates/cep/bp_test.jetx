@@ -38,7 +38,7 @@
             </tr>
             <tr>
                 <td colspan="4">
-                    <textarea>请输入something...</textarea>
+                    <textarea>请输入something...1</textarea>
                 </td>
             </tr>
 			</thead>
@@ -66,8 +66,8 @@
                 </td>
             </tr>
             <tr>
-                <td>
-                    <textarea></textarea>
+                <td colspan="4">
+                    <textarea>请输入something...2</textarea>
                 </td>
             </tr>
         </table>
@@ -93,20 +93,18 @@
     <div>
         <table class="table table-striped table-condensed">
             <tr>
-                <td colspan="2">
+                <td colspan="4">
                     <select>
                         <option>目标选择</option>
                     </select>
                     <button>发布埋点配置</button>
                 </td>
-                <td colspan="2"></td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="4">
                     <button>生成一级仓库</button>
                     <button>预览报表结果</button>
                 </td>
-                <td colspan="2"></td>
             </tr>
         </table>
     </div>
