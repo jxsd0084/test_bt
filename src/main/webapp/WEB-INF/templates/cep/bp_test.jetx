@@ -12,27 +12,29 @@
 <br/>
 <div class="row">
 	<div>
-		<table id="datatable" class="table table-striped table-bordered table-condensed">
+		<table id="datatable" class="table table-striped table-condensed">
 			<thead>
 			<tr>
 				<td>
                     <button>预览埋点结果</button>
-                </td>
-                <td>
                     <button>添加埋点项</button>
                 </td>
-				<td>
-                    <div>日志分隔类型</div>
-                </td>
-                <td>
-                    <select>
-                        <option>Json格式</option>
-                        <option>KV格式</option>
-                    </select>
+                <td colspan="2">
+                    <div>
+                        <div class="left">日志分隔类型</div>
+                        <div class="right">
+                        <select>
+                            <option>Json格式</option>
+                            <option>KV格式</option>
+                        </select>
+                        </div>
+                    </div>
                 </td>
 			</tr>
             <tr>
-                <td colspan="4">期待埋点样例</td>
+                <th colspan="4">
+                    <h3>期待埋点样例</h3>
+                </th>
             </tr>
             <tr>
                 <td colspan="4">
@@ -47,12 +49,21 @@
 </div>
 <div class="row">
     <div>
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-condensed">
             <tr>
-                <th>VS</th>
+                <th colspan="4">
+                    <h3>VS</h3>
+                </th>
             </tr>
             <tr>
-                <th>实际发布日志</th>
+                <th colspan="4">
+                    <h3>实际发布日志</h3>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <button>获取服务端日志</button>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -64,7 +75,7 @@
 </div>
 <div class="row">
     <div>
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-condensed">
             <tr>
                 <td colspan="4">
                     <button>验证/对比埋点内容</button>
@@ -80,22 +91,19 @@
 </div>
 <div>
     <div>
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-condensed">
             <tr>
                 <td colspan="2">
                     <select>
                         <option>目标选择</option>
                     </select>
-                </td>
-                <td colspan="2">
                     <button>发布埋点配置</button>
                 </td>
+                <td colspan="2"></td>
             </tr>
             <tr>
-                <td>
+                <td colspan="2">
                     <button>生成一级仓库</button>
-                </td>
-                <td>
                     <button>预览报表结果</button>
                 </td>
                 <td colspan="2"></td>
