@@ -2,6 +2,7 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.BuriedPoint;
+import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.InfluxRpcService;
 import org.apache.ibatis.annotations.Param;
@@ -35,15 +36,19 @@ public class CEPTraceController {
         // data, type, full, meta
         for (BuriedPoint br : caller) {
             JSONArray ja2 = new JSONArray();
-            ja2.add(br.getId());            //编号
+            ja2.add(br.getId());            // 编号
             ja2.add(br.getBpName());        // 埋点字段
             ja2.add(br.getBpValue());       // 埋点数据类型
             ja2.add(br.getBpValueDesc());   // 埋点字段描述
             ja2.add(br.getIsChecked());     // 是否必填项
-            ja2.add(br.getId());     //操作
+            ja2.add(br.getId());            // 操作
 
             ja1.add(ja2);
         }
+
+        // 此处为防止页面刷新之后, 左边导航条的数据丢失
+        List<NavigationItem> navigationItemList = cepService.getConfiguration();
+        model.addAttribute("navigationItemList", navigationItemList);
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
