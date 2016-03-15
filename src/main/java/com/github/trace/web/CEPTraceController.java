@@ -34,10 +34,12 @@ public class CEPTraceController {
         // data, type, full, meta
         for (BuriedPoint br : caller) {
             JSONArray ja2 = new JSONArray();
+            ja2.add(br.getId());            //编号
             ja2.add(br.getBpName());        // 埋点字段
             ja2.add(br.getBpValue());       // 埋点数据类型
             ja2.add(br.getBpValueDesc());   // 埋点字段描述
             ja2.add(br.getIsChecked());     // 是否必填项
+            ja2.add(br.getId());     //操作
 
             ja1.add(ja2);
         }
@@ -50,7 +52,15 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/new")
-    public String createConfig(Model model) {
+    public String createConfig(@RequestParam(name = "id") int id,Model model) {
+
+
+        BuriedPoint caller = cepService.getBuriedPoint(id);
+
+        model.addAttribute("BpName", caller.getBpName() );
+        model.addAttribute("BpValue", caller.getBpValue() );
+        model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
+        model.addAttribute("IsChecked", caller.getIsChecked() );
         return "func/conf_create";
     }
 

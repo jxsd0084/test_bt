@@ -46,8 +46,8 @@ public class CEPService {
    * @param child_id  子业务ID
    * @return  1-删除成功  0-删除失败
      */
-  public int deleteBuriedPoint(int parent_id, int child_id){
-    return buriedPointMapper.deleteByBizIds(parent_id, child_id);
+  public BuriedPoint getBuriedPoint(int id) {
+    return buriedPointMapper.findById(id);
   }
 
   /**
