@@ -1,11 +1,17 @@
 package com.github.trace.web;
 
+import com.github.trace.entity.NavigationItem;
+import com.github.trace.service.CEPService;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 
 /**
@@ -16,12 +22,15 @@ public class HomeController {
   @Value("${casServerUrlPrefix}")
   private String casServerUrlPrefix = "/cas";
 
+  @Autowired
+  private CEPService cepService;
+
   @RequestMapping("/logout")
   public String logout(RedirectAttributes r) {
     SecurityUtils.getSubject().logout();
     r.addFlashAttribute("message", "您已经安全退出");
-    String redirectUrl = casServerUrlPrefix.substring(0,casServerUrlPrefix.length()-4);
-    return "redirect:" + casServerUrlPrefix + "/logout?service="+redirectUrl;
+    String redirectUrl = casServerUrlPrefix.substring(0, casServerUrlPrefix.length() - 4);
+    return "redirect:" + casServerUrlPrefix + "/logout?service=" + redirectUrl;
   }
 
   @RequestMapping("/unauthorized")
@@ -30,7 +39,9 @@ public class HomeController {
   }
 
   @RequestMapping("/")
-  public String home() {
+  public String home(Model model) {
+    List<NavigationItem> navigationItemList = cepService.getConfiguration();
+    model.addAttribute("navigationItemList", navigationItemList);
     return "home";
   }
 

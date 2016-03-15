@@ -1,7 +1,9 @@
 package com.github.trace.service;
 
 import com.github.trace.entity.BuriedPoint;
+import com.github.trace.entity.NavigationItem;
 import com.github.trace.mapper.BuriedPointMapper;
+import com.github.trace.mapper.NavigationItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,15 @@ public class CEPService {
   @Autowired
   private BuriedPointMapper buriedPointMapper;
 
+  @Autowired
+  private NavigationItemMapper navigationItemMapper;
+
   /**
    * 获取所有的埋点列表
    * @return 埋点列表
      */
-  public List<BuriedPoint> getConfiguration() {
-    return buriedPointMapper.findAll();
+  public List<NavigationItem> getConfiguration() {
+    return navigationItemMapper.findAll();
   }
 
   /**
