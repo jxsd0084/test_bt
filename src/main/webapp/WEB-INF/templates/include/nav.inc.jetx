@@ -22,12 +22,12 @@
             <span><i class="icon-folder-open"></i> <a href="#">前端埋点_nav.inc.jetx</a></span>
                <ul>
                <li>
-                  <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=1"> Ping-back _nav.inc.jetx</a></span>
+                  <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=1&parent_name=Ping-back"> Ping-back _nav.inc.jetx</a></span>
                </li>
                </ul>
                <ul>
                 <li>
-                  <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=2"> Android | IOS _nav.inc.jetx</a></span>
+                  <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=2&parent_name=Android | iOS"> Android | IOS _nav.inc.jetx</a></span>
                 </li>
                </ul>
            </li>
@@ -35,12 +35,12 @@
             <span><i class="icon-folder-open"></i><a href="#">后端埋点_nav.inc.jetx</a></span>
               <ul>
                <li>
-                 <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=2&child_id=1">CEP_nav.inc.jetx</a></span>
+                 <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=2&child_id=1&parent_name=CEP">CEP_nav.inc.jetx</a></span>
                </li>
               </ul>
               <ul>
                <li>
-                 <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=2&child_id=2">企信_nav.inc.jetx</a></span>
+                 <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=2&child_id=2&parent_name=企信">企信_nav.inc.jetx</a></span>
                </li>
               </ul>
             </li>
