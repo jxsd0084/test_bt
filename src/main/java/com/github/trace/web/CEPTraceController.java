@@ -42,6 +42,8 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
+        model.addAttribute("parent_id", parent_id);
+        model.addAttribute("child_id", child_id);
         model.addAttribute("data", ja1);
         return "cep/bp_list";
     }
