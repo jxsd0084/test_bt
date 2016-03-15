@@ -81,6 +81,15 @@ public class CEPService {
     return buriedPointMapper.findById(id);
   }
 
+
+  public String insertBuriedPoint(BuriedPoint bp) {
+    return buriedPointMapper.insert(bp)+"";
+  }
+
+  public boolean modifyBuriedPoint(String bp_name,String bp_value,String bp_value_desc,boolean is_checked ,int id) {
+    return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
+  }
+
 //  /**
 //   * 发送邮件
 //   */

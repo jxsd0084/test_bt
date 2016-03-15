@@ -2,15 +2,15 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
 
 	<classpath>
-		<dir name="D:/WorkSpace/GitLab/buriedtool/target/test-classes">
+		<dir name="/home/hadoop/workspace/git/buriedtool/target/test-classes">
 		</dir>
-		<dir name="D:/WorkSpace/GitLab/buriedtool/target/classes">
+		<dir name="/home/hadoop/workspace/git/buriedtool/target/classes">
 		</dir>
 	</classpath>
 
 	<web>
 		<link target="/">
-			<dir name="D:/WorkSpace/GitLab/buriedtool/src/main/webapp">
+			<dir name="/home/hadoop/workspace/git/buriedtool/src/main/webapp">
 			</dir>
 		</link>
 	</web>

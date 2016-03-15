@@ -112,26 +112,7 @@
 
         $("#delete").on('click', function () {
 
-
-           			 window.location.href='${CONTEXT_PATH}/cep/new';
-
-                    $.ajax({
-                        url: "${CONTEXT_PATH}/cep/new",
-                        contentType: "application/json",
-                        data: "",
-                        dataType: "json",
-                        type: "POST",
-                        traditional: true,
-                        success: function (data) {
-                            if (data.code == 200) {
-                                location.reload();
-                            } else {
-                                $('#dangerInfo').text("警告：" + data.info);
-                                $('#dangerInfo').removeClass("hide");
-                            }
-                        }
-                    });
-
+			window.location.href='${CONTEXT_PATH}/cep/new';
 
         })
 
