@@ -2,40 +2,48 @@
 #set(navbar="createConfig")
 #tag layout_block("bodyContent")
 <div class="container">
-  <legend>新建埋点配置项</legend>
+  <legend>埋点配置项</legend>
 
   <form class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>
       <div class="form-group">
-        <label for="name" class="col-md-2 control-label">名称</label>
+        <label for="name" class="col-md-2 control-label">埋点字段</label>
 
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control focused" name="name" id="name" placeholder="必填" value="${config.name}"/>
+          <input type="text" class="form-control focused" name="name1" id="name1" placeholder="必填" />
         </div>
 
-        <p class="help-block col-md-offset-2">如：db-main</p>
+        <p class="help-block col-md-offset-2">如：UserID</p>
       </div>
+
+        <div class="form-group">
+            <label for="name" class="col-md-2 control-label">埋点数据类型</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control focused" name="name2" id="name2" placeholder="必填" />
+            </div>
+            <p class="help-block col-md-offset-2">如：字符串(String),整数(Int)</p>
+        </div>
+
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">配置组</label>
+        <label for="profile" class="col-md-2 control-label">埋点字段描述</label>
 
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="profile" id="profile" placeholder="必填" value='${config.profile?!"test"}'/>
-
-          <p class="help-block bg-info">批量创建：逗号分隔的多个组名</p>
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" />
         </div>
-        <p class="help-block col-md-offset-2">如：online(正式),preview(预发布),test(测试环境)</p>
+        <p class="help-block col-md-offset-2">如：用户编号</p>
       </div>
       <div class="form-group">
-        <label for="content" class="col-md-2 control-label">内容</label>
+        <label for="content" class="col-md-2 control-label">是否必填项</label>
 
         <div class="col-md-10 col-lg-8">
-          <textarea cols="20" rows="5" class="form-control" name="content" id="content" placeholder="选填">${config.content}</textarea>
+            <input type="checkbox" id="name4" >
         </div>
       </div>
+
 
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
-          <button type="submit" class="btn btn-primary">创建</button>
+          <button type="submit" class="btn btn-primary">确认</button>
           <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
         </div>
       </div>
@@ -43,4 +51,29 @@
   </form>
 </div>
 #end
+
+#tag layout_block("scriptContent")
+<script>
+
+    $(document).ready(function () {
+
+
+        $("#name1").val("${BpName}");
+
+        $("#name2").val("${BpValue}");
+
+        $("#name3").val("${BpValueDesc}");
+
+        if(${IsChecked}){
+            $("#name4").attr("checked",'checked');
+        }
+
+
+
+
+    });
+
+</script>
+#end
+
 #include("/include/form-layout.jetx")
