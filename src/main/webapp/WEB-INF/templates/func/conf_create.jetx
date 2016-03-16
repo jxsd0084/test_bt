@@ -91,20 +91,25 @@
             var data = '';
             var id = '${id}';
 
+            var value1 = $("#name1").val();
+            var value2 = $("#name2").val();
+            var value3 = $("#name3").val();
+            var is_checked = $("#name4").is(':checked');
+
             if(tag == 'modify'){
                 data = {
-                    bp_name             :$("#name1").val(),
-                    bp_value            :$("#name2").val(),
-                    bp_value_desc       :$("#name3").val(),
-                    is_checked          :$("#name4").is(':checked'),
+                    bp_name             :value1,
+                    bp_value            :value1,
+                    bp_value_desc       :value3,
+                    is_checked          :is_checked,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 data = {
-                    bp_name             :$("#name1").val(),
-                    bp_value            :$("#name2").val(),
-                    bp_value_desc       :$("#name3").val(),
-                    is_checked          :$("#name4").is(':checked')
+                    bp_name             :value1,
+                    bp_value            :value2,
+                    bp_value_desc       :value3,
+                    is_checked          :is_checked
                 };
             }
 
