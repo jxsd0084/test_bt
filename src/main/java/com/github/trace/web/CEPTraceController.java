@@ -46,9 +46,8 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        // 此处为防止页面刷新之后, 左边导航条的数据丢失
-        List<NavigationItem> navigationItemList = cepService.getConfiguration();
-        model.addAttribute("navigationItemList", navigationItemList);
+        // 左边导航条
+        setLeftNavigationTree(model, cepService);
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -60,8 +59,10 @@ public class CEPTraceController {
     @RequestMapping("/new")
     public String createConfig(@RequestParam(name = "id") int id,Model model) {
 
-
         BuriedPoint caller = cepService.getBuriedPoint(id);
+
+        // 左边导航条
+        setLeftNavigationTree(model, cepService);
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -77,6 +78,12 @@ public class CEPTraceController {
        return cepService.modifyBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
 
      //   return "func/conf_create";
+    }
+
+    // 此处为防止页面刷新之后, 左边导航条的数据丢失
+    private void setLeftNavigationTree(Model model, CEPService cepService){
+        List<NavigationItem> navigationItemList = cepService.getConfiguration();
+        model.addAttribute("navigationItemList", navigationItemList);
     }
 
 }
