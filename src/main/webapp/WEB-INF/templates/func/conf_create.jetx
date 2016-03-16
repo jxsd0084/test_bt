@@ -49,6 +49,7 @@
       <!-- 确认按钮 -->
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
+          <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
           <input type="button" class="btn btn-primary" id="confirm" value="确认1"></input>
           <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
         </div>
@@ -59,6 +60,11 @@
 #end
 #tag layout_block("scriptContent")
 <script>
+
+    var showResult = function(msg){
+        $('#resultInfo').text(msg);
+	    $('#resultInfo').removeClass("hide");
+    }
 
     var myValidator = function(){
         var msg = '';
@@ -76,7 +82,7 @@
         }
 
         if(!result){
-           alert(msg)
+           showResult(msg);
         }
 
         return result;
@@ -122,12 +128,12 @@
                     data                :data,
                     dataType            :"text",
                     type                :"GET",
-                    success             :function (data) {
-    //                    if (data) {
-    //                        alert(data)
-    //                    } else {
-    //                        alert(data)
-    //                    }
+                    error:function(data){
+                        alert("出错了！！:" + data.info);
+                        showResult("错误信息: " + data.info);
+                    },
+                    success:function (data) {
+                        showResult("插入成功!");
                     }
                 });
             }
