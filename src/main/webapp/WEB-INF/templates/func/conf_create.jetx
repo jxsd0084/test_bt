@@ -63,6 +63,7 @@
     var myValidator = function(){
         var msg = '';
         var result = true;
+
         var value1 = $("#name1").val();
         var value2 = $("#name2").val();
         var value3 = $("#name3").val();
@@ -85,20 +86,36 @@
 
         $("#confirm").on('click', function () {
 
+            var tag = '${tag}';
+            var url = '${CONTEXT_PATH}/cep/' + tag;
+            var data = '';
+            var id = '${id}';
+
+            if(tag == 'modify'){
+                data = {
+                    bp_name             :$("#name1").val(),
+                    bp_value            :$("#name2").val(),
+                    bp_value_desc       :$("#name3").val(),
+                    is_checked          :$("#name4").is(':checked'),
+                    id                  :id
+                };
+            }else if(tag == 'add'){     // 新增不需要指定主键ID
+                data = {
+                    bp_name             :$("#name1").val(),
+                    bp_value            :$("#name2").val(),
+                    bp_value_desc       :$("#name3").val(),
+                    is_checked          :$("#name4").is(':checked')
+                };
+            }
+
             if(myValidator()){
                 $.ajax({
-                    url: "${CONTEXT_PATH}/cep/modify",
-                    contentType: "application/json",
-                    data:  {
-                        bp_name:$("#name1").val(),
-                        bp_value:$("#name2").val(),
-                        bp_value_desc:$("#name3").val(),
-                        is_checked:$("#name4").is(':checked'),
-                        id:${id}
-                    },
-                    dataType: "text",
-                    type: "GET",
-                    success: function (data) {
+                    url                 :url,
+                    contentType         :"application/json",
+                    data                :data,
+                    dataType            :"text",
+                    type                :"GET",
+                    success             :function (data) {
     //                    if (data) {
     //                        alert(data)
     //                    } else {
@@ -107,6 +124,7 @@
                     }
                 });
             }
+
         })
     });
 

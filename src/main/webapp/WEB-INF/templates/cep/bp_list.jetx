@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/newConifg'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/newConifg?tag=add'"/>
 </div>
 <br/>
 <div class="row">
@@ -199,16 +199,11 @@
 		});
 
         $("[name='modify']").on('click', function () {
-
-            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id;
-
+            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify';
         });
 
         $("[name='delete']").on('click', function () {
-
             //window.location.href='${CONTEXT_PATH}/cep/delete?id='+this.id;
-
-
             $.ajax({
                 url: "${CONTEXT_PATH}/cep/delete",
                 contentType: "application/json",
@@ -254,5 +249,4 @@
 </script>
 #end
 #include("/include/layout.jetx")
-#include("/cep/bp_generator.jetx")
 
