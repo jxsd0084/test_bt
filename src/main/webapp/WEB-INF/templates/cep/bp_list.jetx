@@ -16,8 +16,8 @@
 		<li class="active">${parent_name} -添加客户信息-埋点配置</li>
 	</ol>
 </div>
-<div class="row" style="padding:9px 0px 0px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/new'">
+<div class="row" style="padding:9px 0px 5px 25px;">
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/newConifg'"/>
 </div>
 <br/>
 <div class="row">
@@ -224,14 +224,13 @@
 
 	});
 
+    $("#delete").on('click', function () {
+        window.location.href='${CONTEXT_PATH}/cep/new';
+    })
+
 	$("#browseBP").click( function() {
         alert('预览埋点结果!')
     });
-        $("#delete").on('click', function () {
-
-			window.location.href='${CONTEXT_PATH}/cep/new';
-
-        })
 
     $("#addBPItem").click( function() {
         alert('添加埋点项 !')

@@ -57,7 +57,7 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/new")
-    public String createConfig(@RequestParam(name = "id") int id,Model model) {
+    public String createConfig(@RequestParam(name = "id") int id, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
 
@@ -69,6 +69,11 @@ public class CEPTraceController {
         model.addAttribute("BpValue", caller.getBpValue() );
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
+        return "func/conf_create";
+    }
+
+    @RequestMapping("/newConifg")
+    public String newConfig() {
         return "func/conf_create";
     }
 

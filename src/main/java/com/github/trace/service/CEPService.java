@@ -58,8 +58,8 @@ public class CEPService {
     return buriedPointMapper.insert(buriedPoint);
   }
 
-
   public boolean modifyBuriedPoint(String bp_name,String bp_value,String bp_value_desc,boolean is_checked ,int id) {
     return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
   }
+
 }
