@@ -1,5 +1,5 @@
-#set(title="埋点配置管理")
-#set(navbar="buriedPointConfig")
+#set(title="CEP埋点配置管理")
+#set(navbar="servicelog")
 #tag layout_block("headContent")
 <style>
 	#datatable td:nth-child(n+3) {
@@ -198,37 +198,22 @@
 			]
 		});
 
-	$("[name='modify']").on('click', function () {
-		window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id;
-	});
+        $("[name='modify']").on('click', function () {
 
-	$("#delete").on('click', function () {
-		window.location.href='${CONTEXT_PATH}/cep/new';
-		$.ajax({
-			url: "${CONTEXT_PATH}/cep/new",
-			contentType: "application/json",
-			data: "",
-			dataType: "json",
-			type: "POST",
-			traditional: true,
-				success: function (data) {
-					if (data.code == 200) {
-						location.reload();
-					} else {
-						$('#dangerInfo').text("警告：" + data.info);
-						$('#dangerInfo').removeClass("hide");
-					}
-				}
-			});
-		})
+            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id;
 
-	});
+        });
 
-    $("#delete").on('click', function () {
-        window.location.href='${CONTEXT_PATH}/cep/new';
-    })
 
-	$("#browseBP").click( function() {
+
+        $("#delete").on('click', function () {
+
+			window.location.href='${CONTEXT_PATH}/cep/new';
+
+        })
+
+
+    $("#browseBP").click( function() {
         alert('预览埋点结果!')
     });
 
@@ -259,4 +244,5 @@
 </script>
 #end
 #include("/include/layout.jetx")
+#include("/cep/bp_generator.jetx")
 

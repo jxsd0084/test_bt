@@ -24,4 +24,6 @@
         <plugin interceptor="com.github.mybatis.interceptor.MasterSlaveInterceptor"/>
         <plugin interceptor="com.github.mybatis.interceptor.PaginationAutoMapInterceptor"/>
     </plugins>
+
+
 </configuration>

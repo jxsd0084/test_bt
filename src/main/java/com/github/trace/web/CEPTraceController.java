@@ -78,11 +78,19 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/modify")
-    public boolean modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id, Model model) {
+    public String modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id, Model model) {
 
-       return cepService.modifyBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
+       cepService.modifyBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
 
-     //   return "func/conf_create";
+        return "func/bp_list";
+    }
+
+    @RequestMapping("/delete")
+    public String deleteBuriedPoint(@Param("id") Integer id, Model model) {
+
+        cepService.deleteBuriedPoint(id);
+
+        return "func/bp_list";
     }
 
     // 此处为防止页面刷新之后, 左边导航条的数据丢失
