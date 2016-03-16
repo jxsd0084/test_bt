@@ -43,7 +43,7 @@
 
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
-          <button type="submit" class="btn btn-primary">确认</button>
+          <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
           <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
         </div>
       </div>
@@ -65,13 +65,33 @@
         $("#name3").val("${BpValueDesc}");
 
         if(${IsChecked}){
-            $("#name4").attr("checked",'checked');
+            $("#name4").attr("checked",'true');
         }
 
 
+        $("#confirm").on('click', function () {
 
+            $.ajax({
+                url: "${CONTEXT_PATH}/cep/modify",
+                contentType: "application/json",
+                data:  {bp_name:$("#name1").val(),bp_value:$("#name2").val(),bp_value_desc:$("#name3").val(),is_checked:$("#name4").is(':checked'),id:${id}},
+                dataType: "text",
+                type: "GET",
+                success: function (data) {
+//                    if (data) {
+//                        alert(data)
+//                    } else {
+//                        alert(data)
+//                    }
+                }
+            });
+
+
+        })
 
     });
+
+
 
 </script>
 #end

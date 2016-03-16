@@ -227,6 +227,11 @@
 	$("#browseBP").click( function() {
         alert('预览埋点结果!')
     });
+        $("#delete").on('click', function () {
+
+			window.location.href='${CONTEXT_PATH}/cep/new';
+
+        })
 
     $("#addBPItem").click( function() {
         alert('添加埋点项 !')

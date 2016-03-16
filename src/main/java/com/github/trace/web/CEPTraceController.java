@@ -5,6 +5,7 @@ import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.InfluxRpcService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,11 +63,20 @@ public class CEPTraceController {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
 
+        model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
         model.addAttribute("BpValue", caller.getBpValue() );
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
         return "func/conf_create";
+    }
+
+    @RequestMapping("/modify")
+    public boolean modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id, Model model) {
+
+       return cepService.modifyBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
+
+     //   return "func/conf_create";
     }
 
 }
