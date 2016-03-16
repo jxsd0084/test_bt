@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 发送邮件
- * Created by hanmz on 2015/12/22.
+ * CEP 后台埋点配置管理
+ * Created by wujing on 2016/03/11.
  */
 @Service
 public class CEPService {

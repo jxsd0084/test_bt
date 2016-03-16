@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
-import com.github.trace.service.InfluxRpcService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +19,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/cep")
 public class CEPTraceController {
-    @Autowired
-    private InfluxRpcService influxRpcService;
 
     @Autowired
     private CEPService cepService;

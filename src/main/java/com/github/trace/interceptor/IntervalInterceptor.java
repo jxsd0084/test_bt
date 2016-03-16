@@ -8,16 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.function.Supplier;
 
-/**
- * 统一截获聚合的interval设置。
- * <ul>
- * <li>默认按照1m一个点聚合</li>
- * <li>可以通过interval={1m|5m|10m|1h}等进行设置</li>
- * <li>url参数的设置会被转成cookie设置，便于多个请求之间进行透传</li>
- * </ul>
- * <p>
- * Created by lir on 2016/1/23.
- */
+
 public class IntervalInterceptor implements HandlerInterceptor {
     @SuppressWarnings("unchecked")
     private static final ThreadLocal<String> INTERVAL = ThreadLocal.withInitial((Supplier) () -> "1m");
