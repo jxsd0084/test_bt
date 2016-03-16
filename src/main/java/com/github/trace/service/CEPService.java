@@ -40,15 +40,14 @@ public class CEPService {
     return buriedPointMapper.findByBizIds(parent_id, child_id);
   }
 
-//  /**
-//   * 删除埋点
-//   * @param parent_id 父业务ID
-//   * @param child_id  子业务ID
-//   * @return  1-删除成功  0-删除失败
-//     */
-//  public BuriedPoint getBuriedPoint(int id) {
-//    return buriedPointMapper.findById(id);
-//  }
+  /**
+   * 删除埋点
+   * @param id 业务ID
+   * @return  1-删除成功  0-删除失败
+     */
+  public int deleteBuriedPoint(int id) {
+    return buriedPointMapper.deleteBuriedPoint(id);
+  }
 
   /**
    * 插入新埋点
@@ -57,6 +56,12 @@ public class CEPService {
      */
   public int insertBuriedPoint(BuriedPoint buriedPoint){
     return buriedPointMapper.insert(buriedPoint);
+  }
+
+
+
+  public BuriedPoint getBuriedPoint(int id) {
+    return buriedPointMapper.findById(id);
   }
 
 

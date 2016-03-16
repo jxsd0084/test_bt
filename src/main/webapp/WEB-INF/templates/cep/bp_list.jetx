@@ -204,18 +204,27 @@
 
         });
 
+        $("[name='delete']").on('click', function () {
+
+            //window.location.href='${CONTEXT_PATH}/cep/delete?id='+this.id;
 
 
-        $("#delete").on('click', function () {
-
-			window.location.href='${CONTEXT_PATH}/cep/new';
-
+            $.ajax({
+                url: "${CONTEXT_PATH}/cep/delete",
+                contentType: "application/json",
+                data:  {id:this.id},
+                dataType: "text",
+                type: "GET",
+                success: function (data) {
+//                    if (data) {
+//                        alert(data)
+//                    } else {
+//                        alert(data)
+//                    }
+                }
+            });
         })
 
-
-    $("#browseBP").click( function() {
-        alert('预览埋点结果!')
-    });
 
     $("#addBPItem").click( function() {
         alert('添加埋点项 !')
@@ -241,6 +250,7 @@
         alert('预览报表结果 !')
     });
 
+    });
 </script>
 #end
 #include("/include/layout.jetx")
