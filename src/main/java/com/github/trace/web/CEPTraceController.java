@@ -73,7 +73,9 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/newConifg")
-    public String newConfig() {
+    public String newConfig(Model model) {
+        // 左边导航条
+        setLeftNavigationTree(model, cepService);
         return "func/conf_create";
     }
 
