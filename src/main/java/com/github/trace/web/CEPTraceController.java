@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -114,6 +115,25 @@ public class CEPTraceController {
         cepService.deleteBuriedPoint(id);
 
         return "func/bp_list";
+    }
+
+    @RequestMapping("/format")
+    @ResponseBody
+    public String format(@Param("BuriedPointList") String BuriedPointList, Model model) {
+
+        System.out.println("BP"+BuriedPointList);
+
+        return BuriedPointList+"";
+    }
+
+    @RequestMapping("/compare")
+    @ResponseBody
+    public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
+
+        System.out.println("BP"+str1);
+        System.out.println("BP"+str2);
+
+        return "compare";
     }
 
     // 此处为防止页面刷新之后, 左边导航条的数据丢失

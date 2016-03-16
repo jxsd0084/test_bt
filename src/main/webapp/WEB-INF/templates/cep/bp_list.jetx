@@ -63,7 +63,7 @@
             </tr>
             <tr>
                 <td colspan="4" style="padding-left: 20px">
-                    <textarea style="width: 100%">请输入something...1</textarea>
+                    <textarea id = "textarea1" style="width: 100%">请输入something...1</textarea>
                 </td>
             </tr>
 			</thead>
@@ -92,7 +92,7 @@
             </tr>
             <tr>
                 <td colspan="4" style="padding-left: 20px">
-                    <textarea style="width: 100%">请输入something...2</textarea>
+                    <textarea  id="textarea2" style="width: 100%">请输入something...2</textarea>
                 </td>
             </tr>
         </table>
@@ -110,7 +110,7 @@
     </div>
 </div>
 <div class="row">
-    <div style="padding-left: 20px">
+    <div  id ="compare" style="padding-left: 20px">
         结果对比表格
     </div>
 </div>
@@ -211,26 +211,118 @@
                 dataType: "text",
                 type: "GET",
                 success: function (data) {
-    //                    if (data) {
-    //                        alert(data)
-    //                    } else {
-    //                        alert(data)
-    //                    }
+
+
+
                 }
             });
         })
 
-        $("#addBPItem").click( function() {
-            alert('添加埋点项 !')
+
+    $("#browseBP").click( function() {
+        var user =
+
+        {
+
+            "username":"andy",
+
+            "age":20,
+
+            "info": { "tel": "123456", "cellphone": "98765"},
+
+            "address":
+
+                    [
+
+                        {"city":"beijing","postcode":"222333"},
+
+                        {"city":"newyork","postcode":"555666"}
+
+                    ]
+
+        }
+
+
+
+
+        var list = $('#datatable').DataTable().data();
+
+        console.log(list);
+
+        var as = [];
+
+        for(var i = 0; i < list.length ;i++ ) {
+
+            //for(var j = 0; j < list[i].length ;j++) {
+                var temp = [];
+                temp.push('{"key1":');
+                temp.push(list[i][0]);
+                temp.push(',"key2":');
+                temp.push(list[i][1]);
+                temp.push(',"key3":');
+                temp.push(list[i][2]);
+                temp.push(',"key4":');
+                temp.push(list[i][3]);
+                temp.push(',"key5":');
+                temp.push(list[i][4]);
+                temp.push(',"key6":');
+                temp.push(list[i][5]);
+                temp.push('}');
+                as.push(temp.join(""));
+          //  }
+
+        }
+
+//        var table = $('#datatable').DataTable();
+//
+//
+//        table.data().each( function (d) {
+//            d.counter++;
+//        } );
+
+
+
+        alert('预览埋点结果!')
+        $.ajax({
+            url: "${CONTEXT_PATH}/cep/format",
+            contentType: "application/json",
+            data:  {BuriedPointList:as.toString()},
+            dataType: "text",
+            type: "GET",
+            success: function (data) {
+
+                $("#textarea1").val(data);
+            }
         });
 
+    });
+
+    $("#addBPItem").click( function() {
+        alert('添加埋点项 !')
+    });
+
         $("#getServerLog").click( function() {
-            alert('获取服务端日志 !')
+           // alert('获取服务端日志 !')
+
+            str2: $("#textarea2").val('{"Uid":"1234"}')
         });
 
         $("#validateBP").click( function() {
-            alert('验证/对比埋点内容 !')
+
+        $.ajax({
+            url: "${CONTEXT_PATH}/cep/compare",
+            contentType: "application/json",
+            data:  {str1: $("#textarea1").val(),str2: $("#textarea2").val()},
+            dataType: "text",
+            type: "GET",
+            success: function (data) {
+
+                alert(data)
+
+            }
         });
+
+    });
 
         $("#deployBP").click( function() {
             alert('发布埋点配置 !')
