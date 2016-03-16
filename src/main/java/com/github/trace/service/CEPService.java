@@ -54,11 +54,9 @@ public class CEPService {
    * @param buriedPoint
    * @return
      */
-  public int insertBuriedPoint(BuriedPoint buriedPoint){
+  public int addBuriedPoint(BuriedPoint buriedPoint){
     return buriedPointMapper.insert(buriedPoint);
   }
-
-
 
   public BuriedPoint getBuriedPoint(int id) {
     return buriedPointMapper.findById(id);
@@ -68,4 +66,5 @@ public class CEPService {
   public boolean modifyBuriedPoint(String bp_name,String bp_value,String bp_value_desc,boolean is_checked ,int id) {
     return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
   }
+
 }

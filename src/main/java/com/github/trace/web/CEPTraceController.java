@@ -57,7 +57,7 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/new")
-    public String createConfig(@RequestParam(name = "id") int id, Model model) {
+    public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
 
@@ -69,20 +69,44 @@ public class CEPTraceController {
         model.addAttribute("BpValue", caller.getBpValue() );
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
+        model.addAttribute("tag", tag);
         return "func/conf_create";
     }
 
     @RequestMapping("/newConifg")
-    public String newConfig(Model model) {
+    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
         // 左边导航条
         setLeftNavigationTree(model, cepService);
+
+        model.addAttribute("parent_id", parent_id);
+        model.addAttribute("child_id", child_id);
+        model.addAttribute("tag", tag);
         return "func/conf_create";
     }
 
     @RequestMapping("/modify")
     public String modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id, Model model) {
 
-       cepService.modifyBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
+        cepService.modifyBuriedPoint(bp_name, bp_value, bp_value_desc, is_checked, id);
+
+        return "func/bp_list";
+    }
+
+    @RequestMapping("/add")
+    public String addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+
+        BuriedPoint buriedPoint = new BuriedPoint();
+        buriedPoint.setBpName(bp_name);
+        buriedPoint.setBpValue(bp_value);
+        buriedPoint.setBpValueDesc(bp_value_desc);
+        buriedPoint.setIsChecked(is_checked==true?0:1);
+        buriedPoint.setParentId(parent_id);
+        buriedPoint.setParentName("");
+        buriedPoint.setChildId(child_id);
+        buriedPoint.setChildName("");
+        buriedPoint.setRegex("");
+
+        cepService.addBuriedPoint(buriedPoint);
 
         return "func/bp_list";
     }

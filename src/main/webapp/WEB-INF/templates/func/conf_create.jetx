@@ -86,8 +86,10 @@
 
         $("#confirm").on('click', function () {
 
+            var pid = '${parent_id}'
+            var cid = '${child_id}'
             var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/cep/' + tag;
+            var url = '${CONTEXT_PATH}/cep/' + tag + '?parent_id=' + pid + '&child_id=' + cid;
             var data = '';
             var id = '${id}';
 
