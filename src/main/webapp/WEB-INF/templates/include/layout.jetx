@@ -47,7 +47,7 @@
 <script>
 	window._gtag = {traceId: '${requestScope.PV_TRACE_ID}', ajaxCount: 0};
                 #include("/include/global.min.js")
-<!--
+
 	$(document).ready(function(){
 	      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
 		  $('.tree li.parent_li > span').on('click', function (e) {
@@ -62,7 +62,6 @@
 			e.stopPropagation();
 		});
 	});
--->
 
 </script>
 #tag layout_block_default("scriptContent")#end
