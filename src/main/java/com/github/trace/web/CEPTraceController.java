@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wujing on 2016/3/11.
@@ -91,22 +93,30 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/add")
-    public String addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+    @ResponseBody
+    public Map<String,Object> addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+
+        Map<String,Object> map = new HashMap<String,Object>();
 
         BuriedPoint buriedPoint = new BuriedPoint();
         buriedPoint.setBpName(bp_name);
         buriedPoint.setBpValue(bp_value);
         buriedPoint.setBpValueDesc(bp_value_desc);
-        buriedPoint.setIsChecked(is_checked==true?0:1);
+        buriedPoint.setIsChecked(is_checked==true?1:0);
         buriedPoint.setParentId(parent_id);
         buriedPoint.setParentName("");
         buriedPoint.setChildId(child_id);
         buriedPoint.setChildName("");
         buriedPoint.setRegex("");
 
-        cepService.addBuriedPoint(buriedPoint);
+        int res = cepService.addBuriedPoint(buriedPoint);
+        if(res == 1){
+            map.put("msg", "数据成功插入");
+        }else{
+            map.put("msg", "数据插入失败!");
+        }
 
-        return "func/bp_list";
+        return map;
     }
 
     @RequestMapping("/delete")
