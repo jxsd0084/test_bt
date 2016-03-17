@@ -20,9 +20,14 @@
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">埋点数据类型</label>
         <div class="col-md-3 col-lg-3">
-            <input type="text" class="form-control focused" name="name2" id="name2" placeholder="必填" value="${BpValue}"/>
+            <select style="width: 140px">
+                <option default> - 必选 - </option>
+                <option value="0">文本（Text）</option>
+                <option value="1">数字（Number）</option>
+                <option value="2">日期（Date）</option>
+            <select/>
         </div>
-        <p class="help-block col-md-offset-2">如：字符串(String),整数(Int)</p>
+        <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
       </div>
 
       <!-- 埋点字段描述 -->
