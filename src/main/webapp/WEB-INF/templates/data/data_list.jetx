@@ -1,4 +1,4 @@
-#set(title="埋点数据类型数组")
+#set(title="埋点数据类型设置")
 #set(navbar="dataTypeConfig")
 #tag layout_block("headContent")
 <style>
@@ -13,11 +13,11 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active">${parent_name} -添加客户信息-埋点配置</li>
+		<li class="active">${parent_name} - 数据类型配置</li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/newConifg?tag=add&parent_id=${parent_id}&child_id=${child_id}'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/newConifg?tag=add&parent_id=1&child_id=1'"/>
 </div>
 <br/>
 <div class="row">

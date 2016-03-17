@@ -1,0 +1,152 @@
+#set(title="新建数据类型配置")
+#set(navbar="dataCreateConfig")
+#tag layout_block("bodyContent")
+<div class="container">
+
+  <legend>埋点配置项</legend>
+
+  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+    <fieldset>
+      <!-- 埋点字段 -->
+      <div class="form-group">
+        <label for="name" class="col-md-2 control-label">埋点字段</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control focused" name="name1" id="name1" placeholder="必填" value="${BpName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：UserID</p>
+      </div>
+
+      <!-- 埋点数据类型 -->
+      <div class="form-group">
+        <label for="name" class="col-md-2 control-label">埋点数据类型</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name2" id="name2" style="width: 140px">
+                <option value="" default> - 必选 - </option>
+                <option value="文本">文本（Text）</option>
+                <option value="数字">数字（Number）</option>
+                <option value="日期">日期（Date）</option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
+      </div>
+
+      <!-- 埋点字段描述 -->
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">埋点字段描述</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${BpValueDesc}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：用户编号</p>
+      </div>
+
+      <!-- 是否必填项 -->
+      <div class="form-group">
+        <label for="content" class="col-md-2 control-label">是否必填项</label>
+        <div class="col-md-10 col-lg-8">
+            <input type="checkbox" id="name4"
+            #if(IsChecked)
+               checked="checked"
+            #end
+            >
+        </div>
+      </div>
+
+      <!-- 确认按钮 -->
+      <div class="form-group well well-sm">
+        <div class="col-md-offset-2 col-md-10 col-lg-8">
+          <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
+          <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
+          <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script>
+
+    var showResult = function(msg){
+        $('#resultInfo').text(msg);
+	    $('#resultInfo').removeClass("hide");
+    }
+
+    var myValidator = function(){
+        var msg = '';
+        var result = true;
+
+        var value1 = $("#name1").val();
+        var value2 = $("#name2").val();
+        var value3 = $("#name3").val();
+
+        if(value1 == '' ||
+           value2 == '' ||
+           value3 == '' ){
+           msg = '必填项不能为空值!'
+           result = false;
+        }
+
+        if(!result){
+           showResult(msg);
+        }
+
+        return result;
+    }
+
+    $(document).ready(function () {
+
+        $("#confirm").on('click', function () {
+
+            var pid = '${parent_id}'
+            var cid = '${child_id}'
+            var tag = '${tag}';
+            var url = '${CONTEXT_PATH}/cep/' + tag + '?parent_id=' + pid + '&child_id=' + cid;
+            var data = '';
+            var id = '${id}';
+
+            var value1 = $("#name1").val();
+            var value2 = $("#name2").val();
+            var value3 = $("#name3").val();
+            var is_checked = $("#name4").is(':checked');
+
+            if(tag == 'modify'){
+                data = {
+                    bp_name             :value1,
+                    bp_value            :value1,
+                    bp_value_desc       :value3,
+                    is_checked          :is_checked,
+                    id                  :id
+                };
+            }else if(tag == 'add'){     // 新增不需要指定主键ID
+                data = {
+                    bp_name             :value1,
+                    bp_value            :value2,
+                    bp_value_desc       :value3,
+                    is_checked          :is_checked
+                };
+            }
+
+            if(myValidator()){
+                $.ajax({
+                    url                 :url,
+                    contentType         :"application/json",
+                    data                :data,
+                    dataType            :"text",
+                    type                :"GET",
+                    success:function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            showResult(json.info);
+                        } else {
+                            showResult("警告：" + json.info);
+                        }
+                    }
+                });
+            }
+
+        })
+    });
+
+</script>
+#end
+#include("/include/form-layout.jetx")

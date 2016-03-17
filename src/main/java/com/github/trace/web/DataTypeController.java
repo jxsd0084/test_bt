@@ -30,12 +30,13 @@ public class DataTypeController {
 
     @RequestMapping("/new")
     public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
-        return "func/conf_create";
+        return "data/data_create";
     }
 
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
-        return "func/conf_create";
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        return "data/data_create";
     }
 
     @RequestMapping("/modify")
