@@ -1,6 +1,9 @@
 package com.github.trace.web;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
@@ -13,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by wujing on 2016/3/11.
@@ -59,7 +65,9 @@ public class CEPTraceController {
     public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-        setLeftNavigationTree(model, cepService); // 左边导航条
+
+
+        setLeftNavigationTree(model, cepService);
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -72,8 +80,8 @@ public class CEPTraceController {
 
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
-
-        setLeftNavigationTree(model, cepService); // 左边导航条
+        // 左边导航条
+        setLeftNavigationTree(model, cepService);
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -132,19 +140,137 @@ public class CEPTraceController {
     @ResponseBody
     public String format(@Param("BuriedPointList") String BuriedPointList, Model model) {
 
-        System.out.println("BP"+BuriedPointList);
+        System.out.println("BuriedPointList"+BuriedPointList);
 
         return BuriedPointList+"";
+    }
+
+    @RequestMapping("/serverLog")
+    @ResponseBody
+    public String serverLog(@Param("Path") String path, Model model) {
+
+        System.out.println("BuriedPointList"+path);
+
+        return path+"";
     }
 
     @RequestMapping("/compare")
     @ResponseBody
     public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
 
-        System.out.println("BP"+str1);
-        System.out.println("BP"+str2);
+        JSONObject jsonObject1 = JSON.parseObject(str1);
+        JSONObject jsonObject2 = JSON.parseObject(str2);
 
-        return "compare";
+        String line1 = "";
+        String line2 = "";
+        String line3 = "";
+
+
+
+        List<BuriedPoint> caller = cepService.getBuriedPointList(1, 2);
+
+        JSONArray ja1 = new JSONArray();
+
+        // data, type, full, meta
+//        for (BuriedPoint br : caller) {
+//            JSONArray ja2 = new JSONArray();
+//            ja2.add(br.getId()+"");            // 编号
+//            ja2.add(br.getBpName()+"");        // 埋点字段
+//            ja2.add(br.getBpValue()+"");       // 埋点数据类型
+//            ja2.add(br.getBpValueDesc()+"");   // 埋点字段描述
+//            ja2.add(br.getIsChecked()+"");     // 是否必填项
+//            ja2.add(br.getId()+"");            // 操作
+//
+//            ja1.add(ja2);
+//        }
+
+        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(str1, new TypeReference<LinkedHashMap<String, String>>() {
+        });
+
+
+        LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(str2, new TypeReference<LinkedHashMap<String, String>>() {
+        });
+
+        for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
+
+            if(jsonMap2.containsKey(entry1.getKey())){
+                line1 += entry1.getKey()+"\t";
+                line2 += entry1.getValue()+"\t";
+                line3 += jsonMap2.get(entry1.getKey())+"\t";
+
+                JSONArray ja2 = new JSONArray();
+                ja2.add(entry1.getKey()+"");
+                ja2.add(entry1.getValue()+"");
+
+                String patternString = "";
+
+
+                if(entry1.getValue().split(",")[1].equals("文本")){
+                    patternString = ".*";
+                }
+
+
+                if(entry1.getValue().split(",")[1].equals("数字")){
+                    patternString = "^[0-9]*$";
+                }
+
+                if(entry1.getValue().split(",")[1].equals("日期")){
+                    patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
+                }
+
+                Pattern pattern = Pattern.compile(patternString);
+                Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
+                boolean b= matcher.matches();
+                //当条件满足时，将返回true，否则返回false
+
+                System.out.println("patternString:"+patternString);
+                System.out.println("jsonMap2.get(entry1.getKey()):"+jsonMap2.get(entry1.getKey()));
+                System.out.println(b);
+
+
+
+
+                ja2.add(jsonMap2.get(entry1.getKey()));
+                    ja2.add(b);
+
+
+
+                ja2.add("");
+                ja2.add("");
+
+
+
+                ja1.add(ja2);
+
+
+            }else{
+                line1 += entry1.getKey()+"\t";
+                line2 += entry1.getValue()+"\t";
+                line3 += ""+"\t";
+
+
+                JSONArray ja2 = new JSONArray();
+                ja2.add(entry1.getKey()+"");            // 编号
+                ja2.add(entry1.getValue()+"");        // 埋点字段
+                ja2.add("");       // 埋点数据类型
+                ja2.add("错误");   // 埋点字段描述
+                ja2.add("");     // 是否必填项
+                ja2.add("");            // 操作
+
+                ja1.add(ja2);
+
+            }
+
+        }
+
+
+
+        // 左边导航条
+        setLeftNavigationTree(model, cepService);
+
+        System.out.println("BuriedPointList"+ja1.toJSONString());
+
+        return ja1.toJSONString();
     }
 
     // 此处为防止页面刷新之后, 左边导航条的数据丢失
