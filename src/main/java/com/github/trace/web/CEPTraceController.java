@@ -52,7 +52,7 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -65,9 +65,7 @@ public class CEPTraceController {
     public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-
-
-        setLeftNavigationTree(model, cepService);
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -80,8 +78,8 @@ public class CEPTraceController {
 
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -271,12 +269,6 @@ public class CEPTraceController {
         System.out.println("BuriedPointList"+ja1.toJSONString());
 
         return ja1.toJSONString();
-    }
-
-    // 此处为防止页面刷新之后, 左边导航条的数据丢失
-    private void setLeftNavigationTree(Model model, CEPService cepService){
-        List<NavigationItem> navigationItemList = cepService.getConfiguration();
-        model.addAttribute("navigationItemList", navigationItemList);
     }
 
 }
