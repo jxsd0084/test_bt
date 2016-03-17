@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
+import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -94,8 +95,8 @@ public class CEPTraceController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public Map<String,Object> addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
-
+    public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+        String result = "";
         Map<String,Object> map = new HashMap<String,Object>();
 
         BuriedPoint buriedPoint = new BuriedPoint();
@@ -111,12 +112,12 @@ public class CEPTraceController {
 
         int res = cepService.addBuriedPoint(buriedPoint);
         if(res == 1){
-            map.put("msg", "数据成功插入");
+            result = "数据插入成功!";
+            return ImmutableMap.of("code", 200, "info", result);
         }else{
-            map.put("msg", "数据插入失败!");
+            result = "数据插入失败！";
+            return ImmutableMap.of("code", -1, "info", result);
         }
-
-        return map;
     }
 
     @RequestMapping("/delete")

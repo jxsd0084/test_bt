@@ -128,12 +128,12 @@
                     data                :data,
                     dataType            :"text",
                     type                :"GET",
-                    error:function(data){
-                        alert("出错了！！:" + data.info);
-                        showResult("错误信息: " + data.info);
-                    },
                     success:function (data) {
-                        showResult("插入成功!");
+                        if (data.code == 200) {
+                            showResult(data.info);
+                        } else {
+                            showResult("警告：数据插入失败！");
+                        }
                     }
                 });
             }
