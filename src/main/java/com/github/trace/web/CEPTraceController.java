@@ -86,11 +86,18 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/modify")
-    public String modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id, Model model) {
+    @ResponseBody
+    public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
+        String result = "";
 
-        cepService.modifyBuriedPoint(bp_name, bp_value, bp_value_desc, is_checked, id);
-
-        return "func/bp_list";
+        boolean flag = cepService.modifyBuriedPoint(bp_name, bp_value, bp_value_desc, is_checked, id);
+        if(flag){
+            result = "数据修改成功!";
+            return ImmutableMap.of("code", 200, "info", result);
+        }else{
+            result = "数据修改失败！";
+            return ImmutableMap.of("code", -1, "info", result);
+        }
     }
 
     @RequestMapping("/add")

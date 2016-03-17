@@ -50,7 +50,7 @@
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
           <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
-          <input type="button" class="btn btn-primary" id="confirm" value="确认1"></input>
+          <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
           <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
         </div>
       </div>
@@ -129,10 +129,11 @@
                     dataType            :"text",
                     type                :"GET",
                     success:function (data) {
-                        if (data.code == 200) {
-                            showResult(data.info);
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            showResult(json.info);
                         } else {
-                            showResult("警告：数据插入失败！");
+                            showResult("警告：" + json.info);
                         }
                     }
                 });
