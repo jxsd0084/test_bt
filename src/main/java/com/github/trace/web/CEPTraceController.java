@@ -2,8 +2,8 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.BuriedPoint;
-import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
+import com.github.trace.utils.ControllerHelper;
 import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -59,7 +59,7 @@ public class CEPTraceController {
     public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-        setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -73,7 +73,7 @@ public class CEPTraceController {
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
 
-        setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -145,12 +145,6 @@ public class CEPTraceController {
         System.out.println("BP"+str2);
 
         return "compare";
-    }
-
-    // 此处为防止页面刷新之后, 左边导航条的数据丢失
-    private void setLeftNavigationTree(Model model, CEPService cepService){
-        List<NavigationItem> navigationItemList = cepService.getConfiguration();
-        model.addAttribute("navigationItemList", navigationItemList);
     }
 
 }
