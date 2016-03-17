@@ -4,14 +4,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
+import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wujing on 2016/3/11.
@@ -43,8 +46,7 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+        setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -57,9 +59,7 @@ public class CEPTraceController {
     public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+        setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -72,8 +72,8 @@ public class CEPTraceController {
 
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+
+        setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -82,38 +82,69 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/modify")
-    public String modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id, Model model) {
+    @ResponseBody
+    public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
+        String result = "";
 
-        cepService.modifyBuriedPoint(bp_name, bp_value, bp_value_desc, is_checked, id);
-
-        return "func/bp_list";
+        boolean flag = cepService.modifyBuriedPoint(bp_name, bp_value, bp_value_desc, is_checked, id);
+        if(flag){
+            result = "数据修改成功!";
+            return ImmutableMap.of("code", 200, "info", result);
+        }else{
+            result = "数据修改失败！";
+            return ImmutableMap.of("code", -1, "info", result);
+        }
     }
 
     @RequestMapping("/add")
-    public String addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+    @ResponseBody
+    public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+        String result = "";
 
         BuriedPoint buriedPoint = new BuriedPoint();
         buriedPoint.setBpName(bp_name);
         buriedPoint.setBpValue(bp_value);
         buriedPoint.setBpValueDesc(bp_value_desc);
-        buriedPoint.setIsChecked(is_checked==true?0:1);
+        buriedPoint.setIsChecked(is_checked==true?1:0);
         buriedPoint.setParentId(parent_id);
         buriedPoint.setParentName("");
         buriedPoint.setChildId(child_id);
         buriedPoint.setChildName("");
         buriedPoint.setRegex("");
 
-        cepService.addBuriedPoint(buriedPoint);
-
-        return "func/bp_list";
+        int res = cepService.addBuriedPoint(buriedPoint);
+        if(res == 1){
+            result = "数据插入成功!";
+            return ImmutableMap.of("code", 200, "info", result);
+        }else{
+            result = "数据插入失败！";
+            return ImmutableMap.of("code", -1, "info", result);
+        }
     }
 
     @RequestMapping("/delete")
     public String deleteBuriedPoint(@Param("id") Integer id, Model model) {
-
         cepService.deleteBuriedPoint(id);
-
         return "func/bp_list";
+    }
+
+    @RequestMapping("/format")
+    @ResponseBody
+    public String format(@Param("BuriedPointList") String BuriedPointList, Model model) {
+
+        System.out.println("BP"+BuriedPointList);
+
+        return BuriedPointList+"";
+    }
+
+    @RequestMapping("/compare")
+    @ResponseBody
+    public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
+
+        System.out.println("BP"+str1);
+        System.out.println("BP"+str2);
+
+        return "compare";
     }
 
     // 此处为防止页面刷新之后, 左边导航条的数据丢失

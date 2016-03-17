@@ -1,11 +1,11 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="navtop">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a id="myHome" class="navbar-brand" href="${CONTEXT_PATH}/">蜂云-埋点工具平台_nav.inc.jetx</a>
+      <a id="myHome" class="navbar-brand" href="${CONTEXT_PATH}/">蜂云-埋点工具平台</a>
       <a class="navbar-brand hidden-md hidden-lg" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
       <ul class="user-menu">
         <li class="dropdown pull-right">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>X_X_X${principal()}<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>${principal()}<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="/user/password"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
             <li><a href="${CONTEXT_PATH}/logout"><span class="glyphicon glyphicon-log-out"></span> 退出</a></li>
@@ -19,22 +19,22 @@
    	<div class="tree">
         <ul>
             <li>
-               <span><i class="icon-folder-open"></i> <a href="#">前端埋点_nav.inc.jetx</a></span>
+               <span><i class="icon-folder-open"></i> <a href="#">前端埋点</a></span>
                #for(item : navigationItemList)
                 #if(item.parentId == 1)
                    <ul>
                        <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}"> ${item.childName} _nav.inc.jetx </a></span>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}"> ${item.childName} </a></span>
                        </li>
                    </ul>
                 #end
                #end
-               <span><i class="icon-folder-open"></i> <a href="#">前端埋点_nav.inc.jetx</a></span>
+               <span><i class="icon-folder-open"></i> <a href="#">前端埋点</a></span>
                #for(item : navigationItemList)
                 #if(item.parentId == 2)
                    <ul>
                        <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}"> ${item.childName} _nav.inc.jetx </a></span>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}"> ${item.childName} </a></span>
                        </li>
                    </ul>
                 #end
