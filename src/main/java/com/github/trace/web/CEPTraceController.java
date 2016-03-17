@@ -7,6 +7,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
+import com.github.trace.utils.ControllerHelper;
 import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -264,7 +265,7 @@ public class CEPTraceController {
 
 
         // 左边导航条
-        setLeftNavigationTree(model, cepService);
+        ControllerHelper.setLeftNavigationTree(model, cepService);
 
         System.out.println("BuriedPointList"+ja1.toJSONString());
 
