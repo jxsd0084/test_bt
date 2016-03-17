@@ -112,7 +112,7 @@
             if(tag == 'modify'){
                 data = {
                     bp_name             :value1,
-                    bp_value            :value1,
+                    bp_value            :value2,
                     bp_value_desc       :value3,
                     is_checked          :is_checked,
                     id                  :id
