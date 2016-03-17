@@ -20,11 +20,11 @@
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">埋点数据类型</label>
         <div class="col-md-3 col-lg-3">
-            <select style="width: 140px">
-                <option default> - 必选 - </option>
-                <option value="0">文本（Text）</option>
-                <option value="1">数字（Number）</option>
-                <option value="2">日期（Date）</option>
+            <select name="name2" id="name2" style="width: 140px">
+                <option value="" default> - 必选 - </option>
+                <option value="文本">文本（Text）</option>
+                <option value="数字">数字（Number）</option>
+                <option value="日期">日期（Date）</option>
             <select/>
         </div>
         <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,8 +46,7 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+        setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -61,9 +59,7 @@ public class CEPTraceController {
     public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+        setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -76,8 +72,8 @@ public class CEPTraceController {
 
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
-        // 左边导航条
-        setLeftNavigationTree(model, cepService);
+
+        setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -104,7 +100,6 @@ public class CEPTraceController {
     @ResponseBody
     public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
         String result = "";
-        Map<String,Object> map = new HashMap<String,Object>();
 
         BuriedPoint buriedPoint = new BuriedPoint();
         buriedPoint.setBpName(bp_name);
@@ -129,9 +124,7 @@ public class CEPTraceController {
 
     @RequestMapping("/delete")
     public String deleteBuriedPoint(@Param("id") Integer id, Model model) {
-
         cepService.deleteBuriedPoint(id);
-
         return "func/bp_list";
     }
 
