@@ -63,8 +63,8 @@ public class CEPService {
   }
 
 
-  public boolean modifyBuriedPoint(String bp_name,String bp_value,String bp_value_desc,boolean is_checked ,int id) {
-    return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,bp_value_desc,is_checked,id);
+  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc,boolean is_checked ,int id) {
+    return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,regex,bp_value_desc,is_checked,id);
   }
 
 }

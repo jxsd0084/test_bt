@@ -28,6 +28,7 @@
                 <th>编号</th>
 				<th>埋点字段</th>
                 <th>埋点数据类型</th>
+                <th>自定义正则表达式</th>
 				<th>埋点字段描述</th>
                 <th>是否必填项</th>
                 <th>操作</th>
@@ -156,7 +157,7 @@
                 	}
                 },
                 {
-                    targets: 4, render: function (data, type, full, meta) {
+                    targets: 5, render: function (data, type, full, meta) {
 						if(data){
 							return '<input type="checkbox" checked disabled> 必填项'
 						}else {
@@ -166,7 +167,7 @@
                 	}
                 },
                 {
-                    targets: 5, render: function (data, type, full, meta) {
+                    targets: 6, render: function (data, type, full, meta) {
                     	return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="delete" style="width: 40px" type="button" value="刪除">'
                 	}
                 }
@@ -204,7 +205,7 @@
         for(var i = 0; i < list.length ;i++ ) {
 
                 var temp = [];
-                temp.push('"'+list[i][1]+'":"'+list[i][3]+","+list[i][2]+","+list[i][4]+'"');
+                temp.push('"'+list[i][1]+'":"'+list[i][4]+","+list[i][2]+","+escape(list[i][3])+'"');
                 as.push(temp);
 
         }
@@ -214,7 +215,7 @@
         $.ajax({
             url: "${CONTEXT_PATH}/cep/format",
             contentType: "application/json",
-            data:  {BuriedPointList:as.toString()},
+            data:  {BuriedPointList:as},
             dataType: "text",
             type: "GET",
             success: function (data) {
@@ -240,11 +241,10 @@
         $.ajax({
             url: "${CONTEXT_PATH}/cep/compare",
             contentType: "application/json",
-            data:  {str1: $("#textarea1").val(),str2: $("#textarea2").val()},
+            data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
             dataType: "json",
             type: "GET",
             success: function (mydata) {
-
 
                 $('#datatable2').dataTable().fnDestroy();
 

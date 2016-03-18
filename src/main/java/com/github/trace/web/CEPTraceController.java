@@ -9,6 +9,7 @@ import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
 import com.github.trace.utils.ControllerHelper;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.apache.velocity.runtime.parser.node.ASTStringLiteral.unescape;
 
 /**
  * Created by wujing on 2016/3/11.
@@ -46,6 +51,7 @@ public class CEPTraceController {
             ja2.add(br.getId());            // 编号
             ja2.add(br.getBpName());        // 埋点字段
             ja2.add(br.getBpValue());       // 埋点数据类型
+            ja2.add(br.getRegex());         // 自定义正则表达式
             ja2.add(br.getBpValueDesc());   // 埋点字段描述
             ja2.add(br.getIsChecked());     // 是否必填项
             ja2.add(br.getId());            // 操作
@@ -71,6 +77,7 @@ public class CEPTraceController {
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
         model.addAttribute("BpValue", caller.getBpValue() );
+        model.addAttribute("Regex", caller.getRegex() );
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
         model.addAttribute("tag", tag);
@@ -90,10 +97,10 @@ public class CEPTraceController {
 
     @RequestMapping("/modify")
     @ResponseBody
-    public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
+    public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("regex") String regex, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
         String result = "";
 
-        boolean flag = cepService.modifyBuriedPoint(bp_name, bp_value, bp_value_desc, is_checked, id);
+        boolean flag = cepService.modifyBuriedPoint(bp_name, bp_value,regex, bp_value_desc, is_checked, id);
         if(flag){
             result = "数据修改成功!";
             return ImmutableMap.of("code", 200, "info", result);
@@ -157,7 +164,10 @@ public class CEPTraceController {
     @ResponseBody
     public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
 
+
+
         JSONObject jsonObject1 = JSON.parseObject(str1);
+        //JSONObject jsonObject1 = JSON.parseObject(str1);
         JSONObject jsonObject2 = JSON.parseObject(str2);
 
         String line1 = "";
@@ -202,12 +212,11 @@ public class CEPTraceController {
                 ja2.add(entry1.getValue()+"");
 
                 String patternString = "";
-
+                String patternString2 = "";
 
                 if(entry1.getValue().split(",")[1].equals("文本")){
                     patternString = ".*";
                 }
-
 
                 if(entry1.getValue().split(",")[1].equals("数字")){
                     patternString = "^[0-9]*$";
@@ -222,47 +231,54 @@ public class CEPTraceController {
                 boolean b= matcher.matches();
                 //当条件满足时，将返回true，否则返回false
 
+
+                if(entry1.getValue().split(",").length>=3){
+
+                    try {
+                        patternString2 = URLDecoder.decode(entry1.getValue().split(",")[2].toString(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+
+                    Pattern pattern2 = null;
+                    pattern2 = Pattern.compile( patternString2);
+
+                    Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
+                    b= matcher2.matches();
+                }
+
                 System.out.println("patternString:"+patternString);
+                System.out.println("patternString2:"+patternString2);
                 System.out.println("jsonMap2.get(entry1.getKey()):"+jsonMap2.get(entry1.getKey()));
                 System.out.println(b);
 
 
-
-
                 ja2.add(jsonMap2.get(entry1.getKey()));
-                    ja2.add(b);
-
-
+                ja2.add(b);
 
                 ja2.add("");
                 ja2.add("");
-
-
 
                 ja1.add(ja2);
-
 
             }else{
                 line1 += entry1.getKey()+"\t";
                 line2 += entry1.getValue()+"\t";
                 line3 += ""+"\t";
 
-
                 JSONArray ja2 = new JSONArray();
-                ja2.add(entry1.getKey()+"");            // 编号
-                ja2.add(entry1.getValue()+"");        // 埋点字段
-                ja2.add("");       // 埋点数据类型
-                ja2.add("错误");   // 埋点字段描述
-                ja2.add("");     // 是否必填项
-                ja2.add("");            // 操作
+                ja2.add(entry1.getKey()+"");
+                ja2.add(entry1.getValue()+"");
+                ja2.add("");
+                ja2.add("错误");
+                ja2.add("");
+                ja2.add("");
 
                 ja1.add(ja2);
 
             }
 
         }
-
-
 
         // 左边导航条
         ControllerHelper.setLeftNavigationTree(model, cepService);
