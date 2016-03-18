@@ -80,17 +80,23 @@ public class CEPTraceController {
         model.addAttribute("Regex", caller.getRegex() );
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
+
+        model.addAttribute("parent_id", caller.getParentId());
+        model.addAttribute("child_id", caller.getChildId());
+        model.addAttribute("parent_name", caller.getParentName());
+
         model.addAttribute("tag", tag);
         return "func/conf_create";
     }
 
     @RequestMapping("/newConifg")
-    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
+    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id,  @RequestParam(name = "parent_name") String parent_name,Model model) {
 
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
+        model.addAttribute("parent_name", parent_name);
         model.addAttribute("tag", tag);
         return "func/conf_create";
     }
@@ -270,7 +276,7 @@ public class CEPTraceController {
                 ja2.add(entry1.getKey()+"");
                 ja2.add(entry1.getValue()+"");
                 ja2.add("");
-                ja2.add("错误");
+                ja2.add("false");
                 ja2.add("");
                 ja2.add("");
 
