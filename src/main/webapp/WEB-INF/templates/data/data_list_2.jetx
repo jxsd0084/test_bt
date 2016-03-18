@@ -42,8 +42,6 @@
 #tag layout_block("scriptContent")
 <!-- 隐藏域 -->
 <input type="hidden" id="id" name="id" value="${id}" />
-<input type="hidden" id="parent_id" name="parent_id" value="${parent_id}" />
-<input type="hidden" id="child_id" name="child_id" value="${child_id}" />
 <script>
 	var data = ${data}
 	$(document).ready(function () {
@@ -62,7 +60,7 @@
             columnDefs: [
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<input name="modify" id ="' + data + '" style="width: 50px" type="button" value="修改">';
+                        return '<a href="${CONTEXT_PATH}/dataType/new?id=' + full[0] + '&tag=modify" >修改</a>';
                     }
                 }
             ]
@@ -70,160 +68,7 @@
     });
 
     $("[name='modify']").on('click', function () {
-        window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify';
-    });
-
-    $("[name='delete']").on('click', function () {
-        //window.location.href='${CONTEXT_PATH}/cep/delete?id='+this.id;
-        $.ajax({
-            url: "${CONTEXT_PATH}/cep/delete",
-            contentType: "application/json",
-            data:  {id:this.id},
-            dataType: "text",
-            type: "GET",
-            success: function (data) {
-            }
-        });
-    })
-
-    $("#browseBP").click( function() {
-        var user =
-        {
-            "username":"andy",
-            "age":20,
-            "info": { "tel": "123456", "cellphone": "98765"},
-            "address":
-                    [
-                        {"city":"beijing","postcode":"222333"},
-                        {"city":"newyork","postcode":"555666"}
-                    ]
-        }
-
-        var list = $('#datatable').DataTable().data();
-        console.log(list);
-        var as = [];
-        for(var i = 0; i < list.length ;i++ ) {
-            //for(var j = 0; j < list[i].length ;j++) {
-                var temp = [];
-                temp.push('{"key1":');
-                temp.push(list[i][0]);
-                temp.push(',"key2":');
-                temp.push(list[i][1]);
-                temp.push(',"key3":');
-                temp.push(list[i][2]);
-                temp.push(',"key4":');
-                temp.push(list[i][3]);
-                temp.push(',"key5":');
-                temp.push(list[i][4]);
-                temp.push(',"key6":');
-                temp.push(list[i][5]);
-                temp.push('}');
-                as.push(temp.join(""));
-          //  }
-        }
-
-//        var table = $('#datatable').DataTable();
-
-//        table.data().each( function (d) {
-//            d.counter++;
-//        } );
-
-        alert('预览埋点结果!')
-        $.ajax({
-            url: "${CONTEXT_PATH}/cep/format",
-            contentType: "application/json",
-            data:  {BuriedPointList:as.toString()},
-            dataType: "text",
-            type: "GET",
-            success: function (data) {
-                $("#textarea1").val(data);
-            }
-        });
-
-    });
-
-    $("#addBPItem").click( function() {
-        alert('添加埋点项 !')
-    });
-
-    $("#getServerLog").click( function() {
-        // alert('获取服务端日志 !')
-        str2: $("#textarea2").val('{"Uid":"1234"}')
-    });
-
-    $("#validateBP").click( function() {
-        $.ajax({
-            url: "${CONTEXT_PATH}/cep/compare",
-            contentType: "application/json",
-            data:  {str1: $("#textarea1").val(),str2: $("#textarea2").val()},
-            dataType: "text",
-            type: "GET",
-            success: function (data) {
-                var json = JSON.parse(data);
-                alert("<>" + json);
-
-                var data = json;
-                $(document).ready(function () {
-                    var table = $('#datatable2').DataTable({
-                        stateSave: true,
-                        searching: true,
-                        autowidth: true,
-                        paging: true,
-                        info: true,
-                        fixedHeader: fixedHeaderObject,
-                        language: lang,
-                        dom: bootstrapDom,
-                        order: [[2, 'desc'], [3, 'desc']],
-                        lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
-                        data: data,
-                        columnDefs: [
-                            {
-                                targets: 0, render: function (data, type, full, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                targets: 1, render: function (data, type, full, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                targets: 2, render: function (data, type, full, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                targets: 3, render: function (data, type, full, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                targets: 4, render: function (data, type, full, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                targets: 5, render: function (data, type, full, meta) {
-                                    return data;
-                                }
-                            }
-                        ]
-                    });
-                });
-            }
-        });
-    });
-
-    $("#deployBP").click( function() {
-        alert('发布埋点配置 !')
-    });
-
-    $("#generateLeve1WH").click( function() {
-        alert('生成一级仓库 !')
-    });
-
-    $("#previewBPReport").click( function() {
-        alert('预览报表结果 !')
+        window.location.href='${CONTEXT_PATH}/dataType/new?id=' + this.id + '&tag=modify';
     });
 
 </script>

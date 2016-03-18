@@ -54,12 +54,12 @@ public class DataTypeController {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(id);
 
         JSONArray jsonArray1 = new JSONArray();
-        for (LevelTwoFields levelTwoFields : list) {
+        for (LevelTwoFields fieldObj : list) {
             JSONArray jsonArray2 = new JSONArray();
-            jsonArray2.add(levelTwoFields.getId());
-            jsonArray2.add(levelTwoFields.getLevel1FieldName() + "_" + levelTwoFields.getId());
-            jsonArray2.add(levelTwoFields.getLevel1FieldTag());
-            jsonArray2.add(levelTwoFields.getLevel2FieldName());
+            jsonArray2.add(fieldObj.getId());
+            jsonArray2.add(fieldObj.getLevel1FieldName() + "_" + fieldObj.getId());
+            jsonArray2.add(fieldObj.getLevel1FieldTag());
+            jsonArray2.add(fieldObj.getLevel2FieldName());
 
             jsonArray1.add(jsonArray2);
         }
@@ -67,6 +67,18 @@ public class DataTypeController {
         ControllerHelper.setLeftNavigationTree(model, cepService);
         model.addAttribute("data", jsonArray1);
         return "data/data_list_2";
+    }
+
+    @RequestMapping("/new")
+    public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
+
+        LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+
+        model.addAttribute("id", id );
+        model.addAttribute("obj", fieldObj);
+        model.addAttribute("tag", tag);
+        return "data/data_create";
     }
 
     @RequestMapping("/newConifg")

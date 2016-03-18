@@ -36,4 +36,13 @@ public class DataTypeService {
     return levelTwoFieldMapper.findLevelTwoFieldsListById(id);
   }
 
+  /**
+   * 根据二级字段ID查询 二级字段
+   * @param id 二级字段ID
+   * @return 二级字段
+     */
+  public LevelTwoFields getLevelTwoFieldById(int id) {
+    return levelTwoFieldMapper.findById(id);
+  }
+
 }
