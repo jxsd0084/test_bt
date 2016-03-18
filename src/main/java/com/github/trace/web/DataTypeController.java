@@ -2,6 +2,7 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
+import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
@@ -28,7 +29,7 @@ public class DataTypeController {
     @Autowired
     private DataTypeService dataTypeService;
 
-    @RequestMapping("/list")
+    @RequestMapping("/listLevelOne")
     public String getFieldList(Model model) {
         List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
 
@@ -48,9 +49,24 @@ public class DataTypeController {
         return "data/data_list";
     }
 
-    @RequestMapping("/new")
-    public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
-        return "data/data_create";
+    @RequestMapping("/listLevelTwo")
+    public String createConfig(@RequestParam(name = "id") int id, Model model) {
+        List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(id);
+
+        JSONArray jsonArray1 = new JSONArray();
+        for (LevelTwoFields levelTwoFields : list) {
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(levelTwoFields.getId());
+            jsonArray2.add(levelTwoFields.getLevel1FieldName() + "_" + levelTwoFields.getId());
+            jsonArray2.add(levelTwoFields.getLevel1FieldTag());
+            jsonArray2.add(levelTwoFields.getLevel2FieldName());
+
+            jsonArray1.add(jsonArray2);
+        }
+
+        ControllerHelper.setLeftNavigationTree(model, cepService);
+        model.addAttribute("data", jsonArray1);
+        return "data/data_list_2";
     }
 
     @RequestMapping("/newConifg")
