@@ -29,6 +29,7 @@
 				<th>标识</th>
                 <th>名称</th>
 				<th>组件名称</th>
+				<th>操作</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -46,41 +47,26 @@
 <script>
 	var data = ${data}
 	$(document).ready(function () {
-            var table = $('#datatable').DataTable({
-                stateSave: true,
-                searching: true,
-                autowidth: true,
-                paging: true,
-                info: true,
-                fixedHeader: fixedHeaderObject,
-                language: lang,
-                dom: bootstrapDom,
-                order: [[2, 'desc'], [3, 'desc']],
-                lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
-                data: data,
-                columnDefs: [
-                    {
-                        targets: 0, render: function (data, type, full, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        targets: 1, render: function (data, type, full, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        targets: 2, render: function (data, type, full, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        targets: 3, render: function (data, type, full, meta) {
-                            return data;
-                        }
+        var table = $('#datatable').DataTable({
+            stateSave: true,
+            searching: true,
+            autowidth: true,
+            paging: true,
+            info: true,
+            fixedHeader: fixedHeaderObject,
+            language: lang,
+            dom: bootstrapDom,
+            order: [[2, 'desc'], [3, 'desc']],
+            lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
+            data: data,
+            columnDefs: [
+                {
+                    targets: 4, render: function (data, type, full, meta) {
+                        return '<input name="modify" id ="' + data + '" style="width: 50px" type="button" value="修改">';
                     }
-                ]
-            });
+                }
+            ]
+        });
     });
 
     $("[name='modify']").on('click', function () {
