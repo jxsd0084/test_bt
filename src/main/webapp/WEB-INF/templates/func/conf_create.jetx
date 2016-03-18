@@ -30,11 +30,20 @@
         <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
       </div>
 
+        <!-- 自定义正则表达式 -->
+        <div class="form-group">
+            <label for="name" class="col-md-2 control-label">自定义正则表达式</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control focused" name="name3" id="name3"  value="${Regex}"/>
+            </div>
+            <p class="help-block col-md-offset-2">如：[0-9]5</p>
+        </div>
+
       <!-- 埋点字段描述 -->
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">埋点字段描述</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${BpValueDesc}"/>
+          <input type="text" class="form-control" name="name4" id="name4" placeholder="必填" value="${BpValueDesc}"/>
         </div>
         <p class="help-block col-md-offset-2">如：用户编号</p>
       </div>
@@ -43,7 +52,7 @@
       <div class="form-group">
         <label for="content" class="col-md-2 control-label">是否必填项</label>
         <div class="col-md-10 col-lg-8">
-            <input type="checkbox" id="name4"
+            <input type="checkbox" id="name5"
             #if(IsChecked)
                checked="checked"
             #end
@@ -78,10 +87,11 @@
         var value1 = $("#name1").val();
         var value2 = $("#name2").val();
         var value3 = $("#name3").val();
+        var value4 = $("#name4").val();
 
         if(value1 == '' ||
            value2 == '' ||
-           value3 == '' ){
+           value4 == '' ){
            msg = '必填项不能为空值!'
            result = false;
         }
@@ -107,13 +117,15 @@
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
-            var is_checked = $("#name4").is(':checked');
+            var value4 = $("#name4").val();
+            var is_checked = $("#name5").is(':checked');
 
             if(tag == 'modify'){
                 data = {
                     bp_name             :value1,
                     bp_value            :value2,
-                    bp_value_desc       :value3,
+                    regex               :value3,
+                    bp_value_desc       :value4,
                     is_checked          :is_checked,
                     id                  :id
                 };
