@@ -1,6 +1,9 @@
 package com.github.trace.web;
 
+import com.alibaba.fastjson.JSONArray;
+import com.github.trace.entity.LevelOneFields;
 import com.github.trace.service.CEPService;
+import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,10 +25,26 @@ public class DataTypeController {
 
     @Autowired
     private CEPService cepService;
+    @Autowired
+    private DataTypeService dataTypeService;
 
     @RequestMapping("/list")
-    public String callerList(@RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, @RequestParam(name = "parent_name") String parent_name, Model model) {
+    public String getFieldList(Model model) {
+        List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
+
+        JSONArray jsonArray1 = new JSONArray();
+        for (LevelOneFields levelOneField : list) {
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(levelOneField.getId());
+            jsonArray2.add(levelOneField.getLevel1FieldTag());
+            jsonArray2.add(levelOneField.getLevel1FieldName());
+            jsonArray2.add(levelOneField.getLevel1FieldDesc());
+
+            jsonArray1.add(jsonArray2);
+        }
+
         ControllerHelper.setLeftNavigationTree(model, cepService);
+        model.addAttribute("data", jsonArray1);
         return "data/data_list";
     }
 
