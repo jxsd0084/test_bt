@@ -67,7 +67,7 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/edit?id=' + full[0] + '&tag=modify&lev=1" >修改</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?id=' + full[0] + '&tag=modify" >修改</a>';
                     }
                 }
             ]

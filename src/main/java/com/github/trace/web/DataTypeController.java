@@ -6,6 +6,7 @@ import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
+import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class DataTypeController {
     private DataTypeService dataTypeService;
 
     @RequestMapping("/listLevelOne")
-    public String getFieldList(Model model) {
+    public String getLeveOneFieldsList(Model model) {
         List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
 
         JSONArray jsonArray1 = new JSONArray();
@@ -50,7 +51,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String createConfig(@RequestParam(name = "id") int id, Model model) {
+    public String getLeveTwoFieldsList(@RequestParam(name = "id") int id, Model model) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(id);
 
         JSONArray jsonArray1 = new JSONArray();
@@ -69,21 +70,28 @@ public class DataTypeController {
         return "data/data_list_2";
     }
 
-    @RequestMapping("/edit")
-    public String editLevelOne(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, Model model) {
-        if (lev == 1){
-            LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(id);
-            model.addAttribute("obj", fieldObj);
-        }else{
-            LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
-            model.addAttribute("obj", fieldObj);
-        }
+    @RequestMapping("/editLevelOne")
+    public String editLevelOne(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
+        LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(id);
+        model.addAttribute("obj", fieldObj);
+
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("tag", tag);
-        model.addAttribute("lev", lev);
         return "data/data_edit";
+    }
+
+    @RequestMapping("/editLevelTwo")
+    public String editLevelTwo(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
+        LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
+        model.addAttribute("obj", fieldObj);
+
+        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+
+        model.addAttribute("id", id );
+        model.addAttribute("tag", tag);
+        return "data/data_edit_2";
     }
 
     @RequestMapping("/newConifg")
@@ -98,10 +106,25 @@ public class DataTypeController {
         return null;
     }
 
-    @RequestMapping("/add")
+    @RequestMapping("/addLevelOne")
     @ResponseBody
-    public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
-        return null;
+    public Map addLevelOne(@Param("tag") String level1FieldTag, @Param("name") String level1FieldName, @Param("desc") String level1FieldDesc) {
+
+        String result = "";
+
+        LevelOneFields levelOneFields = new LevelOneFields();
+        levelOneFields.setLevel1FieldTag(level1FieldTag);
+        levelOneFields.setLevel1FieldName(level1FieldName);
+        levelOneFields.setLevel1FieldDesc(level1FieldDesc);
+
+        int res = dataTypeService.addLevelOneFields(levelOneFields);
+        if(res == 1){
+            result = "数据插入成功!";
+            return ImmutableMap.of("code", 200, "info", result);
+        }else{
+            result = "数据插入失败！";
+            return ImmutableMap.of("code", -1, "info", result);
+        }
     }
 
 }

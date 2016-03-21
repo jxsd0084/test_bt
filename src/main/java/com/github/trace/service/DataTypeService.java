@@ -54,4 +54,13 @@ public class DataTypeService {
     return levelTwoFieldMapper.findById(id);
   }
 
+  /**
+   * 插入一级新字段
+   * @param levelOneFields
+   * @return
+     */
+  public int addLevelOneFields(LevelOneFields levelOneFields) {
+    return levelOneFieldMapper.insert(levelOneFields);
+  }
+
 }
