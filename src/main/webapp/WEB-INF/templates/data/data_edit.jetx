@@ -9,12 +9,30 @@
     <fieldset>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">组件名称</label>
+        <label for="profile" class="col-md-2 control-label">一级组件标识</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.level2FieldName}"/>
+          <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" value="${obj.level1FieldTag}"/>
         </div>
-        <p class="help-block col-md-offset-2">如：验证码点击次数</p>
+        <p class="help-block col-md-offset-2">如：Register (英文单词)</p>
       </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">一级组件名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.level1FieldName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：注册 (中文汉字)</p>
+      </div>
+
+      #if(lev == 2)
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">二级组件名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.level2FieldName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：验证码点击次数 (中文汉字)</p>
+      </div>
+      #end
 
       <!-- 确认按钮 -->
       <div class="form-group well well-sm">

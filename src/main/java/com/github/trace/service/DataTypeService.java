@@ -28,6 +28,15 @@ public class DataTypeService {
     return levelOneFieldMapper.findAll();
   }
 
+  /**
+   * 根据一级字段ID查询 二级字段
+   * @param id 二级字段ID
+   * @return 二级字段
+     */
+  public LevelOneFields getLevelOneFieldById(int id) {
+    return levelOneFieldMapper.findById(id);
+  }
+
   /***
    * 根据一级字段ID获取 二级字段 列表
    * @param id 一级字段ID

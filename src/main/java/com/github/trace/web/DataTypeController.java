@@ -69,25 +69,30 @@ public class DataTypeController {
         return "data/data_list_2";
     }
 
-    @RequestMapping("/new")
-    public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
-
-        LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
+    @RequestMapping("/edit")
+    public String editLevelOne(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, Model model) {
+        if (lev == 1){
+            LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(id);
+            model.addAttribute("obj", fieldObj);
+        }else{
+            LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
+            model.addAttribute("obj", fieldObj);
+        }
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
         model.addAttribute("id", id );
-        model.addAttribute("obj", fieldObj);
         model.addAttribute("tag", tag);
-        return "data/data_create";
+        model.addAttribute("lev", lev);
+        return "data/data_edit";
     }
 
     @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
-        return "data/data_create";
+        return "data/data_edit";
     }
 
-    @RequestMapping("/modify")
+    @RequestMapping("/update")
     @ResponseBody
     public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
         return null;
@@ -97,23 +102,6 @@ public class DataTypeController {
     @ResponseBody
     public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
         return null;
-    }
-
-    @RequestMapping("/delete")
-    public String deleteBuriedPoint(@Param("id") Integer id, Model model) {
-        return "func/bp_list";
-    }
-
-    @RequestMapping("/format")
-    @ResponseBody
-    public String format(@Param("BuriedPointList") String BuriedPointList, Model model) {
-        return "";
-    }
-
-    @RequestMapping("/compare")
-    @ResponseBody
-    public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
-        return "";
     }
 
 }

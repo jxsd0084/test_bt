@@ -60,7 +60,7 @@
             columnDefs: [
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/new?id=' + full[0] + '&tag=modify" >修改</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/edit?id=' + full[0] + '&tag=modify&lev=2" >修改</a>';
                     }
                 }
             ]

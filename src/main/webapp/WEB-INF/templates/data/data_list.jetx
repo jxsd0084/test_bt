@@ -67,14 +67,10 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<input name="modify" id ="' + data + '" style="width: 50px" type="button" value="修改">';
+                        return '<a href="${CONTEXT_PATH}/dataType/edit?id=' + full[0] + '&tag=modify&lev=1" >修改</a>';
                     }
                 }
             ]
-        });
-
-        $("[name='modify']").on('click', function () {
-            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify';
         });
 
     });
