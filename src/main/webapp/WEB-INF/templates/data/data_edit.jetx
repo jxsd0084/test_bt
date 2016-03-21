@@ -1,5 +1,5 @@
-#set(title="数据类型新建项")
-#set(navbar="dataCreate")
+#set(title="数据类型一级字段编辑")
+#set(navbar="dataLevelOneEdit")
 #tag layout_block("bodyContent")
 <div class="container">
 
@@ -78,7 +78,7 @@
         $("#confirm").on('click', function () {
 
             var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/dataType/addLevelOne';
+            var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelOne';
             var data = '';
             var id = '${id}';
 

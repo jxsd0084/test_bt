@@ -5,11 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
-import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
 import com.github.trace.utils.ControllerHelper;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.velocity.runtime.parser.node.ASTStringLiteral.unescape;
 
 /**
  * Created by wujing on 2016/3/11.
@@ -119,7 +115,6 @@ public class CEPTraceController {
     @RequestMapping("/add")
     @ResponseBody
     public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
-        String result = "";
 
         BuriedPoint buriedPoint = new BuriedPoint();
         buriedPoint.setBpName(bp_name);
@@ -133,13 +128,8 @@ public class CEPTraceController {
         buriedPoint.setRegex("");
 
         int res = cepService.addBuriedPoint(buriedPoint);
-        if(res == 1){
-            result = "数据插入成功!";
-            return ImmutableMap.of("code", 200, "info", result);
-        }else{
-            result = "数据插入失败！";
-            return ImmutableMap.of("code", -1, "info", result);
-        }
+
+        return ControllerHelper.returnResponseVal(res);
     }
 
     @RequestMapping("/delete")

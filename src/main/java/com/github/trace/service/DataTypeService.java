@@ -72,4 +72,23 @@ public class DataTypeService {
     return levelTwoFieldMapper.insert(levelTwoFields);
   }
 
+
+  /**
+   * 更新一级字段
+   * @param levelOneFields
+   * @return
+     */
+  public int updateLevelOne(LevelOneFields levelOneFields) {
+    return levelOneFieldMapper.update(levelOneFields);
+  }
+
+  /**
+   * 更新一级字段
+   * @param levelTwoFields
+   * @return
+     */
+  public int updateLevelTwo(LevelTwoFields levelTwoFields) {
+    return levelTwoFieldMapper.update(levelTwoFields);
+  }
+
 }
