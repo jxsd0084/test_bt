@@ -6,7 +6,6 @@ import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
-import com.google.common.collect.ImmutableMap;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -106,17 +105,42 @@ public class DataTypeController {
         }
     }
 
-    @RequestMapping("/update")
+    @RequestMapping("/modifyLevelOne")
     @ResponseBody
-    public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
-        return null;
+    public Map modifyLevelOne(@Param("L1_tag") String l1_tag, @Param("L1_name") String l1_name, @Param("L1_desc") String l1_desc, @Param("id") int id) {
+
+        LevelOneFields levelOneFields = new LevelOneFields();
+        levelOneFields.setId(id);
+        levelOneFields.setLevel1FieldTag(l1_tag);
+        levelOneFields.setLevel1FieldName(l1_name);
+        levelOneFields.setLevel1FieldDesc(l1_desc);
+
+        int res = dataTypeService.updateLevelOne(levelOneFields);
+
+        return ControllerHelper.returnResponseVal(res);
+
+    }
+
+    @RequestMapping("/modifyLevelTwo")
+    @ResponseBody
+    public Map modifyLevelTwo(@Param("L1_tag") String l1_tag, @Param("L1_name") String l1_name, @Param("L2_name") String l2_name, @Param("L2_desc") String l2_desc, @Param("id") int id) {
+
+        LevelTwoFields levelTwoFields = new LevelTwoFields();
+        levelTwoFields.setId(id);
+        levelTwoFields.setLevel1FieldTag(l1_tag);
+        levelTwoFields.setLevel1FieldName(l1_name);
+        levelTwoFields.setLevel2FieldName(l2_name);
+        levelTwoFields.setLevel2FieldDesc(l2_desc);
+
+        int res = dataTypeService.updateLevelTwo(levelTwoFields);
+
+        return ControllerHelper.returnResponseVal(res);
+
     }
 
     @RequestMapping("/addLevelOne")
     @ResponseBody
     public Map addLevelOne(@Param("L1_tag") String tag, @Param("L1_name") String name, @Param("L1_desc") String desc) {
-
-        String result = "";
 
         LevelOneFields levelOneFields = new LevelOneFields();
         levelOneFields.setLevel1FieldTag("a2");
@@ -124,20 +148,14 @@ public class DataTypeController {
         levelOneFields.setLevel1FieldDesc("a2");
 
         int res = dataTypeService.addLevelOneFields(levelOneFields);
-        if(res == 1){
-            result = "数据插入成功!";
-            return ImmutableMap.of("code", 200, "info", result);
-        }else{
-            result = "数据插入失败！";
-            return ImmutableMap.of("code", -1, "info", result);
-        }
+
+        return ControllerHelper.returnResponseVal(res);
+
     }
 
     @RequestMapping("/addLevelTwo")
     @ResponseBody
     public Map addLevelTwo(@Param("L1_tag") String l1_tag, @Param("L1_name") String l1_name, @Param("L2_name") String l2_name, @Param("L2_desc") String l2_desc) {
-
-        String result = "";
 
         LevelTwoFields levelTwoFields = new LevelTwoFields();
         levelTwoFields.setLevel1FieldId(3);
@@ -147,13 +165,9 @@ public class DataTypeController {
         levelTwoFields.setLevel2FieldDesc("xxx");
 
         int res = dataTypeService.addLevelTwoFields(levelTwoFields);
-        if(res == 1){
-            result = "数据插入成功!";
-            return ImmutableMap.of("code", 200, "info", result);
-        }else{
-            result = "数据插入失败！";
-            return ImmutableMap.of("code", -1, "info", result);
-        }
+
+        return ControllerHelper.returnResponseVal(res);
+
     }
 
 }

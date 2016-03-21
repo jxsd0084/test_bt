@@ -42,8 +42,6 @@
 #tag layout_block("scriptContent")
 <!-- 隐藏域 -->
 <input type="hidden" id="id" name="id" value="${id}" />
-<input type="hidden" id="parent_id" name="parent_id" value="${parent_id}" />
-<input type="hidden" id="child_id" name="child_id" value="${child_id}" />
 <script>
 	var data = ${data}
 	$(document).ready(function () {
