@@ -1,5 +1,5 @@
-#set(title="数据类型新建项")
-#set(navbar="dataCreate")
+#set(title="导航树新建项")
+#set(navbar="navCreate")
 #tag layout_block("bodyContent")
 <div class="container">
 

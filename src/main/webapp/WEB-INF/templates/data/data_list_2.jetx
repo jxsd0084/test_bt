@@ -1,5 +1,5 @@
-#set(title="二级字段设置")
-#set(navbar="levelTwoConfig")
+#set(title="数据类型二级字段")
+#set(navbar="dataLevelTwo")
 #tag layout_block("headContent")
 <style>
 	#datatable td:nth-child(n+3) {
@@ -65,10 +65,6 @@
                 }
             ]
         });
-    });
-
-    $("[name='modify']").on('click', function () {
-        window.location.href='${CONTEXT_PATH}/dataType/new?id=' + this.id + '&tag=modify';
     });
 
 </script>
