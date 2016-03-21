@@ -63,4 +63,13 @@ public class DataTypeService {
     return levelOneFieldMapper.insert(levelOneFields);
   }
 
+  /**
+   * 插入二级新字段
+   * @param levelTwoFields
+   * @return
+     */
+  public int addLevelTwoFields(LevelTwoFields levelTwoFields) {
+    return levelTwoFieldMapper.insert(levelTwoFields);
+  }
+
 }

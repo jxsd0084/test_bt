@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建一级字段配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/newConifg?tag=add&parent_id=1&child_id=1'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建一级字段配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1'"/>
 </div>
 <br/>
 <div class="row">

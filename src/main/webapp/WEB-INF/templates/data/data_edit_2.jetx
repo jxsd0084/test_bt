@@ -19,7 +19,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">一级组件名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.level1FieldName}"/>
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.level1FieldName}"/>
         </div>
         <p class="help-block col-md-offset-2">如：注册 (中文汉字)</p>
       </div>
@@ -27,9 +27,16 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">二级组件名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.level2FieldName}"/>
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.level2FieldName}"/>
         </div>
         <p class="help-block col-md-offset-2">如：验证码点击次数 (中文汉字)</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">二级组件描述</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name4" id="name4" value="${obj.level2FieldDesc}"/>
+        </div>
       </div>
 
       <!-- 确认按钮 -->
@@ -80,27 +87,29 @@
         $("#confirm").on('click', function () {
 
             var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/cep/' + tag + '?parent_id=' + pid + '&child_id=' + cid;
+            var url = '${CONTEXT_PATH}/dataType/addLevelTwo';
             var data = '';
             var id = '${id}';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
+            var value4 = $("#name4").val();
 
-            if(tag == 'modify' && lev == 1){
+            if(tag == 'modify'){
                 data = {
-                    bp_name             :value1,
-                    bp_value            :value1,
-                    bp_value_desc       :value3,
+                    L1_tag              :value1,
+                    L1_name             :value1,
+                    L2_name             :value3,
+                    L2_desc             :value4,
                     id                  :id
                 };
-            }else if(tag == 'add' && lev == 1){     // 新增不需要指定主键ID
+            }else if(tag == 'add'){     // 新增不需要指定主键ID
                 data = {
-                    bp_name             :value1,
-                    bp_value            :value2,
-                    bp_value_desc       :value3,
-                    is_checked          :is_checked
+                    L1_tag              :value1,
+                    L1_name             :value2,
+                    L2_name             :value3,
+                    L2_desc             :value4,
                 };
             }
 
