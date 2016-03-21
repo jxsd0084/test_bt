@@ -1,5 +1,5 @@
-#set(title="数据类型新建项")
-#set(navbar="dataCreate")
+#set(title="数据类型二级字段编辑")
+#set(navbar="dataLevelTwoEdit")
 #tag layout_block("bodyContent")
 <div class="container">
 
@@ -87,7 +87,7 @@
         $("#confirm").on('click', function () {
 
             var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/dataType/addLevelTwo';
+            var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelTwo';
             var data = '';
             var id = '${id}';
 
@@ -99,7 +99,7 @@
             if(tag == 'modify'){
                 data = {
                     L1_tag              :value1,
-                    L1_name             :value1,
+                    L1_name             :value2,
                     L2_name             :value3,
                     L2_desc             :value4,
                     id                  :id
