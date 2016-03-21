@@ -8,6 +8,7 @@
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
           <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=1&parent_name=">埋点配置与监控</a></li>
           <li ><a href="">数据源配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/cep/list">导航树配置</a></li>
         </ul>
       </div>
       <div>
@@ -38,7 +39,7 @@
                    </ul>
                 #end
                #end
-               <span><i class="icon-folder-open"></i> <a href="#">后端埋点</a></span>
+               <span><i class="icon-folder-open"></i>后端埋点</span>
                #for(item : navigationItemList)
                 #if(item.parentId == 2)
                    <ul>

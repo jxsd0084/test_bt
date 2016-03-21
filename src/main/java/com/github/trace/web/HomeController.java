@@ -19,6 +19,7 @@ import java.util.List;
  */
 @Controller
 public class HomeController {
+
   @Value("${casServerUrlPrefix}")
   private String casServerUrlPrefix = "/cas";
 
@@ -51,4 +52,5 @@ public class HomeController {
     String username = SecurityUtils.getSubject().getPrincipal().toString();
     return username;
   }
+
 }

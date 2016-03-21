@@ -28,12 +28,48 @@ public class DataTypeService {
     return levelOneFieldMapper.findAll();
   }
 
+  /**
+   * 根据一级字段ID查询 二级字段
+   * @param id 二级字段ID
+   * @return 二级字段
+     */
+  public LevelOneFields getLevelOneFieldById(int id) {
+    return levelOneFieldMapper.findById(id);
+  }
+
   /***
    * 根据一级字段ID获取 二级字段 列表
    * @param id 一级字段ID
      */
   public List<LevelTwoFields> getLevelTwoFieldList(int id) {
     return levelTwoFieldMapper.findLevelTwoFieldsListById(id);
+  }
+
+  /**
+   * 根据二级字段ID查询 二级字段
+   * @param id 二级字段ID
+   * @return 二级字段
+     */
+  public LevelTwoFields getLevelTwoFieldById(int id) {
+    return levelTwoFieldMapper.findById(id);
+  }
+
+  /**
+   * 插入一级新字段
+   * @param levelOneFields
+   * @return
+     */
+  public int addLevelOneFields(LevelOneFields levelOneFields) {
+    return levelOneFieldMapper.insert(levelOneFields);
+  }
+
+  /**
+   * 插入二级新字段
+   * @param levelTwoFields
+   * @return
+     */
+  public int addLevelTwoFields(LevelTwoFields levelTwoFields) {
+    return levelTwoFieldMapper.insert(levelTwoFields);
   }
 
 }
