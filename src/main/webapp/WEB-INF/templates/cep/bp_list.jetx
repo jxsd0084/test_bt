@@ -130,7 +130,12 @@
 <input type="hidden" id="child_id" name="child_id" value="${child_id}" />
 <script>
 	var data = ${data}
+    var delete_id
+
 	$(document).ready(function () {
+
+        #include("/cep/modal.js");
+
 		var table = $('#datatable').DataTable({
 			stateSave: true,
 			searching: true,
@@ -146,7 +151,6 @@
 			columnDefs: [
 				{
 					targets: 1, render: function (data, type, full, meta) {
-//						var link = full;
 						return data;
 ##						return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
 					}
@@ -168,7 +172,7 @@
                 },
                 {
                     targets: 6, render: function (data, type, full, meta) {
-                    	return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="delete" style="width: 40px" type="button" value="刪除">'
+                    	return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
                 	}
                 }
 
@@ -181,26 +185,15 @@
 
         $("[name='delete']").on('click', function () {
             //window.location.href='${CONTEXT_PATH}/cep/delete?id='+this.id;
-            $.ajax({
-                url: "${CONTEXT_PATH}/cep/delete",
-                contentType: "application/json",
-                data:  {id:this.id},
-                dataType: "text",
-                type: "GET",
-                success: function (data) {
-
-                }
-            });
+            delete_id = this.id;
+            $('#myModal').modal('show');
         })
 
 
     $("#browseBP").click( function() {
         var list = $('#datatable').DataTable().data();
 
-        console.log(list);
-
         var as = [];
-
 
         for(var i = 0; i < list.length ;i++ ) {
 
@@ -227,11 +220,38 @@
     });
 
     $("#addBPItem").click( function() {
-        alert('添加埋点项 !')
+        //alert('添加埋点项 !')
     });
 
         $("#getServerLog").click( function() {
-           // alert('获取服务端日志 !')
+
+            $.ajax({
+                url: "${CONTEXT_PATH}/cep/get",
+                contentType: "application/json",
+                data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
+                dataType: "json",
+                type: "GET",
+                success: function (mydata) {
+                    //重新加载数据前需要做如下操作,否则会报错.
+                    $('#datatable2').dataTable().fnDestroy();
+
+                    $('#datatable2').DataTable( {
+                        data: mydata,
+                        columnDefs: [
+                            {
+                                targets: 4, render: function (data, type, full, meta) {
+                                //var link = full;
+                                '<input type="checkbox" disabled> 必填项'
+                            }
+                            }
+
+                        ]
+                    } );
+
+
+                }
+            });
+
 
             str2: $("#textarea2").val('{"Uid":"1234"}')
         });
@@ -245,12 +265,25 @@
             dataType: "json",
             type: "GET",
             success: function (mydata) {
-
+                //重新加载数据前需要做如下操作,否则会报错.
                 $('#datatable2').dataTable().fnDestroy();
 
                 $('#datatable2').DataTable( {
+                    data: mydata,
+                    columnDefs: [
+                        {
+                            targets: 3, render: function (data, type, full, meta) {
+                            //var link = full;
+                            if(data == "false"){
+                                return '<div style="color:#F00">false</div> '
+                            }else{
+                                return data
+                            }
 
-                    data: mydata
+                            }
+                        }
+
+                    ]
                 } );
 
 
@@ -271,8 +304,12 @@
             alert('预览报表结果 !')
         });
 
+
+
+
     });
 </script>
 #end
 #include("/include/layout.jetx")
+#include("/cep/modal.jetx")
 

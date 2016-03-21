@@ -19,7 +19,7 @@
         #include("/include/global.min.css")
         td.highlight {
             font-weight: bold;
-            color: red;
+            color: #ff0000;
         }
         .highlight {
             background-color: #FFFF88 !important;

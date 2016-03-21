@@ -170,34 +170,13 @@ public class CEPTraceController {
     @ResponseBody
     public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
 
-
-
         JSONObject jsonObject1 = JSON.parseObject(str1);
-        //JSONObject jsonObject1 = JSON.parseObject(str1);
+
         JSONObject jsonObject2 = JSON.parseObject(str2);
-
-        String line1 = "";
-        String line2 = "";
-        String line3 = "";
-
-
 
         List<BuriedPoint> caller = cepService.getBuriedPointList(1, 2);
 
         JSONArray ja1 = new JSONArray();
-
-        // data, type, full, meta
-//        for (BuriedPoint br : caller) {
-//            JSONArray ja2 = new JSONArray();
-//            ja2.add(br.getId()+"");            // 编号
-//            ja2.add(br.getBpName()+"");        // 埋点字段
-//            ja2.add(br.getBpValue()+"");       // 埋点数据类型
-//            ja2.add(br.getBpValueDesc()+"");   // 埋点字段描述
-//            ja2.add(br.getIsChecked()+"");     // 是否必填项
-//            ja2.add(br.getId()+"");            // 操作
-//
-//            ja1.add(ja2);
-//        }
 
         LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(str1, new TypeReference<LinkedHashMap<String, String>>() {
         });
@@ -209,9 +188,6 @@ public class CEPTraceController {
         for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
 
             if(jsonMap2.containsKey(entry1.getKey())){
-                line1 += entry1.getKey()+"\t";
-                line2 += entry1.getValue()+"\t";
-                line3 += jsonMap2.get(entry1.getKey())+"\t";
 
                 JSONArray ja2 = new JSONArray();
                 ja2.add(entry1.getKey()+"");
@@ -235,7 +211,6 @@ public class CEPTraceController {
                 Pattern pattern = Pattern.compile(patternString);
                 Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
                 boolean b= matcher.matches();
-                //当条件满足时，将返回true，否则返回false
 
 
                 if(entry1.getValue().split(",").length>=3){
@@ -253,12 +228,6 @@ public class CEPTraceController {
                     b= matcher2.matches();
                 }
 
-                System.out.println("patternString:"+patternString);
-                System.out.println("patternString2:"+patternString2);
-                System.out.println("jsonMap2.get(entry1.getKey()):"+jsonMap2.get(entry1.getKey()));
-                System.out.println(b);
-
-
                 ja2.add(jsonMap2.get(entry1.getKey()));
                 ja2.add(b);
 
@@ -268,9 +237,6 @@ public class CEPTraceController {
                 ja1.add(ja2);
 
             }else{
-                line1 += entry1.getKey()+"\t";
-                line2 += entry1.getValue()+"\t";
-                line3 += ""+"\t";
 
                 JSONArray ja2 = new JSONArray();
                 ja2.add(entry1.getKey()+"");
