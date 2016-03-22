@@ -59,12 +59,14 @@ public class DataTypeController {
             jsonArray2.add(fieldObj.getLevel1FieldName() + "_" + fieldObj.getId());
             jsonArray2.add(fieldObj.getLevel1FieldTag());
             jsonArray2.add(fieldObj.getLevel2FieldName());
+            jsonArray2.add(fieldObj.getLevel2FieldDesc());
 
             jsonArray1.add(jsonArray2);
         }
 
         ControllerHelper.setLeftNavigationTree(model, cepService);
         model.addAttribute("data", jsonArray1);
+        model.addAttribute("L1_id", id);
         model.addAttribute("L1_tag", l1_tag);
         model.addAttribute("L1_name", l1_name);
         return "data/data_list_2";
@@ -97,13 +99,14 @@ public class DataTypeController {
     }
 
     @RequestMapping("/new")
-    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, @RequestParam(name = "L1_tag", required = false) String l1_tag, @RequestParam(name = "L1_name", required = false) String l1_name, Model model) {
+    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, @RequestParam(name = "L1_id", required = false) String l1_id, @RequestParam(name = "L1_tag", required = false) String l1_tag, @RequestParam(name = "L1_name", required = false) String l1_name, Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
         model.addAttribute("tag", tag);
 
         if (lev == 1){
             return "data/data_edit";
         }else{
+            model.addAttribute("L1_id", l1_id);
             model.addAttribute("L1_tag", l1_tag);
             model.addAttribute("L1_name", l1_name);
             return "data/data_edit_2";
@@ -160,10 +163,10 @@ public class DataTypeController {
 
     @RequestMapping("/addLevelTwo")
     @ResponseBody
-    public Map addLevelTwo(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L2_name") String l2_name, @RequestParam("L2_desc") String l2_desc) {
+    public Map addLevelTwo(@RequestParam("L1_id") int l1_id,@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L2_name") String l2_name, @RequestParam("L2_desc") String l2_desc) {
 
         LevelTwoFields levelTwoFields = new LevelTwoFields();
-        levelTwoFields.setLevel1FieldId(3);
+        levelTwoFields.setLevel1FieldId(l1_id);
         levelTwoFields.setLevel1FieldTag(l1_tag);
         levelTwoFields.setLevel1FieldName(l1_name);
         levelTwoFields.setLevel2FieldName(l2_name);

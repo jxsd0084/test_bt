@@ -54,7 +54,7 @@
 #end
 #tag layout_block("scriptContent")
 <!-- 隐藏域 -->
-<input type="hidden" id="name5" name="name5" value="${obj.level1FieldId}" />
+<input type="hidden" id="name5" name="name5" value="${L1_id}" />
 <script>
 
     var showResult = function(msg){
@@ -97,15 +97,15 @@
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
             var value4 = $("#name4").val();
+            var value5 = $("#name5").val();
 
             if(tag == 'modify'){
-                var value5 = $("#name5").val();
                 data = {
-                    L1_id               :value5,
                     L1_tag              :value1,
                     L1_name             :value2,
                     L2_name             :value3,
                     L2_desc             :value4,
+                    L1_id               :value5,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
@@ -114,6 +114,7 @@
                     L1_name             :value2,
                     L2_name             :value3,
                     L2_desc             :value4,
+                    L1_id               :value5,
                 };
             }
 
