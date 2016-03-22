@@ -54,7 +54,7 @@
         </aop:aspect>
     </aop:config>
 
-    <beans profile="default">
+    <beans profile="firstshare">
         <context:property-placeholder ignore-resource-not-found="true" location="classpath:application.properties"/>
     </beans>
 
