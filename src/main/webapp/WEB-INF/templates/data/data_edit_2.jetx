@@ -44,7 +44,7 @@
         <div class="col-md-offset-2 col-md-10 col-lg-8">
           <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
           <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
-          <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
+          <input id="cancel_btn" class="btn" type="button" value="返回"/>
         </div>
       </div>
 
@@ -137,6 +137,11 @@
             }
 
         })
+
+        $("#cancel_btn").on('click', function () {
+            window.location.href='${CONTEXT_PATH}/dataType/listLevelTwo?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}';
+        })
+
     });
 
 </script>
