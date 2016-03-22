@@ -107,7 +107,7 @@ public class DataTypeController {
 
     @RequestMapping("/modifyLevelOne")
     @ResponseBody
-    public Map modifyLevelOne(@Param("L1_tag") String l1_tag, @Param("L1_name") String l1_name, @Param("L1_desc") String l1_desc, @Param("id") int id) {
+    public Map modifyLevelOne(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L1_desc") String l1_desc, @RequestParam("id") int id) {
 
         LevelOneFields levelOneFields = new LevelOneFields();
         levelOneFields.setId(id);
@@ -123,7 +123,7 @@ public class DataTypeController {
 
     @RequestMapping("/modifyLevelTwo")
     @ResponseBody
-    public Map modifyLevelTwo(@Param("L1_tag") String l1_tag, @Param("L1_name") String l1_name, @Param("L2_name") String l2_name, @Param("L2_desc") String l2_desc, @Param("id") int id) {
+    public Map modifyLevelTwo(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L2_name") String l2_name, @RequestParam("L2_desc") String l2_desc, @RequestParam("id") int id) {
 
         LevelTwoFields levelTwoFields = new LevelTwoFields();
         levelTwoFields.setId(id);
