@@ -21,6 +21,7 @@ import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -150,10 +151,17 @@ public class CEPTraceController {
     @RequestMapping("/serverLog")
     @ResponseBody
     public String serverLog(@Param("Path") String path, Model model) {
+        //cepService.getServerLog();
 
-        System.out.println("BuriedPointList"+path);
+        Set<String> serverLogSetList = cepService.getServerLog();
 
-        return path+"";
+        String results = null;
+
+        for (String string: serverLogSetList ) {
+            results = string;
+        }
+
+        return results;
     }
 
     @RequestMapping("/compare")
