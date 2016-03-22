@@ -141,18 +141,18 @@
 			data: data,
 			columnDefs: [
 				{
-					targets: 1, render: function (data, type, full, meta) {
+					targets: 0, render: function (data, type, full, meta) {
 						return data;
 ##						return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
 					}
 				},
                 {
-                    targets: 2, render: function (data, type, full, meta) {
+                    targets: 1, render: function (data, type, full, meta) {
                         return data;
                 	}
                 },
                 {
-                    targets: 5, render: function (data, type, full, meta) {
+                    targets: 4, render: function (data, type, full, meta) {
 						if(data){
 							return '<input type="checkbox" checked disabled> 必填项'
 						}else {
@@ -162,13 +162,23 @@
                 	}
                 },
                 {
-                    targets: 6, render: function (data, type, full, meta) {
+                    targets: 5, render: function (data, type, full, meta) {
                     	return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
                 	}
                 }
 
 			]
 		});
+
+        $('#datatable2').DataTable( {
+
+            columnDefs: [
+
+                { "width": "10%", "targets": 0 },
+                { "width": "10%", "targets": 1 }
+
+            ]
+        } );
 
         $("[name='modify']").on('click', function () {
             window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify';
@@ -186,7 +196,7 @@
         var as = [];
         for(var i = 0; i < list.length ;i++ ) {
                 var temp = [];
-                temp.push('"'+list[i][1]+'":"'+list[i][4]+","+list[i][2]+","+escape(list[i][3])+'"');
+                temp.push('"'+list[i][0]+'":"'+list[i][3]+","+list[i][1]+","+escape(list[i][2])+'"');
                 as.push(temp);
         }
         as = "{" + as + "}";
@@ -235,13 +245,18 @@
                 //重新加载数据前需要做如下操作,否则会报错.
                 $('#datatable2').dataTable().fnDestroy();
 
+
                 $('#datatable2').DataTable( {
                     data: mydata,
                     columnDefs: [
+
+                        { "width": "10%", "targets": 0 },
+                        { "width": "10%", "targets": 1 },
+
                         {
                             targets: 3, render: function (data, type, full, meta) {
                             //var link = full;
-                            if(data == "false"){
+                            if(data == "false" || data == false){
                                 return '<div style="color:#F00">false</div> '
                             }else{
                                 return data

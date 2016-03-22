@@ -48,7 +48,7 @@ public class CEPTraceController {
         // data, type, full, meta
         for (BuriedPoint br : caller) {
             JSONArray ja2 = new JSONArray();
-            ja2.add(br.getId());            // 编号
+          //  ja2.add(br.getId());            // 编号
             ja2.add(br.getBpName());        // 埋点字段
             ja2.add(br.getBpValue());       // 埋点数据类型
             ja2.add(br.getRegex());         // 自定义正则表达式
@@ -213,7 +213,7 @@ public class CEPTraceController {
 
                 JSONArray ja2 = new JSONArray();
                 ja2.add(entry1.getKey()+"");
-                ja2.add(entry1.getValue()+"");
+                ja2.add(entry1.getValue().split(",")[1]+"");
 
                 String patternString = "";
                 String patternString2 = "";
@@ -262,7 +262,7 @@ public class CEPTraceController {
 
                 JSONArray ja2 = new JSONArray();
                 ja2.add(entry1.getKey()+"");
-                ja2.add(entry1.getValue()+"");
+                ja2.add(entry1.getValue().split(",")[1]+"");
                 ja2.add("");
                 ja2.add("false");
                 ja2.add("");
