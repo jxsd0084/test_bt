@@ -125,7 +125,7 @@ public class DataTypeController {
 
         int res = dataTypeService.updateLevelTwoByCascade(levelOneFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "更新");
 
     }
 
@@ -142,7 +142,7 @@ public class DataTypeController {
 
         int res = dataTypeService.updateLevelTwo(levelTwoFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "更新");
 
     }
 
@@ -157,7 +157,7 @@ public class DataTypeController {
 
         int res = dataTypeService.addLevelOneFields(levelOneFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "添加");
 
     }
 
@@ -174,7 +174,7 @@ public class DataTypeController {
 
         int res = dataTypeService.addLevelTwoFields(levelTwoFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "添加");
 
     }
 

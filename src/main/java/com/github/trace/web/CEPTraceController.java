@@ -129,7 +129,7 @@ public class CEPTraceController {
 
         int res = cepService.addBuriedPoint(buriedPoint);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "添加");
     }
 
     @RequestMapping("/delete")
