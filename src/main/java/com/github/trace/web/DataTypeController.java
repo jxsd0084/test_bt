@@ -123,7 +123,7 @@ public class DataTypeController {
         levelOneFields.setLevel1FieldName(l1_name);
         levelOneFields.setLevel1FieldDesc(l1_desc);
 
-        int res = dataTypeService.updateLevelOne(levelOneFields);
+        int res = dataTypeService.updateLevelTwoByCascade(levelOneFields);
 
         return ControllerHelper.returnResponseVal(res);
 
