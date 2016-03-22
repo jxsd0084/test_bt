@@ -60,7 +60,7 @@
             columnDefs: [
                 {
                     targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?id='+ full[0] +'">' + data + '</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
                     }
                 },
                 {

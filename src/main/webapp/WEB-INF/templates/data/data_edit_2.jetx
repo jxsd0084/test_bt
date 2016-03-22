@@ -11,7 +11,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">一级组件标识</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" readonly="true" value="${obj.level1FieldTag}"/>
+          <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" readonly="true" value="${L1_tag}"/>
         </div>
         <p class="help-block col-md-offset-2">如：Register (英文单词)</p>
       </div>
@@ -19,7 +19,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">一级组件名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" readonly="true" value="${obj.level1FieldName}"/>
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" readonly="true" value="${L1_name}"/>
         </div>
         <p class="help-block col-md-offset-2">如：注册 (中文汉字)</p>
       </div>
@@ -35,7 +35,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">二级组件描述</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name4" id="name4" value="${obj.level2FieldDesc}"/>
+          <input type="text" class="form-control" name="name4" id="name4" placeholder="选填" value="${obj.level2FieldDesc}"/>
         </div>
       </div>
 
@@ -53,6 +53,8 @@
 </div>
 #end
 #tag layout_block("scriptContent")
+<!-- 隐藏域 -->
+<input type="hidden" id="name5" name="name5" value="${obj.level1FieldId}" />
 <script>
 
     var showResult = function(msg){
@@ -97,7 +99,9 @@
             var value4 = $("#name4").val();
 
             if(tag == 'modify'){
+                var value5 = $("#name5").val();
                 data = {
+                    L1_id               :value5,
                     L1_tag              :value1,
                     L1_name             :value2,
                     L2_name             :value3,

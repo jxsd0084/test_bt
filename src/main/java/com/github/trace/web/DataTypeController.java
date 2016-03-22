@@ -6,7 +6,6 @@ import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,7 +49,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLeveTwoFieldsList(@RequestParam(name = "id") int id, Model model) {
+    public String getLeveTwoFieldsList(@RequestParam(name = "id") int id, @RequestParam(name = "L1_tag") String l1_tag, @RequestParam(name = "L1_name") String l1_name, Model model) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(id);
 
         JSONArray jsonArray1 = new JSONArray();
@@ -66,6 +65,8 @@ public class DataTypeController {
 
         ControllerHelper.setLeftNavigationTree(model, cepService);
         model.addAttribute("data", jsonArray1);
+        model.addAttribute("L1_tag", l1_tag);
+        model.addAttribute("L1_name", l1_name);
         return "data/data_list_2";
     }
 
@@ -82,7 +83,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editLevelTwo")
-    public String editLevelTwo(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
+    public String editLevelTwo(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, @RequestParam(name = "L1_tag") String l1_tag,@RequestParam(name = "L1_name") String l1_name, Model model) {
         LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
         model.addAttribute("obj", fieldObj);
 
@@ -90,17 +91,21 @@ public class DataTypeController {
 
         model.addAttribute("id", id );
         model.addAttribute("tag", tag);
+        model.addAttribute("L1_tag", l1_tag);
+        model.addAttribute("L1_name", l1_name);
         return "data/data_edit_2";
     }
 
     @RequestMapping("/new")
-    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, Model model) {
+    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, @RequestParam(name = "L1_tag", required = false) String l1_tag, @RequestParam(name = "L1_name", required = false) String l1_name, Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
         model.addAttribute("tag", tag);
 
         if (lev == 1){
             return "data/data_edit";
         }else{
+            model.addAttribute("L1_tag", l1_tag);
+            model.addAttribute("L1_name", l1_name);
             return "data/data_edit_2";
         }
     }
@@ -140,12 +145,12 @@ public class DataTypeController {
 
     @RequestMapping("/addLevelOne")
     @ResponseBody
-    public Map addLevelOne(@Param("L1_tag") String tag, @Param("L1_name") String name, @Param("L1_desc") String desc) {
+    public Map addLevelOne(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L1_desc") String l1_desc) {
 
         LevelOneFields levelOneFields = new LevelOneFields();
-        levelOneFields.setLevel1FieldTag("a2");
-        levelOneFields.setLevel1FieldName("a2");
-        levelOneFields.setLevel1FieldDesc("a2");
+        levelOneFields.setLevel1FieldTag(l1_tag);
+        levelOneFields.setLevel1FieldName(l1_name);
+        levelOneFields.setLevel1FieldDesc(l1_desc);
 
         int res = dataTypeService.addLevelOneFields(levelOneFields);
 
@@ -155,14 +160,14 @@ public class DataTypeController {
 
     @RequestMapping("/addLevelTwo")
     @ResponseBody
-    public Map addLevelTwo(@Param("L1_tag") String l1_tag, @Param("L1_name") String l1_name, @Param("L2_name") String l2_name, @Param("L2_desc") String l2_desc) {
+    public Map addLevelTwo(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L2_name") String l2_name, @RequestParam("L2_desc") String l2_desc) {
 
         LevelTwoFields levelTwoFields = new LevelTwoFields();
         levelTwoFields.setLevel1FieldId(3);
-        levelTwoFields.setLevel1FieldTag("a2");
-        levelTwoFields.setLevel1FieldName("a2");
-        levelTwoFields.setLevel2FieldName("a2");
-        levelTwoFields.setLevel2FieldDesc("xxx");
+        levelTwoFields.setLevel1FieldTag(l1_tag);
+        levelTwoFields.setLevel1FieldName(l1_name);
+        levelTwoFields.setLevel2FieldName(l2_name);
+        levelTwoFields.setLevel2FieldDesc(l2_desc);
 
         int res = dataTypeService.addLevelTwoFields(levelTwoFields);
 
