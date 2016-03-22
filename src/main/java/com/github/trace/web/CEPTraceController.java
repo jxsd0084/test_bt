@@ -171,16 +171,14 @@ public class CEPTraceController {
 
     @RequestMapping("/serverLog")
     @ResponseBody
-    public String serverLog(@Param("Path") String path,
-                            Model model) {
-        //cepService.getServerLog();
+    public String serverLog(@Param("str1") String str1,@Param("str2") int str2,Model model) {
 
-        Set<String> serverLogSetList = cepService.getServerLog();
+        Set<String> serverLogSetList = cepService.getServerLog( str1,str2 );
 
-        String results = null;
+        String results = "";
 
         for (String string: serverLogSetList ) {
-            results = string;
+            results += string+"\n";
         }
 
         return results;

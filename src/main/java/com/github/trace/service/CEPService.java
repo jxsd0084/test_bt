@@ -59,7 +59,8 @@ public class CEPService {
    * 插入新埋点
    * @param buriedPoint
    * @return
-     */
+   *
+  */
   public int addBuriedPoint(BuriedPoint buriedPoint){
     return buriedPointMapper.insert(buriedPoint);
   }
@@ -74,9 +75,9 @@ public class CEPService {
   }
 
 
-  public Set<String> getServerLog() {
+  public Set<String> getServerLog(String str1,int st2) {
     //return kafkaService.getMessages("nginx.reverse","type",1);
-    return kafkaService.getMessages("dcx.MonitorRequest","type",1);
+    return kafkaService.getMessages(str1,"type",st2);
   }
 
 }

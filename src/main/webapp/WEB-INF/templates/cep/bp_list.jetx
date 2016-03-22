@@ -66,6 +66,20 @@
                 <td style="padding-left: 20px">
                     <button id="getServerLog">获取服务端日志</button>
                 </td>
+                <td >
+                    <label for="select">Topic</label>
+                    <select name="select" id="select">
+                        <option value="nginx.reverse" default>nginx.reverse</option>
+                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
+                    <select/>
+                </td>
+                <td >
+                    <label for="select2" >条数</label>
+                    <select name="select2" id="select2">
+                        <option value="1" default>1</option>
+                        <option value="5" >5</option>
+                    <select/>
+                </td>
             </tr>
             <tr>
                 <td colspan="8" style="padding-left: 20px">
@@ -224,7 +238,7 @@
             $.ajax({
                 url: "${CONTEXT_PATH}/cep/serverLog",
                 contentType: "application/json",
-                data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
+                data:  { str1:$("#select").val(),str2: $("#select2").val()},
                 dataType: "text",
                 type: "GET",
                 success: function (mydata) {
@@ -253,7 +267,6 @@
 
                         { "width": "10%", "targets": 0 },
                         { "width": "10%", "targets": 1 },
-
                         {
                             targets: 3, render: function (data, type, full, meta) {
                             //var link = full;

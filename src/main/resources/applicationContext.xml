@@ -22,6 +22,8 @@
     <import resource="classpath:spring/spring-scheduler.xml"/>
     <import resource="classpath:spring/spring-nav.xml"/>
 
+    <bean id="redisCache" class="com.github.jedis.support.JedisFactoryBean" p:configName="oss-web-redis"/>
+
     <!-- 使用全局的日期格式化 -->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="registerDefaultFormatters" value="false"/>
@@ -53,7 +55,7 @@
         </aop:aspect>
     </aop:config>
 
-    <beans profile="default">
+    <beans profile="firstshare">
         <context:property-placeholder ignore-resource-not-found="true" location="classpath:application.properties"/>
     </beans>
 
