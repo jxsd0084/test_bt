@@ -49,11 +49,11 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLeveTwoFieldsList(@RequestParam(name = "id") int id,
+    public String getLeveTwoFieldsList(@RequestParam(name = "L1_id") int l1_id,
                                        @RequestParam(name = "L1_tag") String l1_tag,
                                        @RequestParam(name = "L1_name") String l1_name,
                                        Model model) {
-        List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(id);
+        List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(l1_id);
 
         JSONArray jsonArray1 = new JSONArray();
         for (LevelTwoFields fieldObj : list) {
@@ -69,22 +69,22 @@ public class DataTypeController {
 
         ControllerHelper.setLeftNavigationTree(model, cepService);
         model.addAttribute("data", jsonArray1);
-        model.addAttribute("L1_id", id);
+        model.addAttribute("L1_id", l1_id);
         model.addAttribute("L1_tag", l1_tag);
         model.addAttribute("L1_name", l1_name);
         return "data/data_list_2";
     }
 
     @RequestMapping("/editLevelOne")
-    public String editLevelOne(@RequestParam(name = "id") int id,
+    public String editLevelOne(@RequestParam(name = "L1_id") int l1_id,
                                @RequestParam(name = "tag") String tag,
                                Model model) {
-        LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(id);
+        LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(l1_id);
         model.addAttribute("obj", fieldObj);
 
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
-        model.addAttribute("id", id );
+        model.addAttribute("id", l1_id);
         model.addAttribute("tag", tag);
         return "data/data_edit";
     }
@@ -92,6 +92,7 @@ public class DataTypeController {
     @RequestMapping("/editLevelTwo")
     public String editLevelTwo(@RequestParam(name = "id") int id,
                                @RequestParam(name = "tag") String tag,
+                               @RequestParam(name = "L1_id") String l1_id,
                                @RequestParam(name = "L1_tag") String l1_tag,
                                @RequestParam(name = "L1_name") String l1_name,
                                Model model) {
@@ -102,6 +103,7 @@ public class DataTypeController {
 
         model.addAttribute("id", id );
         model.addAttribute("tag", tag);
+        model.addAttribute("L1_id", l1_id);
         model.addAttribute("L1_tag", l1_tag);
         model.addAttribute("L1_name", l1_name);
         return "data/data_edit_2";
