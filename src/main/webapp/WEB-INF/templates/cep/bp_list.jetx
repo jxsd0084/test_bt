@@ -1,4 +1,4 @@
-#set(title="CEP埋点配置管理")
+#set(title="埋点配置管理")
 #set(navbar="servicelog")
 #tag layout_block("headContent")
 <style>
@@ -25,7 +25,6 @@
 		<table id="datatable" class="table table-striped table-bordered table-condensed">
 			<thead>
 			<tr>
-                <th>编号</th>
 				<th>埋点字段</th>
                 <th>埋点数据类型</th>
                 <th>自定义正则表达式</th>
@@ -47,14 +46,6 @@
 			<tr>
 				<td style="padding-left: 20px">
                     <button id="browseBP">预览埋点结果</button>
-                    <button id="addBPItem">添加埋点项</button>
-                </td>
-                <td colspan="2">
-                    <font size="4">日志分隔类型：</font>
-                    <select>
-                        <option>Json格式</option>
-                        <option>KV格式</option>
-                    </select>
                 </td>
 			</tr>
             <tr>
@@ -77,7 +68,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4" style="padding-left: 20px">
+                <td colspan="8" style="padding-left: 20px">
                     <textarea  id="textarea2" style="width: 100%">请输入something...2</textarea>
                 </td>
             </tr>
@@ -192,19 +183,13 @@
 
     $("#browseBP").click( function() {
         var list = $('#datatable').DataTable().data();
-
         var as = [];
-
         for(var i = 0; i < list.length ;i++ ) {
-
                 var temp = [];
                 temp.push('"'+list[i][1]+'":"'+list[i][4]+","+list[i][2]+","+escape(list[i][3])+'"');
                 as.push(temp);
-
         }
-
         as = "{" + as + "}";
-
         $.ajax({
             url: "${CONTEXT_PATH}/cep/format",
             contentType: "application/json",
@@ -223,7 +208,7 @@
         //alert('添加埋点项 !')
     });
 
-        $("#getServerLog").click( function() {
+    $("#getServerLog").click( function() {
 
             $.ajax({
                 url: "${CONTEXT_PATH}/cep/serverLog",
@@ -232,9 +217,7 @@
                 dataType: "text",
                 type: "GET",
                 success: function (mydata) {
-
                     $("#textarea2").val(mydata)
-
                 }
             });
 
@@ -266,11 +249,8 @@
 
                             }
                         }
-
                     ]
                 } );
-
-
             }
         });
 
@@ -287,9 +267,6 @@
         $("#previewBPReport").click( function() {
             alert('预览报表结果 !')
         });
-
-
-
 
     });
 </script>
