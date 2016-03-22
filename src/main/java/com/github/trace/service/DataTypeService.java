@@ -91,4 +91,27 @@ public class DataTypeService {
     return levelTwoFieldMapper.update(levelTwoFields);
   }
 
+  /**
+   * 级联更新二级字段
+   */
+  public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
+    int res = updateLevelOne(levelOneFields);
+    if (res == 1) {
+      return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
+    }
+    return 0;
+  }
+
+  private int updateLevelTwoByL1Obj(int id, String l1_tag, String l1_name) {
+    int res = 0;
+    List<LevelTwoFields> list = getLevelTwoFieldList(id);
+    for (int i = 0; i < list.size(); i++) {
+      LevelTwoFields fields = list.get(i);
+      fields.setLevel1FieldName(l1_tag);
+      fields.setLevel1FieldName(l1_name);
+      res = updateLevelTwo(fields);
+    }
+    return res;
+  }
+
 }

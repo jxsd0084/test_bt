@@ -226,34 +226,18 @@
         $("#getServerLog").click( function() {
 
             $.ajax({
-                url: "${CONTEXT_PATH}/cep/get",
+                url: "${CONTEXT_PATH}/cep/serverLog",
                 contentType: "application/json",
                 data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
-                dataType: "json",
+                dataType: "text",
                 type: "GET",
                 success: function (mydata) {
-                    //重新加载数据前需要做如下操作,否则会报错.
-                    $('#datatable2').dataTable().fnDestroy();
 
-                    $('#datatable2').DataTable( {
-                        data: mydata,
-                        columnDefs: [
-                            {
-                                targets: 4, render: function (data, type, full, meta) {
-                                //var link = full;
-                                '<input type="checkbox" disabled> 必填项'
-                            }
-                            }
-
-                        ]
-                    } );
-
+                    $("#textarea2").val(mydata)
 
                 }
             });
 
-
-            str2: $("#textarea2").val('{"Uid":"1234"}')
         });
 
         $("#validateBP").click( function() {

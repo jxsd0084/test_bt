@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * CEP 后台埋点配置管理
@@ -21,6 +22,11 @@ public class CEPService {
 
   @Autowired
   private NavigationItemMapper navigationItemMapper;
+
+  @Autowired
+  private KafkaService kafkaService;
+
+
 
   /**
    * 获取所有的埋点列表
@@ -66,5 +72,13 @@ public class CEPService {
   public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc,boolean is_checked ,int id) {
     return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,regex,bp_value_desc,is_checked,id);
   }
+
+
+  public Set<String> getServerLog() {
+    //return kafkaService.getMessages("nginx.reverse","type",1);
+    return kafkaService.getMessages("dcx.MonitorRequest","type",1);
+  }
+
+
 
 }

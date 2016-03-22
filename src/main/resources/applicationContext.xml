@@ -51,7 +51,6 @@
     <aop:config>
         <aop:aspect ref="serviceProfiler">
             <aop:around method="profile" pointcut="execution(* com.github.trace.service.Influx*.*(..))"/>
-            <aop:around method="profile" pointcut="execution(* com.github.trace.service.ElasticSearch.*(..))"/>
         </aop:aspect>
     </aop:config>
 
