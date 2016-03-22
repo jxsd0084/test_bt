@@ -24,13 +24,13 @@ public class ControllerHelper {
      * @param res
      * @return
      */
-    public static Map returnResponseVal(int res){
+    public static Map returnResponseVal(int res, String msg){
         String result;
         if(res == 1){
-            result = "数据插入成功!";
+            result = "数据" + msg + "成功!";
             return ImmutableMap.of("code", 200, "info", result);
         }else{
-            result = "数据插入失败！";
+            result = "数据" + msg + "失败！";
             return ImmutableMap.of("code", -1, "info", result);
         }
     }

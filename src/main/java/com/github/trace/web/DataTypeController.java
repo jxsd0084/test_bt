@@ -49,7 +49,10 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLeveTwoFieldsList(@RequestParam(name = "id") int id, @RequestParam(name = "L1_tag") String l1_tag, @RequestParam(name = "L1_name") String l1_name, Model model) {
+    public String getLeveTwoFieldsList(@RequestParam(name = "id") int id,
+                                       @RequestParam(name = "L1_tag") String l1_tag,
+                                       @RequestParam(name = "L1_name") String l1_name,
+                                       Model model) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(id);
 
         JSONArray jsonArray1 = new JSONArray();
@@ -73,7 +76,9 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editLevelOne")
-    public String editLevelOne(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
+    public String editLevelOne(@RequestParam(name = "id") int id,
+                               @RequestParam(name = "tag") String tag,
+                               Model model) {
         LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(id);
         model.addAttribute("obj", fieldObj);
 
@@ -85,7 +90,11 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editLevelTwo")
-    public String editLevelTwo(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, @RequestParam(name = "L1_tag") String l1_tag,@RequestParam(name = "L1_name") String l1_name, Model model) {
+    public String editLevelTwo(@RequestParam(name = "id") int id,
+                               @RequestParam(name = "tag") String tag,
+                               @RequestParam(name = "L1_tag") String l1_tag,
+                               @RequestParam(name = "L1_name") String l1_name,
+                               Model model) {
         LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
         model.addAttribute("obj", fieldObj);
 
@@ -99,7 +108,12 @@ public class DataTypeController {
     }
 
     @RequestMapping("/new")
-    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "lev") int lev, @RequestParam(name = "L1_id", required = false) String l1_id, @RequestParam(name = "L1_tag", required = false) String l1_tag, @RequestParam(name = "L1_name", required = false) String l1_name, Model model) {
+    public String newConfig(@RequestParam(name = "tag") String tag,
+                            @RequestParam(name = "lev") int lev,
+                            @RequestParam(name = "L1_id", required = false) String l1_id,
+                            @RequestParam(name = "L1_tag", required = false) String l1_tag,
+                            @RequestParam(name = "L1_name", required = false) String l1_name,
+                            Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
         model.addAttribute("tag", tag);
 
@@ -115,8 +129,10 @@ public class DataTypeController {
 
     @RequestMapping("/modifyLevelOne")
     @ResponseBody
-    public Map modifyLevelOne(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L1_desc") String l1_desc, @RequestParam("id") int id) {
-
+    public Map modifyLevelOne(@RequestParam("L1_tag") String l1_tag,
+                              @RequestParam("L1_name") String l1_name,
+                              @RequestParam("L1_desc") String l1_desc,
+                              @RequestParam("id") int id) {
         LevelOneFields levelOneFields = new LevelOneFields();
         levelOneFields.setId(id);
         levelOneFields.setLevel1FieldTag(l1_tag);
@@ -125,14 +141,17 @@ public class DataTypeController {
 
         int res = dataTypeService.updateLevelTwoByCascade(levelOneFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "更新");
 
     }
 
     @RequestMapping("/modifyLevelTwo")
     @ResponseBody
-    public Map modifyLevelTwo(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L2_name") String l2_name, @RequestParam("L2_desc") String l2_desc, @RequestParam("id") int id) {
-
+    public Map modifyLevelTwo(@RequestParam("L1_tag") String l1_tag,
+                              @RequestParam("L1_name") String l1_name,
+                              @RequestParam("L2_name") String l2_name,
+                              @RequestParam("L2_desc") String l2_desc,
+                              @RequestParam("id") int id) {
         LevelTwoFields levelTwoFields = new LevelTwoFields();
         levelTwoFields.setId(id);
         levelTwoFields.setLevel1FieldTag(l1_tag);
@@ -142,14 +161,15 @@ public class DataTypeController {
 
         int res = dataTypeService.updateLevelTwo(levelTwoFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "更新");
 
     }
 
     @RequestMapping("/addLevelOne")
     @ResponseBody
-    public Map addLevelOne(@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L1_desc") String l1_desc) {
-
+    public Map addLevelOne(@RequestParam("L1_tag") String l1_tag,
+                           @RequestParam("L1_name") String l1_name,
+                           @RequestParam("L1_desc") String l1_desc) {
         LevelOneFields levelOneFields = new LevelOneFields();
         levelOneFields.setLevel1FieldTag(l1_tag);
         levelOneFields.setLevel1FieldName(l1_name);
@@ -157,14 +177,17 @@ public class DataTypeController {
 
         int res = dataTypeService.addLevelOneFields(levelOneFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "添加");
 
     }
 
     @RequestMapping("/addLevelTwo")
     @ResponseBody
-    public Map addLevelTwo(@RequestParam("L1_id") int l1_id,@RequestParam("L1_tag") String l1_tag, @RequestParam("L1_name") String l1_name, @RequestParam("L2_name") String l2_name, @RequestParam("L2_desc") String l2_desc) {
-
+    public Map addLevelTwo(@RequestParam("L1_id") int l1_id,
+                           @RequestParam("L1_tag") String l1_tag,
+                           @RequestParam("L1_name") String l1_name,
+                           @RequestParam("L2_name") String l2_name,
+                           @RequestParam("L2_desc") String l2_desc) {
         LevelTwoFields levelTwoFields = new LevelTwoFields();
         levelTwoFields.setLevel1FieldId(l1_id);
         levelTwoFields.setLevel1FieldTag(l1_tag);
@@ -174,7 +197,7 @@ public class DataTypeController {
 
         int res = dataTypeService.addLevelTwoFields(levelTwoFields);
 
-        return ControllerHelper.returnResponseVal(res);
+        return ControllerHelper.returnResponseVal(res, "添加");
 
     }
 

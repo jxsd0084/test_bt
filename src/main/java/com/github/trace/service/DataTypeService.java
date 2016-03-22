@@ -95,19 +95,29 @@ public class DataTypeService {
    * 级联更新二级字段
    */
   public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
-    int res = updateLevelOne(levelOneFields);
-    if (res == 1) {
-      return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
-    }
+
+//    SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+//      SqlSessionFactory sessionFactory = factoryBean.getObject();
+//      SqlSession sqlSession = sessionFactory.openSession(false);
+
+      int res = updateLevelOne(levelOneFields);
+      if (res == 1) {
+        return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
+      }
+
     return 0;
   }
 
-  private int updateLevelTwoByL1Obj(int id, String l1_tag, String l1_name) {
+  private int updateLevelTwoByL1Obj(int l1_id, String l1_tag, String l1_name) {
     int res = 0;
-    List<LevelTwoFields> list = getLevelTwoFieldList(id);
+    List<LevelTwoFields> list = getLevelTwoFieldList(l1_id);
+    if(list.size() == 0){ // 有一级字段,没有二级字段
+      res = 1;
+      return res;
+    }
     for (int i = 0; i < list.size(); i++) {
       LevelTwoFields fields = list.get(i);
-      fields.setLevel1FieldName(l1_tag);
+      fields.setLevel1FieldTag(l1_tag);
       fields.setLevel1FieldName(l1_name);
       res = updateLevelTwo(fields);
     }

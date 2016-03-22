@@ -7,6 +7,7 @@
 
   <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>
+
       <!-- 埋点字段 -->
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">埋点字段</label>
@@ -22,22 +23,22 @@
         <div class="col-md-3 col-lg-3">
             <select name="name2" id="name2" style="width: 140px">
                 <option value="" default> - 必选 - </option>
-                <option value="文本">文本（Text）</option>
-                <option value="数字">数字（Number）</option>
-                <option value="日期">日期（Date）</option>
+                <option value="文本" #if(BpValue == '文本') selected #end>文本（Text）</option>
+                <option value="数字" #if(BpValue == '数字') selected #end>数字（Number）</option>
+                <option value="日期" #if(BpValue == '日期') selected #end>日期（Date）</option>
             <select/>
         </div>
         <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
       </div>
 
-        <!-- 自定义正则表达式 -->
-        <div class="form-group">
-            <label for="name" class="col-md-2 control-label">自定义正则表达式</label>
-            <div class="col-md-3 col-lg-3">
-                <input type="text" class="form-control focused" name="name3" id="name3"  value="${Regex}"/>
-            </div>
-            <p class="help-block col-md-offset-2">如：[0-9]5</p>
-        </div>
+      <!-- 自定义正则表达式 -->
+      <div class="form-group">
+          <label for="name" class="col-md-2 control-label">自定义正则表达式</label>
+          <div class="col-md-3 col-lg-3">
+              <input type="text" class="form-control focused" name="name3" id="name3"  value="${Regex}"/>
+          </div>
+          <p class="help-block col-md-offset-2">如：[0-9]5</p>
+      </div>
 
       <!-- 埋点字段描述 -->
       <div class="form-group">
@@ -65,9 +66,10 @@
         <div class="col-md-offset-2 col-md-10 col-lg-8">
           <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
           <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
-          <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
+          <input id="cancel_btn" class="btn" type="button" value="返回"/>
         </div>
       </div>
+
     </fieldset>
   </form>
 </div>
@@ -161,8 +163,6 @@
         $("#cancel_btn").on('click', function () {
             window.location.href='${CONTEXT_PATH}/cep/list?parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}'
         })
-
-
 
     });
 

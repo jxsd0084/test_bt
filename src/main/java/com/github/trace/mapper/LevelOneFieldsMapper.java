@@ -5,6 +5,4 @@ import com.github.trace.entity.LevelOneFields;
 
 public interface LevelOneFieldsMapper extends ICrudMapper<LevelOneFields> {
 
-    void updateLevelTwo();
-
 }
