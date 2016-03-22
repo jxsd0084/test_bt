@@ -36,7 +36,10 @@ public class CEPTraceController {
     private CEPService cepService;
 
     @RequestMapping("/list")
-    public String callerList(@RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id, @RequestParam(name = "parent_name") String parent_name, Model model) {
+    public String callerList(@RequestParam(name = "parent_id") int parent_id,
+                             @RequestParam(name = "child_id") int child_id,
+                             @RequestParam(name = "parent_name") String parent_name,
+                             Model model) {
 
         List<BuriedPoint> caller = cepService.getBuriedPointList(parent_id, child_id);
 
@@ -66,7 +69,9 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/new")
-    public String createConfig(@RequestParam(name = "id") int id, @RequestParam(name = "tag") String tag, Model model) {
+    public String createConfig(@RequestParam(name = "id") int id,
+                               @RequestParam(name = "tag") String tag,
+                               Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
@@ -87,7 +92,11 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/newConifg")
-    public String newConfig(@RequestParam(name = "tag") String tag, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id,  @RequestParam(name = "parent_name") String parent_name,Model model) {
+    public String newConfig(@RequestParam(name = "tag") String tag,
+                            @RequestParam(name = "parent_id") int parent_id,
+                            @RequestParam(name = "child_id") int child_id,
+                            @RequestParam(name = "parent_name") String parent_name,
+                            Model model) {
 
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
 
@@ -100,7 +109,12 @@ public class CEPTraceController {
 
     @RequestMapping("/modify")
     @ResponseBody
-    public Map modifyConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("regex") String regex, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @Param("id") int id) {
+    public Map modifyConfig(@Param("bp_name") String bp_name,
+                            @Param("bp_value") String bp_value,
+                            @Param("regex") String regex,
+                            @Param("bp_value_desc") String bp_value_desc,
+                            @Param("is_checked") boolean is_checked,
+                            @Param("id") int id) {
         String result = "";
 
         boolean flag = cepService.modifyBuriedPoint(bp_name, bp_value,regex, bp_value_desc, is_checked, id);
@@ -115,7 +129,12 @@ public class CEPTraceController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public Map addConfig(@Param("bp_name") String bp_name, @Param("bp_value") String bp_value, @Param("bp_value_desc") String bp_value_desc, @Param("is_checked") boolean is_checked, @RequestParam(name = "parent_id") int parent_id, @RequestParam(name = "child_id") int child_id) {
+    public Map addConfig(@Param("bp_name") String bp_name,
+                         @Param("bp_value") String bp_value,
+                         @Param("bp_value_desc") String bp_value_desc,
+                         @Param("is_checked") boolean is_checked,
+                         @RequestParam(name = "parent_id") int parent_id,
+                         @RequestParam(name = "child_id") int child_id) {
 
         BuriedPoint buriedPoint = new BuriedPoint();
         buriedPoint.setBpName(bp_name);
@@ -134,14 +153,16 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/delete")
-    public String deleteBuriedPoint(@Param("id") Integer id, Model model) {
+    public String deleteBuriedPoint(@Param("id") Integer id,
+                                    Model model) {
         cepService.deleteBuriedPoint(id);
         return "func/bp_list";
     }
 
     @RequestMapping("/format")
     @ResponseBody
-    public String format(@Param("BuriedPointList") String BuriedPointList, Model model) {
+    public String format(@Param("BuriedPointList") String BuriedPointList,
+                         Model model) {
 
         System.out.println("BuriedPointList"+BuriedPointList);
 
@@ -150,7 +171,8 @@ public class CEPTraceController {
 
     @RequestMapping("/serverLog")
     @ResponseBody
-    public String serverLog(@Param("Path") String path, Model model) {
+    public String serverLog(@Param("Path") String path,
+                            Model model) {
         //cepService.getServerLog();
 
         Set<String> serverLogSetList = cepService.getServerLog();
@@ -166,7 +188,9 @@ public class CEPTraceController {
 
     @RequestMapping("/compare")
     @ResponseBody
-    public String compare(@Param("Source") String str1,@Param("Target") String str2, Model model) {
+    public String compare(@Param("Source") String str1,
+                          @Param("Target") String str2,
+                          Model model) {
 
         JSONObject jsonObject1 = JSON.parseObject(str1);
 
