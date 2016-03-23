@@ -34,7 +34,7 @@
                 #if(item.parentId == 1)
                    <ul>
                        <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}"> ${item.childName} </a></span>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
                        </li>
                    </ul>
                 #end
@@ -46,7 +46,7 @@
                 #if(item.parentId == 2)
                    <ul>
                        <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}"> ${item.childName} </a></span>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
                        </li>
                    </ul>
                 #end
