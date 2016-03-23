@@ -59,8 +59,8 @@ public class DataTypeController {
         for (LevelTwoFields fieldObj : list) {
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(fieldObj.getId());
-            jsonArray2.add(fieldObj.getLevel1FieldName() + "_" + fieldObj.getId());
-            jsonArray2.add(fieldObj.getLevel1FieldTag());
+            jsonArray2.add(fieldObj.getLevel1FieldTag() + "_" + fieldObj.getId());
+            jsonArray2.add(fieldObj.getLevel1FieldName());
             jsonArray2.add(fieldObj.getLevel2FieldName());
             jsonArray2.add(fieldObj.getLevel2FieldDesc());
 
