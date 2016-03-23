@@ -201,7 +201,7 @@ public class CEPTraceController {
             for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
                 JSONArray ja2 = new JSONArray();
                 ja2.add(entry1.getKey()+"");
-                ja2.add(entry1.getValue().split(",")[1]+"");
+                ja2.add(entry1.getValue().split(",")[0]+"");
                 for (int i = 0; i < jsonArray.size(); i++) {
 
                     LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});

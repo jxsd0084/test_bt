@@ -47,6 +47,20 @@
 				<td style="padding-left: 20px">
                     <button id="browseBP">预览埋点结果</button>
                 </td>
+                <td >
+                    <label for="select">Topic</label>
+                    <select name="select" id="select">
+                        <option value="nginx.reverse" default>nginx.reverse</option>
+                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
+                        <select/>
+                </td>
+                <td >
+                    <label for="select2" >条数</label>
+                    <select name="select2" id="select2">
+                        <option value="1" default>1</option>
+                        <option value="5" >5</option>
+                        <select/>
+                </td>
 ##                <td colspan="2">
 ##                    <font size="4">日志分隔类型：</font>
 ##                    <select>
@@ -55,66 +69,36 @@
 ##                    </select>
 ##                </td>
 			</tr>
-            <tr>
-                <td colspan="4" style="padding-left: 20px">
-                    <textarea id = "textarea1" style="width: 100%;height: 120px">请输入something...1</textarea>
-                </td>
-            </tr>
+
+                    <textarea id = "textarea1" style="display:none">请输入something...1</textarea>
+
 			</thead>
 			<tbody>
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<br/>
+
+
 <div class="row">
-    <div>
         <table id="datatable" class="table table-striped table-condensed">
-            <tr>
-                <td style="padding-left: 20px">
-                    <button id="getServerLog">获取服务端日志</button>
-                </td>
-                <td >
-                    <label for="select">Topic</label>
-                    <select name="select" id="select">
-                        <option value="nginx.reverse" default>nginx.reverse</option>
-                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
-                    <select/>
-                </td>
-                <td >
-                    <label for="select2" >条数</label>
-                    <select name="select2" id="select2">
-                        <option value="1" default>1</option>
-                        <option value="5" >5</option>
-                    <select/>
-                </td>
-            </tr>
             <tr>
                 <td colspan="8" style="padding-left: 20px">
-                    <textarea  id="textarea2" style="width: 100%;height: 240px">请输入something...2</textarea>
+                    <div>服务端日志</div>
+                    <textarea  id="textarea2" style="width: 100%;height: 240px"></textarea>
                 </td>
             </tr>
         </table>
-    </div>
-</div>
-<div class="row">
-    <div>
-        <table id="datatable" class="table table-striped table-condensed">
-            <tr>
-                <td colspan="4" style="padding-left: 20px">
-                    <button id="validateBP">验证/对比埋点内容</button>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-<div class="row">
-    <div  id ="compare" style="padding-left: 20px">
-        结果对比表格
-    </div>
 </div>
 
 <br/>
-<div class="row">
+
+<div class="row" style="padding-left: 20px">
+    <div>
+        结果对比表格
+    </div>
     <div>
         <table id="datatable2" class="table table-striped table-bordered table-condensed">
             <thead>
@@ -164,8 +148,9 @@
 			fixedHeader: fixedHeaderObject,
 			language: lang,
 			dom: bootstrapDom,
-			order: [[2, 'desc'], [3, 'desc']],
-			lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
+			order: [[0, 'asc'], [3, 'desc']],
+            paging: false,
+			//lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
 			data: data,
 			columnDefs: [
 				{
@@ -199,7 +184,8 @@
 		});
 
         $('#datatable2').DataTable( {
-
+            paging: false,
+            language: lang,
             columnDefs: [
 
                 { "width": "10%", "targets": 0 },
@@ -220,6 +206,7 @@
 
 
     $("#browseBP").click( function() {
+
         var list = $('#datatable').DataTable().data();
         var as = [];
         for(var i = 0; i < list.length ;i++ ) {
@@ -230,6 +217,7 @@
         as = "{" + as + "}";
         $.ajax({
             url: "${CONTEXT_PATH}/cep/format",
+            async : false,
             contentType: "application/json",
             data:  {BuriedPointList:as},
             dataType: "text",
@@ -240,31 +228,21 @@
             }
         });
 
-    });
-
-    $("#addBPItem").click( function() {
-        //alert('添加埋点项 !')
-    });
-
-    $("#getServerLog").click( function() {
-
-            $.ajax({
-                url: "${CONTEXT_PATH}/cep/serverLog",
-                contentType: "application/json",
-                data:  { str1:$("#select").val(),str2: $("#select2").val()},
-                dataType: "text",
-                type: "GET",
-                success: function (mydata) {
-                    $("#textarea2").val(mydata)
-                }
-            });
-
+        $.ajax({
+            url: "${CONTEXT_PATH}/cep/serverLog",
+            async : false,
+            contentType: "application/json",
+            data:  { str1:$("#select").val(),str2: $("#select2").val()},
+            dataType: "text",
+            type: "GET",
+            success: function (mydata) {
+                $("#textarea2").val(mydata)
+            }
         });
-
-        $("#validateBP").click( function() {
 
         $.ajax({
             url: "${CONTEXT_PATH}/cep/compare",
+            async : false,
             contentType: "application/json",
             data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
             dataType: "json",
@@ -275,7 +253,8 @@
 
 
                 $('#datatable2').DataTable( {
-                    bRetrieve:true,
+                    paging: false,
+                    language: lang,
                     data: mydata,
                     columnDefs: [
                         {
@@ -293,7 +272,7 @@
                                 return data
                             }
 
-                            }
+                        }
                         },
                         {
                             targets: 5, render: function (data, type, full, meta) {
@@ -344,19 +323,23 @@
             }
         });
 
+
     });
 
-        $("#deployBP").click( function() {
-            alert('发布埋点配置 !')
-        });
 
-        $("#generateLeve1WH").click( function() {
-            alert('生成一级仓库 !')
-        });
+    $("#getServerLog").click( function() {
 
-        $("#previewBPReport").click( function() {
-            alert('预览报表结果 !')
-        });
+
+
+    });
+
+    $("#validateBP").click( function() {
+
+
+
+    });
+
+
 
     });
 </script>
