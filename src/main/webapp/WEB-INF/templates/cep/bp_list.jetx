@@ -47,13 +47,13 @@
 				<td style="padding-left: 20px">
                     <button id="browseBP">预览埋点结果</button>
                 </td>
-#*                <td colspan="2">
-                    <font size="4">日志分隔类型：</font>
-                    <select>
-                        <option>Json格式</option>
-                        <option>KV格式</option>
-                    </select>
-                </td>*#
+##                <td colspan="2">
+##                    <font size="4">日志分隔类型：</font>
+##                    <select>
+##                        <option>Json格式</option>
+##                        <option>KV格式</option>
+##                    </select>
+##                </td>
 			</tr>
             <tr>
                 <td colspan="4" style="padding-left: 20px">
