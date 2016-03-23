@@ -25,11 +25,11 @@
     </div>
   </div>
 </nav>
-<div id="sidebar-collapse"
-   	<div class="tree col-sm-2 col-md-2 col-lg-2 sidebar">
+<div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
+   	<div class="tree">
         <ul>
-            <li>
-               <span><i class="icon-folder-open"></i>前端埋点</span>
+           <li>
+           <span><i class="icon-folder-open"></i>前端埋点</span>
                #for(item : navigationItemList)
                 #if(item.parentId == 1)
                    <ul>
@@ -39,7 +39,9 @@
                    </ul>
                 #end
                #end
-               <span><i class="icon-folder-open"></i>后端埋点</span>
+            </li>
+           <li>
+           <span><i class="icon-folder-open"></i>后端埋点</span>
                #for(item : navigationItemList)
                 #if(item.parentId == 2)
                    <ul>
@@ -49,7 +51,7 @@
                    </ul>
                 #end
                #end
-            </li>
+           </li>
         </ul>
     </div>
 </div>
