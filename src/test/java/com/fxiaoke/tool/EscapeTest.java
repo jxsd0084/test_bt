@@ -19,5 +19,7 @@ public class EscapeTest {
     public void testEscape() throws Exception {
         assertEquals("%5Cd", URLEncoder.encode("\\d", "UTF-8"));
         assertEquals("\\d", URLDecoder.decode("%5cd", "UTF-8"));
+
+
     }
 }
