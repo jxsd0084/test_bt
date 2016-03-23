@@ -135,7 +135,7 @@
                 data = {
                     bp_name             :value1,
                     bp_value            :value2,
-                    bp_value_desc       :value3,
+                    bp_value_desc       :value4,
                     is_checked          :is_checked
                 };
             }
