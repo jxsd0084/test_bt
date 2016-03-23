@@ -175,13 +175,13 @@ public class CEPTraceController {
 
         Set<String> serverLogSetList = cepService.getServerLog( str1,str2 );
 
-        String results = "";
+//        String results = "";
+//
+//        for (String string: serverLogSetList ) {
+//            results += string+"\n";
+//        }
 
-        for (String string: serverLogSetList ) {
-            results += string+"\n";
-        }
-
-        return results;
+        return serverLogSetList.toString();
     }
 
     @RequestMapping("/compare")
@@ -190,85 +190,72 @@ public class CEPTraceController {
                           @Param("Target") String str2,
                           Model model) {
 
-        JSONObject jsonObject1 = JSON.parseObject(str1);
+        JSONArray jsonArray  = JSON.parseArray(str2);
 
-        JSONObject jsonObject2 = JSON.parseObject(str2);
-
-        List<BuriedPoint> caller = cepService.getBuriedPointList(1, 2);
 
         JSONArray ja1 = new JSONArray();
 
-        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(str1, new TypeReference<LinkedHashMap<String, String>>() {
-        });
+        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(str1, new TypeReference<LinkedHashMap<String, String>>() {});
 
 
-        LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(str2, new TypeReference<LinkedHashMap<String, String>>() {
-        });
-
-        for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
-
-            if(jsonMap2.containsKey(entry1.getKey())){
-
+            for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
                 JSONArray ja2 = new JSONArray();
                 ja2.add(entry1.getKey()+"");
                 ja2.add(entry1.getValue().split(",")[1]+"");
+                for (int i = 0; i < jsonArray.size(); i++) {
 
-                String patternString = "";
-                String patternString2 = "";
+                    LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
 
-                if(entry1.getValue().split(",")[1].equals("文本")){
-                    patternString = ".*";
-                }
+                    if(jsonMap2.containsKey(entry1.getKey())){
 
-                if(entry1.getValue().split(",")[1].equals("数字")){
-                    patternString = "^[0-9]*$";
-                }
+                        String patternString = "";
+                        String patternString2 = "";
 
-                if(entry1.getValue().split(",")[1].equals("日期")){
-                    patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
-                }
+                        if(entry1.getValue().split(",")[1].equals("文本")){
+                            patternString = ".*";
+                        }
 
-                Pattern pattern = Pattern.compile(patternString);
-                Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
-                boolean b= matcher.matches();
+                        if(entry1.getValue().split(",")[1].equals("数字")){
+                            patternString = "^[0-9]*$";
+                        }
+
+                        if(entry1.getValue().split(",")[1].equals("日期")){
+                            patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
+                        }
+
+                        Pattern pattern = Pattern.compile(patternString);
+                        Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
+                        boolean b= matcher.matches();
 
 
-                if(entry1.getValue().split(",").length>=3){
+                        if(entry1.getValue().split(",").length>=3){
 
-                    try {
-                        patternString2 = URLDecoder.decode(entry1.getValue().split(",")[2].toString(), "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                            try {
+                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[2].toString(), "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+
+                            Pattern pattern2 = null;
+                            pattern2 = Pattern.compile( patternString2);
+
+                            Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
+                            b= matcher2.matches();
+                        }
+
+                        ja2.add(jsonMap2.get(entry1.getKey()));
+                        ja2.add(b);
+
+
+                    }else{
+
+                        ja2.add("");
+                        ja2.add(false);
+
                     }
 
-                    Pattern pattern2 = null;
-                    pattern2 = Pattern.compile( patternString2);
-
-                    Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
-                    b= matcher2.matches();
                 }
-
-                ja2.add(jsonMap2.get(entry1.getKey()));
-                ja2.add(b);
-
-                ja2.add("");
-                ja2.add("");
-
                 ja1.add(ja2);
-
-            }else{
-
-                JSONArray ja2 = new JSONArray();
-                ja2.add(entry1.getKey()+"");
-                ja2.add(entry1.getValue().split(",")[1]+"");
-                ja2.add("");
-                ja2.add("false");
-                ja2.add("");
-                ja2.add("");
-
-                ja1.add(ja2);
-
-            }
 
         }
 

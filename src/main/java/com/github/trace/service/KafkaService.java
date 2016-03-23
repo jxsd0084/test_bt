@@ -87,7 +87,7 @@ public class KafkaService {
 
     Set<String> results = Sets.newHashSet();
     for (KafkaMessageAndOffset messageAndOffset : fetchedData) {
-      if (results.size() > 10) {
+      if (results.size() > count) {
         break;
       }
       results.add(messageAndOffset.getMessage());
