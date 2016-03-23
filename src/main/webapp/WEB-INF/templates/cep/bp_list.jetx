@@ -87,7 +87,7 @@
             <tr>
                 <td colspan="8" style="padding-left: 20px">
                     <div>服务端日志</div>
-                    <textarea  id="textarea2" style="width: 100%;height: 240px">请输入something...</textarea>
+                    <textarea  id="textarea2" style="width: 100%;height: 240px"></textarea>
                 </td>
             </tr>
         </table>
@@ -148,7 +148,7 @@
 			fixedHeader: fixedHeaderObject,
 			language: lang,
 			dom: bootstrapDom,
-			order: [[2, 'desc'], [3, 'desc']],
+			order: [[0, 'asc'], [3, 'desc']],
             paging: false,
 			//lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
 			data: data,
