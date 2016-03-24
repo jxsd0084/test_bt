@@ -6,8 +6,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.service.CEPService;
 import com.github.trace.utils.ControllerHelper;
-import com.google.common.collect.ImmutableMap;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -112,30 +110,32 @@ public class CEPTraceController {
 
     @RequestMapping("/modify")
     @ResponseBody
-    public Map modifyConfig(@Param("bp_name") String bp_name,
-                            @Param("bp_value") String bp_value,
-                            @Param("regex") String regex,
-                            @Param("bp_value_desc") String bp_value_desc,
-                            @Param("is_checked") boolean is_checked,
-                            @Param("id") int id) {
-        String result = "";
+    public Map modifyConfig(@RequestParam("bp_name") String bp_name,
+                            @RequestParam("bp_value") String bp_value,
+                            @RequestParam("regex") String regex,
+                            @RequestParam("bp_value_desc") String bp_value_desc,
+                            @RequestParam("is_checked") boolean is_checked,
+                            @RequestParam("id") int id) {
 
-        boolean flag = cepService.modifyBuriedPoint(bp_name, bp_value,regex, bp_value_desc, is_checked, id);
-        if(flag){
-            result = "数据修改成功!";
-            return ImmutableMap.of("code", 200, "info", result);
-        }else{
-            result = "数据修改失败！";
-            return ImmutableMap.of("code", -1, "info", result);
-        }
+        BuriedPoint buriedPoint = new BuriedPoint();
+        buriedPoint.setId(id);
+        buriedPoint.setBpName(bp_name);
+        buriedPoint.setBpValue(bp_value);
+        buriedPoint.setRegex(regex);
+        buriedPoint.setBpValueDesc(bp_value_desc);
+        buriedPoint.setIsChecked(is_checked==true?1:0);
+
+        int res = cepService.modifyBuriedPoint(buriedPoint);
+
+        return ControllerHelper.returnResponseVal(res, "更新");
     }
 
     @RequestMapping("/add")
     @ResponseBody
-    public Map addConfig(@Param("bp_name") String bp_name,
-                         @Param("bp_value") String bp_value,
-                         @Param("bp_value_desc") String bp_value_desc,
-                         @Param("is_checked") boolean is_checked,
+    public Map addConfig(@RequestParam("bp_name") String bp_name,
+                         @RequestParam("bp_value") String bp_value,
+                         @RequestParam("bp_value_desc") String bp_value_desc,
+                         @RequestParam("is_checked") boolean is_checked,
                          @RequestParam(name = "parent_id") int parent_id,
                          @RequestParam(name = "child_id") int child_id) {
 
@@ -156,15 +156,14 @@ public class CEPTraceController {
     }
 
     @RequestMapping("/delete")
-    public String deleteBuriedPoint(@Param("id") Integer id,
-                                    Model model) {
-        cepService.deleteBuriedPoint(id);
+    public String deleteBuriedPoint(@RequestParam("id") Integer id) {
+        cepService.deleteById(id);
         return "func/bp_list";
     }
 
     @RequestMapping("/format")
     @ResponseBody
-    public String format(@Param("BuriedPointList") String BuriedPointList,
+    public String format(@RequestParam("BuriedPointList") String BuriedPointList,
                          Model model) {
 
         System.out.println("BuriedPointList"+BuriedPointList);
@@ -174,7 +173,9 @@ public class CEPTraceController {
 
     @RequestMapping("/serverLog")
     @ResponseBody
-    public String serverLog(@Param("str1") String str1,@Param("str2") int str2,Model model) {
+    public String serverLog(@RequestParam("str1") String str1,
+                            @RequestParam("str2") int str2,
+                            Model model) {
 
         Set<String> serverLogSetList = cepService.getServerLog( str1,str2 );
 
@@ -189,8 +190,8 @@ public class CEPTraceController {
 
     @RequestMapping("/compare")
     @ResponseBody
-    public String compare(@Param("Source") String str1,
-                          @Param("Target") String str2,
+    public String compare(@RequestParam("Source") String str1,
+                          @RequestParam("Target") String str2,
                           Model model) {
 
         JSONArray jsonArray  = JSON.parseArray(str2);
@@ -272,8 +273,8 @@ public class CEPTraceController {
 
     @RequestMapping("/compareByTopic")
     @ResponseBody
-    public String compare(@Param("topic") String topic,
-                          @Param("jsonArray") String jsonArray) {
+    public String compare(@RequestParam("topic") String topic,
+                          @RequestParam("jsonArray") String jsonArray) {
         return cepService.compareByTopic(topic,jsonArray);
 
     }
