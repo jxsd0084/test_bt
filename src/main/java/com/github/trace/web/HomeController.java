@@ -43,6 +43,7 @@ public class HomeController {
   public String home(Model model) {
     List<NavigationItem> navigationItemList = cepService.getConfiguration();
     model.addAttribute("navigationItemList", navigationItemList);
+    model.addAttribute("obj", navigationItemList.get(0));
     return "home";
   }
 

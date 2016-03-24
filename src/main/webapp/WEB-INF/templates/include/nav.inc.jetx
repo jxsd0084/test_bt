@@ -6,7 +6,7 @@
       <div style="padding-top: 5px">
         <ul class="nav navbar-nav nav-tabs">
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
-          <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=1&parent_name=iOS">埋点配置与监控</a></li>
+          <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${obj.parentId}&child_id=${obj.childId}&parent_name=${obj.parentName}&topic=${obj.topic}">埋点配置与监控</a></li>
           <li ><a href="">数据源配置</a></li>
           <li ><a href="${CONTEXT_PATH}/param/list">参数配置</a></li>
         </ul>
