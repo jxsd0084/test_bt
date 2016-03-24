@@ -38,6 +38,7 @@ public class CEPTraceController {
     public String callerList(@RequestParam(name = "parent_id") int parent_id,
                              @RequestParam(name = "child_id") int child_id,
                              @RequestParam(name = "parent_name") String parent_name,
+                             @RequestParam(name = "topic") String topic,
                              Model model) {
 
         List<BuriedPoint> caller = cepService.getBuriedPointList(parent_id, child_id);
@@ -63,6 +64,7 @@ public class CEPTraceController {
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
         model.addAttribute("parent_name", parent_name);
+        model.addAttribute("topic", topic);
         model.addAttribute("data", ja1);
         return "cep/bp_list";
     }
