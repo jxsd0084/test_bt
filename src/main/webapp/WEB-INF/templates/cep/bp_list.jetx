@@ -45,13 +45,12 @@
     <div class="col-md-2" >
         <button id="browseBP">预览埋点结果</button>
     </div>
-    <div class="col-md-2" >Topic:</div>
+    <div class="col-md-2" >队列名称:</div>
     <div class="col-md-2" id="select">${topic}</div>
     <div class="col-md-2" >日志数:</div>
     <div class="col-md-2" >
         <select name="select2" id="select2">
-            <option value="1" default>1</option>
-        <option value="5" >5</option><select/>
+            <option value="5" default>5</option>
     </div>
 
 
