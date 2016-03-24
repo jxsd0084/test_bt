@@ -97,6 +97,7 @@ public class CEPTraceController {
                             @RequestParam(name = "parent_id") int parent_id,
                             @RequestParam(name = "child_id") int child_id,
                             @RequestParam(name = "parent_name") String parent_name,
+                            @RequestParam(name = "topic") String topic,
                             Model model) {
 
         ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
@@ -104,6 +105,7 @@ public class CEPTraceController {
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
         model.addAttribute("parent_name", parent_name);
+        model.addAttribute("topic", topic);
         model.addAttribute("tag", tag);
         return "func/conf_create";
     }

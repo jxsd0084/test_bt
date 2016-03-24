@@ -17,7 +17,7 @@ public class ControllerHelper {
     public static void setLeftNavigationTree(Model model, CEPService cepService){
         List<NavigationItem> navigationItemList = cepService.getConfiguration();
         model.addAttribute("navigationItemList", navigationItemList);
-        model.addAttribute("obj", navigationItemList.get(0));
+        model.addAttribute("navObj", navigationItemList.get(0));
     }
 
     /**
