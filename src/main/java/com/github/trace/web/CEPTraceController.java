@@ -270,7 +270,7 @@ public class CEPTraceController {
 
     @RequestMapping("/compareByTopic")
     @ResponseBody
-    public String compare(@Param("topic") String topic,
+    public boolean compare(@Param("topic") String topic,
                           @Param("jsonArray") String jsonArray) {
         return cepService.compareByTopic(topic,jsonArray);
 
