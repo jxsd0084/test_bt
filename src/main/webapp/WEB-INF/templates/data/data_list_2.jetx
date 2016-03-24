@@ -57,7 +57,7 @@
             language: lang,
             dom: bootstrapDom,
             order: [[2, 'desc'], [3, 'desc']],
-            lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
+            lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
                 {
