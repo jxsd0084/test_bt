@@ -39,90 +39,71 @@
 	</div>
 </div>
 <br/>
-<div class="row">
-	<div>
-		<table id="datatable" class="table table-striped table-condensed">
-			<thead>
-			<tr>
-				<td style="padding-left: 20px">
-                    <button id="browseBP">预览埋点结果</button>
-                </td>
-##                <td colspan="2">
-##                    <font size="4">日志分隔类型：</font>
-##                    <select>
-##                        <option>Json格式</option>
-##                        <option>KV格式</option>
-##                    </select>
-##                </td>
-			</tr>
-            <tr>
-                <td colspan="4" style="padding-left: 20px">
-                    <textarea id = "textarea1" style="width: 100%;height: 120px">请输入something...1</textarea>
-                </td>
-            </tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-	</div>
-</div>
-<div class="row">
-    <div>
-        <table id="datatable" class="table table-striped table-condensed">
-            <tr>
-                <td style="padding-left: 20px">
-                    <button id="getServerLog">获取服务端日志</button>
-                </td>
-                <td >
-                    <label for="select">队列名称</label>
-                    <select name="select" id="select">
-                        <option value="nginx.reverse" default>nginx.reverse</option>
-                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
-                    <select/>
-                </td>
-                <td >
-                    <label for="select2" >条数</label>
-                    <select name="select2" id="select2">
-                        <option value="5"default>5</option>
-                    <select/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="8" style="padding-left: 20px">
-                    <textarea  id="textarea2" style="width: 100%;height: 120px">请输入something...2</textarea>
-                </td>
-            </tr>
-        </table>
+
+<div class="row" style="padding-left: 40px">
+
+    <div class="col-md-2" >
+        <button id="browseBP">预览埋点结果</button>
     </div>
-</div>
-<div class="row">
-    <div>
-        <table id="datatable" class="table table-striped table-condensed">
-            <tr>
-                <td colspan="4" style="padding-left: 20px">
-                    <button id="validateBP">验证/对比埋点内容</button>
-                </td>
-            </tr>
-        </table>
+    <div class="col-md-2" >队列名称:</div>
+    <div class="col-md-2" id="select">${topic}</div>
+    <div class="col-md-2" >日志数:</div>
+    <div class="col-md-2" >
+        <select name="select2" id="select2">
+            <option value="5" default>5</option>
     </div>
+
+
+
+    ##                    <select name="select" id="select">
+    ##                        <option value="nginx.reverse" default>nginx.reverse</option>
+    ##                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
+    ##                     <select/>
+
 </div>
-<div class="row">
-    <div  id ="compare" style="padding-left: 20px">
-        结果对比表格
-    </div>
+
+
+    <textarea id = "textarea1" style="display:none">请输入something...1</textarea>
+
+
 </div>
 
 <br/>
+
+
 <div class="row">
+        <table id="datatable" class="table table-striped table-condensed">
+            <tr>
+                <td colspan="8" style="padding-left: 20px">
+                    <div>服务端日志</div>
+                    <textarea  id="textarea2" style="width: 100%;height: 240px"></textarea>
+                </td>
+            </tr>
+        </table>
+</div>
+
+<br/>
+
+<div class="row" style="padding-left: 20px">
+    <div>
+        结果对比表格
+    </div>
     <div>
         <table id="datatable2" class="table table-striped table-bordered table-condensed">
             <thead>
             <tr>
+
                 <th>埋点字段</th>
                 <th>埋点字段描述</th>
                 <th>日志1</th>
                 <th>正确性</th>
                 <th>日志2</th>
+                <th>正确性</th>
+                <th>日志3</th>
+                <th>正确性</th>
+                <th>日志4</th>
+                <th>正确性</th>
+                <th>日志5</th>
                 <th>正确性</th>
             </tr>
             </thead>
@@ -156,8 +137,9 @@
 			fixedHeader: fixedHeaderObject,
 			language: lang,
 			dom: bootstrapDom,
-			order: [[2, 'desc'], [3, 'desc']],
-			lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
+			order: [[0, 'asc'], [3, 'desc']],
+            paging: false,
+			//lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
 			data: data,
 			columnDefs: [
 				{
@@ -191,7 +173,8 @@
 		});
 
         $('#datatable2').DataTable( {
-
+            paging: false,
+            language: lang,
             columnDefs: [
 
                 { "width": "10%", "targets": 0 },
@@ -212,6 +195,7 @@
 
 
     $("#browseBP").click( function() {
+
         var list = $('#datatable').DataTable().data();
         var as = [];
         for(var i = 0; i < list.length ;i++ ) {
@@ -222,6 +206,7 @@
         as = "{" + as + "}";
         $.ajax({
             url: "${CONTEXT_PATH}/cep/format",
+            async : false,
             contentType: "application/json",
             data:  {BuriedPointList:as},
             dataType: "text",
@@ -232,31 +217,21 @@
             }
         });
 
-    });
-
-    $("#addBPItem").click( function() {
-        //alert('添加埋点项 !')
-    });
-
-    $("#getServerLog").click( function() {
-
-            $.ajax({
-                url: "${CONTEXT_PATH}/cep/serverLog",
-                contentType: "application/json",
-                data:  { str1:$("#select").val(),str2: $("#select2").val()},
-                dataType: "text",
-                type: "GET",
-                success: function (mydata) {
-                    $("#textarea2").val(mydata)
-                }
-            });
-
+        $.ajax({
+            url: "${CONTEXT_PATH}/cep/serverLog",
+            async : false,
+            contentType: "application/json",
+            data:  { str1:$("#select").text(),str2: $("#select2").val()},
+            dataType: "text",
+            type: "GET",
+            success: function (mydata) {
+                $("#textarea2").val(mydata)
+            }
         });
-
-        $("#validateBP").click( function() {
 
         $.ajax({
             url: "${CONTEXT_PATH}/cep/compare",
+            async : false,
             contentType: "application/json",
             data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
             dataType: "json",
@@ -267,40 +242,93 @@
 
 
                 $('#datatable2').DataTable( {
+                    paging: false,
+                    language: lang,
                     data: mydata,
                     columnDefs: [
-
+                        {
+                            sDefaultContent: '',
+                            aTargets: [ '_all' ]
+                        },
                         { "width": "10%", "targets": 0 },
                         { "width": "10%", "targets": 1 },
                         {
                             targets: 3, render: function (data, type, full, meta) {
                             //var link = full;
-                            if(data == "false" || data == false){
+                            if(data == false){
                                 return '<div style="color:#F00">false</div> '
                             }else{
                                 return data
                             }
 
+                        }
+                        },
+                        {
+                            targets: 5, render: function (data, type, full, meta) {
+                            //var link = full;
+                            if(data == false){
+                                return '<div style="color:#F00">false</div> '
+                            }else{
+                                return data
                             }
+
+                        }
+                        },
+                        {
+                            targets: 7, render: function (data, type, full, meta) {
+                            //var link = full;
+                            if(data == false){
+                                return '<div style="color:#F00">false</div> '
+                            }else{
+                                return data
+                            }
+
+                        }
+                        },
+                        {
+                            targets: 9, render: function (data, type, full, meta) {
+                            //var link = full;
+                            if(data == false){
+                                return '<div style="color:#F00">false</div> '
+                            }else{
+                                return data
+                            }
+
+                        }
+                        },
+                        {
+                            targets: 11, render: function (data, type, full, meta) {
+                            //var link = full;
+                            if(data == false){
+                                return '<div style="color:#F00">false</div> '
+                            }else{
+                                return data
+                            }
+
+                        }
                         }
                     ]
                 });
             }
         });
 
+
     });
 
-        $("#deployBP").click( function() {
-            alert('发布埋点配置 !')
-        });
 
-        $("#generateLeve1WH").click( function() {
-            alert('生成一级仓库 !')
-        });
+    $("#getServerLog").click( function() {
 
-        $("#previewBPReport").click( function() {
-            alert('预览报表结果 !')
-        });
+
+
+    });
+
+    $("#validateBP").click( function() {
+
+
+
+    });
+
+
 
     });
 </script>
