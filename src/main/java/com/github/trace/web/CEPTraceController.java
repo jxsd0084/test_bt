@@ -134,6 +134,7 @@ public class CEPTraceController {
     @ResponseBody
     public Map addConfig(@RequestParam("bp_name") String bp_name,
                          @RequestParam("bp_value") String bp_value,
+                         @RequestParam("regex") String regex,
                          @RequestParam("bp_value_desc") String bp_value_desc,
                          @RequestParam("is_checked") boolean is_checked,
                          @RequestParam(name = "parent_id") int parent_id,
@@ -145,10 +146,10 @@ public class CEPTraceController {
         buriedPoint.setBpValueDesc(bp_value_desc);
         buriedPoint.setIsChecked(is_checked==true?1:0);
         buriedPoint.setParentId(parent_id);
-        buriedPoint.setParentName("");
+//        buriedPoint.setParentName("");
         buriedPoint.setChildId(child_id);
-        buriedPoint.setChildName("");
-        buriedPoint.setRegex("");
+//        buriedPoint.setChildName("");
+        buriedPoint.setRegex(regex);
 
         int res = cepService.addBuriedPoint(buriedPoint);
 
