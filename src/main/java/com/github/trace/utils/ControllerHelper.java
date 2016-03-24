@@ -14,10 +14,11 @@ import java.util.Map;
 public class ControllerHelper {
 
     // 此处为防止页面刷新之后, 左边导航条的数据丢失
-    public static void setLeftNavigationTree(Model model, CEPService cepService){
+    public static List setLeftNavigationTree(Model model, CEPService cepService){
         List<NavigationItem> navigationItemList = cepService.getConfiguration();
         model.addAttribute("navigationItemList", navigationItemList);
         model.addAttribute("navObj", navigationItemList.get(0));
+        return navigationItemList;
     }
 
     /**
