@@ -8,11 +8,8 @@ import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.mapper.BuriedPointMapper;
 import com.github.trace.mapper.NavigationItemMapper;
-import com.github.trace.utils.ControllerHelper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -86,6 +83,15 @@ public class CEPService {
   }
 
   /**
+   * 删除埋点2
+   * @param id 业务ID
+   * @return  1-删除成功  0-删除失败
+     */
+  public int deleteById(int id) {
+    return buriedPointMapper.deleteById(id);
+  }
+
+  /**
    * 插入新埋点
    * @param buriedPoint
    * @return
@@ -100,8 +106,12 @@ public class CEPService {
   }
 
 
-  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc,boolean is_checked ,int id) {
+  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc, boolean is_checked ,int id) {
     return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,regex,bp_value_desc,is_checked,id);
+  }
+
+  public int modifyBuriedPoint(BuriedPoint buriedPoint) {
+    return buriedPointMapper.update(buriedPoint);
   }
 
 
