@@ -28,11 +28,30 @@
 <div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
    	<div class="tree">
         <ul>
-           #for(item : navigationItemList)
            <li>
-              <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
+           <span><i class="icon-folder-open"></i>前端埋点</span>
+               #for(item : navigationItemList)
+                #if(item.parentId == 1)
+                   <ul>
+                       <li>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
+                       </li>
+                   </ul>
+                #end
+               #end
+            </li>
+           <li>
+           <span><i class="icon-folder-open"></i>后端埋点</span>
+               #for(item : navigationItemList)
+                #if(item.parentId == 2)
+                   <ul>
+                       <li>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
+                       </li>
+                   </ul>
+                #end
+               #end
            </li>
-           #end
         </ul>
     </div>
 </div>
