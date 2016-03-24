@@ -13,7 +13,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active">${parent_name}二级字段配置</li>
+		<li class="active"><a href="${CONTEXT_PATH}/dataType/listLevelOne">返回上一级</a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
