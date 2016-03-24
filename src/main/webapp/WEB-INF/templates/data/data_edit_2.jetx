@@ -57,10 +57,7 @@
 <input type="hidden" id="name5" name="name5" value="${L1_id}" />
 <script>
 
-    var showResult = function(msg){
-        $('#resultInfo').text(msg);
-	    $('#resultInfo').removeClass("hide");
-    }
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelTwo?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}';
 
     var myValidator = function(){
         var msg = '';
@@ -88,10 +85,11 @@
 
         $("#confirm").on('click', function () {
 
-            var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelTwo';
+            var tag  = '${tag}';
+            var url  = '${CONTEXT_PATH}/dataType/' + tag + 'LevelTwo';
             var data = '';
-            var id = '${id}';
+            var id   = '${id}';
+            var msg  = '';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
@@ -100,6 +98,7 @@
             var value5 = $("#name5").val();
 
             if(tag == 'modify'){
+                msg  = '修改';
                 data = {
                     L1_tag              :value1,
                     L1_name             :value2,
@@ -109,6 +108,7 @@
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
+                msg  = '添加';
                 data = {
                     L1_tag              :value1,
                     L1_name             :value2,
@@ -128,7 +128,7 @@
                     success:function (data) {
                         var json = JSON.parse(data);
                         if (json.code == 200) {
-                            showResult(json.info);
+                            forward(msg + "成功!", GLOBAL_URL);
                         } else {
                             showResult("警告：" + json.info);
                         }
@@ -139,7 +139,7 @@
         })
 
         $("#cancel_btn").on('click', function () {
-            window.location.href='${CONTEXT_PATH}/dataType/listLevelTwo?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}';
+            window.location.href = GLOBAL_URL;
         })
 
     });

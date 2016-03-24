@@ -34,7 +34,7 @@
       <!-- 确认按钮 -->
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
-          <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
+          <p align="lefts" class="hide" id="resultInfo"></p>
           <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
           <input id="cancel_btn" class="btn" type="button" value="返回"/>
         </div>
@@ -47,10 +47,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var showResult = function(msg){
-        $('#resultInfo').text(msg);
-	    $('#resultInfo').removeClass("hide");
-    }
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelOne';
 
     var myValidator = function(){
         var msg = '';
@@ -81,12 +78,14 @@
             var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelOne';
             var data = '';
             var id = '${id}';
+            var msg = '';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
 
             if(tag == 'modify'){
+                msg  = '修改';
                 data = {
                     L1_tag              :value1,
                     L1_name             :value2,
@@ -94,6 +93,7 @@
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
+                msg  = '添加';
                 data = {
                     L1_tag              :value1,
                     L1_name             :value2,
@@ -111,9 +111,9 @@
                     success:function (data) {
                         var json = JSON.parse(data);
                         if (json.code == 200) {
-                            showResult(json.info);
+                            forward(msg + "成功!", GLOBAL_URL);
                         } else {
-                            showResult("警告：" + json.info);
+                            showResult("警告：" + json.info, false);
                         }
                     }
                 });
@@ -122,7 +122,7 @@
         })
 
         $("#cancel_btn").on('click', function () {
-            window.location.href='${CONTEXT_PATH}/dataType/listLevelOne';
+            window.location.href = GLOBAL_URL;
         })
 
     });
