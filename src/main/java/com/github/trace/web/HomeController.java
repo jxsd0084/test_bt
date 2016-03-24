@@ -1,7 +1,7 @@
 package com.github.trace.web;
 
-import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
+import com.github.trace.utils.ControllerHelper;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 
 /**
@@ -41,8 +39,7 @@ public class HomeController {
 
   @RequestMapping("/")
   public String home(Model model) {
-    List<NavigationItem> navigationItemList = cepService.getConfiguration();
-    model.addAttribute("navigationItemList", navigationItemList);
+    ControllerHelper.setLeftNavigationTree(model, cepService);
     return "home";
   }
 

@@ -40,12 +40,30 @@ public class CEPService {
   private KafkaService kafkaService;
 
   /**
-   * 获取所有的埋点列表
+   * 获取所有的导航项列表
    * @return 埋点列表
      */
 //  @Cacheable(value="navigationItemCache")
   public List<NavigationItem> getConfiguration() {
     return navigationItemMapper.findAll();
+  }
+
+  /**
+   * 根据id查询具体的导航项
+   * @param id
+   * @return
+     */
+  public NavigationItem getConfigById(int id){
+    return navigationItemMapper.findById(id);
+  }
+
+  /**
+   * 更新导航项
+   * @param navigationItem
+   * @return
+     */
+  public int updateConfig(NavigationItem navigationItem){
+    return navigationItemMapper.update(navigationItem);
   }
 
   /**

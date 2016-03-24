@@ -6,9 +6,9 @@
       <div style="padding-top: 5px">
         <ul class="nav navbar-nav nav-tabs">
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
-          <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=1&parent_name=iOS">埋点配置与监控</a></li>
+          <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${obj.parentId}&child_id=${obj.childId}&parent_name=${obj.childName}&topic=${obj.topic}">埋点配置与监控</a></li>
           <li ><a href="">数据源配置</a></li>
-          <li ><a href="${CONTEXT_PATH}/cep/list">导航树配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/param/list">参数配置</a></li>
         </ul>
       </div>
       <div>
@@ -28,11 +28,30 @@
 <div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
    	<div class="tree">
         <ul>
-           #for(item : navigationItemList)
            <li>
-              <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
+           <span><i class="icon-folder-open"></i>前端埋点</span>
+               #for(item : navigationItemList)
+                #if(item.parentId == 1)
+                   <ul>
+                       <li>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
+                       </li>
+                   </ul>
+                #end
+               #end
+            </li>
+           <li>
+           <span><i class="icon-folder-open"></i>后端埋点</span>
+               #for(item : navigationItemList)
+                #if(item.parentId == 2)
+                   <ul>
+                       <li>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
+                       </li>
+                   </ul>
+                #end
+               #end
            </li>
-           #end
         </ul>
     </div>
 </div>
