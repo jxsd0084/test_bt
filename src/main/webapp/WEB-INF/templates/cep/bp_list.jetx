@@ -83,8 +83,7 @@
                 <td >
                     <label for="select2" >条数</label>
                     <select name="select2" id="select2">
-                        <option value="1">1</option>
-                        <option value="5" default>5</option>
+                        <option value="5"default>5</option>
                     <select/>
                 </td>
             </tr>
