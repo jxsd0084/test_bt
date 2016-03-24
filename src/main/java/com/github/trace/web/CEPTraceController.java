@@ -269,5 +269,14 @@ public class CEPTraceController {
         return ja1.toJSONString();
     }
 
+    @RequestMapping("/compareByTopic")
+    @ResponseBody
+    public String compare(@Param("topic") String topic,
+                          @Param("jsonArray") String jsonArray) {
+        return cepService.compareByTopic(topic,jsonArray);
+
+    }
+
+
 }
 
