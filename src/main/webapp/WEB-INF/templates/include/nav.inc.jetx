@@ -8,7 +8,7 @@
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
           <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=1&child_id=1&parent_name=iOS">埋点配置与监控</a></li>
           <li ><a href="">数据源配置</a></li>
-          <li ><a href="${CONTEXT_PATH}/cep/list">导航树配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/param/list">参数配置</a></li>
         </ul>
       </div>
       <div>
