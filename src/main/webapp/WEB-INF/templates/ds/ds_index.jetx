@@ -1,5 +1,5 @@
-#set(title="数据源管理")
-#set(navbar="dataSourceMagament")
+#set(title="数据源")
+#set(navbar="dataSource")
 #tag layout_block("headContent")
 <style>
 </style>
@@ -18,7 +18,7 @@
 <br/>
 <div class="row">
 	<div>
-		<table id="datatable" class="table table-striped table-bordered table-condensed">
+		<table id="datatable" class="table table-striped table-bordered table-condensed" style="padding-left: 20px;padding-right: 10px">
 			<thead>
 			<tr>
                 <th>名称</th>
@@ -26,61 +26,49 @@
 				<th>驱动</th>
                 <th>URL</th>
                 <th>库名</th>
-				<th>账号</th>
-				<th>密码(*)</th>
 				<th>操作</th>
 			</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>MySQL1</td>
-					<td>jdbc</td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_01</a></td>
+					<td>MySQL (jdbc)</td>
 					<td>com.mysql.jdbc.driver</td>
 					<td>jdbc:mysql:localhost:3306</td>
-					<td>FSCRM001</td>
-					<td>admin</td>
-					<td>****</td>
-					<td><a href="">修改</a> | <a href="">删除</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
 				</tr>
 				<tr>
-					<td>MySQL1</td>
-					<td>jdbc</td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_02</a></td>
+					<td>MySQL (jdbc)</td>
 					<td>com.mysql.jdbc.driver</td>
 					<td>jdbc:mysql:localhost:3306</td>
-					<td>FSCRM001</td>
-					<td>admin</td>
-					<td>****</td>
-					<td><a href="">修改</a> | <a href="">删除</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
 				</tr>
 				<tr>
-					<td>MySQL1</td>
-					<td>jdbc</td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_03</a></td>
+					<td>MySQL (jdbc)</td>
 					<td>com.mysql.jdbc.driver</td>
 					<td>jdbc:mysql:localhost:3306</td>
-					<td>FSCRM001</td>
-					<td>admin</td>
-					<td>****</td>
-					<td><a href="">修改</a> | <a href="">删除</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
 				</tr>
 				<tr>
-					<td>MySQL1</td>
-					<td>jdbc</td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_04</a></td>
+					<td>MySQL (jdbc)</td>
 					<td>com.mysql.jdbc.driver</td>
 					<td>jdbc:mysql:localhost:3306</td>
-					<td>FSCRM001</td>
-					<td>admin</td>
-					<td>****</td>
-					<td><a href="">修改</a> | <a href="">删除</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
 				</tr>
 				<tr>
-					<td>MySQL1</td>
-					<td>jdbc</td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_05</a></td>
+					<td>MySQL (jdbc)</td>
 					<td>com.mysql.jdbc.driver</td>
 					<td>jdbc:mysql:localhost:3306</td>
-					<td>FSCRM001</td>
-					<td>admin</td>
-					<td>****</td>
-					<td><a href="">修改</a> | <a href="">删除</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
+					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
 				</tr>
 			</tbody>
 		</table>

@@ -29,5 +29,16 @@ public class DataSourceController {
         return "ds/ds_edit";
     }
 
+    @RequestMapping("/tblsIndex")
+    public String tablesIndex(Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        return "ds/ds_index_2";
+    }
+
+    @RequestMapping("/fldsIndex")
+    public String fieldsIndex(Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        return "ds/ds_index_3";
+    }
 
 }

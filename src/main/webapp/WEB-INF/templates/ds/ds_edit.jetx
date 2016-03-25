@@ -86,7 +86,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelOne';
+    var GLOBAL_URL = '${CONTEXT_PATH}/ds/index';
 
     var myValidator = function(){
         var msg = '';

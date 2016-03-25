@@ -25,6 +25,7 @@
     </div>
   </div>
 </nav>
+#if(flag != 'ds')
 <div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
    	<div class="tree">
         <ul>
@@ -55,4 +56,30 @@
         </ul>
     </div>
 </div>
+#else
+<div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
+   	<div class="tree">
+        <ul>
+           <li>
+           <span><i class="icon-folder-open"></i>数据库链接</span>
+               <ul>
+                   <li>
+                      <span><i class="icon-leaf"></i><a href=""> 企信 </a></span>
+                   </li>
+               </ul>
+               <ul>
+                   <li>
+                      <span><i class="icon-leaf"></i><a href=""> 协同 </a></span>
+                   </li>
+               </ul>
+               <ul>
+                   <li>
+                      <span><i class="icon-leaf"></i><a href=""> CRM </a></span>
+                   </li>
+               </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+#end
 
