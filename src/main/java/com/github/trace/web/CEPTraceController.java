@@ -57,7 +57,7 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -73,7 +73,7 @@ public class CEPTraceController {
                                Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -98,7 +98,7 @@ public class CEPTraceController {
                             @RequestParam(name = "topic") String topic,
                             Model model) {
 
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -191,16 +191,16 @@ public class CEPTraceController {
 
     @RequestMapping("/compare")
     @ResponseBody
-    public String compare(@RequestParam("Source") String str1,
-                          @RequestParam("Target") String str2,
+    public String compare(@RequestParam("Source") String Source,
+                          @RequestParam("Target") String Target,
                           Model model) {
 
-        JSONArray jsonArray  = JSON.parseArray(str2);
+        JSONArray jsonArray  = JSON.parseArray(Target);
 
 
         JSONArray ja1 = new JSONArray();
 
-        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(str1, new TypeReference<LinkedHashMap<String, String>>() {});
+        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(Source, new TypeReference<LinkedHashMap<String, String>>() {});
 
 
             for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
@@ -265,20 +265,20 @@ public class CEPTraceController {
         }
 
         // 左边导航条
-        ControllerHelper.setLeftNavigationTree(model, cepService);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
 
         System.out.println("BuriedPointList"+ja1.toJSONString());
 
         return ja1.toJSONString();
     }
 
-    @RequestMapping("/compareByTopic")
-    @ResponseBody
-    public boolean compare(@RequestParam("topic") String topic,
-                          @RequestParam("jsonArray") String jsonArray) {
-        return cepService.compareByTopic(topic,jsonArray);
-
-    }
+//    @RequestMapping("/compareByTopic")
+//    @ResponseBody
+//    public boolean compareByTopic(@RequestParam("topic") String topic,
+//                          @RequestParam("jsonArray") String jsonArray) {
+//        return cepService.compareByTopic(topic,jsonArray);
+//
+//    }
 
 
 }
