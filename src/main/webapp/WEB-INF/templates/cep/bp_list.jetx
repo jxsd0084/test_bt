@@ -51,6 +51,7 @@
     <div class="col-md-2" >
         <select name="select2" id="select2">
             <option value="5" default>5</option>
+            <option value="1" default>1</option>
     </div>
 
 
@@ -233,7 +234,7 @@
             url: "${CONTEXT_PATH}/cep/compare",
             async : false,
             contentType: "application/json",
-            data:  { str1:$("#textarea1").val(),str2: $("#textarea2").val()},
+            data:  { Source:$("#textarea1").val(),Target: $("#textarea2").val()},
             dataType: "json",
             type: "GET",
             success: function (mydata) {
