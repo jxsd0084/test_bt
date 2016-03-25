@@ -39,7 +39,7 @@ public class HomeController {
 
   @RequestMapping("/")
   public String home(Model model) {
-    ControllerHelper.setLeftNavigationTree(model, cepService);
+    ControllerHelper.setLeftNavigationTree(model, cepService, "");
     return "home";
   }
 

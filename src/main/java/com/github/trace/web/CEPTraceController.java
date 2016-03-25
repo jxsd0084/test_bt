@@ -57,7 +57,7 @@ public class CEPTraceController {
             ja1.add(ja2);
         }
 
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -73,7 +73,7 @@ public class CEPTraceController {
                                Model model) {
 
         BuriedPoint caller = cepService.getBuriedPoint(id);
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("BpName", caller.getBpName() );
@@ -98,7 +98,7 @@ public class CEPTraceController {
                             @RequestParam(name = "topic") String topic,
                             Model model) {
 
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("parent_id", parent_id);
         model.addAttribute("child_id", child_id);
@@ -265,7 +265,7 @@ public class CEPTraceController {
         }
 
         // 左边导航条
-        ControllerHelper.setLeftNavigationTree(model, cepService);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
 
         System.out.println("BuriedPointList"+ja1.toJSONString());
 

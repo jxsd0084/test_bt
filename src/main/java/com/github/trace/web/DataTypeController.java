@@ -43,7 +43,7 @@ public class DataTypeController {
             jsonArray1.add(jsonArray2);
         }
 
-        ControllerHelper.setLeftNavigationTree(model, cepService);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray1);
         return "data/data_list";
     }
@@ -67,7 +67,7 @@ public class DataTypeController {
             jsonArray1.add(jsonArray2);
         }
 
-        ControllerHelper.setLeftNavigationTree(model, cepService);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray1);
         model.addAttribute("L1_id", l1_id);
         model.addAttribute("L1_tag", l1_tag);
@@ -82,7 +82,7 @@ public class DataTypeController {
         LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(l1_id);
         model.addAttribute("obj", fieldObj);
 
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("id", l1_id);
         model.addAttribute("tag", tag);
@@ -99,7 +99,7 @@ public class DataTypeController {
         LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
         model.addAttribute("obj", fieldObj);
 
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("id", id );
         model.addAttribute("tag", tag);
@@ -116,7 +116,7 @@ public class DataTypeController {
                             @RequestParam(name = "L1_tag", required = false) String l1_tag,
                             @RequestParam(name = "L1_name", required = false) String l1_name,
                             Model model) {
-        ControllerHelper.setLeftNavigationTree(model, cepService); // 左边导航条
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
         model.addAttribute("tag", tag);
 
         if (lev == 1){
