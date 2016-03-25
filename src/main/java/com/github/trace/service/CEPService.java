@@ -112,9 +112,19 @@ public class CEPService {
   }
 
 
-  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc, boolean is_checked ,int id) {
-    return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,regex,bp_value_desc,is_checked,id);
-  }
+//    /** 修改埋点信息
+//     *
+//      * @param bp_name
+//     * @param bp_value
+//     * @param regex
+//     * @param bp_value_desc
+//     * @param is_checked
+//     * @param id
+//     * @return
+//     */
+//  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc,boolean is_checked ,int id) {
+//    return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,regex,bp_value_desc,is_checked,id);
+//  }
 
   public int modifyBuriedPoint(BuriedPoint buriedPoint) {
     return buriedPointMapper.update(buriedPoint);
