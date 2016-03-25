@@ -1,0 +1,60 @@
+#set(title="数据源管理")
+#set(navbar="dataSourceMagament")
+#tag layout_block("headContent")
+<style>
+</style>
+#end
+#tag layout_block("bodyContent")
+<h1>hello~ 数据源管理页</h1>
+
+<div class="container rs_layout" wrapper="true">
+	<div class="rs_layout_top breadCrumbWrap">
+		<div class="breadCrumbStart">您当前的位置是在：</div>
+		<ul class="breadCrumb">
+			<li class="bc_ithems"><a href="">数据模型管理</a></li>
+			<li class="bc_ithems"><a href="">数据库连接</a></li>
+			<li class="bc_ithems"><a href="">数据库名称</a></li>
+		</ul>
+	</div>
+	<div class="rs_layout_left" resizable="true" style="width:230px;">
+		<div class="lftTreeWrap">
+			<div class="ztree" id="zTree_adminLIst"></div>
+		</div>
+	</div>
+	<div class="rs_layout_center">
+		<div class="rs_layout">
+			<div class="rs_layout_center">
+				<div class="tableScrollWrap">
+				<form id="cubeform" action="" method="post">
+				<input id="dicid" type="hidden" name="dicid" value=""/>
+					<table class="table_style_1">
+						<thead>
+							<tr>
+								<th></th>
+								<th><i class="verMidWrap">名称</i><i class="tbArrow"></i></th>
+								<th class="minSize"><i class="verMidWrap">数据结算</i><i class="tbArrow"></i></th>
+								<th class="minSize"><i class="verMidWrap">结算时间</i><i class="tbArrow"></i></th>
+								<th class="minSize"><i class="verMidWrap">结算版本</i><i class="tbArrow"></i></th>
+								<th class="minSize"><i class="verMidWrap">类型</i><i class="tbArrow"></i></th>
+								<th class="minSize"><i class="verMidWrap">创建时间</i><i class="tbArrow"></i></th>
+								<th class="minSize"><i class="verMidWrap">版本</i><i class="tbArrow"></i></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+#end
+#tag layout_block("scriptContent")
+<script>
+</script>
+#end
+#include("/include/layout.jetx")
+
