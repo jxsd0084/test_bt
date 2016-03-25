@@ -26,8 +26,7 @@ public class ParamController {
 
     @RequestMapping("/list")
     public String listParams(Model model) {
-        List<NavigationItem> navigationItemList = cepService.getConfiguration();
-        model.addAttribute("navigationItemList", navigationItemList);
+        List<NavigationItem> navigationItemList = ControllerHelper.setLeftNavigationTree(model, cepService);
 
         JSONArray jsonArray1 = new JSONArray();
         for (NavigationItem navigationItem : navigationItemList) {

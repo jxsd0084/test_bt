@@ -89,6 +89,15 @@ public class CEPService {
   }
 
   /**
+   * 删除埋点2
+   * @param id 业务ID
+   * @return  1-删除成功  0-删除失败
+     */
+  public int deleteById(int id) {
+    return buriedPointMapper.deleteById(id);
+  }
+
+  /**
    * 插入新埋点
    * @param buriedPoint
    * @return
@@ -103,8 +112,12 @@ public class CEPService {
   }
 
 
-  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc,boolean is_checked ,int id) {
+  public boolean modifyBuriedPoint(String bp_name,String bp_value,String regex,String bp_value_desc, boolean is_checked ,int id) {
     return buriedPointMapper.updateBuriedPoint(bp_name,bp_value,regex,bp_value_desc,is_checked,id);
+  }
+
+  public int modifyBuriedPoint(BuriedPoint buriedPoint) {
+    return buriedPointMapper.update(buriedPoint);
   }
 
 

@@ -8,7 +8,6 @@
   <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>
 
-      <!-- 埋点字段 -->
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">埋点字段</label>
         <div class="col-md-3 col-lg-3">
@@ -17,7 +16,6 @@
         <p class="help-block col-md-offset-2">如：UserID</p>
       </div>
 
-      <!-- 埋点数据类型 -->
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">埋点数据类型</label>
         <div class="col-md-3 col-lg-3">
@@ -31,7 +29,6 @@
         <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
       </div>
 
-      <!-- 自定义正则表达式 -->
       <div class="form-group">
           <label for="name" class="col-md-2 control-label">自定义正则表达式</label>
           <div class="col-md-3 col-lg-3">
@@ -40,7 +37,6 @@
           <p class="help-block col-md-offset-2">如：[0-9]5</p>
       </div>
 
-      <!-- 埋点字段描述 -->
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">埋点字段描述</label>
         <div class="col-md-3 col-lg-3">
@@ -49,7 +45,6 @@
         <p class="help-block col-md-offset-2">如：用户编号</p>
       </div>
 
-      <!-- 是否必填项 -->
       <div class="form-group">
         <label for="content" class="col-md-2 control-label">是否必填项</label>
         <div class="col-md-10 col-lg-8">
@@ -77,7 +72,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/cep/list?parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/cep/list?parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}&topic=${topic}';
 
     var myValidator = function(){
         var msg = '';
@@ -135,6 +130,7 @@
                 data = {
                     bp_name             :value1,
                     bp_value            :value2,
+                    regex               :value3,
                     bp_value_desc       :value4,
                     is_checked          :is_checked
                 };
