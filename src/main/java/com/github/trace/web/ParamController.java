@@ -26,18 +26,9 @@ public class ParamController {
 
     @RequestMapping("/list")
     public String listParams(Model model) {
-        List<NavigationItem> navigationItemList = ControllerHelper.setLeftNavigationTree(model, cepService, "");
-
-        JSONArray jsonArray1 = new JSONArray();
-        for (NavigationItem navigationItem : navigationItemList) {
-            JSONArray jsonArray2 = new JSONArray();
-            jsonArray2.add(navigationItem.getId());
-            jsonArray2.add(navigationItem.getParentName());
-            jsonArray2.add(navigationItem.getTopic());
-
-            jsonArray1.add(jsonArray2);
-        }
-        model.addAttribute("data", jsonArray1);
+        List<NavigationItem> list = ControllerHelper.setLeftNavigationTree(model, cepService, "");
+        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+        model.addAttribute("data", jsonArray);
         return "param/param_list";
     }
 
