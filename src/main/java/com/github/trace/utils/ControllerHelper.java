@@ -1,5 +1,6 @@
 package com.github.trace.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
 import com.google.common.collect.ImmutableMap;
@@ -37,5 +38,19 @@ public class ControllerHelper {
             return ImmutableMap.of("code", -1, "info", result);
         }
     }
+
+	/**
+     * 转换为JSONArray
+     * @param list
+     * @return
+     */
+    public static JSONArray convertToJSON(List list){
+		JSONArray outerJSON = new JSONArray();
+		for (int i = 0; i < list.size(); i++) {
+			JSONArray innerJSON = ReflectionUtil.convertToJSON(list.get(i));
+			outerJSON.add(innerJSON);
+		}
+		return outerJSON;
+	}
 
 }
