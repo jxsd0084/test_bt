@@ -11,13 +11,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Created by Administrator on 2016/3/26.
+ * Created by chenlong on 2016/3/26.
  */
 public class ReflectionUtil {
 
-		private static Logger LOGGER = LoggerFactory.getLogger(ReflectionUtil.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(ReflectionUtil.class);
 
-	    public static JSONArray convertToJSON(Object obj) {
+    public static JSONArray convertToJSON(Object obj) {
         JSONArray jsonArray = new JSONArray();
         Class clazz = obj.getClass();
         Field[] fields = clazz.getDeclaredFields();
