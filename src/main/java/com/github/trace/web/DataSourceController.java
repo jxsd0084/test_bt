@@ -28,18 +28,21 @@ public class DataSourceController {
     @Autowired
 
     @RequestMapping("/list")
-    public String index(@RequestParam(name = "biz_id") int bizId,
+    public String index(@RequestParam(name = "bizId") int bizId,
                         Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         List<DatabaseInfo> list = dataSourceServer.getDataBaseInfoListById(bizId);
         JSONArray jsonArray = ControllerHelper.convertToJSON(list);
         model.addAttribute("data", jsonArray);
+        model.addAttribute("bizId", bizId);
         return "ds/ds_index";
     }
 
     @RequestMapping("/edit")
-    public String edit(Model model){
+    public String edit(@RequestParam(name = "bizId") int bizId,
+                       Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        model.addAttribute("bizId", bizId);
         return "ds/ds_edit";
     }
 
