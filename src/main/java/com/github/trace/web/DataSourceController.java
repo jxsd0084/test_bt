@@ -1,6 +1,7 @@
 package com.github.trace.web;
 
 import com.github.trace.service.CEPService;
+import com.github.trace.service.DataSourceServer;
 import com.github.trace.utils.ControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,15 @@ public class DataSourceController {
 
     @Autowired
     private CEPService cepService;
+    @Autowired
+    private DataSourceServer dataSourceServer;
+
 
     @RequestMapping("/index")
     public String index(Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+//        List<DatabaseBiz> list = dataSourceServer.getDataBaseBizList();
+//        model.addAttribute("navigationItemList", list);
         return "ds/ds_index";
     }
 

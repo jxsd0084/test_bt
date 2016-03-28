@@ -1,8 +1,8 @@
 package com.github.trace.mapper;
 
 import com.github.mybatis.mapper.ICrudMapper;
-import com.github.trace.entity.DataBaseInfo;
+import com.github.trace.entity.DatabaseInfo;
 
-public interface DataBaseInfoMapper extends ICrudMapper<DataBaseInfo>{
+public interface DatabaseInfoMapper extends ICrudMapper<DatabaseInfo>{
 
 }

@@ -1,6 +1,7 @@
 package com.github.trace.utils;
 
 import com.alibaba.fastjson.JSONArray;
+import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.service.CEPService;
 import com.google.common.collect.ImmutableMap;
@@ -16,9 +17,11 @@ public class ControllerHelper {
 
     // 此处为防止页面刷新之后, 左边导航条的数据丢失
     public static List setLeftNavigationTree(Model model, CEPService cepService, String navFlag){
+        List<DatabaseBiz> databaseBizList = cepService.getDataBaseBizList();
         List<NavigationItem> navigationItemList = cepService.getConfiguration();
-        model.addAttribute("navigationItemList", navigationItemList);
         model.addAttribute("navObj", navigationItemList.get(0));
+        model.addAttribute("navigationItemList", navigationItemList);
+        model.addAttribute("databaseBizList", databaseBizList);
         model.addAttribute("flag", navFlag);
         return navigationItemList;
     }

@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
+import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.mapper.BuriedPointMapper;
+import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.NavigationItemMapper;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,7 +42,17 @@ public class CEPService {
   private NavigationItemMapper navigationItemMapper;
 
   @Autowired
+  private DatabaseBizMapper dataBaseBizMapper;
+
+  @Autowired
   private KafkaService kafkaService;
+
+  /**
+   * 查询 数据源 导航项
+   */
+  public List<DatabaseBiz> getDataBaseBizList(){
+      return dataBaseBizMapper.findAll();
+  }
 
   /**
    * 获取所有的导航项列表
