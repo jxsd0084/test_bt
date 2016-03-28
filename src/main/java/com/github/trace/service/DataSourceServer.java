@@ -1,6 +1,7 @@
 package com.github.trace.service;
 
 import com.github.trace.entity.DatabaseBiz;
+import com.github.trace.entity.DatabaseInfo;
 import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.DatabaseInfoMapper;
 import org.slf4j.Logger;
@@ -29,6 +30,13 @@ public class DataSourceServer {
      */
     public List<DatabaseBiz> getDataBaseBizList(){
         return dataBaseBizMapper.findAll();
+    }
+
+    /**
+     * 根据Id查询 数据源
+     */
+    public List<DatabaseInfo> getDataBaseInfoListById(int id){
+        return dataBaseInfoMapper.findDatabaseInfoListById(id);
     }
 
 }

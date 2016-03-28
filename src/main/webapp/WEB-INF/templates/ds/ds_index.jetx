@@ -30,46 +30,6 @@
 			</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_01</a></td>
-					<td>MySQL (jdbc)</td>
-					<td>com.mysql.jdbc.driver</td>
-					<td>jdbc:mysql:localhost:3306</td>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
-					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
-				</tr>
-				<tr>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_02</a></td>
-					<td>MySQL (jdbc)</td>
-					<td>com.mysql.jdbc.driver</td>
-					<td>jdbc:mysql:localhost:3306</td>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
-					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
-				</tr>
-				<tr>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_03</a></td>
-					<td>MySQL (jdbc)</td>
-					<td>com.mysql.jdbc.driver</td>
-					<td>jdbc:mysql:localhost:3306</td>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
-					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
-				</tr>
-				<tr>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_04</a></td>
-					<td>MySQL (jdbc)</td>
-					<td>com.mysql.jdbc.driver</td>
-					<td>jdbc:mysql:localhost:3306</td>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
-					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
-				</tr>
-				<tr>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">CRM_05</a></td>
-					<td>MySQL (jdbc)</td>
-					<td>com.mysql.jdbc.driver</td>
-					<td>jdbc:mysql:localhost:3306</td>
-					<td><a href="${CONTEXT_PATH}/ds/tblsIndex">FSCRM001</a></td>
-					<td><a href="${CONTEXT_PATH}/ds/edit">修改</a> | <a href="">删除</a></td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -78,7 +38,7 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-/*	var data = ${data}
+	var data = ${data}
 	$(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
@@ -94,18 +54,23 @@
             data: data,
             columnDefs: [
                 {
-//                    targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
+                    targets: 0, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/ds/">' + full + '</a>';
                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
+                        return '<a href="${CONTEXT_PATH}/ds/" ></a>';
+                    }
+                },
+                {
+                    targets: 5, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/ds/" >修改</a> | <a href="${CONTEXT_PATH}/ds/" >删除</a>';
                     }
                 }
             ]
         });
-    });*/
+    });
 </script>
 #end
 #include("/include/layout.jetx")
