@@ -62,26 +62,13 @@
         <ul>
            <li>
            <span><i class="icon-folder-open"></i>数据库链接</span>
-               <ul>
-                   <li>
-                      <span><i class="icon-leaf"></i><a href=""> 企信 </a></span>
-                   </li>
-               </ul>
-               <ul>
-                   <li>
-                      <span><i class="icon-leaf"></i><a href=""> 协同 </a></span>
-                   </li>
-               </ul>
-               <ul>
-                   <li>
-                      <span><i class="icon-leaf"></i><a href=""> CRM </a></span>
-                   </li>
-               </ul>
-               <ul>
-                   <li>
-                      <span><i class="icon-leaf"></i><a href=""> 汇聚 </a></span>
-                   </li>
-               </ul>
+               #for(item : databaseBizList)
+                   <ul>
+                       <li>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/ds/list?biz_id=${item.id}"> ${item.name} </a></span>
+                       </li>
+                   </ul>
+               #end
             </li>
         </ul>
     </div>
