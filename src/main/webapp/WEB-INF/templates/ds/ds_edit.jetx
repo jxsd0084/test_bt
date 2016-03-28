@@ -11,62 +11,70 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">数据库类型</label>
         <div class="col-md-3 col-lg-3">
-            <select name="name2" id="name2" style="width: 140px">
+            <select name="name1" id="name1" style="width: 140px">
                 <option value="" default> - 必选 - </option>
-                <option value="0">SQLServer</option>
-                <option value="1">MySQL</option>
-                <option value="2">MongoDB</option>
+                <option value="SQLServer">SQLServer</option>
+                <option value="MySQL">MySQL</option>
+                <option value="MongoDB">MongoDB</option>
             <select/>
         </div>
-        <p class="help-block col-md-offset-2">如：MySQL </p>
+        <p class="help-block col-md-offset-2">如：MySQL</p>
       </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">链接名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" value=""/>
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value=""/>
         </div>
-        <p class="help-block col-md-offset-2">如：CRM_DB </p>
+        <p class="help-block col-md-offset-2">如：CRM_DB_CON</p>
       </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">驱动名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value=""/>
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value=""/>
         </div>
-        <p class="help-block col-md-offset-2">如：Driver</p>
+        <p class="help-block col-md-offset-2">如：com.mysql.jdbc.Driver</p>
       </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">数据库链接</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name4" id="name4" placeholder="选填" value=""/>
         </div>
-        <p class="help-block col-md-offset-2">如：URL</p>
+        <p class="help-block col-md-offset-2">如：jdbc:mysql://localhost</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">端口号</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value=""/>
+        </div>
+        <p class="help-block col-md-offset-2">如：3306</p>
       </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">数据库名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name6" id="name6" placeholder="选填" value=""/>
         </div>
-        <p class="help-block col-md-offset-2">如：FSCRM</p>
+        <p class="help-block col-md-offset-2">如：FSCRM001</p>
       </div>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">账号</label>
+        <label for="profile" class="col-md-2 control-label">用户名</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name7" id="name7" placeholder="选填" value=""/>
         </div>
-        <p class="help-block col-md-offset-2">如：username</p>
+        <p class="help-block col-md-offset-2">如：admin</p>
       </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">密码</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name8" id="name8" placeholder="选填" value=""/>
         </div>
-        <p class="help-block col-md-offset-2">如：password</p>
+        <p class="help-block col-md-offset-2">如：admin</p>
       </div>
 
       <!-- 确认按钮 -->
@@ -86,7 +94,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/ds/list?bizId=${bizId}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}';
 
     var myValidator = function(){
         var msg = '';
@@ -94,9 +102,21 @@
 
         var value1 = $("#name1").val();
         var value2 = $("#name2").val();
+        var value3 = $("#name3").val();
+        var value4 = $("#name4").val();
+        var value5 = $("#name5").val();
+        var value6 = $("#name6").val();
+        var value7 = $("#name7").val();
+        var value8 = $("#name8").val();
 
         if(value1 == '' ||
-           value2 == ''
+           value2 == '' ||
+           value3 == '' ||
+           value4 == '' ||
+           value5 == '' ||
+           value6 == '' ||
+           value7 == '' ||
+           value8 == ''
         ){
            msg = '必填项不能为空值!'
            result = false;
@@ -113,30 +133,50 @@
 
         $("#confirm").on('click', function () {
 
-            var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelOne';
-            var data = '';
-            var id = '${id}';
-            var msg = '';
+            var tag     = '${tag}';
+            var url     = '${CONTEXT_PATH}/ds/' + tag;
+            var data    = '';
+            var id      = '${id}';
+            var bizId   = '${bizId}';
+            var bizName = '${bizName}';
+            var msg     = '';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
+            var value4 = $("#name4").val();
+            var value5 = $("#name5").val();
+            var value6 = $("#name6").val();
+            var value7 = $("#name7").val();
+            var value8 = $("#name8").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
                 data = {
-                    L1_tag              :value1,
-                    L1_name             :value2,
-                    L1_desc             :value3,
+                    bizId               :bizId,
+                    dbType              :value1,
+                    dbName              :value2,
+                    bizName             :value3,
+                    dbDriver            :value4,
+                    dbUrl               :value5,
+                    dbPort              :value6,
+                    dbUsername          :value7,
+                    dbPassword          :value8,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
-                    L1_tag              :value1,
-                    L1_name             :value2,
-                    L1_desc             :value3,
+                    bizId               :bizId,
+                    bizName             :bizName,
+                    dbType              :value1,
+                    name                :value2,
+                    dbDriver            :value3,
+                    dbUrl               :value4,
+                    dbPort              :value5,
+                    dbName              :value6,
+                    dbUsername          :value7,
+                    dbPassword          :value8
                 };
             }
 

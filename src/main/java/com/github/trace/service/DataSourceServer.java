@@ -39,6 +39,14 @@ public class DataSourceServer {
         return dataBaseInfoMapper.findDatabaseInfoListById(id);
     }
 
+    /**
+     * 插入
+     * @param databaseInfo
+     */
+    public int addDatabaseInfo(DatabaseInfo databaseInfo) {
+        return dataBaseInfoMapper.insert(databaseInfo);
+    }
+
 }
 
 

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -25,25 +27,64 @@ public class DataSourceController {
     private CEPService cepService;
     @Autowired
     private DataSourceServer dataSourceServer;
-    @Autowired
 
     @RequestMapping("/list")
     public String index(@RequestParam(name = "bizId") int bizId,
+                        @RequestParam(name = "bizName") String bizName,
                         Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         List<DatabaseInfo> list = dataSourceServer.getDataBaseInfoListById(bizId);
         JSONArray jsonArray = ControllerHelper.convertToJSON(list);
         model.addAttribute("data", jsonArray);
         model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
         return "ds/ds_index";
     }
 
     @RequestMapping("/edit")
     public String edit(@RequestParam(name = "bizId") int bizId,
+                       @RequestParam(name = "bizName") String bizName,
+                       @RequestParam(name = "tag") String tag,
                        Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        model.addAttribute("tag", tag);
         return "ds/ds_edit";
+    }
+
+    @RequestMapping(value = "/add")
+    @ResponseBody
+    public Map add(@RequestParam(name = "bizId") int bizId,
+                   @RequestParam(name = "bizName") String bizName,
+                   @RequestParam(name = "dbType") String dbType,
+                   @RequestParam(name = "name") String name,
+                   @RequestParam(name = "dbDriver") String dbDriver,
+                   @RequestParam(name = "dbUrl") String dbUrl,
+                   @RequestParam(name = "dbPort") int dbPort,
+                   @RequestParam(name = "dbName") String dbName,
+                   @RequestParam(name = "dbUsername") String dbUsername,
+                   @RequestParam(name = "dbPassword") String dbPassword,
+                   Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        DatabaseInfo databaseInfo = new DatabaseInfo();
+        databaseInfo.setBizId(bizId);
+        databaseInfo.setBizName(bizName);
+        databaseInfo.setDbType(dbType);
+        databaseInfo.setName(name);
+        databaseInfo.setDbDriver(dbDriver);
+        databaseInfo.setDbUrl(dbUrl);
+        databaseInfo.setDbPort(dbPort);
+        databaseInfo.setDbName(dbName);
+        databaseInfo.setDbUsername(dbUsername);
+        databaseInfo.setDbPassword(dbPassword);
+
+        int res = dataSourceServer.addDatabaseInfo(databaseInfo);
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        return ControllerHelper.returnResponseVal(res, "更新");
     }
 
     @RequestMapping("/tblsIndex")

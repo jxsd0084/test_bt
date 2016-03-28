@@ -13,7 +13,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建数据源" onclick="window.location.href='${CONTEXT_PATH}/ds/edit?bizId=${bizId}&tag=add'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建数据源" onclick="window.location.href='${CONTEXT_PATH}/ds/edit?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
 </div>
 <br/>
 <div class="row">

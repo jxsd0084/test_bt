@@ -7,7 +7,7 @@
         <ul class="nav navbar-nav nav-tabs">
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
           <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${navObj.parentId}&child_id=${navObj.childId}&parent_name=${navObj.childName}&topic=${navObj.topic}">埋点配置与监控</a></li>
-          <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1">数据源配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据源配置</a></li>
           <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
         </ul>
       </div>
@@ -65,7 +65,7 @@
                #for(item : databaseBizList)
                    <ul>
                        <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/ds/list?biz_id=${item.id}"> ${item.name} </a></span>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/ds/list?bizId=${item.id}&bizName=${item.name}"> ${item.name} </a></span>
                        </li>
                    </ul>
                #end
