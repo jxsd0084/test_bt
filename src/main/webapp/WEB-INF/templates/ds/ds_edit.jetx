@@ -205,6 +205,57 @@
             window.location.href = GLOBAL_URL;
         })
 
+        $("#test").on('click', function () {
+            var url     = '${CONTEXT_PATH}/ds/test_con';
+            var data    = '';
+            var id      = '${id}';
+            var bizId   = '${bizId}';
+            var bizName = '${bizName}';
+            var msg     = '连接';
+
+            var value1 = $("#name1").val();
+            var value2 = $("#name2").val();
+            var value3 = $("#name3").val();
+            var value4 = $("#name4").val();
+            var value5 = $("#name5").val();
+            var value6 = $("#name6").val();
+            var value7 = $("#name7").val();
+            var value8 = $("#name8").val();
+
+            data = {
+                    bizId               :bizId,
+                    bizName             :bizName,
+                    dbType              :value1,
+                    name                :value2,
+                    dbDriver            :value3,
+                    dbUrl               :value4,
+                    dbPort              :value5,
+                    dbName              :value6,
+                    dbUsername          :value7,
+                    dbPassword          :value8,
+                    id                  :id
+            };
+
+            if(myValidator()){
+                $.ajax({
+                    url                 :url,
+                    contentType         :"application/json",
+                    data                :data,
+                    dataType            :"text",
+                    type                :"GET",
+                    success:function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            showResult("成功 !" + json.info, true);
+                        } else {
+                            showResult("警告：" + json.info, false);
+                        }
+                    }
+                });
+            }
+
+        })
+
     });
 
 </script>

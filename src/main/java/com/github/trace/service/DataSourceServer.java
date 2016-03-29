@@ -4,6 +4,7 @@ import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.DatabaseInfo;
 import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.DatabaseInfoMapper;
+import com.github.trace.utils.DataBaseHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,15 @@ public class DataSourceServer {
      */
     public int addDatabaseInfo(DatabaseInfo databaseInfo) {
         return dataBaseInfoMapper.insert(databaseInfo);
+    }
+
+    /**
+     * 测试 数据库连接
+     * @param databaseInfo
+     * @return
+     */
+    public int testJdbcConnection(DatabaseInfo databaseInfo) {
+        return DataBaseHelper.testConnection(databaseInfo);
     }
 
 }

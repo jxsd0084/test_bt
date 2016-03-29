@@ -123,6 +123,42 @@ public class DataSourceController {
         return ControllerHelper.returnResponseVal(res, "修改");
     }
 
+    @RequestMapping("/test_con")
+    @ResponseBody
+    public Map jdbcCon(@RequestParam(name = "id") int id,
+                       @RequestParam(name = "bizId") int bizId,
+                       @RequestParam(name = "bizName") String bizName,
+                       @RequestParam(name = "dbType") String dbType,
+                       @RequestParam(name = "name") String name,
+                       @RequestParam(name = "dbDriver") String dbDriver,
+                       @RequestParam(name = "dbUrl") String dbUrl,
+                       @RequestParam(name = "dbPort") int dbPort,
+                       @RequestParam(name = "dbName") String dbName,
+                       @RequestParam(name = "dbUsername") String dbUsername,
+                       @RequestParam(name = "dbPassword") String dbPassword,
+                       Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        DatabaseInfo databaseInfo = new DatabaseInfo();
+        databaseInfo.setId(id);
+        databaseInfo.setBizId(bizId);
+        databaseInfo.setBizName(bizName);
+        databaseInfo.setDbType(dbType);
+        databaseInfo.setName(name);
+        databaseInfo.setDbDriver(dbDriver);
+        databaseInfo.setDbUrl(dbUrl);
+        databaseInfo.setDbPort(dbPort);
+        databaseInfo.setDbName(dbName);
+        databaseInfo.setDbUsername(dbUsername);
+        databaseInfo.setDbPassword(dbPassword);
+
+        int res = dataSourceServer.testJdbcConnection(databaseInfo);
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        return ControllerHelper.returnResponseVal(res, "连接");
+    }
+
     @RequestMapping("/delete")
     public String delete(@RequestParam(name = "id") int id,
                          @RequestParam(name = "bizId") int bizId,
