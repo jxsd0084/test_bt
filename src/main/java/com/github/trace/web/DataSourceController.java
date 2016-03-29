@@ -51,10 +51,15 @@ public class DataSourceController {
 
     @RequestMapping("/modify")
     public String modify(@RequestParam(name = "id") int id,
+                         @RequestParam(name = "bizId") int bizId,
+                         @RequestParam(name = "bizName") String bizName,
                          @RequestParam(name = "tag") String tag,
                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         DatabaseInfo dataBaseInfo = dataSourceServer.getDataBaseInfoById(id);
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
         model.addAttribute("tag", tag);
         model.addAttribute("obj", dataBaseInfo);
         return "ds/ds_edit";
