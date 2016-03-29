@@ -197,7 +197,6 @@ public class CEPTraceController {
 
         JSONArray jsonArray  = JSON.parseArray(Target);
 
-
         JSONArray ja1 = new JSONArray();
 
         LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(Source, new TypeReference<LinkedHashMap<String, String>>() {});
@@ -211,7 +210,7 @@ public class CEPTraceController {
 
                     LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
 
-                    if(jsonMap2.containsKey(entry1.getKey())){
+                    if(jsonMap2.containsKey(entry1.getKey()) && entry1.getValue().split(",")[2].equals("1")){
 
                         String patternString = "";
                         String patternString2 = "";
@@ -233,10 +232,10 @@ public class CEPTraceController {
                         boolean b= matcher.matches();
 
 
-                        if(entry1.getValue().split(",").length>=3){
+                        if(entry1.getValue().split(",").length>=4){
 
                             try {
-                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[2].toString(), "UTF-8");
+                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
@@ -252,6 +251,9 @@ public class CEPTraceController {
                         ja2.add(b);
 
 
+                    }else if(entry1.getValue().split(",")[2].toString().equals("0")){
+                        ja2.add("");
+                        ja2.add(true);
                     }else{
 
                         ja2.add("");

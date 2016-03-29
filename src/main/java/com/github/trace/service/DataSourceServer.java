@@ -2,7 +2,7 @@ package com.github.trace.service;
 
 import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.DatabaseInfo;
-import com.github.trace.mapper.DatabaseBizMapper;
+import com.github.trace.mapper.DataBaseBizMapper;
 import com.github.trace.mapper.DatabaseInfoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class DataSourceServer {
     private static final Logger LOG = LoggerFactory.getLogger( DataSourceServer.class );
 
     @Autowired
-    private DatabaseBizMapper dataBaseBizMapper;
+    private DataBaseBizMapper dataBaseBizMapper;
     @Autowired
     private DatabaseInfoMapper dataBaseInfoMapper;
 

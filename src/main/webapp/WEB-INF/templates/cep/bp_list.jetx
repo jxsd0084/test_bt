@@ -201,7 +201,7 @@
         var as = [];
         for(var i = 0; i < list.length ;i++ ) {
                 var temp = [];
-                temp.push('"'+list[i][0]+'":"'+list[i][3]+","+list[i][1]+","+escape(list[i][2])+'"');
+                temp.push('"'+list[i][0]+'":"'+list[i][3]+","+list[i][1]+","+list[i][4]+","+escape(list[i][2])+'"');
                 as.push(temp);
         }
         as = "{" + as + "}";
@@ -251,8 +251,8 @@
                             sDefaultContent: '',
                             aTargets: [ '_all' ]
                         },
-                        { "width": "10%", "targets": 0 },
-                        { "width": "10%", "targets": 1 },
+                        { "width": "8%", "targets": [ '_all' ] },
+
                         {
                             targets: 3, render: function (data, type, full, meta) {
                             //var link = full;
