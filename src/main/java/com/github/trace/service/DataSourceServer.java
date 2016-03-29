@@ -2,7 +2,7 @@ package com.github.trace.service;
 
 import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.DatabaseInfo;
-import com.github.trace.mapper.DataBaseBizMapper;
+import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.DatabaseInfoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class DataSourceServer {
     private static final Logger LOG = LoggerFactory.getLogger( DataSourceServer.class );
 
     @Autowired
-    private DataBaseBizMapper dataBaseBizMapper;
+    private DatabaseBizMapper dataBaseBizMapper;
     @Autowired
     private DatabaseInfoMapper dataBaseInfoMapper;
 
@@ -45,6 +45,15 @@ public class DataSourceServer {
      */
     public DatabaseInfo getDataBaseInfoById(int id) {
         return dataBaseInfoMapper.findById(id);
+    }
+
+    /**
+     * 根据Id删除 数据源
+     * @param id
+     * @return
+     */
+    public int deleteDataBaseInfoById(int id) {
+        return dataBaseInfoMapper.deleteById(id);
     }
 
     /**

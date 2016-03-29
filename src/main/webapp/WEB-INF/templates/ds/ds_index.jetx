@@ -86,12 +86,23 @@
                 },
                 {
                     targets: 6, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/ds/modify?id=' + full[0] + '&tag=modify" >修改</a> | <a href="${CONTEXT_PATH}/ds/delete?bizId=${bizId}" >删除</a>';
+                        return '<a href="${CONTEXT_PATH}/ds/modify?id=' + full[0] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] + ');">删除</a>';
                     }
                 }
             ]
         });
+
     });
+
+    var js_method   = function(id){
+        var bizId   = '${bizId}';
+        var bizName = '${bizName}';
+        var url     = "${CONTEXT_PATH}/ds/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
+        if(confirm("是否确定删除?")){
+            window.location.href = url;
+        }
+    }
+
 </script>
 #end
 #include("/include/layout.jetx")

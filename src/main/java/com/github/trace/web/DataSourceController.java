@@ -33,12 +33,7 @@ public class DataSourceController {
                         @RequestParam(name = "bizName") String bizName,
                         Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        List<DatabaseInfo> list = dataSourceServer.getDataBaseInfoListById(bizId);
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-        model.addAttribute("data", jsonArray);
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        return "ds/ds_index";
+        return setCommonParam(bizId, bizName, model, "ds/ds_index");
     }
 
     @RequestMapping("/edit")
@@ -63,6 +58,16 @@ public class DataSourceController {
         model.addAttribute("tag", tag);
         model.addAttribute("obj", dataBaseInfo);
         return "ds/ds_edit";
+    }
+
+    @RequestMapping("/delete")
+    public String delete(@RequestParam(name = "id") int id,
+                         @RequestParam(name = "bizId") int bizId,
+                         @RequestParam(name = "bizName") String bizName,
+                         Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        dataSourceServer.deleteDataBaseInfoById(id);
+        return setCommonParam(bizId, bizName, model, "ds/ds_index");
     }
 
     @RequestMapping(value = "/add")
@@ -109,6 +114,15 @@ public class DataSourceController {
     public String fieldsIndex(Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         return "ds/ds_index_3";
+    }
+
+    private String setCommonParam(int bizId, String bizName, Model model, String retPath){
+        List<DatabaseInfo> list = dataSourceServer.getDataBaseInfoListById(bizId);
+        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+        model.addAttribute("data", jsonArray);
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        return retPath;
     }
 
 }
