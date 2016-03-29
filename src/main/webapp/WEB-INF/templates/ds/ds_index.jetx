@@ -61,7 +61,7 @@
                 },
                 {
                     targets: 1, render: function (data, type, full, meta) {
-                        return full[3];
+                        return '<a href="">' + full[3] + '</a>';
                     }
                 },
                 {
@@ -81,7 +81,7 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                        return full[4];
+                        return '<a href="">' + full[4] + '</a>';
                     }
                 },
                 {
