@@ -86,7 +86,7 @@
                 },
                 {
                     targets: 6, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/ds/" >修改</a> | <a href="${CONTEXT_PATH}/ds/" >删除</a>';
+                        return '<a href="${CONTEXT_PATH}/ds/modify?id=' + full[0] + '&tag=modify" >修改</a> | <a href="${CONTEXT_PATH}/ds/delete?bizId=${bizId}" >删除</a>';
                     }
                 }
             ]

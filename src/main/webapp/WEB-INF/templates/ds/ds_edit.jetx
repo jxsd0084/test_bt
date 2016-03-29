@@ -13,9 +13,9 @@
         <div class="col-md-3 col-lg-3">
             <select name="name1" id="name1" style="width: 140px">
                 <option value="" default> - 必选 - </option>
-                <option value="SQLServer">SQLServer</option>
-                <option value="MySQL">MySQL</option>
-                <option value="MongoDB">MongoDB</option>
+                <option value="SQLServer" #if(obj.dbType == 'SQLServer')selected#end>SQLServer</option>
+                <option value="MySQL"     #if(obj.dbType == 'MySQL')    selected#end>MySQL</option>
+                <option value="MongoDB"   #if(obj.dbType == 'MongoDB')  selected#end>MongoDB</option>
             <select/>
         </div>
         <p class="help-block col-md-offset-2">如：MySQL</p>
@@ -24,7 +24,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">链接名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value=""/>
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.name}"/>
         </div>
         <p class="help-block col-md-offset-2">如：CRM_DB_CON</p>
       </div>
@@ -32,7 +32,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">驱动名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value=""/>
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.dbDriver}"/>
         </div>
         <p class="help-block col-md-offset-2">如：com.mysql.jdbc.Driver</p>
       </div>
@@ -40,7 +40,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">数据库链接</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name4" id="name4" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name4" id="name4" placeholder="选填" value="${obj.dbUrl}"/>
         </div>
         <p class="help-block col-md-offset-2">如：jdbc:mysql://localhost</p>
       </div>
@@ -48,7 +48,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">端口号</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value="${obj.dbPort}"/>
         </div>
         <p class="help-block col-md-offset-2">如：3306</p>
       </div>
@@ -56,7 +56,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">数据库名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name6" id="name6" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name6" id="name6" placeholder="选填" value="${obj.dbName}"/>
         </div>
         <p class="help-block col-md-offset-2">如：FSCRM001</p>
       </div>
@@ -64,7 +64,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">用户名</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name7" id="name7" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name7" id="name7" placeholder="选填" value="${obj.dbUsername}"/>
         </div>
         <p class="help-block col-md-offset-2">如：admin</p>
       </div>
@@ -72,7 +72,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">密码</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name8" id="name8" placeholder="选填" value=""/>
+          <input type="text" class="form-control" name="name8" id="name8" placeholder="选填" value="${obj.dbPassword}"/>
         </div>
         <p class="help-block col-md-offset-2">如：admin</p>
       </div>

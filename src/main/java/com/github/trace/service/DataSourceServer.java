@@ -33,10 +33,18 @@ public class DataSourceServer {
     }
 
     /**
-     * 根据Id查询 数据源
+     * 根据Id查询 数据源列表
      */
     public List<DatabaseInfo> getDataBaseInfoListById(int id){
         return dataBaseInfoMapper.findDatabaseInfoListById(id);
+    }
+
+    /**
+     * 根据Id查询 数据源
+     * @param id
+     */
+    public DatabaseInfo getDataBaseInfoById(int id) {
+        return dataBaseInfoMapper.findById(id);
     }
 
     /**

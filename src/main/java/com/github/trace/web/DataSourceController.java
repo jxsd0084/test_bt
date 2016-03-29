@@ -47,9 +47,21 @@ public class DataSourceController {
                        @RequestParam(name = "tag") String tag,
                        Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
         model.addAttribute("tag", tag);
+        return "ds/ds_edit";
+    }
+
+    @RequestMapping("/modify")
+    public String modify(@RequestParam(name = "id") int id,
+                         @RequestParam(name = "tag") String tag,
+                         Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        DatabaseInfo dataBaseInfo = dataSourceServer.getDataBaseInfoById(id);
+        model.addAttribute("tag", tag);
+        model.addAttribute("obj", dataBaseInfo);
         return "ds/ds_edit";
     }
 
