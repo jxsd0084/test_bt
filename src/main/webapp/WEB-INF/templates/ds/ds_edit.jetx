@@ -154,12 +154,13 @@
                 msg  = '修改';
                 data = {
                     bizId               :bizId,
+                    bizName             :bizName,
                     dbType              :value1,
-                    dbName              :value2,
-                    bizName             :value3,
-                    dbDriver            :value4,
-                    dbUrl               :value5,
-                    dbPort              :value6,
+                    name                :value2,
+                    dbDriver            :value3,
+                    dbUrl               :value4,
+                    dbPort              :value5,
+                    dbName              :value6,
                     dbUsername          :value7,
                     dbPassword          :value8,
                     id                  :id

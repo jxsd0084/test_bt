@@ -37,27 +37,15 @@ public class DataSourceController {
     }
 
     @RequestMapping("/edit")
-    public String edit(@RequestParam(name = "bizId") int bizId,
+    public String edit(@RequestParam(name = "id") int id,
+                       @RequestParam(name = "bizId") int bizId,
                        @RequestParam(name = "bizName") String bizName,
                        @RequestParam(name = "tag") String tag,
                        Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        model.addAttribute("tag", tag);
-        return "ds/ds_edit";
-    }
-
-    @RequestMapping("/modify")
-    public String modify(@RequestParam(name = "id") int id,
-                         @RequestParam(name = "bizId") int bizId,
-                         @RequestParam(name = "bizName") String bizName,
-                         @RequestParam(name = "tag") String tag,
-                         Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         DatabaseInfo dataBaseInfo = dataSourceServer.getDataBaseInfoById(id);
 
+        model.addAttribute("id", id);
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
         model.addAttribute("tag", tag);
@@ -65,17 +53,7 @@ public class DataSourceController {
         return "ds/ds_edit";
     }
 
-    @RequestMapping("/delete")
-    public String delete(@RequestParam(name = "id") int id,
-                         @RequestParam(name = "bizId") int bizId,
-                         @RequestParam(name = "bizName") String bizName,
-                         Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        dataSourceServer.deleteDataBaseInfoById(id);
-        return setCommonParam(bizId, bizName, model, "ds/ds_index");
-    }
-
-    @RequestMapping(value = "/add")
+    @RequestMapping("/add")
     @ResponseBody
     public Map add(@RequestParam(name = "bizId") int bizId,
                    @RequestParam(name = "bizName") String bizName,
@@ -106,7 +84,53 @@ public class DataSourceController {
 
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
-        return ControllerHelper.returnResponseVal(res, "更新");
+        return ControllerHelper.returnResponseVal(res, "添加");
+    }
+
+    @RequestMapping("/modify")
+    @ResponseBody
+    public Map modify(@RequestParam(name = "id") int id,
+                      @RequestParam(name = "bizId") int bizId,
+                      @RequestParam(name = "bizName") String bizName,
+                      @RequestParam(name = "dbType") String dbType,
+                      @RequestParam(name = "name") String name,
+                      @RequestParam(name = "dbDriver") String dbDriver,
+                      @RequestParam(name = "dbUrl") String dbUrl,
+                      @RequestParam(name = "dbPort") int dbPort,
+                      @RequestParam(name = "dbName") String dbName,
+                      @RequestParam(name = "dbUsername") String dbUsername,
+                      @RequestParam(name = "dbPassword") String dbPassword,
+                      Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        DatabaseInfo databaseInfo = new DatabaseInfo();
+        databaseInfo.setId(id);
+        databaseInfo.setBizId(bizId);
+        databaseInfo.setBizName(bizName);
+        databaseInfo.setDbType(dbType);
+        databaseInfo.setName(name);
+        databaseInfo.setDbDriver(dbDriver);
+        databaseInfo.setDbUrl(dbUrl);
+        databaseInfo.setDbPort(dbPort);
+        databaseInfo.setDbName(dbName);
+        databaseInfo.setDbUsername(dbUsername);
+        databaseInfo.setDbPassword(dbPassword);
+
+        int res = dataSourceServer.updateDataBaseInfo(databaseInfo);
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        return ControllerHelper.returnResponseVal(res, "修改");
+    }
+
+    @RequestMapping("/delete")
+    public String delete(@RequestParam(name = "id") int id,
+                         @RequestParam(name = "bizId") int bizId,
+                         @RequestParam(name = "bizName") String bizName,
+                         Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        dataSourceServer.deleteDataBaseInfoById(id);
+        return setCommonParam(bizId, bizName, model, "ds/ds_index");
     }
 
     @RequestMapping("/tblsIndex")

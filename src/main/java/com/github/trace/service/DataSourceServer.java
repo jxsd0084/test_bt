@@ -48,6 +48,15 @@ public class DataSourceServer {
     }
 
     /**
+     * 根据Id更新 数据源
+     * @param databaseInfo
+     * @return
+     */
+    public int updateDataBaseInfo(DatabaseInfo databaseInfo) {
+        return dataBaseInfoMapper.update(databaseInfo);
+    }
+
+    /**
      * 根据Id删除 数据源
      * @param id
      * @return
