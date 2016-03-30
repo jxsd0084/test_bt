@@ -170,8 +170,28 @@ public class DataSourceController {
     }
 
     @RequestMapping("/tblsIndex")
-    public String tablesIndex(Model model){
+    public String tablesIndex(@RequestParam(name = "dbName") String dbName,
+                              @RequestParam(name = "dbUrl") String dbUrl,
+                              @RequestParam(name = "dbPort") int dbPort,
+                              @RequestParam(name = "dbDriver") String dbDriver,
+                              @RequestParam(name = "dbUsername") String dbUsername,
+                              @RequestParam(name = "dbPassword") String dbPassword,
+                              Model model){
+
+        DatabaseInfo databaseInfo = new DatabaseInfo();
+        databaseInfo.setDbName(dbName);
+        databaseInfo.setDbUrl(dbUrl);
+        databaseInfo.setDbPort(dbPort);
+        databaseInfo.setDbDriver(dbDriver);
+        databaseInfo.setDbUsername(dbUsername);
+        databaseInfo.setDbPassword(dbPassword);
+
+        List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
+
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+        model.addAttribute("data", jsonArray);
         return "ds/ds_index_2";
     }
 

@@ -83,6 +83,14 @@ public class DataSourceServer {
         return DataBaseHelper.testConnection(databaseInfo);
     }
 
+    /**
+     * 获取 目标数据库中所有的表
+     * @param databaseInfo
+     * @return
+     */
+    public List getDatabaseTables(DatabaseInfo databaseInfo) {
+        return DataBaseHelper.getDatabaseTables(databaseInfo);
+    }
 }
 
 

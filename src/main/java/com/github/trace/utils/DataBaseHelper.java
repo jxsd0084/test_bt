@@ -5,8 +5,12 @@ import com.mysql.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chenlong on 2016/3/29.
@@ -23,20 +27,11 @@ public class DataBaseHelper {
     private static String CONN_DB_NAME = "";
 
     /**
-     * 测试 数据库连接
-     * @return
-     */
-    public static int testConnection(DatabaseInfo databaseInfo){
-        return getConnection(databaseInfo);
-    }
-
-    /**
      * 获取 数据库连接
      * @param databaseInfo
      * @return
      */
-    public static int getConnection(DatabaseInfo databaseInfo){
-        int res = 0;
+    private static Connection getConnection(DatabaseInfo databaseInfo){
         Connection conn = null;
         try{
             CONN_DRIVER     = databaseInfo.getDbDriver();
@@ -48,22 +43,17 @@ public class DataBaseHelper {
 
             Class.forName(CONN_DRIVER);
             conn = (Connection) DriverManager.getConnection(CONN_URL, CONN_USERNAME, CONN_PASSWORD);
-            if (conn != null) {
-                res = 1;
-            }
         } catch (Exception e){
             LOGGER.error("get connection failed !", e);
-        } finally {
-            closeConnection(conn);
         }
-        return res;
+        return conn;
     }
 
     /**
      * 关闭 数据库连接
      * @param conn
      */
-    public static void closeConnection(Connection conn){
+    private static void closeConnection(Connection conn){
         if(conn != null){
             try {
                 conn.close();
@@ -71,6 +61,42 @@ public class DataBaseHelper {
                 LOGGER.error("close connection failed !", e);
             }
         }
+    }
+
+    /**
+     * 测试 数据库连接
+     * @return
+     */
+    public static int testConnection(DatabaseInfo databaseInfo){
+        int res = 0;
+        Connection conn =  getConnection(databaseInfo);
+        if (conn != null) {
+            res = 1;
+            closeConnection(conn);
+        }
+        return res;
+    }
+
+    /**
+     * 获取 目标数据中所有的表
+     * @param databaseInfo
+     * @return
+     */
+    public static List getDatabaseTables(DatabaseInfo databaseInfo) {
+        List<String> list = new ArrayList<String>();
+        Connection conn = getConnection(databaseInfo);
+        if (conn != null) {
+            try {
+                DatabaseMetaData metaData = conn.getMetaData();
+                ResultSet rs = metaData.getTables(null, null, "%", null);
+                while (rs.next()){
+                    list.add(rs.getString("TABLE_NAME"));
+                }
+            } catch (SQLException e) {
+                LOGGER.error("get metaData failed !", e);
+            }
+        }
+        return list;
     }
 
 }
