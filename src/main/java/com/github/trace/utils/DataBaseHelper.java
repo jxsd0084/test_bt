@@ -23,11 +23,19 @@ public class DataBaseHelper {
     private static String CONN_DB_NAME = "";
 
     /**
+     * 测试 数据库连接
+     * @return
+     */
+    public static int testConnection(DatabaseInfo databaseInfo){
+        return getConnection(databaseInfo);
+    }
+
+    /**
      * 获取 数据库连接
      * @param databaseInfo
      * @return
      */
-    public static int testConnection(DatabaseInfo databaseInfo){
+    public static int getConnection(DatabaseInfo databaseInfo){
         int res = 0;
         Connection conn = null;
         try{
