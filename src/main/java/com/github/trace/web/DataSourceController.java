@@ -187,17 +187,49 @@ public class DataSourceController {
         databaseInfo.setDbPassword(dbPassword);
 
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
+        JSONArray jsonArray1 = new JSONArray();
+        int cont = 0;
+        for (String tableName : list){
+            cont ++;
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(cont);
+            jsonArray2.add(dbName);
+            jsonArray2.add(tableName);
+
+            jsonArray1.add(jsonArray2);
+        }
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-        model.addAttribute("data", jsonArray);
+        model.addAttribute("data", jsonArray1);
+        model.addAttribute("obj", databaseInfo);
         return "ds/ds_index_2";
     }
 
     @RequestMapping("/fldsIndex")
-    public String fieldsIndex(Model model){
+    public String fieldsIndex(@RequestParam(name = "dbName") String dbName,
+                              @RequestParam(name = "dbUrl") String dbUrl,
+                              @RequestParam(name = "dbPort") int dbPort,
+                              @RequestParam(name = "dbDriver") String dbDriver,
+                              @RequestParam(name = "dbUsername") String dbUsername,
+                              @RequestParam(name = "dbPassword") String dbPassword,
+                              @RequestParam(name = "tableName") String tableName,
+                              Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        DatabaseInfo databaseInfo = new DatabaseInfo();
+        databaseInfo.setDbName(dbName);
+        databaseInfo.setDbUrl(dbUrl);
+        databaseInfo.setDbPort(dbPort);
+        databaseInfo.setDbDriver(dbDriver);
+        databaseInfo.setDbUsername(dbUsername);
+        databaseInfo.setDbPassword(dbPassword);
+
+        List<String> fieldList = dataSourceServer.getTableFields(databaseInfo, tableName);
+        for (String field : fieldList){
+
+        }
+
         return "ds/ds_index_3";
     }
 
