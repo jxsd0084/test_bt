@@ -9,7 +9,7 @@ $("#confirm").on('click', function () {
         dataType: "text",
         type: "GET",
         success: function (data) {
-            alert("成功删除!")
+            window.location.href = '${CONTEXT_PATH}/cep/list?parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}&topic=${topic}';
         }
     });
 })
