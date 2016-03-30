@@ -46,7 +46,7 @@ public class CEPTraceController {
         // data, type, full, meta
         for (BuriedPoint br : caller) {
             JSONArray ja2 = new JSONArray();
-          //  ja2.add(br.getId());            // 编号
+            //  ja2.add(br.getId());            // 编号
             ja2.add(br.getBpName());        // 埋点字段
             ja2.add(br.getBpValue());       // 埋点数据类型
             ja2.add(br.getRegex());         // 自定义正则表达式
@@ -202,67 +202,77 @@ public class CEPTraceController {
         LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(Source, new TypeReference<LinkedHashMap<String, String>>() {});
 
 
-            for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
-                JSONArray ja2 = new JSONArray();
-                ja2.add(entry1.getKey()+"");
-                ja2.add(entry1.getValue().split(",")[0]+"");
-                for (int i = 0; i < jsonArray.size(); i++) {
+        for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
+            JSONArray ja2 = new JSONArray();
+            ja2.add(entry1.getKey()+"");
+            ja2.add(entry1.getValue().split(",")[0]+"");
+            for (int i = 0; i < jsonArray.size(); i++) {
 
-                    LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
+                LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
 
-                    if(jsonMap2.containsKey(entry1.getKey()) && entry1.getValue().split(",")[2].equals("1")){
+                if(jsonMap2.containsKey(entry1.getKey()) && entry1.getValue().split(",")[2].equals("1")){
 
-                        String patternString = "";
-                        String patternString2 = "";
+                    String patternString = "";
+                    String patternString2 = "";
 
-                        if(entry1.getValue().split(",")[1].equals("文本")){
-                            patternString = ".*";
-                        }
-
-                        if(entry1.getValue().split(",")[1].equals("数字")){
-                            patternString = "^[0-9]*$";
-                        }
-
-                        if(entry1.getValue().split(",")[1].equals("日期")){
-                            patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
-                        }
-
-                        Pattern pattern = Pattern.compile(patternString);
-                        Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
-                        boolean b= matcher.matches();
-
-
-                        if(entry1.getValue().split(",").length>=4){
-
-                            try {
-                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-
-                            Pattern pattern2 = null;
-                            pattern2 = Pattern.compile( patternString2);
-
-                            Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
-                            b= matcher2.matches();
-                        }
-
-                        ja2.add(jsonMap2.get(entry1.getKey()));
-                        ja2.add(b);
-
-
-                    }else if(entry1.getValue().split(",")[2].toString().equals("0")){
-                        ja2.add("");
-                        ja2.add(true);
-                    }else{
-
-                        ja2.add("");
-                        ja2.add(false);
-
+                    if(entry1.getValue().split(",")[1].equals("文本")){
+                        patternString = ".*";
                     }
 
+                    if(entry1.getValue().split(",")[1].equals("数字")){
+                        patternString = "^[0-9]*$";
+                    }
+
+                    if(entry1.getValue().split(",")[1].equals("日期")){
+                        patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
+                    }
+
+                    Pattern pattern = Pattern.compile(patternString);
+                    Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
+                    boolean b= matcher.matches();
+
+
+                    if(entry1.getValue().split(",").length>=4){
+
+                        try {
+                            patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+
+                        Pattern pattern2 = null;
+                        pattern2 = Pattern.compile( patternString2);
+
+                        Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
+                        b= matcher2.matches();
+                    }
+                    JSONArray ja3 = new JSONArray();
+                    String err = "";
+                    Object val = jsonMap2.get(entry1.getKey());
+                    if(val==null)
+                        err = "null";
+                    else if("".equals(val))
+                        err="空值";
+                    ja3.add(b);
+                    ja3.add(val);
+                    ja3.add(err);
+                    ja2.add(ja3);
+                }else if(entry1.getValue().split(",")[2].toString().equals("0")){
+                    JSONArray ja3 = new JSONArray();
+                    ja3.add(true);
+                    ja3.add("");
+                    ja3.add("");
+                    ja2.add(ja3);
+                }else{
+                    JSONArray ja3 = new JSONArray();
+                    ja3.add(false);
+                    ja3.add("");
+                    ja3.add("空值");
+                    ja2.add(ja3);
                 }
-                ja1.add(ja2);
+
+            }
+            ja1.add(ja2);
 
         }
 
