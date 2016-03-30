@@ -32,19 +32,11 @@ public class DataTypeController {
     public String getLeveOneFieldsList(Model model) {
         List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
 
-        JSONArray jsonArray1 = new JSONArray();
-        for (LevelOneFields levelOneField : list) {
-            JSONArray jsonArray2 = new JSONArray();
-            jsonArray2.add(levelOneField.getId());
-            jsonArray2.add(levelOneField.getLevel1FieldTag());
-            jsonArray2.add(levelOneField.getLevel1FieldName());
-            jsonArray2.add(levelOneField.getLevel1FieldDesc());
-
-            jsonArray1.add(jsonArray2);
-        }
+        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-        model.addAttribute("data", jsonArray1);
+
+        model.addAttribute("data", jsonArray);
         return "data/data_list";
     }
 
@@ -55,20 +47,11 @@ public class DataTypeController {
                                        Model model) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(l1_id);
 
-        JSONArray jsonArray1 = new JSONArray();
-        for (LevelTwoFields fieldObj : list) {
-            JSONArray jsonArray2 = new JSONArray();
-            jsonArray2.add(fieldObj.getId());
-            jsonArray2.add(fieldObj.getLevel1FieldTag() + "_" + fieldObj.getId());
-            jsonArray2.add(fieldObj.getLevel1FieldName());
-            jsonArray2.add(fieldObj.getLevel2FieldName());
-            jsonArray2.add(fieldObj.getLevel2FieldDesc());
-
-            jsonArray1.add(jsonArray2);
-        }
+        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-        model.addAttribute("data", jsonArray1);
+
+        model.addAttribute("data", jsonArray);
         model.addAttribute("L1_id", l1_id);
         model.addAttribute("L1_tag", l1_tag);
         model.addAttribute("L1_name", l1_name);

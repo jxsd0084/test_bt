@@ -1,14 +1,14 @@
-<nav class="navbar navbar-fixed-top" role="navigation" id="navtop">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="navtop">
   <div class="container-fluid">
     <div class="navbar-header">
       <a id="myHome" class="navbar-brand" href="${CONTEXT_PATH}/">蜂云-埋点工具平台</a>
       <a class="navbar-brand hidden-md hidden-lg" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
       <div style="padding-top: 5px">
         <ul class="nav navbar-nav nav-tabs">
-          <li ><a class="img-polaroid" href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
-          <li ><a class="img-polaroid" href="${CONTEXT_PATH}/cep/list?parent_id=${navObj.parentId}&child_id=${navObj.childId}&parent_name=${navObj.childName}&topic=${navObj.topic}">埋点配置与监控</a></li>
-          <li ><a class="img-polaroid" href="${CONTEXT_PATH}/ds/index">数据源配置</a></li>
-          <li ><a class="img-polaroid" href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
+          <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${navObj.parentId}&child_id=${navObj.childId}&parent_name=${navObj.childName}&topic=${navObj.topic}">埋点配置与监控</a></li>
+          <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据源配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
         </ul>
       </div>
       <div>
@@ -25,6 +25,7 @@
     </div>
   </div>
 </nav>
+#if(flag != 'ds')
 <div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
    	<div class="tree">
         <ul>
@@ -55,4 +56,22 @@
         </ul>
     </div>
 </div>
+#else
+<div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
+   	<div class="tree">
+        <ul>
+           <li>
+           <span><i class="icon-folder-open"></i>数据库链接</span>
+               #for(item : databaseBizList)
+                   <ul>
+                       <li>
+                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/ds/list?bizId=${item.id}&bizName=${item.name}"> ${item.name} </a></span>
+                       </li>
+                   </ul>
+               #end
+            </li>
+        </ul>
+    </div>
+</div>
+#end
 
