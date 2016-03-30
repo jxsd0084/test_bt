@@ -2,41 +2,41 @@
 #set(navbar="servicelog")
 #tag layout_block("headContent")
 <style>
-	#datatable td:nth-child(n+3) {
-		text-align: center;
-		width: 40px;
-	}
+    #datatable td:nth-child(n+3) {
+        text-align: center;
+        width: 40px;
+    }
 </style>
 #end
 #tag layout_block("bodyContent")
 <div class="row headbar">
-	<ol class="breadcrumb">
-		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
-		</li>
-		<li class="active"><font color="blue">${parent_name}</font> - 埋点配置</li>
-	</ol>
+    <ol class="breadcrumb">
+        <li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
+        </li>
+        <li class="active"><font color="blue">${parent_name}</font> - 埋点配置</li>
+    </ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/newConifg?tag=add&parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}&topic=${topic}'"/>
+    <input id="submit_btn" class="btn btn-primary" type="button" value="新建配置项" onclick="window.location.href='${CONTEXT_PATH}/cep/newConifg?tag=add&parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}&topic=${topic}'"/>
 </div>
 <br/>
 <div class="row">
-	<div>
-		<table id="datatable" class="table table-striped table-bordered table-condensed">
-			<thead>
-			<tr>
-				<th>埋点字段</th>
+    <div>
+        <table id="datatable" class="table table-striped table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>埋点字段</th>
                 <th>埋点数据类型</th>
                 <th>自定义正则表达式</th>
-				<th>埋点字段描述</th>
+                <th>埋点字段描述</th>
                 <th>是否必填项</th>
                 <th>操作</th>
-			</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-	</div>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 <br/>
 
@@ -56,15 +56,15 @@
 
 
 
-    ##                    <select name="select" id="select">
-    ##                        <option value="nginx.reverse" default>nginx.reverse</option>
-    ##                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
-    ##                     <select/>
+##                    <select name="select" id="select">
+##                        <option value="nginx.reverse" default>nginx.reverse</option>
+##                        <option value="dcx.MonitorRequest" >dcx.MonitorRequest</option>
+##                     <select/>
 
 </div>
 
 
-    <textarea id = "textarea1" style="display:none">请输入something...1</textarea>
+<textarea id = "textarea1" style="display:none">请输入something...1</textarea>
 
 
 </div>
@@ -73,14 +73,14 @@
 
 
 <div class="row">
-        <table id="datatable" class="table table-striped table-condensed">
-            <tr>
-                <td colspan="8" style="padding-left: 20px">
-                    <div>服务端日志</div>
-                    <textarea  id="textarea2" style="width: 100%;height: 240px"></textarea>
-                </td>
-            </tr>
-        </table>
+    <table id="datatable" class="table table-striped table-condensed">
+        <tr>
+            <td colspan="8" style="padding-left: 20px">
+                <div>服务端日志</div>
+                <textarea  id="textarea2" style="width: 100%;height: 240px"></textarea>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <br/>
@@ -97,15 +97,10 @@
                 <th>埋点字段</th>
                 <th>埋点字段描述</th>
                 <th>日志1</th>
-                <th>正确性</th>
                 <th>日志2</th>
-                <th>正确性</th>
                 <th>日志3</th>
-                <th>正确性</th>
                 <th>日志4</th>
-                <th>正确性</th>
                 <th>日志5</th>
-                <th>正确性</th>
             </tr>
             </thead>
             <tbody>
@@ -122,56 +117,56 @@
 <input type="hidden" id="parent_id" name="parent_id" value="${parent_id}" />
 <input type="hidden" id="child_id" name="child_id" value="${child_id}" />
 <script>
-	var data = ${data}
+    var data = ${data}
     var delete_id
 
-	$(document).ready(function () {
+    $(document).ready(function () {
 
-        #include("/cep/modal.js");
+            #include("/cep/modal.js");
 
-		var table = $('#datatable').DataTable({
-			stateSave: true,
-			searching: true,
-			autowidth: true,
-			paging: true,
-			info: true,
-			fixedHeader: fixedHeaderObject,
-			language: lang,
-			dom: bootstrapDom,
-			order: [[0, 'asc'], [3, 'desc']],
+        var table = $('#datatable').DataTable({
+            stateSave: true,
+            searching: true,
+            autowidth: true,
+            paging: true,
+            info: true,
+            fixedHeader: fixedHeaderObject,
+            language: lang,
+            dom: bootstrapDom,
+            order: [[0, 'asc'], [3, 'desc']],
             paging: false,
-			//lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
-			data: data,
-			columnDefs: [
-				{
-					targets: 0, render: function (data, type, full, meta) {
-						return data;
-##						return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
-					}
-				},
+            //lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]],
+            data: data,
+            columnDefs: [
+                {
+                    targets: 0, render: function (data, type, full, meta) {
+                    return data;
+                ##						return '<a href="${CONTEXT_PATH}/log/detail?last=${last}&start=${start}&end=${end}&name=' + escape(link[0]+"/"+link[1]) + '">' + data + '</a>'
+                }
+                },
                 {
                     targets: 1, render: function (data, type, full, meta) {
-                        return data;
-                	}
+                    return data;
+                }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-						if(data){
-							return '<input type="checkbox" checked disabled> 必填项'
-						}else {
-							return '<input type="checkbox" disabled> 必填项'
+                    if(data){
+                        return '<input type="checkbox" checked disabled> 必填项'
+                    }else {
+                        return '<input type="checkbox" disabled> 必填项'
 
-						}
-                	}
+                    }
+                }
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                    	return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
-                	}
+                    return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
+                }
                 }
 
-			]
-		});
+            ]
+        });
 
         $('#datatable2').DataTable( {
             paging: false,
@@ -195,139 +190,139 @@
         })
 
 
-    $("#browseBP").click( function() {
+        $("#browseBP").click( function() {
 
-        var list = $('#datatable').DataTable().data();
-        var as = [];
-        for(var i = 0; i < list.length ;i++ ) {
+            var list = $('#datatable').DataTable().data();
+            var as = [];
+            for(var i = 0; i < list.length ;i++ ) {
                 var temp = [];
                 temp.push('"'+list[i][0]+'":"'+list[i][3]+","+list[i][1]+","+list[i][4]+","+escape(list[i][2])+'"');
                 as.push(temp);
-        }
-        as = "{" + as + "}";
-        $.ajax({
-            url: "${CONTEXT_PATH}/cep/format",
-            async : false,
-            contentType: "application/json",
-            data:  {BuriedPointList:as},
-            dataType: "text",
-            type: "GET",
-            success: function (data) {
-
-                $("#textarea1").val(data);
             }
+            as = "{" + as + "}";
+            $.ajax({
+                url: "${CONTEXT_PATH}/cep/format",
+                async : false,
+                contentType: "application/json",
+                data:  {BuriedPointList:as},
+                dataType: "text",
+                type: "GET",
+                success: function (data) {
+
+                    $("#textarea1").val(data);
+                }
+            });
+
+            $.ajax({
+                url: "${CONTEXT_PATH}/cep/serverLog",
+                async : false,
+                contentType: "application/json",
+                data:  { str1:$("#select").text(),str2: $("#select2").val()},
+                dataType: "text",
+                type: "GET",
+                success: function (mydata) {
+                    $("#textarea2").val(mydata)
+                }
+            });
+
+            $.ajax({
+                url: "${CONTEXT_PATH}/cep/compare",
+                async : false,
+                contentType: "application/json",
+                data:  { Source:$("#textarea1").val(),Target: $("#textarea2").val()},
+                dataType: "json",
+                type: "GET",
+                success: function (mydata) {
+                    //重新加载数据前需要做如下操作,否则会报错.
+                    $('#datatable2').dataTable().fnDestroy();
+
+
+                    $('#datatable2').DataTable( {
+                        paging: false,
+                        language: lang,
+                        data: mydata,
+                        columnDefs: [
+                            {
+                                sDefaultContent: '',
+                                aTargets: [ '_all' ]
+                            },
+                            { "width": "8%", "targets": [ '_all' ] },
+
+                            {
+                                targets: 2, render: function (data, type, full, meta) {
+                                //var link = full;
+                                if(data[0] == false){
+                                    return '<div style="color:#F00">'+data[2]+'</div> '
+                                }else{
+                                    return data[1]
+                                }
+
+                            }
+                            },
+                            {
+                                targets: 3, render: function (data, type, full, meta) {
+                                //var link = full;
+                                if(data[0] == false){
+                                    return '<div style="color:#F00">'+data[2]+'</div> '
+                                }else{
+                                    return data[1]
+                                }
+
+                            }
+                            },
+                            {
+                                targets: 4, render: function (data, type, full, meta) {
+                                //var link = full;
+                                if(data[0] == false){
+                                    return '<div style="color:#F00">'+data[2]+'</div> '
+                                }else{
+                                    return data[1]
+                                }
+
+                            }
+                            },
+                            {
+                                targets: 5, render: function (data, type, full, meta) {
+                                //var link = full;
+                                if(data[0] == false){
+                                    return '<div style="color:#F00">'+data[2]+'</div> '
+                                }else{
+                                    return data[1]
+                                }
+
+                            }
+                            },
+                            {
+                                targets: 6, render: function (data, type, full, meta) {
+                                //var link = full;
+                                if(data[0] == false){
+                                    return '<div style="color:#F00">'+data[2]+'</div> '
+                                }else{
+                                    return data[1]
+                                }
+
+                            }
+                            }
+                        ]
+                    });
+                }
+            });
+
+
         });
 
-        $.ajax({
-            url: "${CONTEXT_PATH}/cep/serverLog",
-            async : false,
-            contentType: "application/json",
-            data:  { str1:$("#select").text(),str2: $("#select2").val()},
-            dataType: "text",
-            type: "GET",
-            success: function (mydata) {
-                $("#textarea2").val(mydata)
-            }
+
+        $("#getServerLog").click( function() {
+
+
+
         });
 
-        $.ajax({
-            url: "${CONTEXT_PATH}/cep/compare",
-            async : false,
-            contentType: "application/json",
-            data:  { Source:$("#textarea1").val(),Target: $("#textarea2").val()},
-            dataType: "json",
-            type: "GET",
-            success: function (mydata) {
-                //重新加载数据前需要做如下操作,否则会报错.
-                $('#datatable2').dataTable().fnDestroy();
+        $("#validateBP").click( function() {
 
 
-                $('#datatable2').DataTable( {
-                    paging: false,
-                    language: lang,
-                    data: mydata,
-                    columnDefs: [
-                        {
-                            sDefaultContent: '',
-                            aTargets: [ '_all' ]
-                        },
-                        { "width": "8%", "targets": [ '_all' ] },
 
-                        {
-                            targets: 3, render: function (data, type, full, meta) {
-                            //var link = full;
-                            if(data == false){
-                                return '<div style="color:#F00">false</div> '
-                            }else{
-                                return data
-                            }
-
-                        }
-                        },
-                        {
-                            targets: 5, render: function (data, type, full, meta) {
-                            //var link = full;
-                            if(data == false){
-                                return '<div style="color:#F00">false</div> '
-                            }else{
-                                return data
-                            }
-
-                        }
-                        },
-                        {
-                            targets: 7, render: function (data, type, full, meta) {
-                            //var link = full;
-                            if(data == false){
-                                return '<div style="color:#F00">false</div> '
-                            }else{
-                                return data
-                            }
-
-                        }
-                        },
-                        {
-                            targets: 9, render: function (data, type, full, meta) {
-                            //var link = full;
-                            if(data == false){
-                                return '<div style="color:#F00">false</div> '
-                            }else{
-                                return data
-                            }
-
-                        }
-                        },
-                        {
-                            targets: 11, render: function (data, type, full, meta) {
-                            //var link = full;
-                            if(data == false){
-                                return '<div style="color:#F00">false</div> '
-                            }else{
-                                return data
-                            }
-
-                        }
-                        }
-                    ]
-                });
-            }
         });
-
-
-    });
-
-
-    $("#getServerLog").click( function() {
-
-
-
-    });
-
-    $("#validateBP").click( function() {
-
-
-
-    });
 
 
 

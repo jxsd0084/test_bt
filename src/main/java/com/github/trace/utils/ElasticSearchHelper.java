@@ -69,9 +69,9 @@ public class ElasticSearchHelper {
     if (bulkRequest.numberOfActions() > 0) {
       BulkResponse bulkResponse = bulkRequest.execute().actionGet();
       if (bulkResponse.hasFailures()) {
-        LOG.error("cannot execute bulkIndex, reason: {}, items: {}", bulkResponse.buildFailureMessage(), items);
+        LOG.error("Cannot execute bulkIndex, reason: {}, items: {}", bulkResponse.buildFailureMessage(), items);
       } else {
-        LOG.info("save {} items to ElasticSearch in {}", items.size(), index);
+        LOG.info("Saved {} items to ElasticSearch in {}", items.size(), index);
       }
     }
   }

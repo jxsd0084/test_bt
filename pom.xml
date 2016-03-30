@@ -308,6 +308,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
+                    <encoding>UTF-8</encoding>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                     <showWarnings>true</showWarnings>
@@ -445,6 +446,7 @@
                     <path>/buriedtool</path>
                     <server>tomcat-development-server</server>
                     <useTestClasspath>true</useTestClasspath>
+                    <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
             </plugin>
 
