@@ -99,4 +99,25 @@ public class DataBaseHelper {
         return list;
     }
 
+    /**
+     * 获取 目标表中的所有字段
+     * @param databaseInfo
+     * @param tableName
+     */
+    public static List<String> getTableFields(DatabaseInfo databaseInfo, String tableName) {
+        Connection conn = getConnection(databaseInfo);
+        List<String> list = new ArrayList<String>();
+        if (conn != null) {
+            try {
+                DatabaseMetaData dmd = conn.getMetaData();
+                ResultSet rs = dmd.getColumns( null, "%", tableName, "%");
+                while (rs.next()){
+                    list.add(rs.getString(4));
+                }
+            } catch (SQLException e) {
+                LOGGER.error("get table fields failed !", e);
+            }
+        }
+        return list;
+    }
 }

@@ -91,6 +91,16 @@ public class DataSourceServer {
     public List getDatabaseTables(DatabaseInfo databaseInfo) {
         return DataBaseHelper.getDatabaseTables(databaseInfo);
     }
+
+    /**
+     * 获取 目标表中所有字段
+     * @param databaseInfo
+     * @param tableName
+     */
+    public List<String> getTableFields(DatabaseInfo databaseInfo, String tableName) {
+        return DataBaseHelper.getTableFields(databaseInfo, tableName);
+    }
+
 }
 
 
