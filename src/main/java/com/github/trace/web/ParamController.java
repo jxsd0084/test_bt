@@ -32,6 +32,14 @@ public class ParamController {
         return "param/param_list";
     }
 
+    @RequestMapping("/new")
+    public String newParam(Model model) {
+//        List<NavigationItem> list = ControllerHelper.setLeftNavigationTree(model, cepService, "");
+//        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+//        model.addAttribute("data", jsonArray);
+        return "param/param_edit";
+    }
+
     @RequestMapping("/edit")
     public String editParam(@RequestParam(name = "id") int id,
                             Model model) {

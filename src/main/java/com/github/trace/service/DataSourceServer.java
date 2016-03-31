@@ -2,6 +2,7 @@ package com.github.trace.service;
 
 import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.DatabaseInfo;
+import com.github.trace.entity.TableField;
 import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.DatabaseInfoMapper;
 import com.github.trace.utils.DataBaseHelper;
@@ -91,6 +92,16 @@ public class DataSourceServer {
     public List getDatabaseTables(DatabaseInfo databaseInfo) {
         return DataBaseHelper.getDatabaseTables(databaseInfo);
     }
+
+    /**
+     * 获取 目标表中所有字段
+     * @param databaseInfo
+     * @param tableName
+     */
+    public List<TableField> getTableFields(DatabaseInfo databaseInfo, String tableName) {
+        return DataBaseHelper.getTableFields(databaseInfo, tableName);
+    }
+
 }
 
 

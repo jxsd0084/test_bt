@@ -2,6 +2,7 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.DatabaseInfo;
+import com.github.trace.entity.TableField;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataSourceServer;
 import com.github.trace.utils.ControllerHelper;
@@ -36,8 +37,21 @@ public class DataSourceController {
         return setCommonParam(bizId, bizName, model, "ds/ds_index");
     }
 
+    @RequestMapping("/create")
+    public String create(@RequestParam(name = "bizId") int bizId,
+                         @RequestParam(name = "bizName") String bizName,
+                         @RequestParam(name = "tag") String tag,
+                         Model model) {
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        model.addAttribute("tag", tag);
+        return "ds/ds_edit";
+    }
+
     @RequestMapping("/edit")
-    public String edit(@RequestParam(name = "id") int id,
+    public String edit(@RequestParam(name = "id", required = false) int id,
                        @RequestParam(name = "bizId") int bizId,
                        @RequestParam(name = "bizName") String bizName,
                        @RequestParam(name = "tag") String tag,
@@ -187,17 +201,57 @@ public class DataSourceController {
         databaseInfo.setDbPassword(dbPassword);
 
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
+        JSONArray jsonArray1 = new JSONArray();
+        int cont = 0;
+        for (String tableName : list){
+            cont ++;
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(cont);
+            jsonArray2.add(dbName);
+            jsonArray2.add(tableName);
+
+            jsonArray1.add(jsonArray2);
+        }
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-        model.addAttribute("data", jsonArray);
+        model.addAttribute("data", jsonArray1);
+        model.addAttribute("obj", databaseInfo);
         return "ds/ds_index_2";
     }
 
     @RequestMapping("/fldsIndex")
-    public String fieldsIndex(Model model){
+    public String fieldsIndex(@RequestParam(name = "dbName") String dbName,
+                              @RequestParam(name = "dbUrl") String dbUrl,
+                              @RequestParam(name = "dbPort") int dbPort,
+                              @RequestParam(name = "dbDriver") String dbDriver,
+                              @RequestParam(name = "dbUsername") String dbUsername,
+                              @RequestParam(name = "dbPassword") String dbPassword,
+                              @RequestParam(name = "tableName") String tableName,
+                              Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        DatabaseInfo databaseInfo = new DatabaseInfo();
+        databaseInfo.setDbName(dbName);
+        databaseInfo.setDbUrl(dbUrl);
+        databaseInfo.setDbPort(dbPort);
+        databaseInfo.setDbDriver(dbDriver);
+        databaseInfo.setDbUsername(dbUsername);
+        databaseInfo.setDbPassword(dbPassword);
+
+        List<TableField> list = dataSourceServer.getTableFields(databaseInfo, tableName);
+        JSONArray jsonArray1 = new JSONArray();
+        int cont = 0;
+        for (TableField field : list){
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(++ cont);
+            jsonArray2.add(field.getColumnName());
+            jsonArray2.add(field.getColumnType());
+
+            jsonArray1.add(jsonArray2);
+        }
+
+        model.addAttribute("data", jsonArray1);
         return "ds/ds_index_3";
     }
 

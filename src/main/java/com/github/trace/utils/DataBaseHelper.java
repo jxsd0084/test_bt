@@ -1,6 +1,7 @@
 package com.github.trace.utils;
 
 import com.github.trace.entity.DatabaseInfo;
+import com.github.trace.entity.TableField;
 import com.mysql.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,4 +100,29 @@ public class DataBaseHelper {
         return list;
     }
 
+    /**
+     * 获取 目标表中的所有字段
+     * @param databaseInfo
+     * @param tableName
+     */
+    public static List<TableField> getTableFields(DatabaseInfo databaseInfo, String tableName) {
+        Connection conn = getConnection(databaseInfo);
+        List<TableField> list = new ArrayList<TableField>();
+        if (conn != null) {
+            try {
+                DatabaseMetaData dmd = conn.getMetaData();
+                ResultSet rs = dmd.getColumns( null, null, tableName, "%");
+                while (rs.next()){
+                    TableField tableField = new TableField();
+                    tableField.setColumnName(rs.getString(4));
+                    tableField.setColumnType(rs.getString(6));
+
+                    list.add(tableField);
+                }
+            } catch (SQLException e) {
+                LOGGER.error("get table fields failed !", e);
+            }
+        }
+        return list;
+    }
 }

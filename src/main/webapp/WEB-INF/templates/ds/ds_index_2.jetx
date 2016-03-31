@@ -24,46 +24,6 @@
 			</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>01</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">Competitor</a></td>
-				</tr>
-				<tr>
-					<td>02</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">Contact</a></td>
-				</tr>
-				<tr>
-					<td>03</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">ContactUDef</a></td>
-				</tr>
-				<tr>
-					<td>04</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">CRMFeedRelation</a></td>
-				</tr>
-				<tr>
-					<td>05</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">Customer</a></td>
-				</tr>
-				<tr>
-					<td>06</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">CustomerLocation</a></td>
-				</tr>
-				<tr>
-					<td>07</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">CustomerSaleAction</a></td>
-				</tr>
-				<tr>
-					<td>08</td>
-					<td>FSCRM001</td>
-					<td><a href="${CONTEXT_PATH}/ds/fldsIndex">CustomerSaleActionStage</a></td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -72,7 +32,7 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-/*	var data = ${data}
+ 	var data = ${data}
 	$(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
@@ -83,23 +43,18 @@
             fixedHeader: fixedHeaderObject,
             language: lang,
             dom: bootstrapDom,
-            order: [[2, 'desc'], [3, 'desc']],
+            order: [[1, 'desc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
                 {
-//                    targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
+                    targets: 2, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/ds/fldsIndex?dbName=' + '${obj.dbName}' + '&dbUrl=' + '${obj.dbUrl}' + '&dbPort=' + '${obj.dbPort}' + '&dbDriver=' + '${obj.dbDriver}' + '&dbUsername=' + '${obj.dbUsername}' + '&dbPassword=' + '${obj.dbPassword}' + '&tableName=' + data + '">' + data + '</a>';
                     }
                 }
             ]
         });
-    });*/
+    });
 </script>
 #end
 #include("/include/layout.jetx")

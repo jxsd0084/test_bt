@@ -1,5 +1,7 @@
 package com.github.trace.service;
 
+import com.google.common.collect.Sets;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -61,6 +63,13 @@ public class CEPService {
 //  @Cacheable(value="navigationItemCache")
   public List<NavigationItem> getConfiguration() {
     return navigationItemMapper.findAll();
+  }
+
+  public Set<String> getAllTopics() {
+    Set<String> topics = Sets.newHashSet();
+    List<NavigationItem> items = navigationItemMapper.findAll();
+    items.forEach(item -> topics.add(item.getTopic()));
+    return topics;
   }
 
   /**
