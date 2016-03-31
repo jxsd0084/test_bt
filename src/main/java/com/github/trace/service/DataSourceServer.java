@@ -2,7 +2,8 @@ package com.github.trace.service;
 
 import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.DatabaseInfo;
-import com.github.trace.mapper.DataBaseBizMapper;
+import com.github.trace.entity.TableField;
+import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.DatabaseInfoMapper;
 import com.github.trace.utils.DataBaseHelper;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class DataSourceServer {
     private static final Logger LOG = LoggerFactory.getLogger( DataSourceServer.class );
 
     @Autowired
-    private DataBaseBizMapper                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              dataBaseBizMapper;
+    private DatabaseBizMapper dataBaseBizMapper;
     @Autowired
     private DatabaseInfoMapper dataBaseInfoMapper;
 
@@ -97,7 +98,7 @@ public class DataSourceServer {
      * @param databaseInfo
      * @param tableName
      */
-    public List<String> getTableFields(DatabaseInfo databaseInfo, String tableName) {
+    public List<TableField> getTableFields(DatabaseInfo databaseInfo, String tableName) {
         return DataBaseHelper.getTableFields(databaseInfo, tableName);
     }
 

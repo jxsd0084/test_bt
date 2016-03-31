@@ -27,149 +27,6 @@
 			</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>01</td>
-					<td>EI</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>02</td>
-					<td>CompetitorID</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>03</td>
-					<td>Name</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>04</td>
-					<td>OwnerID</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>05</td>
-					<td>Scale</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>06</td>
-					<td>Competitiveness</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>07</td>
-					<td>Advantage</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>08</td>
-					<td>Disadvantage</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>09</td>
-					<td>Strategies</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>10</td>
-					<td>SalesSituation</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>11</td>
-					<td>MarketingSituation</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>12</td>
-					<td>ContactInfo</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
-				<tr>
-					<td>13</td>
-					<td>Description</td>
-					<td>String</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-					<td>
-						<input type="checkbox"/>
-					</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -178,7 +35,7 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-/*	var data = ${data}
+    var data = ${data}
 	$(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
@@ -189,23 +46,23 @@
             fixedHeader: fixedHeaderObject,
             language: lang,
             dom: bootstrapDom,
-            order: [[2, 'desc'], [3, 'desc']],
+            order: [[0, 'asc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
                 {
-//                    targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
+                    targets: 3, render: function (data, type, full, meta) {
+                        return '<input type="checkbox"/>';
                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
+                        return '<input type="checkbox"/>';
                     }
                 }
             ]
         });
-    });*/
+    });
 </script>
 #end
 #include("/include/layout.jetx")

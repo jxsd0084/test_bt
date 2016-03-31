@@ -1,6 +1,7 @@
 package com.github.trace.utils;
 
 import com.github.trace.entity.DatabaseInfo;
+import com.github.trace.entity.TableField;
 import com.mysql.jdbc.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,15 +105,19 @@ public class DataBaseHelper {
      * @param databaseInfo
      * @param tableName
      */
-    public static List<String> getTableFields(DatabaseInfo databaseInfo, String tableName) {
+    public static List<TableField> getTableFields(DatabaseInfo databaseInfo, String tableName) {
         Connection conn = getConnection(databaseInfo);
-        List<String> list = new ArrayList<String>();
+        List<TableField> list = new ArrayList<TableField>();
         if (conn != null) {
             try {
                 DatabaseMetaData dmd = conn.getMetaData();
-                ResultSet rs = dmd.getColumns( null, "%", tableName, "%");
+                ResultSet rs = dmd.getColumns( null, null, tableName, "%");
                 while (rs.next()){
-                    list.add(rs.getString(4));
+                    TableField tableField = new TableField();
+                    tableField.setColumnName(rs.getString(4));
+                    tableField.setColumnType(rs.getString(6));
+
+                    list.add(tableField);
                 }
             } catch (SQLException e) {
                 LOGGER.error("get table fields failed !", e);

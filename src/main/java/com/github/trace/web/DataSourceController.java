@@ -2,6 +2,7 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.DatabaseInfo;
+import com.github.trace.entity.TableField;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataSourceServer;
 import com.github.trace.utils.ControllerHelper;
@@ -225,11 +226,19 @@ public class DataSourceController {
         databaseInfo.setDbUsername(dbUsername);
         databaseInfo.setDbPassword(dbPassword);
 
-        List<String> fieldList = dataSourceServer.getTableFields(databaseInfo, tableName);
-        for (String field : fieldList){
+        List<TableField> list = dataSourceServer.getTableFields(databaseInfo, tableName);
+        JSONArray jsonArray1 = new JSONArray();
+        int cont = 0;
+        for (TableField field : list){
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(++ cont);
+            jsonArray2.add(field.getColumnName());
+            jsonArray2.add(field.getColumnType());
 
+            jsonArray1.add(jsonArray2);
         }
 
+        model.addAttribute("data", jsonArray1);
         return "ds/ds_index_3";
     }
 
