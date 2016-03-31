@@ -37,8 +37,21 @@ public class DataSourceController {
         return setCommonParam(bizId, bizName, model, "ds/ds_index");
     }
 
+    @RequestMapping("/create")
+    public String create(@RequestParam(name = "bizId") int bizId,
+                         @RequestParam(name = "bizName") String bizName,
+                         @RequestParam(name = "tag") String tag,
+                         Model model) {
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
+        model.addAttribute("tag", tag);
+        return "ds/ds_edit";
+    }
+
     @RequestMapping("/edit")
-    public String edit(@RequestParam(name = "id") int id,
+    public String edit(@RequestParam(name = "id", required = false) int id,
                        @RequestParam(name = "bizId") int bizId,
                        @RequestParam(name = "bizName") String bizName,
                        @RequestParam(name = "tag") String tag,
