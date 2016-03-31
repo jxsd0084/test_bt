@@ -65,12 +65,26 @@ public class DataBaseHelper {
     }
 
     /**
+     * 关闭 结果集
+     * @param res
+     */
+    private static void closeResultSet(ResultSet res){
+        if(res != null){
+            try {
+                res.close();
+            } catch (SQLException e) {
+                LOGGER.error("close connection failed !", e);
+            }
+        }
+    }
+
+    /**
      * 测试 数据库连接
      * @return
      */
     public static int testConnection(DatabaseInfo databaseInfo){
         int res = 0;
-        Connection conn =  getConnection(databaseInfo);
+        Connection conn = getConnection(databaseInfo);
         if (conn != null) {
             res = 1;
             closeConnection(conn);
@@ -86,15 +100,18 @@ public class DataBaseHelper {
     public static List getDatabaseTables(DatabaseInfo databaseInfo) {
         List<String> list = new ArrayList<String>();
         Connection conn = getConnection(databaseInfo);
+        ResultSet rs = null;
         if (conn != null) {
             try {
                 DatabaseMetaData metaData = conn.getMetaData();
-                ResultSet rs = metaData.getTables(null, null, "%", null);
+                rs = metaData.getTables(null, null, "%", null);
                 while (rs.next()){
                     list.add(rs.getString("TABLE_NAME"));
                 }
             } catch (SQLException e) {
                 LOGGER.error("get metaData failed !", e);
+            } finally {
+                closeResultSet(rs);
             }
         }
         return list;
@@ -108,10 +125,11 @@ public class DataBaseHelper {
     public static List<TableField> getTableFields(DatabaseInfo databaseInfo, String tableName) {
         Connection conn = getConnection(databaseInfo);
         List<TableField> list = new ArrayList<TableField>();
+        ResultSet rs = null;
         if (conn != null) {
             try {
                 DatabaseMetaData dmd = conn.getMetaData();
-                ResultSet rs = dmd.getColumns( null, null, tableName, "%");
+                rs = dmd.getColumns( null, null, tableName, "%");
                 while (rs.next()){
                     TableField tableField = new TableField();
                     tableField.setColumnName(rs.getString(4));
@@ -121,8 +139,11 @@ public class DataBaseHelper {
                 }
             } catch (SQLException e) {
                 LOGGER.error("get table fields failed !", e);
+            } finally {
+                closeResultSet(rs);
             }
         }
         return list;
     }
+
 }
