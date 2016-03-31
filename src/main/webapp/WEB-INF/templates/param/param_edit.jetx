@@ -9,19 +9,75 @@
     <fieldset>
 
       <div class="form-group">
-        <label for="name" class="col-md-2 control-label">名称</label>
+        <label for="profile" class="col-md-2 control-label">业务名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control focused" readonly="true" value="${navObj.parentName}"/>
+            <select name="name1" id="name1" style="width: 200px">
+                <option value="" default> - 必选 - </option>
+                <option value="企信">企信</option>
+                <option value="协同">协同</option>
+                <option value="CRM">CRM</option>
+                <option value="汇聚">汇聚</option>
+            <select/>
         </div>
-        <p class="help-block col-md-offset-2">如：dcx.MonitorRequest</p>
+        <p class="help-block col-md-offset-2">如：企信</p>
       </div>
 
       <div class="form-group">
-        <label for="name" class="col-md-2 control-label">主题 (topic)</label>
+        <label for="profile" class="col-md-2 control-label">数据源选择</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control focused" name="name1" id="name1" value="${navObj.topic}"/>
+            <select name="name1" id="name1" style="width: 200px">
+                <option value="" default> - 必选 - </option>
+                <option value="SQLServer">SQLServer,FSCRM001,172.31.101.12,1433</option>
+                <option value="MySQL"    >MySQL,oss,172.31.101.12,3306</option>
+                <option value="MySQL"    >MySQL,oss,172.31.101.12,3306</option>
+                <option value="MySQL"    >MySQL,oss,172.31.101.12,3306</option>
+            <select/>
         </div>
-        <p class="help-block col-md-offset-2">如：dcx.MonitorRequest</p>
+        <p class="help-block col-md-offset-2">如：MySQL,oss,172.31.101.12</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">导出目标类型</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name1" id="name1" style="width: 200px">
+                <option value="" default> - 必选 - </option>
+                <option value="HDFS" >HDFS</option>
+                <option value="KAFKA">KAFKA</option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2">如：KAFKA</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">目标主题(路径)</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name1" id="name1" style="width: 200px">
+                <option value="" default> - 必选 - </option>
+                <option value="HDFS" >/use/hive/db/</option>
+                <option value="HDFS" >/facishare-data/data/</option>
+                <option value="KAFKA">dcx.MonitorRequest</option>
+                <option value="KAFKA">nginx.reverse</option>
+                <option value="KAFKA">broker.feeds-search0</option>
+                <option value="KAFKA">broker.feeds-search1</option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2">如：KAFKA,nginx.reverse</p>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="col-md-2 control-label">开始导出时间</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control focused" value="${navObj.parentName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：20160331 12:00:00</p>
+      </div>
+
+      <div class="form-group">
+        <label for="name" class="col-md-2 control-label">导出名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control focused" value="${navObj.parentName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：MyExportName</p>
       </div>
 
       <!-- 确认按钮 -->
