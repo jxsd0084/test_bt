@@ -11,7 +11,7 @@ import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.DatabaseBiz;
 import com.github.trace.entity.NavigationItem;
 import com.github.trace.mapper.BuriedPointMapper;
-import com.github.trace.mapper.DatabaseBizMapper;
+import com.github.trace.mapper.DataBaseBizMapper;
 import com.github.trace.mapper.NavigationItemMapper;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,7 +45,7 @@ public class CEPService {
   private NavigationItemMapper navigationItemMapper;
 
   @Autowired
-  private DatabaseBizMapper dataBaseBizMapper;
+  private DataBaseBizMapper dataBaseBizMapper;
 
   @Autowired
   private KafkaService kafkaService;
