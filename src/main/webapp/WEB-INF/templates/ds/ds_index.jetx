@@ -81,7 +81,7 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/ds/tblsIndex?dbName=' + full[4] + '&dbUrl=' + full[6] + '&dbPort=' + full[7] + '&dbDriver=' + full[8] + '&dbUsername=' + full[9] + '&dbPassword=' + full[10] + '">' + full[4] + '</a>';
+                        return '<a href="${CONTEXT_PATH}/ds/tblsIndex?dbName=' + full[4] + '&dbUrl=' + full[6] + '&dbPort=' + full[7] + '&dbDriver=' + full[8] + '&dbUsername=' + full[9] + '&dbPassword=' + full[10] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">' + full[4] + '</a>';
                     }
                 },
                 {

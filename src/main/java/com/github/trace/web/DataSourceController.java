@@ -190,6 +190,8 @@ public class DataSourceController {
                               @RequestParam(name = "dbDriver") String dbDriver,
                               @RequestParam(name = "dbUsername") String dbUsername,
                               @RequestParam(name = "dbPassword") String dbPassword,
+                              @RequestParam(name = "bizId") int bizId,
+                              @RequestParam(name = "bizName") String bizName,
                               Model model){
 
         DatabaseInfo databaseInfo = new DatabaseInfo();
@@ -199,6 +201,8 @@ public class DataSourceController {
         databaseInfo.setDbDriver(dbDriver);
         databaseInfo.setDbUsername(dbUsername);
         databaseInfo.setDbPassword(dbPassword);
+        databaseInfo.setBizId(bizId);
+        databaseInfo.setBizName(bizName);
 
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
         JSONArray jsonArray1 = new JSONArray();
@@ -217,6 +221,15 @@ public class DataSourceController {
 
         model.addAttribute("data", jsonArray1);
         model.addAttribute("obj", databaseInfo);
+        model.addAttribute("dbName",dbName );
+        model.addAttribute("dbUrl",dbUrl );
+        model.addAttribute("dbPort",dbPort );
+        model.addAttribute("dbDriver",dbDriver );
+        model.addAttribute("dbUsername",dbUsername );
+        model.addAttribute("dbPassword",dbPassword );
+
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
         return "ds/ds_index_2";
     }
 
@@ -228,6 +241,8 @@ public class DataSourceController {
                               @RequestParam(name = "dbUsername") String dbUsername,
                               @RequestParam(name = "dbPassword") String dbPassword,
                               @RequestParam(name = "tableName") String tableName,
+                              @RequestParam(name = "bizId") int bizId,
+                              @RequestParam(name = "bizName") String bizName,
                               Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
@@ -238,6 +253,8 @@ public class DataSourceController {
         databaseInfo.setDbDriver(dbDriver);
         databaseInfo.setDbUsername(dbUsername);
         databaseInfo.setDbPassword(dbPassword);
+        databaseInfo.setBizId(bizId);
+        databaseInfo.setBizName(bizName);
 
         List<TableField> list = dataSourceServer.getTableFields(databaseInfo, tableName);
         JSONArray jsonArray1 = new JSONArray();
@@ -252,6 +269,14 @@ public class DataSourceController {
         }
 
         model.addAttribute("data", jsonArray1);
+        model.addAttribute("dbName",dbName );
+        model.addAttribute("dbUrl",dbUrl );
+        model.addAttribute("dbPort",dbPort );
+        model.addAttribute("dbDriver",dbDriver );
+        model.addAttribute("dbUsername",dbUsername );
+        model.addAttribute("dbPassword",dbPassword );
+        model.addAttribute("bizId", bizId);
+        model.addAttribute("bizName", bizName);
         return "ds/ds_index_3";
     }
 
