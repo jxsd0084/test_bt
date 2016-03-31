@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -247,12 +245,20 @@ public class CEPTraceController {
                         b= matcher2.matches();
                     }
                     JSONArray ja3 = new JSONArray();
-                    String err = "";
-                    Object val = jsonMap2.get(entry1.getKey());
+                    Object err = "";
+                    String val = jsonMap2.get(entry1.getKey());
                     if(val==null)
                         err = "null";
                     else if("".equals(val))
                         err="空值";
+                    else{
+                        if(entry1.getValue().split(",")[1].equals("日期")){
+                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date = new Date(Long.valueOf(val));
+                            val =sdf.format(date);
+                        }
+                        err=val;
+                    }
                     ja3.add(b);
                     ja3.add(val);
                     ja3.add(err);
