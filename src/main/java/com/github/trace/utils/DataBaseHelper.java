@@ -59,7 +59,7 @@ public class DataBaseHelper {
             try {
                 conn.close();
             } catch (SQLException e) {
-                LOGGER.error("close connection failed !", e);
+                LOGGER.error("close Connection failed !", e);
             }
         }
     }
@@ -73,7 +73,7 @@ public class DataBaseHelper {
             try {
                 res.close();
             } catch (SQLException e) {
-                LOGGER.error("close connection failed !", e);
+                LOGGER.error("close ResultSet failed !", e);
             }
         }
     }
