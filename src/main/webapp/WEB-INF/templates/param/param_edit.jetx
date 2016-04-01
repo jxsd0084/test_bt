@@ -37,6 +37,15 @@
       </div>
 
       <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">已选数据表</label>
+        <div class="col-md-3 col-lg-3">
+            <textarea style="alignment: left;height: 40px">数据表1, 数据表2, ...
+            </textarea>
+        </div>
+        <p class="help-block col-md-offset-2">如：table1,table2</p>
+      </div>
+
+      <div class="form-group">
         <label for="profile" class="col-md-2 control-label">导出目标类型</label>
         <div class="col-md-3 col-lg-3">
             <select name="name1" id="name1" style="width: 200px">
