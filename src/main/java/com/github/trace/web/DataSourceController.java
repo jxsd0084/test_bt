@@ -192,6 +192,7 @@ public class DataSourceController {
                               @RequestParam(name = "dbPassword") String dbPassword,
                               @RequestParam(name = "bizId") int bizId,
                               @RequestParam(name = "bizName") String bizName,
+                              @RequestParam(name = "id") int id,
                               Model model){
 
         DatabaseInfo databaseInfo = new DatabaseInfo();
@@ -203,6 +204,7 @@ public class DataSourceController {
         databaseInfo.setDbPassword(dbPassword);
         databaseInfo.setBizId(bizId);
         databaseInfo.setBizName(bizName);
+        databaseInfo.setId(id);
 
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
         JSONArray jsonArray1 = new JSONArray();
@@ -227,9 +229,11 @@ public class DataSourceController {
         model.addAttribute("dbDriver",dbDriver );
         model.addAttribute("dbUsername",dbUsername );
         model.addAttribute("dbPassword",dbPassword );
-
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
+        model.addAttribute("id", id);
+        model.addAttribute("databaseInfo", databaseInfo);
+
         return "ds/ds_index_2";
     }
 
@@ -243,6 +247,8 @@ public class DataSourceController {
                               @RequestParam(name = "tableName") String tableName,
                               @RequestParam(name = "bizId") int bizId,
                               @RequestParam(name = "bizName") String bizName,
+                              @RequestParam(name = "id") int id,
+
                               Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
@@ -255,6 +261,7 @@ public class DataSourceController {
         databaseInfo.setDbPassword(dbPassword);
         databaseInfo.setBizId(bizId);
         databaseInfo.setBizName(bizName);
+        databaseInfo.setId(id);
 
         List<TableField> list = dataSourceServer.getTableFields(databaseInfo, tableName);
         JSONArray jsonArray1 = new JSONArray();
@@ -277,6 +284,7 @@ public class DataSourceController {
         model.addAttribute("dbPassword",dbPassword );
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
+        model.addAttribute("id", id);
         return "ds/ds_index_3";
     }
 
