@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/ds/index"><font color="blue">返回数据源</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源</font></a></li>
 	</ol>
 </div>
 <br/>
@@ -49,7 +49,7 @@
             columnDefs: [
                 {
                     targets: 2, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/ds/fldsIndex?dbName=' + '${obj.dbName}' + '&dbUrl=' + '${obj.dbUrl}' + '&dbPort=' + '${obj.dbPort}' + '&dbDriver=' + '${obj.dbDriver}' + '&dbUsername=' + '${obj.dbUsername}' + '&dbPassword=' + '${obj.dbPassword}' + '&tableName=' + data + '">' + data + '</a>';
+                        return '<a href="${CONTEXT_PATH}/ds/fldsIndex?dbName=' + '${obj.dbName}' + '&dbUrl=' + '${obj.dbUrl}' + '&dbPort=' + '${obj.dbPort}' + '&dbDriver=' + '${obj.dbDriver}' + '&dbUsername=' + '${obj.dbUsername}' + '&dbPassword=' + '${obj.dbPassword}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + data + '">' + data + '</a>';
                     }
                 }
             ]
