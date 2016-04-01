@@ -34,9 +34,9 @@ public class ParamController {
 
     @RequestMapping("/new")
     public String newParam(Model model) {
-//        List<NavigationItem> list = ControllerHelper.setLeftNavigationTree(model, cepService, "");
-//        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-//        model.addAttribute("data", jsonArray);
+        List<NavigationItem> list = ControllerHelper.setLeftNavigationTree(model, cepService, "");
+        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+        model.addAttribute("data", jsonArray);
         return "param/param_edit";
     }
 

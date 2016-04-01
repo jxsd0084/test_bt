@@ -9,8 +9,8 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/ds/index"><font color="blue">数据源</font></a></li>
-		<li class="active"><a href="${CONTEXT_PATH}/ds/tblsIndex"><font color="blue">数据表</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/tblsIndex?dbName=${dbName}&dbUrl=${dbUrl}&dbPort=${dbPort}&dbDriver=${dbDriver}&dbUsername=${dbUsername}&dbPassword=${dbPassword}&bizId=${bizId}&bizName=${bizName}"><font color="blue">数据表</font></a></li>
 	</ol>
 </div>
 <br/>

@@ -208,67 +208,77 @@ public class CEPTraceController {
 
                 LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
 
-                if(jsonMap2.containsKey(entry1.getKey()) && entry1.getValue().split(",")[2].equals("1")){
+                if(jsonMap2.containsKey(entry1.getKey()) ){
+                    if(entry1.getValue().split(",")[2].equals("1")){
+                        String patternString = "";
+                        String patternString2 = "";
 
-                    String patternString = "";
-                    String patternString2 = "";
-
-                    if(entry1.getValue().split(",")[1].equals("文本")){
-                        patternString = ".*";
-                    }
-
-                    if(entry1.getValue().split(",")[1].equals("数字")){
-                        patternString = "^[0-9]*$";
-                    }
-
-                    if(entry1.getValue().split(",")[1].equals("日期")){
-                        patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
-                    }
-
-                    Pattern pattern = Pattern.compile(patternString);
-                    Matcher matcher = pattern.matcher(jsonMap2.get(entry1.getKey()));
-                    boolean b= matcher.matches();
-
-
-                    if(entry1.getValue().split(",").length>=4){
-
-                        try {
-                            patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                        if(entry1.getValue().split(",")[1].equals("文本")){
+                            patternString = ".*";
                         }
 
-                        Pattern pattern2 = null;
-                        pattern2 = Pattern.compile( patternString2);
+                        if(entry1.getValue().split(",")[1].equals("数字")){
+                            patternString = "^[0-9]*$";
+                        }
 
-                        Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
-                        b= matcher2.matches();
-                    }
-                    JSONArray ja3 = new JSONArray();
-                    Object err = "";
-                    String val = jsonMap2.get(entry1.getKey());
-                    if(val==null)
-                        err = "null";
-                    else if("".equals(val))
-                        err="空值";
-                    else{
+                        String value = jsonMap2.get(entry1.getKey());
+                        Matcher matcher;
                         if(entry1.getValue().split(",")[1].equals("日期")){
-                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Date date = new Date(Long.valueOf(val));
-                            val =sdf.format(date);
+                            long dateTime = Long.valueOf(jsonMap2.get(entry1.getKey()));
+                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = new Date(dateTime);
+                            value =sdf.format(date);
+                            patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
+                            Pattern pattern = Pattern.compile(patternString);
+                            matcher = pattern.matcher(value);
+                        }else{
+                            Pattern pattern = Pattern.compile(patternString);
+                            matcher = pattern.matcher(value);
                         }
-                        err=val;
+                        boolean b= matcher.matches();
+
+
+                        if(entry1.getValue().split(",").length>=4){
+
+                            try {
+                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+
+                            Pattern pattern2 = null;
+                            pattern2 = Pattern.compile( patternString2);
+
+                            Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
+                            b= matcher2.matches();
+                        }
+                        JSONArray ja3 = new JSONArray();
+                        Object err = "";
+                        String val = jsonMap2.get(entry1.getKey());
+                        if(val==null)
+                            err = "null";
+                        else if("".equals(val))
+                            err="空值";
+                        else{
+                            if(entry1.getValue().split(",")[1].equals("日期")){
+                                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date date = new Date(Long.valueOf(val));
+                                val =sdf.format(date);
+                            }
+                            err=val;
+                        }
+                        ja3.add(b);
+                        ja3.add(val);
+                        ja3.add(err);
+                        ja2.add(ja3);
+                    }else{
+                        String val = jsonMap2.get(entry1.getKey());
+                        JSONArray ja3 = new JSONArray();
+                        ja3.add(true);
+                        ja3.add(val);
+                        ja3.add(val);
+                        ja2.add(ja3);
                     }
-                    ja3.add(b);
-                    ja3.add(val);
-                    ja3.add(err);
-                    ja2.add(ja3);
-                }else if(entry1.getValue().split(",")[2].toString().equals("0")){
-                    JSONArray ja3 = new JSONArray();
-                    ja3.add(true);
-                    ja3.add("");
-                    ja3.add("");
-                    ja2.add(ja3);
                 }else{
                     JSONArray ja3 = new JSONArray();
                     ja3.add(false);
