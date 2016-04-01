@@ -112,6 +112,7 @@ public class DataBaseHelper {
                 LOGGER.error("get metaData failed !", e);
             } finally {
                 closeResultSet(rs);
+                closeConnection(conn);
             }
         }
         return list;
@@ -141,6 +142,7 @@ public class DataBaseHelper {
                 LOGGER.error("get table fields failed !", e);
             } finally {
                 closeResultSet(rs);
+                closeConnection(conn);
             }
         }
         return list;
