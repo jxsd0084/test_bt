@@ -224,10 +224,15 @@ public class CEPTraceController {
                         String value = jsonMap2.get(entry1.getKey());
                         Matcher matcher;
                         if(entry1.getValue().split(",")[1].equals("日期")){
-                            long dateTime = Long.valueOf(jsonMap2.get(entry1.getKey()));
-                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-                            Date date = new Date(dateTime);
-                            value =sdf.format(date);
+                            try {
+                                long dateTime = Long.valueOf(jsonMap2.get(entry1.getKey()));
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date = new Date(dateTime);
+                                value = sdf.format(date);
+                            }catch (Exception e){
+                                //转化成日期类型时出错
+                                value = jsonMap2.get(entry1.getKey());
+                            }
                             patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
                             Pattern pattern = Pattern.compile(patternString);
                             matcher = pattern.matcher(value);
@@ -262,8 +267,12 @@ public class CEPTraceController {
                         else{
                             if(entry1.getValue().split(",")[1].equals("日期")){
                                 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                Date date = new Date(Long.valueOf(val));
-                                val =sdf.format(date);
+                                try {
+                                    Date date = new Date(Long.valueOf(val));
+                                    val =sdf.format(date);
+                                }catch (NumberFormatException e){
+
+                                }
                             }
                             err=val;
                         }
