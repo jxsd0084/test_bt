@@ -39,7 +39,7 @@ public class ParamController {
             jsonArray2.add(job.getId());
             jsonArray2.add(job.getBizName());
             jsonArray2.add(job.getConnection());
-            jsonArray2.add(job.getTableName());
+//            jsonArray2.add(job.getTableName());
             jsonArray2.add(job.getTargetName());
             jsonArray2.add(job.getTargetAddress());
             jsonArray2.add(job.getTargetPath());
