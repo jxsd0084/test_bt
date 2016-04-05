@@ -3,6 +3,7 @@ package com.github.trace.web;
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
+import com.github.trace.entity.M99Fields;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
@@ -29,11 +30,24 @@ public class DataTypeController {
     private DataTypeService dataTypeService;
 
     @RequestMapping("/listM99")
-    public String listM99(Model model) {
-//        JSONArray jsonArray = dataTypeService.getLevelOneFieldList2();
-//        ControllerHelper.setLeftNavigationTree(model, cepService, "");
-//        model.addAttribute("data", jsonArray);
-        return "data/data_list";
+    public String listM99(@RequestParam(name = "L1_id") int f1_id,
+                          @RequestParam(name = "L1_name") String f1_name,
+                          Model model) {
+        List<M99Fields> list = dataTypeService.getM99Fields(f1_name);
+        JSONArray jsonArray1 = new JSONArray();
+        for (M99Fields m99 : list) {
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(m99.getId());
+            jsonArray2.add(m99.getM1Name());
+            jsonArray2.add(m99.getFieldName());
+            jsonArray2.add(m99.getFieldDesc());
+
+            jsonArray1.add(jsonArray2);
+        }
+//        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
+        model.addAttribute("data", jsonArray1);
+        return "data/m99_list";
     }
 
     @RequestMapping("/listLevelOne")

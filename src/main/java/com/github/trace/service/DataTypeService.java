@@ -3,6 +3,7 @@ package com.github.trace.service;
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
+import com.github.trace.entity.M99Fields;
 import com.github.trace.mapper.LevelOneFieldsMapper;
 import com.github.trace.mapper.LevelTwoFieldsMapper;
 import com.github.trace.mapper.M99FieldsMapper;
@@ -38,7 +39,7 @@ public class DataTypeService {
    * @param m1Name
    * @return
      */
-  public int getM99Fields(String m1Name){
+  public List<M99Fields> getM99Fields(String m1Name){
     return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
   }
 

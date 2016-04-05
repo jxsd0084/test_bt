@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建M99字段配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建M99字段" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1'"/>
 </div>
 <br/>
 <div class="row">
@@ -26,10 +26,9 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-				<th>标识</th>
-                <th>名称</th>
-				<th>描述</th>
-				<th>M99扩展</th>
+                <th>M1标识</th>
+				<th>M99字段</th>
+				<th>M99描述</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -55,22 +54,12 @@
             fixedHeader: fixedHeaderObject,
             language: lang,
             dom: bootstrapDom,
-            order: [[2, 'desc'], [3, 'desc']],
+            order: [[0, 'asc'], [2, 'asc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
                 {
-                    targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
-                    }
-                },
-                {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: 5, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
                     }
                 }
