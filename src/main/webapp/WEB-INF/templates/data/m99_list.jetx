@@ -13,7 +13,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active">${parent_name}<font color="blue">M99字段配置</font></li>
+        <li class="active"><a href="${CONTEXT_PATH}/dataType/listLevelOne"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
