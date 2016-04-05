@@ -31,9 +31,9 @@ public class DataTypeController {
 
     @RequestMapping("/listM99")
     public String listM99(@RequestParam(name = "L1_id") int f1_id,
-                          @RequestParam(name = "L1_name") String f1_name,
+                          @RequestParam(name = "L1_tag") String f1_tag,
                           Model model) {
-        JSONArray jsonArray = getM99FieldsList(f1_name);
+        JSONArray jsonArray = getM99FieldsList(f1_tag);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
         return "data/m99_list";
