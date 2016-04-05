@@ -28,14 +28,18 @@ public class DataTypeController {
     @Autowired
     private DataTypeService dataTypeService;
 
+    @RequestMapping("/listM99")
+    public String listM99(Model model) {
+//        JSONArray jsonArray = dataTypeService.getLevelOneFieldList2();
+//        ControllerHelper.setLeftNavigationTree(model, cepService, "");
+//        model.addAttribute("data", jsonArray);
+        return "data/data_list";
+    }
+
     @RequestMapping("/listLevelOne")
     public String getLeveOneFieldsList(Model model) {
-        List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
-
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-
+        JSONArray jsonArray = dataTypeService.getLevelOneFieldList2();
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-
         model.addAttribute("data", jsonArray);
         return "data/data_list";
     }

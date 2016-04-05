@@ -1,9 +1,11 @@
 package com.github.trace.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.mapper.LevelOneFieldsMapper;
 import com.github.trace.mapper.LevelTwoFieldsMapper;
+import com.github.trace.mapper.M99FieldsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,26 @@ public class DataTypeService {
   private LevelOneFieldsMapper levelOneFieldMapper;
   @Autowired
   private LevelTwoFieldsMapper levelTwoFieldMapper;
+  @Autowired
+  private M99FieldsMapper      m99FieldsMapper;
+
+  /**
+   * 根据M1字段获取所有M99扩展字段的数量
+   * @param m1Name
+   * @return
+     */
+  public int getM99FieldsCount(String m1Name){
+    return m99FieldsMapper.getM99FieldsCountByM1Name(m1Name);
+  }
+
+  /**
+   * 根据M1字段获取所有M99扩展字段的数量
+   * @param m1Name
+   * @return
+     */
+  public int getM99Fields(String m1Name){
+    return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
+  }
 
    /**
    * 获取所有的 一级字段 列表
@@ -95,16 +117,10 @@ public class DataTypeService {
    * 级联更新二级字段
    */
   public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
-
-//    SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-//      SqlSessionFactory sessionFactory = factoryBean.getObject();
-//      SqlSession sqlSession = sessionFactory.openSession(false);
-
       int res = updateLevelOne(levelOneFields);
       if (res == 1) {
         return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
       }
-
     return 0;
   }
 
@@ -122,6 +138,23 @@ public class DataTypeService {
       res = updateLevelTwo(fields);
     }
     return res;
+  }
+
+  public JSONArray getLevelOneFieldList2() {
+    List<LevelOneFields> list = getLevelOneFieldList();
+    JSONArray jsonArray1 = new JSONArray();
+    for (LevelOneFields levelOneFields : list ) {
+        JSONArray jsonArray2 = new JSONArray();
+        String tagName = levelOneFields.getLevel1FieldTag();
+        jsonArray2.add(levelOneFields.getId());
+        jsonArray2.add(levelOneFields.getLevel1FieldName());
+        jsonArray2.add(levelOneFields.getLevel1FieldDesc());
+        jsonArray2.add(tagName);
+        int m99Count = getM99FieldsCount(tagName);  // M99的扩展字段
+        jsonArray2.add(m99Count);
+        jsonArray1.add(jsonArray2);
+    }
+    return jsonArray1;
   }
 
 }
