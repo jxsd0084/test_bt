@@ -17,136 +17,156 @@ import java.util.List;
 @Service
 public class DataTypeService {
 
-  @Autowired
-  private LevelOneFieldsMapper levelOneFieldMapper;
-  @Autowired
-  private LevelTwoFieldsMapper levelTwoFieldMapper;
-  @Autowired
-  private M99FieldsMapper      m99FieldsMapper;
+    @Autowired
+    private LevelOneFieldsMapper levelOneFieldMapper;
+    @Autowired
+    private LevelTwoFieldsMapper levelTwoFieldMapper;
+    @Autowired
+    private M99FieldsMapper m99FieldsMapper;
 
-  /**
-   * 根据M1字段获取所有M99扩展字段的数量
-   * @param m1Name
-   * @return
+    /**
+     * 根据M1字段获取所有M99扩展字段的数量
+     *
+     * @param m1Name
+     * @return
      */
-  public int getM99FieldsCount(String m1Name){
-    return m99FieldsMapper.getM99FieldsCountByM1Name(m1Name);
-  }
+    public int getM99FieldsCount(String m1Name) {
+        return m99FieldsMapper.getM99FieldsCountByM1Name(m1Name);
+    }
 
-  /**
-   * 根据M1字段获取所有M99扩展字段的数量
-   * @param m1Name
-   * @return
+    /**
+     * 根据M1字段获取所有M99扩展字段的数量
+     *
+     * @param m1Name
+     * @return
      */
-  public List<M99Fields> getM99Fields(String m1Name){
-    return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
-  }
+    public List<M99Fields> getM99Fields(String m1Name) {
+        return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
+    }
 
-  /**
-   * 根据Id查询M99字段
-   * @param id
-   * @return
+    /**
+     * 更新M99字段
+     * @param m99Fields
+     * @return
      */
-  public M99Fields getM99FieldsById(int id){
-    return m99FieldsMapper.findById(id);
-  }
+    public int updateM99Fields(M99Fields m99Fields) {
+        return m99FieldsMapper.update(m99Fields);
+    }
 
-   /**
-   * 获取所有的 一级字段 列表
-   * @return 一级字段列表
+    /**
+     * 根据Id查询M99字段
+     *
+     * @param id
+     * @return
      */
-  public List<LevelOneFields> getLevelOneFieldList() {
-    return levelOneFieldMapper.findAll();
-  }
+    public M99Fields getM99FieldsById(int id) {
+        return m99FieldsMapper.findById(id);
+    }
 
-  /**
-   * 根据一级字段ID查询 二级字段
-   * @param id 二级字段ID
-   * @return 二级字段
+    /**
+     * 获取所有的 一级字段 列表
+     *
+     * @return 一级字段列表
      */
-  public LevelOneFields getLevelOneFieldById(int id) {
-    return levelOneFieldMapper.findById(id);
-  }
+    public List<LevelOneFields> getLevelOneFieldList() {
+        return levelOneFieldMapper.findAll();
+    }
 
-  /***
-   * 根据一级字段ID获取 二级字段 列表
-   * @param id 一级字段ID
+    /**
+     * 根据一级字段ID查询 二级字段
+     *
+     * @param id 二级字段ID
+     * @return 二级字段
      */
-  public List<LevelTwoFields> getLevelTwoFieldList(int id) {
-    return levelTwoFieldMapper.findLevelTwoFieldsListById(id);
-  }
+    public LevelOneFields getLevelOneFieldById(int id) {
+        return levelOneFieldMapper.findById(id);
+    }
 
-  /**
-   * 根据二级字段ID查询 二级字段
-   * @param id 二级字段ID
-   * @return 二级字段
+    /***
+     * 根据一级字段ID获取 二级字段 列表
+     *
+     * @param id 一级字段ID
      */
-  public LevelTwoFields getLevelTwoFieldById(int id) {
-    return levelTwoFieldMapper.findById(id);
-  }
+    public List<LevelTwoFields> getLevelTwoFieldList(int id) {
+        return levelTwoFieldMapper.findLevelTwoFieldsListById(id);
+    }
 
-  /**
-   * 插入一级新字段
-   * @param levelOneFields
-   * @return
+    /**
+     * 根据二级字段ID查询 二级字段
+     *
+     * @param id 二级字段ID
+     * @return 二级字段
      */
-  public int addLevelOneFields(LevelOneFields levelOneFields) {
-    return levelOneFieldMapper.insert(levelOneFields);
-  }
+    public LevelTwoFields getLevelTwoFieldById(int id) {
+        return levelTwoFieldMapper.findById(id);
+    }
 
-  /**
-   * 插入二级新字段
-   * @param levelTwoFields
-   * @return
+    /**
+     * 插入一级新字段
+     *
+     * @param levelOneFields
+     * @return
      */
-  public int addLevelTwoFields(LevelTwoFields levelTwoFields) {
-    return levelTwoFieldMapper.insert(levelTwoFields);
-  }
+    public int addLevelOneFields(LevelOneFields levelOneFields) {
+        return levelOneFieldMapper.insert(levelOneFields);
+    }
 
-
-  /**
-   * 更新一级字段
-   * @param levelOneFields
-   * @return
+    /**
+     * 插入二级新字段
+     *
+     * @param levelTwoFields
+     * @return
      */
-  public int updateLevelOne(LevelOneFields levelOneFields) {
-    return levelOneFieldMapper.update(levelOneFields);
-  }
+    public int addLevelTwoFields(LevelTwoFields levelTwoFields) {
+        return levelTwoFieldMapper.insert(levelTwoFields);
+    }
 
-  /**
-   * 更新一级字段
-   * @param levelTwoFields
-   * @return
+
+    /**
+     * 更新一级字段
+     *
+     * @param levelOneFields
+     * @return
      */
-  public int updateLevelTwo(LevelTwoFields levelTwoFields) {
-    return levelTwoFieldMapper.update(levelTwoFields);
-  }
+    public int updateLevelOne(LevelOneFields levelOneFields) {
+        return levelOneFieldMapper.update(levelOneFields);
+    }
 
-  /**
-   * 级联更新二级字段
-   */
-  public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
-      int res = updateLevelOne(levelOneFields);
-      if (res == 1) {
-          return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
-      }
-    return 0;
-  }
+    /**
+     * 更新一级字段
+     *
+     * @param levelTwoFields
+     * @return
+     */
+    public int updateLevelTwo(LevelTwoFields levelTwoFields) {
+        return levelTwoFieldMapper.update(levelTwoFields);
+    }
 
-  private int updateLevelTwoByL1Obj(int l1_id, String l1_tag, String l1_name) {
-      int res = 0;
-      List<LevelTwoFields> list = getLevelTwoFieldList(l1_id);
-      if(list.size() == 0){ // 有一级字段,没有二级字段
-          res = 1;
-          return res;
-      }
-      for (int i = 0; i < list.size(); i++) {
-          LevelTwoFields fields = list.get(i);
-          fields.setLevel1FieldTag(l1_tag);
-          fields.setLevel1FieldName(l1_name);
-          res = updateLevelTwo(fields);
-      }
-      return res;
-  }
+    /**
+     * 级联更新二级字段
+     */
+    public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
+        int res = updateLevelOne(levelOneFields);
+        if (res == 1) {
+            return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
+        }
+        return 0;
+    }
+
+    private int updateLevelTwoByL1Obj(int l1_id, String l1_tag, String l1_name) {
+        int res = 0;
+        List<LevelTwoFields> list = getLevelTwoFieldList(l1_id);
+        if (list.size() == 0) { // 有一级字段,没有二级字段
+            res = 1;
+            return res;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            LevelTwoFields fields = list.get(i);
+            fields.setLevel1FieldTag(l1_tag);
+            fields.setLevel1FieldName(l1_name);
+            res = updateLevelTwo(fields);
+        }
+        return res;
+    }
 
 }

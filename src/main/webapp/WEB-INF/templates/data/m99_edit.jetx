@@ -54,9 +54,11 @@
 
         var value1 = $("#name1").val();
         var value2 = $("#name2").val();
+        var value3 = $("#name3").val();
 
         if(value1 == '' ||
-           value2 == ''
+           value2 == '' ||
+           value3 == ''
         ){
            msg = '必填项不能为空值!'
            result = false;
@@ -74,9 +76,9 @@
         $("#confirm").on('click', function () {
 
             var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelOne';
+            var url = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
             var data = '';
-            var id = '${id}';
+            var id = '${L1_id}';
             var msg = '';
 
             var value1 = $("#name1").val();
@@ -87,16 +89,16 @@
                 msg  = '修改';
                 data = {
                     L1_tag              :value1,
-                    L1_name             :value2,
-                    L1_desc             :value3,
+                    F1_name             :value2,
+                    F1_desc             :value3,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
                     L1_tag              :value1,
-                    L1_name             :value2,
-                    L1_desc             :value3,
+                    F1_name             :value2,
+                    F1_desc             :value3,
                 };
             }
 

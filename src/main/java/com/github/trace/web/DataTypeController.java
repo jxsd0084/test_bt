@@ -70,6 +70,24 @@ public class DataTypeController {
         return "data/m99_edit";
     }
 
+    @RequestMapping("/modifyM99")
+    @ResponseBody
+    public Map modifyM99(@RequestParam("L1_tag") String f1_tag,
+                         @RequestParam("F1_name") String f1_name,
+                         @RequestParam("F1_desc") String f1_desc,
+                         @RequestParam("id") int id) {
+        M99Fields m99Fields = new M99Fields();
+        m99Fields.setId(id);
+        m99Fields.setM1Name(f1_tag);
+        m99Fields.setFieldName(f1_name);
+        m99Fields.setFieldDesc(f1_desc);
+
+        int res = dataTypeService.updateM99Fields(m99Fields);
+
+        return ControllerHelper.returnResponseVal(res, "更新");
+
+    }
+
     @RequestMapping("/listLevelOne")
     public String getLeveOneFieldsList(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
