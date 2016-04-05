@@ -200,9 +200,9 @@ public class DataTypeController {
             JSONArray jsonArray2 = new JSONArray();
             String tagName = levelOneFields.getLevel1FieldTag();
             jsonArray2.add(levelOneFields.getId());
-            jsonArray2.add(levelOneFields.getLevel1FieldName());
-            jsonArray2.add(levelOneFields.getLevel1FieldDesc());
-            jsonArray2.add(tagName);
+            jsonArray2.add(tagName);                                    // 标识 样例:AV
+            jsonArray2.add(levelOneFields.getLevel1FieldName());        // 名称 样例:音视频
+            jsonArray2.add(levelOneFields.getLevel1FieldDesc());        // 描述
             int m99Count = dataTypeService.getM99FieldsCount(tagName);  // M99的扩展字段
             jsonArray2.add(m99Count);
             jsonArray1.add(jsonArray2);
