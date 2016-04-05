@@ -33,26 +33,15 @@ public class DataTypeController {
     public String listM99(@RequestParam(name = "L1_id") int f1_id,
                           @RequestParam(name = "L1_name") String f1_name,
                           Model model) {
-        List<M99Fields> list = dataTypeService.getM99Fields(f1_name);
-        JSONArray jsonArray1 = new JSONArray();
-        for (M99Fields m99 : list) {
-            JSONArray jsonArray2 = new JSONArray();
-            jsonArray2.add(m99.getId());
-            jsonArray2.add(m99.getM1Name());
-            jsonArray2.add(m99.getFieldName());
-            jsonArray2.add(m99.getFieldDesc());
-
-            jsonArray1.add(jsonArray2);
-        }
-//        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
+        JSONArray jsonArray = getM99FieldsList(f1_name);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-        model.addAttribute("data", jsonArray1);
+        model.addAttribute("data", jsonArray);
         return "data/m99_list";
     }
 
     @RequestMapping("/listLevelOne")
     public String getLeveOneFieldsList(Model model) {
-        JSONArray jsonArray = dataTypeService.getLevelOneFieldList2();
+        JSONArray jsonArray = getLevelOneFieldList();
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
         return "data/data_list";
@@ -204,4 +193,39 @@ public class DataTypeController {
 
     }
 
+    public JSONArray getLevelOneFieldList() {
+        List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
+        JSONArray jsonArray1 = new JSONArray();
+        for (LevelOneFields levelOneFields : list ) {
+            JSONArray jsonArray2 = new JSONArray();
+            String tagName = levelOneFields.getLevel1FieldTag();
+            jsonArray2.add(levelOneFields.getId());
+            jsonArray2.add(levelOneFields.getLevel1FieldName());
+            jsonArray2.add(levelOneFields.getLevel1FieldDesc());
+            jsonArray2.add(tagName);
+            int m99Count = dataTypeService.getM99FieldsCount(tagName);  // M99的扩展字段
+            jsonArray2.add(m99Count);
+            jsonArray1.add(jsonArray2);
+        }
+        return jsonArray1;
+    }
+
+    private JSONArray getM99FieldsList(String f1_name) {
+        List<M99Fields> list = dataTypeService.getM99Fields(f1_name);
+        JSONArray jsonArray1 = new JSONArray();
+        for (M99Fields m99 : list) {
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(m99.getId());
+            jsonArray2.add(m99.getM1Name());
+            jsonArray2.add(m99.getFieldName());
+            jsonArray2.add(m99.getFieldDesc());
+
+            jsonArray1.add(jsonArray2);
+        }
+        return jsonArray1;
+    }
+
 }
+
+
+

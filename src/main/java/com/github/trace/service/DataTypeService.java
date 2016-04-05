@@ -1,6 +1,5 @@
 package com.github.trace.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.entity.M99Fields;
@@ -139,23 +138,6 @@ public class DataTypeService {
       res = updateLevelTwo(fields);
     }
     return res;
-  }
-
-  public JSONArray getLevelOneFieldList2() {
-    List<LevelOneFields> list = getLevelOneFieldList();
-    JSONArray jsonArray1 = new JSONArray();
-    for (LevelOneFields levelOneFields : list ) {
-        JSONArray jsonArray2 = new JSONArray();
-        String tagName = levelOneFields.getLevel1FieldTag();
-        jsonArray2.add(levelOneFields.getId());
-        jsonArray2.add(levelOneFields.getLevel1FieldName());
-        jsonArray2.add(levelOneFields.getLevel1FieldDesc());
-        jsonArray2.add(tagName);
-        int m99Count = getM99FieldsCount(tagName);  // M99的扩展字段
-        jsonArray2.add(m99Count);
-        jsonArray1.add(jsonArray2);
-    }
-    return jsonArray1;
   }
 
 }

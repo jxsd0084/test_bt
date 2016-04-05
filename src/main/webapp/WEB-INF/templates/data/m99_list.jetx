@@ -40,8 +40,6 @@
 <br/>
 #end
 #tag layout_block("scriptContent")
-<!-- 隐藏域 -->
-<input type="hidden" id="id" name="id" value="${id}" />
 <script>
 	var data = ${data}
 	$(document).ready(function () {
@@ -58,6 +56,10 @@
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
+                {
+                    sDefaultContent: ' - ',
+                    aTargets: [ '_all' ]
+                },
                 {
                     targets: 4, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
