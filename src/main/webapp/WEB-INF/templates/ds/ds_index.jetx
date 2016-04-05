@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">创建作业 - 页</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">创建作业 - 页</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
