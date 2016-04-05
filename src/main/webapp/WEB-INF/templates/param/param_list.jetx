@@ -26,6 +26,7 @@
 			<thead>
 			<tr>
                 <th style="width: 40px">编号</th>
+                <th style="width: 60px">任务名称</th>
                 <th style="width: 40px">业务名称</th>
                 <th>数据库信息</th>
 ##                <th>表信息</th>
@@ -135,8 +136,8 @@
             data: data,
             columnDefs: [
                 {
-                    targets: 7, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/param/edit?id=' + full[0] + '" >修改</a>';
+                    targets: 8, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/param/edit?id=' + full[0] + '&tag=modify" >修改</a>';
                     }
                 }
             ]
