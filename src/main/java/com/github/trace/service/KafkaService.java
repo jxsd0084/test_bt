@@ -8,7 +8,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.autoconf.ConfigFactory;
 import com.github.trace.entity.KafkaMessageAndOffset;
 import com.github.trace.intern.KafkaUtil;
@@ -71,7 +70,6 @@ public class KafkaService {
     Set<KafkaMessageAndOffset> fetchedData = Sets.newHashSet();
 
     TreeMap<Integer, PartitionMetadata> metaDatas = KafkaUtil.findLeader(brokers, port, topic);
-
     for (Map.Entry<Integer, PartitionMetadata> entry : metaDatas.entrySet()) {
       int partition = entry.getKey();
       String leadBroker = entry.getValue().leader().host();
