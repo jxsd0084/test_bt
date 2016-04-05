@@ -54,6 +54,22 @@ public class DataTypeController {
         return "data/m99_edit";
     }
 
+    @RequestMapping("/editM99")
+    public String editM99(@RequestParam(name = "tag") String tag,
+                          @RequestParam(name = "L1_id") int f1_id,
+                          @RequestParam(name = "L1_tag") String f1_tag,
+                          Model model) {
+        M99Fields m99 = dataTypeService.getM99FieldsById(f1_id);
+        model.addAttribute("obj", m99);
+
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+
+        model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L1_tag", f1_tag);
+        model.addAttribute("tag", tag);
+        return "data/m99_edit";
+    }
+
     @RequestMapping("/listLevelOne")
     public String getLeveOneFieldsList(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();

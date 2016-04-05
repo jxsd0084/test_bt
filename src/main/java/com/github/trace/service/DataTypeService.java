@@ -42,6 +42,15 @@ public class DataTypeService {
     return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
   }
 
+  /**
+   * 根据Id查询M99字段
+   * @param id
+   * @return
+     */
+  public M99Fields getM99FieldsById(int id){
+    return m99FieldsMapper.findById(id);
+  }
+
    /**
    * 获取所有的 一级字段 列表
    * @return 一级字段列表
@@ -119,25 +128,25 @@ public class DataTypeService {
   public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
       int res = updateLevelOne(levelOneFields);
       if (res == 1) {
-        return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
+          return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
       }
     return 0;
   }
 
   private int updateLevelTwoByL1Obj(int l1_id, String l1_tag, String l1_name) {
-    int res = 0;
-    List<LevelTwoFields> list = getLevelTwoFieldList(l1_id);
-    if(list.size() == 0){ // 有一级字段,没有二级字段
-      res = 1;
+      int res = 0;
+      List<LevelTwoFields> list = getLevelTwoFieldList(l1_id);
+      if(list.size() == 0){ // 有一级字段,没有二级字段
+          res = 1;
+          return res;
+      }
+      for (int i = 0; i < list.size(); i++) {
+          LevelTwoFields fields = list.get(i);
+          fields.setLevel1FieldTag(l1_tag);
+          fields.setLevel1FieldName(l1_name);
+          res = updateLevelTwo(fields);
+      }
       return res;
-    }
-    for (int i = 0; i < list.size(); i++) {
-      LevelTwoFields fields = list.get(i);
-      fields.setLevel1FieldTag(l1_tag);
-      fields.setLevel1FieldName(l1_name);
-      res = updateLevelTwo(fields);
-    }
-    return res;
   }
 
 }

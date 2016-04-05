@@ -18,15 +18,15 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">M99字段</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.level1FieldName}"/>
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.fieldName}"/>
         </div>
-        <p class="help-block col-md-offset-2">如：移动端(M1/M2/M3...)</p>
+        <p class="help-block col-md-offset-2">如：移动端(M1,M2,M3...)</p>
       </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">M99描述</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.level1FieldDesc}"/>
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.fieldDesc}"/>
         </div>
       </div>
 
