@@ -36,7 +36,22 @@ public class DataTypeController {
         JSONArray jsonArray = getM99FieldsList(f1_tag);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
+        model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L1_tag", f1_tag);
         return "data/m99_list";
+    }
+
+    @RequestMapping("/newM99")
+    public String newM99(@RequestParam(name = "tag") String tag,
+                         @RequestParam(name = "L1_id") String f1_id,
+                         @RequestParam(name = "L1_tag") String f1_tag,
+                         Model model) {
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+        model.addAttribute("tag", tag);
+        model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L1_tag", f1_tag);
+
+        return "data/m99_edit";
     }
 
     @RequestMapping("/listLevelOne")

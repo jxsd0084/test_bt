@@ -1,0 +1,131 @@
+#set(title="M99字段编辑")
+#set(navbar="M99Edit")
+#tag layout_block("bodyContent")
+<div class="container">
+
+  <legend>数据类型配置项</legend>
+
+  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+    <fieldset>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">M1标识</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name1" id="name1" readonly="true" value="${L1_tag}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">M99字段</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.level1FieldName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：移动端(M1/M2/M3...)</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">M99描述</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.level1FieldDesc}"/>
+        </div>
+      </div>
+
+      <!-- 确认按钮 -->
+      <div class="form-group well well-sm">
+        <div class="col-md-offset-2 col-md-10 col-lg-8">
+          <p align="lefts" class="hide" id="resultInfo"></p>
+          <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
+          <input id="cancel_btn" class="btn" type="button" value="返回"/>
+        </div>
+      </div>
+
+    </fieldset>
+  </form>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script>
+
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}';
+
+    var myValidator = function(){
+        var msg = '';
+        var result = true;
+
+        var value1 = $("#name1").val();
+        var value2 = $("#name2").val();
+
+        if(value1 == '' ||
+           value2 == ''
+        ){
+           msg = '必填项不能为空值!'
+           result = false;
+        }
+
+        if(!result){
+           showResult(msg);
+        }
+
+        return result;
+    }
+
+    $(document).ready(function () {
+
+        $("#confirm").on('click', function () {
+
+            var tag = '${tag}';
+            var url = '${CONTEXT_PATH}/dataType/' + tag + 'LevelOne';
+            var data = '';
+            var id = '${id}';
+            var msg = '';
+
+            var value1 = $("#name1").val();
+            var value2 = $("#name2").val();
+            var value3 = $("#name3").val();
+
+            if(tag == 'modify'){
+                msg  = '修改';
+                data = {
+                    L1_tag              :value1,
+                    L1_name             :value2,
+                    L1_desc             :value3,
+                    id                  :id
+                };
+            }else if(tag == 'add'){     // 新增不需要指定主键ID
+                msg  = '添加';
+                data = {
+                    L1_tag              :value1,
+                    L1_name             :value2,
+                    L1_desc             :value3,
+                };
+            }
+
+            if(myValidator()){
+                $.ajax({
+                    url                 :url,
+                    contentType         :"application/json",
+                    data                :data,
+                    dataType            :"text",
+                    type                :"GET",
+                    success:function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            forward(msg + "成功!", GLOBAL_URL);
+                        } else {
+                            showResult("警告：" + json.info, false);
+                        }
+                    }
+                });
+            }
+
+        })
+
+        $("#cancel_btn").on('click', function () {
+            window.location.href = GLOBAL_URL;
+        })
+
+    });
+
+</script>
+#end
+#include("/include/form-layout.jetx")

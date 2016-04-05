@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建M99字段" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建M99字段" onclick="window.location.href='${CONTEXT_PATH}/dataType/newM99?L1_id=${L1_id}&L1_tag=${L1_tag}&tag=add'"/>
 </div>
 <br/>
 <div class="row">
