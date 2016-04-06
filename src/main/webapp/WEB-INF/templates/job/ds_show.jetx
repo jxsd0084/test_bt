@@ -1,0 +1,101 @@
+#set(title="查看数据源")
+#set(navbar="dataSourceEdit")
+#tag layout_block("bodyContent")
+<div class="container">
+
+  <legend>数据源信息</legend>
+
+  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+    <fieldset>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">数据库类型</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name1" id="name1" style="width: 140px">
+                <option value="" default> - 必选 - </option>
+                <option value="SQLServer" #if(obj.dbType == 'SQLServer')selected#end>SQLServer</option>
+                <option value="MySQL"     #if(obj.dbType == 'MySQL')    selected#end>MySQL</option>
+                <option value="MongoDB"   #if(obj.dbType == 'MongoDB')  selected#end>MongoDB</option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">链接名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.name}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">驱动名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.dbDriver}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">数据库链接</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name4" id="name4" placeholder="选填" value="${obj.dbUrl}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">端口号</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value="${obj.dbPort}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">数据库名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name6" id="name6" placeholder="选填" value="${obj.dbName}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">用户名</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name7" id="name7" placeholder="选填" value="${obj.dbUsername}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">密码</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name8" id="name8" placeholder="选填" value="${obj.dbPassword}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+        <div class="form-group well well-sm">
+            <div class="col-md-offset-2 col-md-10 col-lg-8">
+                <input id="cancel_btn" class="btn" type="button" value="返回"/>
+            </div>
+        </div>
+
+    </fieldset>
+  </form>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script>
+
+    var GLOBAL_URL = '${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}';
+
+    $("#cancel_btn").on('click', function () {
+        window.location.href = GLOBAL_URL;
+    })
+
+</script>
+#end
+#include("/include/form-layout.jetx")
