@@ -118,7 +118,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelOne")
-    public String getLeveOneFieldsList(Model model) {
+    public String getLevelOneFieldsList(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
@@ -126,7 +126,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLeveTwoFieldsList(@RequestParam(name = "L1_id")   int    l1_id,
+    public String getLevelTwoFieldsList(@RequestParam(name = "L1_id")   int    l1_id,
                                        @RequestParam(name = "L1_tag")  String l1_tag,
                                        @RequestParam(name = "L1_name") String l1_name,
                                        Model model) {
@@ -178,7 +178,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/new")
-    public String newConfig(@RequestParam(name = "tag") String tag,
+    public String newLevel(@RequestParam(name = "tag") String tag,
                             @RequestParam(name = "lev") int lev,
                             @RequestParam(name = "L1_id", required = false) String l1_id,
                             @RequestParam(name = "L1_tag", required = false) String l1_tag,
@@ -209,7 +209,7 @@ public class DataTypeController {
         levelOneFields.setLevel1FieldName(l1_name);
         levelOneFields.setLevel1FieldDesc(l1_desc);
 
-        int res = dataTypeService.updateLevelTwoByCascade(levelOneFields);
+        int res = dataTypeService.updateFieldsByCascade(levelOneFields);
 
         return ControllerHelper.returnResponseVal(res, "更新");
 

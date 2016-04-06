@@ -73,6 +73,17 @@ public class DataTypeService {
     }
 
     /**
+     * 更新M99字段对应的M1Name
+     * @param levelOneFields
+     * @return
+     */
+    private int updateM99FieldsByM1Name(LevelOneFields levelOneFields) {
+        String tagName = levelOneFields.getLevel1FieldTag();
+        int id = levelOneFields.getId().intValue();
+        return m99FieldsMapper.updateM99FieldsByM1Name(tagName, id);
+    }
+
+    /**
      * 获取所有的 一级字段 列表
      *
      * @return 一级字段列表
@@ -130,7 +141,6 @@ public class DataTypeService {
         return levelTwoFieldMapper.insert(levelTwoFields);
     }
 
-
     /**
      * 更新一级字段
      *
@@ -142,7 +152,7 @@ public class DataTypeService {
     }
 
     /**
-     * 更新一级字段
+     * 更新二级字段
      *
      * @param levelTwoFields
      * @return
@@ -152,11 +162,24 @@ public class DataTypeService {
     }
 
     /**
+     * 级联更新数据
+     * @param levelOneFields
+     * @return
+     */
+    public int updateFieldsByCascade(LevelOneFields levelOneFields) {
+        int res = updateLevelTwoByCascade(levelOneFields);
+        if (res > 0) {
+            return updateM99FieldsByM1Name(levelOneFields);
+        }
+        return 0;
+    }
+
+    /**
      * 级联更新二级字段
      */
     public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
         int res = updateLevelOne(levelOneFields);
-        if (res == 1) {
+        if (res > 0) {
             return updateLevelTwoByL1Obj(levelOneFields.getId(), levelOneFields.getLevel1FieldTag(), levelOneFields.getLevel1FieldName());
         }
         return 0;
@@ -177,5 +200,6 @@ public class DataTypeService {
         }
         return res;
     }
+
 
 }
