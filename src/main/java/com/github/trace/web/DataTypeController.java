@@ -55,15 +55,17 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editM99")
-    public String editM99(@RequestParam(name = "tag") String tag,
-                          @RequestParam(name = "L1_id") int f1_id,
+    public String editM99(@RequestParam(name = "tag")    String tag,
                           @RequestParam(name = "L1_tag") String f1_tag,
+                          @RequestParam(name = "L1_id")  int    f1_id,
+                          @RequestParam(name = "id")     int    id,
                           Model model) {
         M99Fields m99 = dataTypeService.getM99FieldsById(f1_id);
         model.addAttribute("obj", m99);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
+        model.addAttribute("id", id);
         model.addAttribute("L1_id", f1_id);
         model.addAttribute("L1_tag", f1_tag);
         model.addAttribute("tag", tag);
@@ -93,12 +95,14 @@ public class DataTypeController {
 
     @RequestMapping("/addM99")
     @ResponseBody
-    public Map addM99(@RequestParam("L1_tag")  String f1_tag,
+    public Map addM99(@RequestParam("L1_id")   int    f1_id,
+                      @RequestParam("L1_tag")  String f1_tag,
                       @RequestParam("F1_name") String f1_name,
                       @RequestParam("F1_desc") String f1_desc,
                       @RequestParam("F1_type") String f1_type,
                       @RequestParam("F1_regx") String f1_regx) {
         M99Fields m99Fields = new M99Fields();
+        m99Fields.setM1Id(f1_id);
         m99Fields.setM1Name(f1_tag);
         m99Fields.setFieldName(f1_name);
         m99Fields.setFieldDesc(f1_desc);
@@ -288,10 +292,11 @@ public class DataTypeController {
         for (M99Fields m99 : list) {
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(m99.getId());
-            jsonArray2.add(m99.getM1Name());                            // M1字段  样例:AV
-            jsonArray2.add(m99.getFieldName());                         // 字段名称 样例:M2
-            jsonArray2.add(m99.getFieldDesc());                         // 字段描述 样例:音视频2
-            jsonArray2.add(m99.getFieldType());                         // 字段类型 样例:文本、日期、数字
+            jsonArray2.add(m99.getM1Id());                              // M1-Id       样例:1
+            jsonArray2.add(m99.getM1Name());                            // M1          样例:AV
+            jsonArray2.add(m99.getFieldName());                         // 字段名称     样例:M2
+            jsonArray2.add(m99.getFieldDesc());                         // 字段描述     样例:音视频2
+            jsonArray2.add(m99.getFieldType());                         // 字段类型     样例:文本、日期、数字
             jsonArray2.add(m99.getFieldRegex());                        // 正则表达式
 
             jsonArray1.add(jsonArray2);
