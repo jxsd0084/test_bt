@@ -118,7 +118,7 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelOne")
-    public String getLevelOneFieldsList(Model model) {
+    public String listLevelOneFields(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
@@ -126,15 +126,14 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLevelTwoFieldsList(@RequestParam(name = "L1_id")   int    l1_id,
+    public String listLevelTwoFields(@RequestParam(name = "L1_id")   int    l1_id,
                                        @RequestParam(name = "L1_tag")  String l1_tag,
                                        @RequestParam(name = "L1_name") String l1_name,
                                        Model model) {
-        List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(l1_id);
-
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
+
+        JSONArray jsonArray = getLevelTwoFieldList(l1_id);
 
         model.addAttribute("data", jsonArray);
         model.addAttribute("L1_id", l1_id);
@@ -271,6 +270,10 @@ public class DataTypeController {
 
     }
 
+    /**
+     * 一级字段列表
+     * @return
+     */
     public JSONArray getLevelOneFieldList() {
         List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
         JSONArray jsonArray1 = new JSONArray();
@@ -288,6 +291,33 @@ public class DataTypeController {
         return jsonArray1;
     }
 
+    /**
+     * 二级字段列表
+     * @param l1_id
+     * @return
+     */
+    private JSONArray getLevelTwoFieldList(@RequestParam(name = "L1_id") int l1_id) {
+        List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(l1_id);
+        JSONArray jsonArray1 = new JSONArray();
+        for (LevelTwoFields levelTwoFields : list) {
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(levelTwoFields.getId());                     // 编号
+            jsonArray2.add("");                                         // 占位
+            jsonArray2.add(levelTwoFields.getLevel1FieldName());        // 一级组件名称
+            jsonArray2.add(levelTwoFields.getLevel2FieldName());        // 二级组件名称 样例:音视频
+            jsonArray2.add(levelTwoFields.getLevel2FieldDesc());        // 二级组件描述 样例:点击多人通话按钮
+            jsonArray2.add(levelTwoFields.getLevel1FieldTag());         // 一级组件标识 样例:AV
+
+            jsonArray1.add(jsonArray2);
+        }
+        return jsonArray1;
+    }
+
+    /**
+     * M99字段列表
+     * @param f1_name
+     * @return
+     */
     private JSONArray getM99FieldsList(String f1_name) {
         List<M99Fields> list = dataTypeService.getM99Fields(f1_name);
         JSONArray jsonArray1 = new JSONArray();
