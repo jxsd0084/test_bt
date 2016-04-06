@@ -64,8 +64,6 @@
 </div>
 #end
 #tag layout_block("scriptContent")
-<!-- 隐藏域 -->
-<input type="hidden" id="name6" name="name6" value="${L1_id}" />
 <script>
 
     var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}';
@@ -99,39 +97,39 @@
 
         $("#confirm").on('click', function () {
 
-            var tag  = '${tag}';
-            var url  = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
-            var data = '';
-            var id   = '${id}';
-            var msg  = '';
+            var tag   = '${tag}';
+            var url   = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
+            var data  = '';
+            var id    = '${id}';
+            var L1_id = '${L1_id}'
+            var msg   = '';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
             var value4 = $("#name4").val();
             var value5 = $("#name5").val();
-            var value6 = $("#name6").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
                 data = {
+                    L1_id               :L1_id,
                     L1_tag              :value1,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
                     F1_regx             :value5,
-                    L1_id               :value6,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
+                    L1_id               :L1_id
                     L1_tag              :value1,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
                     F1_regx             :value5,
-                    L1_id               :value6
                 };
             }
 
