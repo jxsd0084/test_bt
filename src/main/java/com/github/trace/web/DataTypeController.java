@@ -30,7 +30,7 @@ public class DataTypeController {
     private DataTypeService dataTypeService;
 
     @RequestMapping("/listM99")
-    public String listM99(@RequestParam(name = "L1_id") int f1_id,
+    public String listM99(@RequestParam(name = "L1_id")  int    f1_id,
                           @RequestParam(name = "L1_tag") String f1_tag,
                           Model model) {
         JSONArray jsonArray = getM99FieldsList(f1_tag);
@@ -42,9 +42,9 @@ public class DataTypeController {
     }
 
     @RequestMapping("/newM99")
-    public String newM99(@RequestParam(name = "tag") String tag,
-                         @RequestParam(name = "L1_id") String f1_id,
+    public String newM99(@RequestParam(name = "L1_id")  int f1_id,
                          @RequestParam(name = "L1_tag") String f1_tag,
+                         @RequestParam(name = "tag")    String tag,
                          Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
         model.addAttribute("tag", tag);
@@ -55,12 +55,12 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editM99")
-    public String editM99(@RequestParam(name = "tag")    String tag,
-                          @RequestParam(name = "L1_tag") String f1_tag,
+    public String editM99(@RequestParam(name = "id")     int    id,
                           @RequestParam(name = "L1_id")  int    f1_id,
-                          @RequestParam(name = "id")     int    id,
+                          @RequestParam(name = "L1_tag") String f1_tag,
+                          @RequestParam(name = "tag")    String tag,
                           Model model) {
-        M99Fields m99 = dataTypeService.getM99FieldsById(f1_id);
+        M99Fields m99 = dataTypeService.getM99FieldsById(id);
         model.addAttribute("obj", m99);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
@@ -74,8 +74,8 @@ public class DataTypeController {
 
     @RequestMapping("/modifyM99")
     @ResponseBody
-    public Map modifyM99(@RequestParam("L1_tag")  String f1_tag,
-                         @RequestParam("L1_id")   int    f1_id,
+    public Map modifyM99(@RequestParam("L1_id")   int    f1_id,
+                         @RequestParam("L1_tag")  String f1_tag,
                          @RequestParam("F1_name") String f1_name,
                          @RequestParam("F1_desc") String f1_desc,
                          @RequestParam("F1_type") String f1_type,
