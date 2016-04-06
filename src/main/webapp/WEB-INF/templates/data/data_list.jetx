@@ -29,7 +29,7 @@
 				<th>标识</th>
                 <th>名称</th>
 				<th>描述</th>
-				<th>编辑M99</th>
+				<th>扩展字段</th>
 				<th>操作</th>
 			</tr>
 			</thead>
