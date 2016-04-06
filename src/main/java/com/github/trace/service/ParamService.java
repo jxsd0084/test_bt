@@ -21,4 +21,8 @@ public class ParamService {
     return bpJobMapper.findAll();
   }
 
+  public BpJob getBpJobById(int id){
+    return bpJobMapper.findById(id);
+  }
+
 }

@@ -1,5 +1,5 @@
-#set(title="数据类型一级字段")
-#set(navbar="dataLevelOne")
+#set(title="M99扩展字段")
+#set(navbar="M99")
 #tag layout_block("headContent")
 <style>
 	#datatable td:nth-child(n+3) {
@@ -13,11 +13,11 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active">${parent_name}<font color="blue">一级字段配置</font></li>
+        <li class="active"><a href="${CONTEXT_PATH}/dataType/listLevelOne"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建一级字段配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建M99字段" onclick="window.location.href='${CONTEXT_PATH}/dataType/newM99?L1_id=${L1_id}&L1_tag=${L1_tag}&tag=add'"/>
 </div>
 <br/>
 <div class="row">
@@ -26,10 +26,11 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-				<th>标识</th>
-                <th>名称</th>
+                <th>标识</th>
+				<th>名称</th>
 				<th>描述</th>
-				<th>编辑M99</th>
+				<th>类型</th>
+				<th>匹配正则</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -41,8 +42,6 @@
 <br/>
 #end
 #tag layout_block("scriptContent")
-<!-- 隐藏域 -->
-<input type="hidden" id="id" name="id" value="${id}" />
 <script>
 	var data = ${data}
 	$(document).ready(function () {
@@ -55,7 +54,7 @@
             fixedHeader: fixedHeaderObject,
             language: lang,
             dom: bootstrapDom,
-            order: [[2, 'desc'], [3, 'desc']],
+            order: [[0, 'asc'], [2, 'asc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
@@ -64,18 +63,8 @@
                     aTargets: [ '_all' ]
                 },
                 {
-                    targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listM99?L1_id='+ full[0] +'&L1_tag=' + full[1] + '">' + data + '</a>';
-                    }
-                },
-                {
-                    targets: 5, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
+                    targets: 6, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/dataType/editM99?id=' + full[0] + '&L1_id=' + full[6] + '&L1_tag=' + full[1] + '&tag=modify" >修改</a>';
                     }
                 }
             ]

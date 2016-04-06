@@ -61,6 +61,10 @@
             data: data,
             columnDefs: [
                 {
+                    sDefaultContent: ' - ',
+                    aTargets: [ '_all' ]
+                },
+                {
                     targets: 1, render: function (data, type, full, meta) {
                         return full[2] + '_' + full[0];
                     }

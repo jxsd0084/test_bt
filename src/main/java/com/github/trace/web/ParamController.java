@@ -37,6 +37,7 @@ public class ParamController {
         for (BpJob job : list){
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(job.getId());
+            jsonArray2.add(job.getJobName());
             jsonArray2.add(job.getBizName());
             jsonArray2.add(job.getConnection());
 //            jsonArray2.add(job.getTableName());
@@ -61,10 +62,14 @@ public class ParamController {
 
     @RequestMapping("/edit")
     public String editParam(@RequestParam(name = "id") int id,
+                            @RequestParam(name = "tag") String tag,
                             Model model) {
         NavigationItem navObj = cepService.getConfigById(id);
+        BpJob bpJob = paramService.getBpJobById(id);
 
         model.addAttribute("id", id);
+        model.addAttribute("tag", tag);
+        model.addAttribute("obj", bpJob);
         model.addAttribute("navObj", navObj);
         return "param/param_edit";
     }

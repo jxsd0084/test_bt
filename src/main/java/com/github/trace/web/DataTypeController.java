@@ -3,6 +3,7 @@ package com.github.trace.web;
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
+import com.github.trace.entity.M99Fields;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
@@ -28,21 +29,105 @@ public class DataTypeController {
     @Autowired
     private DataTypeService dataTypeService;
 
+    @RequestMapping("/listM99")
+    public String listM99(@RequestParam(name = "L1_id")  int    f1_id,
+                          @RequestParam(name = "L1_tag") String f1_tag,
+                          Model model) {
+        JSONArray jsonArray = getM99FieldsList(f1_tag);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
+        model.addAttribute("data", jsonArray);
+        model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L1_tag", f1_tag);
+        return "data/m99_list";
+    }
+
+    @RequestMapping("/newM99")
+    public String newM99(@RequestParam(name = "L1_id")  int f1_id,
+                         @RequestParam(name = "L1_tag") String f1_tag,
+                         @RequestParam(name = "tag")    String tag,
+                         Model model) {
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+        model.addAttribute("tag", tag);
+        model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L1_tag", f1_tag);
+
+        return "data/m99_edit";
+    }
+
+    @RequestMapping("/editM99")
+    public String editM99(@RequestParam(name = "id")     int    id,
+                          @RequestParam(name = "L1_id")  int    f1_id,
+                          @RequestParam(name = "L1_tag") String f1_tag,
+                          @RequestParam(name = "tag")    String tag,
+                          Model model) {
+        M99Fields m99 = dataTypeService.getM99FieldsById(id);
+        model.addAttribute("obj", m99);
+
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+
+        model.addAttribute("id", id);
+        model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L1_tag", f1_tag);
+        model.addAttribute("tag", tag);
+        return "data/m99_edit";
+    }
+
+    @RequestMapping("/modifyM99")
+    @ResponseBody
+    public Map modifyM99(@RequestParam("L1_id")   int    f1_id,
+                         @RequestParam("L1_tag")  String f1_tag,
+                         @RequestParam("F1_name") String f1_name,
+                         @RequestParam("F1_desc") String f1_desc,
+                         @RequestParam("F1_type") String f1_type,
+                         @RequestParam("F1_regx") String f1_regx,
+                         @RequestParam("id") int id) {
+        M99Fields m99Fields = new M99Fields();
+        m99Fields.setId(id);
+        m99Fields.setM1Id(f1_id);
+        m99Fields.setM1Name(f1_tag);
+        m99Fields.setFieldName(f1_name);
+        m99Fields.setFieldDesc(f1_desc);
+        m99Fields.setFieldType(f1_type);
+        m99Fields.setFieldRegex(f1_regx);
+
+        int res = dataTypeService.updateM99Fields(m99Fields);
+
+        return ControllerHelper.returnResponseVal(res, "更新");
+    }
+
+    @RequestMapping("/addM99")
+    @ResponseBody
+    public Map addM99(@RequestParam("L1_id")   int    f1_id,
+                      @RequestParam("L1_tag")  String f1_tag,
+                      @RequestParam("F1_name") String f1_name,
+                      @RequestParam("F1_desc") String f1_desc,
+                      @RequestParam("F1_type") String f1_type,
+                      @RequestParam("F1_regx") String f1_regx) {
+        M99Fields m99Fields = new M99Fields();
+        m99Fields.setM1Id(f1_id);
+        m99Fields.setM1Name(f1_tag);
+        m99Fields.setFieldName(f1_name);
+        m99Fields.setFieldDesc(f1_desc);
+        m99Fields.setFieldType(f1_type);
+        m99Fields.setFieldRegex(f1_regx);
+
+        int res = dataTypeService.addM99Fields(m99Fields);
+
+        return ControllerHelper.returnResponseVal(res, "更新");
+
+    }
+
     @RequestMapping("/listLevelOne")
     public String getLeveOneFieldsList(Model model) {
-        List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
-
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-
+        JSONArray jsonArray = getLevelOneFieldList();
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-
         model.addAttribute("data", jsonArray);
         return "data/data_list";
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLeveTwoFieldsList(@RequestParam(name = "L1_id") int l1_id,
-                                       @RequestParam(name = "L1_tag") String l1_tag,
+    public String getLeveTwoFieldsList(@RequestParam(name = "L1_id")   int    l1_id,
+                                       @RequestParam(name = "L1_tag")  String l1_tag,
                                        @RequestParam(name = "L1_name") String l1_name,
                                        Model model) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(l1_id);
@@ -186,4 +271,42 @@ public class DataTypeController {
 
     }
 
+    public JSONArray getLevelOneFieldList() {
+        List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
+        JSONArray jsonArray1 = new JSONArray();
+        for (LevelOneFields levelOneFields : list ) {
+            JSONArray jsonArray2 = new JSONArray();
+            String tagName = levelOneFields.getLevel1FieldTag();
+            jsonArray2.add(levelOneFields.getId());
+            jsonArray2.add(tagName);                                    // 标识 样例:AV
+            jsonArray2.add(levelOneFields.getLevel1FieldName());        // 名称 样例:音视频
+            jsonArray2.add(levelOneFields.getLevel1FieldDesc());        // 描述
+            int m99Count = dataTypeService.getM99FieldsCount(tagName);  // M99的扩展字段
+            jsonArray2.add(m99Count);
+            jsonArray1.add(jsonArray2);
+        }
+        return jsonArray1;
+    }
+
+    private JSONArray getM99FieldsList(String f1_name) {
+        List<M99Fields> list = dataTypeService.getM99Fields(f1_name);
+        JSONArray jsonArray1 = new JSONArray();
+        for (M99Fields m99 : list) {
+            JSONArray jsonArray2 = new JSONArray();
+            jsonArray2.add(m99.getId());
+            jsonArray2.add(m99.getM1Name());                            // M1          样例:AV
+            jsonArray2.add(m99.getFieldName());                         // 字段名称     样例:M2
+            jsonArray2.add(m99.getFieldDesc());                         // 字段描述     样例:音视频2
+            jsonArray2.add(m99.getFieldType());                         // 字段类型     样例:文本、日期、数字
+            jsonArray2.add(m99.getFieldRegex());                        // 正则表达式
+            jsonArray2.add(m99.getM1Id());                              // M1-Id       样例:1
+
+            jsonArray1.add(jsonArray2);
+        }
+        return jsonArray1;
+    }
+
 }
+
+
+
