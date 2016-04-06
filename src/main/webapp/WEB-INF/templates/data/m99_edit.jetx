@@ -124,12 +124,12 @@
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
-                    L1_id               :L1_id
+                    L1_id               :L1_id,
                     L1_tag              :value1,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
-                    F1_regx             :value5,
+                    F1_regx             :value5
                 };
             }
 
