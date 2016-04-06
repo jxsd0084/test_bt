@@ -72,17 +72,40 @@ public class DataTypeController {
 
     @RequestMapping("/modifyM99")
     @ResponseBody
-    public Map modifyM99(@RequestParam("L1_tag") String f1_tag,
+    public Map modifyM99(@RequestParam("L1_tag")  String f1_tag,
                          @RequestParam("F1_name") String f1_name,
                          @RequestParam("F1_desc") String f1_desc,
+                         @RequestParam("F1_type") String f1_type,
+                         @RequestParam("F1_regx") String f1_regx,
                          @RequestParam("id") int id) {
         M99Fields m99Fields = new M99Fields();
         m99Fields.setId(id);
         m99Fields.setM1Name(f1_tag);
         m99Fields.setFieldName(f1_name);
         m99Fields.setFieldDesc(f1_desc);
+        m99Fields.setFieldType(f1_type);
+        m99Fields.setFieldRegex(f1_regx);
 
         int res = dataTypeService.updateM99Fields(m99Fields);
+
+        return ControllerHelper.returnResponseVal(res, "更新");
+    }
+
+    @RequestMapping("/addM99")
+    @ResponseBody
+    public Map addM99(@RequestParam("L1_tag")  String f1_tag,
+                      @RequestParam("F1_name") String f1_name,
+                      @RequestParam("F1_desc") String f1_desc,
+                      @RequestParam("F1_type") String f1_type,
+                      @RequestParam("F1_regx") String f1_regx) {
+        M99Fields m99Fields = new M99Fields();
+        m99Fields.setM1Name(f1_tag);
+        m99Fields.setFieldName(f1_name);
+        m99Fields.setFieldDesc(f1_desc);
+        m99Fields.setFieldType(f1_type);
+        m99Fields.setFieldRegex(f1_regx);
+
+        int res = dataTypeService.addM99Fields(m99Fields);
 
         return ControllerHelper.returnResponseVal(res, "更新");
 
@@ -97,8 +120,8 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String getLeveTwoFieldsList(@RequestParam(name = "L1_id") int l1_id,
-                                       @RequestParam(name = "L1_tag") String l1_tag,
+    public String getLeveTwoFieldsList(@RequestParam(name = "L1_id")   int    l1_id,
+                                       @RequestParam(name = "L1_tag")  String l1_tag,
                                        @RequestParam(name = "L1_name") String l1_name,
                                        Model model) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(l1_id);
@@ -265,9 +288,11 @@ public class DataTypeController {
         for (M99Fields m99 : list) {
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(m99.getId());
-            jsonArray2.add(m99.getM1Name());
-            jsonArray2.add(m99.getFieldName());
-            jsonArray2.add(m99.getFieldDesc());
+            jsonArray2.add(m99.getM1Name());                            // M1字段  样例:AV
+            jsonArray2.add(m99.getFieldName());                         // 字段名称 样例:M2
+            jsonArray2.add(m99.getFieldDesc());                         // 字段描述 样例:音视频2
+            jsonArray2.add(m99.getFieldType());                         // 字段类型 样例:文本、日期、数字
+            jsonArray2.add(m99.getFieldRegex());                        // 正则表达式
 
             jsonArray1.add(jsonArray2);
         }

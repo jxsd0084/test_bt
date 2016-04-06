@@ -9,24 +9,44 @@
     <fieldset>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">M1标识</label>
+        <label for="profile" class="col-md-2 control-label">标识</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name1" id="name1" readonly="true" value="${L1_tag}"/>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">M99字段</label>
+        <label for="profile" class="col-md-2 control-label">名称</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.fieldName}"/>
         </div>
-        <p class="help-block col-md-offset-2">如：移动端(M1,M2,M3...)</p>
+        <p class="help-block col-md-offset-2">如：移动端(M1、M2、M3...)</p>
       </div>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">M99描述</label>
+        <label for="profile" class="col-md-2 control-label">描述</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.fieldDesc}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">类型</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name4" id="name4" style="width: 140px">
+                <option value="" default> - 必选 - </option>
+                <option value="文本" #if(obj.fieldType == '文本') selected #end> 文本（Text）  </option>
+                <option value="数字" #if(obj.fieldType == '数字') selected #end> 数字（Number）</option>
+                <option value="日期" #if(obj.fieldType == '日期') selected #end> 日期（Date）  </option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">匹配正则</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value="${obj.fieldRegex}"/>
         </div>
       </div>
 
@@ -54,11 +74,13 @@
 
         var value1 = $("#name1").val();
         var value2 = $("#name2").val();
-        var value3 = $("#name3").val();
+//        var value3 = $("#name3").val();
+        var value4 = $("#name4").val();
 
         if(value1 == '' ||
            value2 == '' ||
-           value3 == ''
+//           value3 == '' ||
+           value4 == ''
         ){
            msg = '必填项不能为空值!'
            result = false;
@@ -84,6 +106,8 @@
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
+            var value4 = $("#name4").val();
+            var value5 = $("#name5").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
@@ -91,6 +115,8 @@
                     L1_tag              :value1,
                     F1_name             :value2,
                     F1_desc             :value3,
+                    F1_type             :value4,
+                    F1_regx             :value5,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
@@ -99,6 +125,8 @@
                     L1_tag              :value1,
                     F1_name             :value2,
                     F1_desc             :value3,
+                    F1_type             :value4,
+                    F1_regx             :value5,
                 };
             }
 

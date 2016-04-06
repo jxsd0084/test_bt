@@ -45,6 +45,16 @@ public class DataTypeService {
     }
 
     /**
+     * 根据Id查询M99字段
+     *
+     * @param id
+     * @return
+     */
+    public M99Fields getM99FieldsById(int id) {
+        return m99FieldsMapper.findById(id);
+    }
+
+    /**
      * 更新M99字段
      * @param m99Fields
      * @return
@@ -54,13 +64,12 @@ public class DataTypeService {
     }
 
     /**
-     * 根据Id查询M99字段
-     *
-     * @param id
+     * 添加M99字段
+     * @param m99Fields
      * @return
      */
-    public M99Fields getM99FieldsById(int id) {
-        return m99FieldsMapper.findById(id);
+    public int addM99Fields(M99Fields m99Fields) {
+        return m99FieldsMapper.insert(m99Fields);
     }
 
     /**

@@ -30,17 +30,17 @@ public class DataSourceController {
     private DataSourceServer dataSourceServer;
 
     @RequestMapping("/list")
-    public String list(@RequestParam(name = "bizId") int bizId,
-                        @RequestParam(name = "bizName") String bizName,
-                        Model model){
+    public String list(@RequestParam(name = "bizId")   int bizId,
+                       @RequestParam(name = "bizName") String bizName,
+                       Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         return setCommonParam(bizId, bizName, model, "ds/ds_index");
     }
 
     @RequestMapping("/listJob")
-    public String listJob(@RequestParam(name = "bizId") int bizId,
-                        @RequestParam(name = "bizName") String bizName,
-                        Model model){
+    public String listJob(@RequestParam(name = "bizId")   int bizId,
+                          @RequestParam(name = "bizName") String bizName,
+                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         return setCommonParam(bizId, bizName, model, "job/job_index");
     }

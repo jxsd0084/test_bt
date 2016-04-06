@@ -26,9 +26,11 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-                <th>M1标识</th>
-				<th>M99字段</th>
-				<th>M99描述</th>
+                <th>标识</th>
+				<th>名称</th>
+				<th>描述</th>
+				<th>类型</th>
+				<th>匹配正则</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -61,7 +63,7 @@
                     aTargets: [ '_all' ]
                 },
                 {
-                    targets: 4, render: function (data, type, full, meta) {
+                    targets: 6, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/dataType/editM99?L1_id=' + full[0] + '&L1_tag=' + full[1] + '&tag=modify" >修改</a>';
                     }
                 }
