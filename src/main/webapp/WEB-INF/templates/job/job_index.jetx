@@ -9,11 +9,12 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源配置 - 页</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="#808080">数据源配置  </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <font style="color: blue;">( 作业创建 - 页面 )</font>
+    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业" onclick="window.location.href='${CONTEXT_PATH}/job/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
 </div>
 <br/>
 <div class="row">
@@ -22,10 +23,10 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-                <th>连接名称</th>
-                <th>连接类型</th>
+                <th>作业名称</th>
                 <th>数据源</th>
-                <th>数据库名</th>
+                <th>备注</th>
+                <th>操作</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -59,17 +60,18 @@
                 },
                 {
                     targets: 2, render: function (data, type, full, meta) {
-                        return full[5];
+                    return '<a href="${CONTEXT_PATH}/job/ds_show?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >'+full[5]+'</a>';
                     }
                 },
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                        return full[6];
-                    }
+                    return full[7];
+                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/ds/tblsIndex?dbName=' + full[4] + '&dbUrl=' + full[6] + '&dbPort=' + full[7] + '&dbDriver=' + full[8] + '&dbUsername=' + full[9] + '&dbPassword=' + full[10] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">' + full[4] + '</a>';
+                        return '<a href="${CONTEXT_PATH}/job/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
+                                ');">删除</a> | <a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=' + full[4] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">选择数据</a>';
                     }
                 }
             ]
@@ -80,7 +82,7 @@
     var js_method   = function(id){
         var bizId   = '${bizId}';
         var bizName = '${bizName}';
-        var url     = "${CONTEXT_PATH}/ds/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
+        var url     = "${CONTEXT_PATH}/job/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
         if(confirm("是否确定删除?")){
             window.location.href = url;
         }
