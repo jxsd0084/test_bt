@@ -20,6 +20,7 @@ import java.util.Map;
  * ElasticSearchHelper Test
  * Created by wzk on 16/4/1.
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class ElasticSearchHelperTest {
@@ -27,12 +28,12 @@ public class ElasticSearchHelperTest {
   private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchHelperTest.class);
 
   @Autowired
-  ElasticsearchService esService;
+  private ElasticsearchService esService;
 
   @Test
   public void testSearch() throws Exception {
-
-    SearchResponse response = esService.search("dcx.MonitorRequest", "867389026965532", "M98", 1459853700000L, 1459853760000L);
+    SearchResponse response = esService.search("dcx.MonitorRequest", "867389026965532",
+                                               "M98", 1459853700000L, 1459853760000L);
 
     SearchHit[] hits = response.getHits().getHits();
     for (SearchHit hit : hits) {

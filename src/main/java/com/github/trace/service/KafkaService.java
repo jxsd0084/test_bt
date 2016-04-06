@@ -4,13 +4,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import com.alibaba.fastjson.JSON;
 import com.github.autoconf.ConfigFactory;
 import com.github.trace.entity.KafkaMessageAndOffset;
 import com.github.trace.intern.KafkaUtil;
+import com.github.trace.utils.JsonLogHandler;
+import com.github.trace.utils.NginxLogHandler;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class KafkaService {
     });
   }
 
-  public Set<String> getMessages(String topic, String type, int count) {
+  public Set<String> getMessages(String topic, int count) {
     Set<KafkaMessageAndOffset> fetchedData = Sets.newHashSet();
 
     TreeMap<Integer, PartitionMetadata> metaDatas = KafkaUtil.findLeader(brokers, port, topic);
@@ -93,49 +93,21 @@ public class KafkaService {
       }
       results.add(messageAndOffset.getMessage());
     }
-    return parse(results, type);
+    return parse(results, topic);
   }
 
-  private Set<String> parse(Set<String> set, String type) {
+  private Set<String> parse(Set<String> logs, String topic) {
     Set<String> results = Sets.newHashSet();
-    if (set == null || set.isEmpty() || Strings.isNullOrEmpty(type)) {
+    if (logs == null || logs.isEmpty() || Strings.isNullOrEmpty(topic)) {
       return results;
     }
 
-    if (StringUtils.equals(type, "nginx")) {
-      set.forEach(log -> {
-        String json = parseNginx(log);
-        if (StringUtils.isNotEmpty(json)) {
-          results.add(json);
-        }
-      });
+    if (StringUtils.startsWith(topic, "nginx")) {
+      results = NginxLogHandler.batchParse(logs);
     } else {
-      return set;
+      results = JsonLogHandler.batchConvert(logs);
     }
     return results;
-  }
-
-  private String parseNginx(String log) {
-    if (StringUtils.isEmpty(log)) {
-      return StringUtils.EMPTY;
-    }
-    String params = StringUtils.substringBetween(log, ".gif?", " HTTP/1");
-    if (StringUtils.isNotEmpty(params)) {
-      return parseToJson(params);
-    }
-    return StringUtils.EMPTY;
-  }
-
-  private String parseToJson(String params) {
-    Map<String, String> map = Maps.newHashMap();
-    List<String> paramList = Splitter.on("&").omitEmptyStrings().splitToList(params);
-    paramList.forEach(param -> {
-      List<String> kv = Splitter.on("=").omitEmptyStrings().splitToList(param);
-      if (kv.size() == 2) {
-        map.put(kv.get(0), kv.get(1));
-      }
-    });
-    return JSON.toJSONString(map);
   }
 
 }

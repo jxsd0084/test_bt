@@ -25,22 +25,20 @@ public class ElasticsearchService {
 
   public SearchResponse search(String topic, String keyword, String timeParamName, long from, long to) {
     SearchRequestBuilder builder = build(topic, keyword, timeParamName, from, to);
-    SearchResponse response = ElasticSearchHelper.search(builder);
-
-    return response;
+    return ElasticSearchHelper.search(builder);
   }
 
   /**
    * 必须同时满足keyword和时间范围
-   * @param topic
-   * @param keyword
-   * @param timeParamName
-   * @param from
-   * @param to
-   * @return
+   * @param topic    topic, 即es中的type
+   * @param keyword  关键词
+   * @param param    使用的时间字段
+   * @param from     起始时间戳
+   * @param to       截止时间戳
+   * @return  {@link SearchRequestBuilder}
    */
-  private SearchRequestBuilder build(String topic, String keyword, String timeParamName,
-                                    long from, long to) {
+  private SearchRequestBuilder build(String topic, String keyword,
+                                     String param, long from, long to) {
     SearchRequestBuilder builder = ElasticSearchHelper.newBuilder(INDEX);
     if (!Strings.isNullOrEmpty(topic)) {
       builder.setTypes(topic);
@@ -49,8 +47,8 @@ public class ElasticsearchService {
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
     boolQuery.must(QueryBuilders.queryStringQuery(keyword));
 
-    if (!Strings.isNullOrEmpty(timeParamName) && from > 0 && to > from) {
-      RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(timeParamName);
+    if (!Strings.isNullOrEmpty(param) && from > 0 && to > from) {
+      RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(param);
       rangeQuery.gte(from).lte(to);
       boolQuery.must(rangeQuery);
     }
