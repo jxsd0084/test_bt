@@ -8,6 +8,7 @@ import com.github.trace.mapper.LevelTwoFieldsMapper;
 import com.github.trace.mapper.M99FieldsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -166,17 +167,16 @@ public class DataTypeService {
      * @param levelOneFields
      * @return
      */
+    @Transactional
     public int updateFieldsByCascade(LevelOneFields levelOneFields) {
-        int res = updateLevelTwoByCascade(levelOneFields);
-        if (res > 0) {
-            return updateM99FieldsByM1Name(levelOneFields);
-        }
-        return 0;
+        updateM99FieldsByM1Name(levelOneFields);    // 可能存在没有任何数据的情况
+        return updateLevelTwoByCascade(levelOneFields);
     }
 
     /**
      * 级联更新二级字段
      */
+    @Transactional
     public int updateLevelTwoByCascade(LevelOneFields levelOneFields) {
         int res = updateLevelOne(levelOneFields);
         if (res > 0) {
