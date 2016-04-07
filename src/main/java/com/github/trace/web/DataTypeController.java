@@ -133,9 +133,9 @@ public class DataTypeController {
 
     @RequestMapping("/listLevelTwo")
     public String listLevelTwoFields(@RequestParam(name = "L1_id")   int    l1_id,
-                                       @RequestParam(name = "L1_tag")  String l1_tag,
-                                       @RequestParam(name = "L1_name") String l1_name,
-                                       Model model) {
+                                     @RequestParam(name = "L1_tag")  String l1_tag,
+                                     @RequestParam(name = "L1_name") String l1_name,
+                                     Model model) {
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
 
@@ -309,9 +309,9 @@ public class DataTypeController {
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(levelTwoFields.getId());                     // 编号
             jsonArray2.add("");                                         // 占位
-            jsonArray2.add(levelTwoFields.getLevel1FieldName());        // 一级组件名称
             jsonArray2.add(levelTwoFields.getLevel2FieldName());        // 二级组件名称 样例:音视频
-            jsonArray2.add(levelTwoFields.getLevel2FieldDesc());        // 二级组件描述 样例:点击多人通话按钮
+            jsonArray2.add(levelTwoFields.getLevel2FieldDesc());        // 一级组件名称
+            jsonArray2.add(levelTwoFields.getLevel1FieldId());          // 一级组件Id
             jsonArray2.add(levelTwoFields.getLevel1FieldTag());         // 一级组件标识 样例:AV
 
             jsonArray1.add(jsonArray2);
