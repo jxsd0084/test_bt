@@ -3,7 +3,7 @@ package com.github.trace.service;
 import com.google.common.collect.Maps;
 
 import com.github.autoconf.api.IConfig;
-import com.github.trace.exceptions.IniConfigException;
+//import com.github.trace.exceptions.IniConfigException;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
@@ -46,7 +46,7 @@ public class KafkaTopicConfig {
       iniConfiguration.load(inputStream);
       iniConfiguration.setThrowExceptionOnMissing(false);
     } catch (ConfigurationException e) {
-      throw new IniConfigException("Cannot load ini config " + config.getName(), e);
+//      throw new IniConfigException("Cannot load ini config " + config.getName(), e);
     }
   }
 
