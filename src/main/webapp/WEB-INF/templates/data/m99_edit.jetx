@@ -101,13 +101,15 @@
 
         $("#confirm").on('click', function () {
 
-            var tag   = '${tag}';
-            var url   = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
-            var data  = '';
-            var id    = '${id}';
-            var L1_id = '${L1_id}'
-            var L2_id = '${L2_id}'
-            var msg   = '';
+            var tag    = '${tag}';
+            var url    = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
+            var data   = '';
+            var L3_id  = '${id}';
+            var L1_id  = '${L1_id}';
+            var L1_tag = '${L1_tag}';
+            var L2_id  = '${L2_id}';
+            var L2_tag = '${L2_tag}';
+            var msg    = '';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
@@ -120,20 +122,22 @@
                 msg  = '修改';
                 data = {
                     L1_id               :L1_id,
+                    L1_tag              :L1_tag,
                     L2_id               :L2_id,
-                    L1_tag              :value1,
+                    L2_tag              :L2_tag,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
                     F1_regx             :value5,
-                    id                  :id
+                    L3_id               :L3_id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
                     L1_id               :L1_id,
-                    L2_id               :L2_id,
                     L1_tag              :value1,
+                    L2_id               :L2_id,
+                    L2_tag              :L2_tag,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
