@@ -25,8 +25,8 @@
                 <th>编号</th>
                 <th>字段名称</th>
 				<th>字段类型</th>
-                <th>是否脱敏</th>
-                <th>是否分区</th>
+                <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否脱敏</div></th>
+                <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否分区</div></th>
 			</tr>
 			</thead>
 			<tbody>
