@@ -26,7 +26,7 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-				<th>事件分类</th>
+				<th>事件分类id</th>
                 <th>分类名称</th>
 				<th>分类描述</th>
 				<th>操作</th>
