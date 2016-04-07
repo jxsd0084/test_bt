@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建扩展字段" onclick="window.location.href='${CONTEXT_PATH}/dataType/newM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}&L2_tag=${L2_tag}&tag=add'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建扩展字段" onclick="window.location.href='${CONTEXT_PATH}/dataType/newM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}&L2_id=${L2_id}&L2_tag=${L2_tag}&tag=add'"/>
 </div>
 <br/>
 <div class="row">
@@ -42,13 +42,14 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-    GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}&L2_tag=${L2_tag}';
+    GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}&L2_id=${L2_id}&L2_tag=${L2_tag}';
 
-    var L1_id  = '${L1_id}';
-    var L1_tag = '${L1_tag}';
-    var L2_id  = '${L2_id}';
-    var L2_tag = '${L2_tag}';
-	var data   = ${data};
+    var L1_id   = '${L1_id}';
+    var L1_tag  = '${L1_tag}';
+    var L1_name = '${L1_name}';
+    var L2_id   = '${L2_id}';
+    var L2_tag  = '${L2_tag}';
+	var data    = ${data};
 	$(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
@@ -69,7 +70,7 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editM99?L3_id=' + full[0] + '&L1_id=' + L1_id + '&L1_tag=' + L1_tag + '&L2_id=' + L2_id + '&L2_tag=' + L2_tag + '&tag=modify">修 |- ' + full + ' -| 改</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="js_method(' + full[0] + ')">删除</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/editM99?L3_id=' + full[0] + '&L1_id=' + L1_id + '&L1_tag=' + L1_tag + '&L1_name=' + L1_name + '&L2_id=' + L2_id + '&L2_tag=' + L2_tag + '&tag=modify">修 |- ' + full + ' -| 改</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="js_method(' + full[0] + ')">删除</a>';
                     }
                 }
             ]
@@ -84,6 +85,7 @@
                 L3_id           :   id,
                 L1_id           :   L1_id,
                 L1_tag          :   L1_tag,
+                L1_name         :   L1_name,
                 L2_id           :   L2_id,
                 L2_tag          :   L2_tag
             };

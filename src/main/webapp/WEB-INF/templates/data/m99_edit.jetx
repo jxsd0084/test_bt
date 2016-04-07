@@ -69,7 +69,7 @@
 <input type="hidden" id="name7" name="name7" value="${L2_tag}" />
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}&L2_tag=${L2_tag}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}&L2_id=${L2_id}&L2_tag=${L2_tag}';
 
     var myValidator = function(){
         var msg = '';
