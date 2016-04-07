@@ -76,7 +76,7 @@
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">开始导出时间</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control focused" value="${navObj.parentName}"/>
+          <input type="text" class="form-control focused" value="${obj.executeTime}"/>
         </div>
         <p class="help-block col-md-offset-2">如：20160331 12:00:00</p>
       </div>
@@ -84,7 +84,7 @@
       <div class="form-group">
         <label for="name" class="col-md-2 control-label">导出名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control focused" value="${navObj.parentName}"/>
+          <input type="text" class="form-control focused" value="${obj.jobName}"/>
         </div>
         <p class="help-block col-md-offset-2">如：MyExportName</p>
       </div>

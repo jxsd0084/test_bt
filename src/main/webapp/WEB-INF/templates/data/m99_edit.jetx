@@ -1,0 +1,164 @@
+#set(title="M99字段编辑")
+#set(navbar="M99Edit")
+#tag layout_block("bodyContent")
+<div class="container">
+
+  <legend>数据类型配置项</legend>
+
+  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+    <fieldset>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">标识</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name1" id="name1" readonly="true" value="${L1_tag}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.fieldName}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：移动端(M1、M2、M3...)</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">描述</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.fieldDesc}"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">类型</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name4" id="name4" style="width: 140px">
+                <option value="" default> - 必选 - </option>
+                <option value="文本" #if(obj.fieldType == '文本') selected #end> 文本（Text）  </option>
+                <option value="数字" #if(obj.fieldType == '数字') selected #end> 数字（Number）</option>
+                <option value="日期" #if(obj.fieldType == '日期') selected #end> 日期（Date）  </option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2">如：文本 / 数字 / 日期</p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">匹配正则</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value="${obj.fieldRegex}"/>
+        </div>
+      </div>
+
+      <!-- 确认按钮 -->
+      <div class="form-group well well-sm">
+        <div class="col-md-offset-2 col-md-10 col-lg-8">
+          <p align="lefts" class="hide" id="resultInfo"></p>
+          <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
+          <input id="cancel_btn" class="btn" type="button" value="返回"/>
+        </div>
+      </div>
+
+    </fieldset>
+  </form>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script>
+
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}';
+
+    var myValidator = function(){
+        var msg = '';
+        var result = true;
+
+        var value1 = $("#name1").val();
+        var value2 = $("#name2").val();
+        var value3 = $("#name3").val();
+        var value4 = $("#name4").val();
+
+        if(value1 == '' ||
+           value2 == '' ||
+           value3 == '' ||
+           value4 == ''
+        ){
+           msg = '必填项不能为空值!'
+           result = false;
+        }
+
+        if(!result){
+           showResult(msg);
+        }
+
+        return result;
+    }
+
+    $(document).ready(function () {
+
+        $("#confirm").on('click', function () {
+
+            var tag   = '${tag}';
+            var url   = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
+            var data  = '';
+            var id    = '${id}';
+            var L1_id = '${L1_id}'
+            var msg   = '';
+
+            var value1 = $("#name1").val();
+            var value2 = $("#name2").val();
+            var value3 = $("#name3").val();
+            var value4 = $("#name4").val();
+            var value5 = $("#name5").val();
+
+            if(tag == 'modify'){
+                msg  = '修改';
+                data = {
+                    L1_id               :L1_id,
+                    L1_tag              :value1,
+                    F1_name             :value2,
+                    F1_desc             :value3,
+                    F1_type             :value4,
+                    F1_regx             :value5,
+                    id                  :id
+                };
+            }else if(tag == 'add'){     // 新增不需要指定主键ID
+                msg  = '添加';
+                data = {
+                    L1_id               :L1_id,
+                    L1_tag              :value1,
+                    F1_name             :value2,
+                    F1_desc             :value3,
+                    F1_type             :value4,
+                    F1_regx             :value5
+                };
+            }
+
+            if(myValidator()){
+                $.ajax({
+                    url                 :url,
+                    contentType         :"application/json",
+                    data                :data,
+                    dataType            :"text",
+                    type                :"GET",
+                    success:function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            forward(msg + "成功!", GLOBAL_URL);
+                        } else {
+                            showResult("警告：" + json.info, false);
+                        }
+                    }
+                });
+            }
+
+        })
+
+        $("#cancel_btn").on('click', function () {
+            window.location.href = GLOBAL_URL;
+        })
+
+    });
+
+</script>
+#end
+#include("/include/form-layout.jetx")

@@ -29,6 +29,7 @@
 				<th>标识</th>
                 <th>名称</th>
 				<th>描述</th>
+				<th>扩展字段</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -59,12 +60,21 @@
             data: data,
             columnDefs: [
                 {
+                    sDefaultContent: ' - ',
+                    aTargets: [ '_all' ]
+                },
+                {
                     targets: 1, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/dataType/listM99?L1_id='+ full[0] +'&L1_tag=' + full[1] + '">' + data + '</a>';
+                    }
+                },
+                {
+                    targets: 5, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
                     }
                 }

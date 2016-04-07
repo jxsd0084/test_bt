@@ -26,8 +26,11 @@
 			<thead>
 			<tr>
                 <th style="width: 40px">编号</th>
+                <th style="width: 60px">任务名称</th>
                 <th style="width: 40px">业务名称</th>
                 <th>数据库信息</th>
+##                <th>表信息</th>
+                <th>目标</th>
                 <th>目标信息</th>
 				<th>主题 与 路径</th>
 				<th style="width: 100px">开始时间</th>
@@ -35,6 +38,7 @@
 			</tr>
 			</thead>
 			<tbody>
+			<!--
             <tr role="row" class="even">
 				<td>1</td>
 				<td>iOS</td>
@@ -107,6 +111,7 @@
 				<td class="sorting_1">20160308 14:00:00</td>
 				<td class="sorting_2"><a href="/bt/param/edit?id=8">修改</a></td>
 			</tr>
+			-->
 			</tbody>
 		</table>
 	</div>
@@ -115,44 +120,29 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-##	var data = ${data};
-##	$(document).ready(function () {
-##        var table = $('#datatable').DataTable({
-##            stateSave: true,
-##            searching: true,
-##            autowidth: true,
-##            paging: true,
-##            info: true,
-##            fixedHeader: fixedHeaderObject,
-##            language: lang,
-##            dom: bootstrapDom,
-##            order: [[2, 'desc'], [3, 'desc']],
-##            lengthMenu: [[25, 50, -1], [25, 50, "All"]],
-##            data: data,
-##            columnDefs: [
-##                {
-##                    targets: 0, render: function (data, type, full, meta) {
-##                        return full[0];
-##                    }
-##                },
-##                {
-##                    targets: 1, render: function (data, type, full, meta) {
-##                        return full[4];
-##                    }
-##                },
-##                {
-##                    targets: 2, render: function (data, type, full, meta) {
-##                        return full[7];
-##                    }
-##                },
-##                {
-##                    targets: 3, render: function (data, type, full, meta) {
-##                        return '<a href="${CONTEXT_PATH}/param/edit?id=' + full[0] + '" >修改</a>';
-##                    }
-##                }
-##            ]
-##        });
-##    });
+	var data = ${data};
+	$(document).ready(function () {
+        var table = $('#datatable').DataTable({
+            stateSave: true,
+            searching: true,
+            autowidth: true,
+            paging: true,
+            info: true,
+            fixedHeader: fixedHeaderObject,
+            language: lang,
+            dom: bootstrapDom,
+            order: [[0, 'desc'], [1, 'desc']],
+            lengthMenu: [[25, 50, -1], [25, 50, "All"]],
+            data: data,
+            columnDefs: [
+                {
+                    targets: 8, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/param/edit?id=' + full[0] + '&tag=modify" >修改</a>';
+                    }
+                }
+            ]
+        });
+    });
 
 </script>
 #end

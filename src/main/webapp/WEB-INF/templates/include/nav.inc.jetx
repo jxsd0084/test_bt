@@ -5,9 +5,9 @@
       <a class="navbar-brand hidden-md hidden-lg" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
       <div style="padding-top: 5px">
         <ul class="nav navbar-nav nav-tabs">
-          <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">数据类型配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">事件行为定义</a></li>
           <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${navObj.parentId}&child_id=${navObj.childId}&parent_name=${navObj.childName}&topic=${navObj.topic}">埋点配置与监控</a></li>
-          <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据源配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
           <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
         </ul>
       </div>
