@@ -26,10 +26,10 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-				<th>标识</th>
-				<th>组件名称</th>
-				<th>组件描述</th>
-				<th>扩展属性维护</th>
+				<th>事件id</th>
+				<th>事件名称</th>
+				<th>事件描述</th>
+				<th>事件属性</th>
 				<th>操作</th>
 			</tr>
 			</thead>
