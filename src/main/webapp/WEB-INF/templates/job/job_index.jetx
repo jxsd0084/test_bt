@@ -71,7 +71,7 @@
                 {
                     targets: 4, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/job/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
-                                ');">删除</a> | <a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=' + full[4] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">选择数据</a>';
+                                ');">删除</a> | <a href="${CONTEXT_PATH}/job/tblsIndex?id=' + full[0] + '&dbSourceId=' + full[4] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">选择数据</a>';
                     }
                 }
             ]

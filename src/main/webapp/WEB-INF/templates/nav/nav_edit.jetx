@@ -11,32 +11,33 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">节点类型</label>
         <div class="col-md-3 col-lg-3">
-            <select name="item_type" id="item_type" style="width: 140px" dis>
+            <select name="item_type" id="item_type" style="width: 140px" disabled="disabled">
                 <option value="0" #if(obj.itemType == 0) selected#end>非叶子节点</option>
                 <option value="1" #if(obj.itemType == 1) selected#end>叶子节点</option>
             <select/>
         </div>
       </div>
-
+        <input type="hidden" class="form-control" name="parent_id" id="parent_id" placeholder="必填" value="${obj.parentId}"/>
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">节点名称</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name" id="name" placeholder="必填" value="${obj.name}"/>
         </div>
       </div>
-      #
+      #if(obj.itemType==0)
+          <input type="hidden" class="form-control" name="topic" id="topic" placeholder="必填"/>
+      #else
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">节点主题</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="topic" id="topic" placeholder="必填" value="${obj.topic}"/>
         </div>
-        <p class="help-block col-md-offset-2">如：com.mysql.jdbc.Driver</p>
       </div>
-
+      #end
       <!-- 确认按钮 -->
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
-          <p align="lefts" class="hide" id="resultInfo"></p>
+          <p align="lefts" class="bg-danger hide" id="resultInfo"></p>
             <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
             <input id="cancel_btn" class="btn btn-primary" type="button" value="返回" onclick="history.go(-1)"/>
         </div>
@@ -49,146 +50,60 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/nav/list';
+    var showResult = function(msg){
+        $('#resultInfo').text(msg);
+        $('#resultInfo').removeClass("hide");
+    }
 
-    var myValidator = function(){
+    var myValidator = function() {
         var msg = '';
         var result = true;
 
-        var value1 = $("#name1").val();
-        var value2 = $("#name2").val();
-        var value3 = $("#name3").val();
-        var value4 = $("#name4").val();
-        var value5 = $("#name5").val();
-        var value6 = $("#name6").val();
-        var value7 = $("#name7").val();
-        var value8 = $("#name8").val();
-
-        if(value1 == '' ||
-           value2 == '' ||
-           value3 == '' ||
-           value4 == '' ||
-           value5 == '' ||
-           value6 == '' ||
-           value7 == '' ||
-           value8 == ''
-        ){
-           msg = '必填项不能为空值!'
-           result = false;
+        var name = $("#name").val();
+        var item_type = $("#item_type").val();
+        var topic = $("#topic").val();
+        if (item_type == '0') {
+            if (name == '') {
+                msg = '节点名称不能为空';
+                result = false;
+            }
+        }else {
+            if (name == '') {
+                msg = '节点名称不能为空';
+                result = false;
+            }
+            if (topic == '') {
+                msg = '叶子节点主题不能为空';
+                result = false;
+            }
         }
 
         if(!result){
-           showResult(msg);
+            showResult(msg);
         }
 
         return result;
     }
 
     $(document).ready(function () {
-
         $("#confirm").on('click', function () {
 
-            var tag     = '${tag}';
-            var url     = '${CONTEXT_PATH}/ds/' + tag;
-            var data    = '';
-            var id      = '${id}';
-            var bizId   = '${bizId}';
-            var bizName = '${bizName}';
-            var msg     = '';
+            var value4 = $('#parent_id').val();
+            var value5=${obj.id};
+            var url = '${CONTEXT_PATH}/nav/modify';
+            var data = '';
+            var value1 = $("#name").val();
+            var value2 = $("#item_type").val();
+            var value3 = $("#topic").val();
 
-            var value1 = $("#name1").val();
-            var value2 = $("#name2").val();
-            var value3 = $("#name3").val();
-            var value4 = $("#name4").val();
-            var value5 = $("#name5").val();
-            var value6 = $("#name6").val();
-            var value7 = $("#name7").val();
-            var value8 = $("#name8").val();
-
-            if(tag == 'modify'){
-                msg  = '修改';
-                data = {
-                    bizId               :bizId,
-                    bizName             :bizName,
-                    dbType              :value1,
-                    name                :value2,
-                    dbDriver            :value3,
-                    dbUrl               :value4,
-                    dbPort              :value5,
-                    dbName              :value6,
-                    dbUsername          :value7,
-                    dbPassword          :value8,
-                    id                  :id
-                };
-            }else if(tag == 'add'){     // 新增不需要指定主键ID
-                msg  = '添加';
-                data = {
-                    bizId               :bizId,
-                    bizName             :bizName,
-                    dbType              :value1,
-                    name                :value2,
-                    dbDriver            :value3,
-                    dbUrl               :value4,
-                    dbPort              :value5,
-                    dbName              :value6,
-                    dbUsername          :value7,
-                    dbPassword          :value8
-                };
-            }
-
-            if(myValidator()){
-                $.ajax({
-                    url                 :url,
-                    contentType         :"application/json",
-                    data                :data,
-                    dataType            :"text",
-                    type                :"GET",
-                    success:function (data) {
-                        var json = JSON.parse(data);
-                        if (json.code == 200) {
-                            forward(msg + "成功!", GLOBAL_URL);
-                        } else {
-                            showResult("警告：" + json.info, false);
-                        }
-                    }
-                });
-            }
-
-        })
-
-        $("#cancel_btn").on('click', function () {
-            window.location.href = GLOBAL_URL;
-        })
-
-        $("#test").on('click', function () {
-            var url     = '${CONTEXT_PATH}/ds/test_con';
-            var data    = '';
-            var id      = '${id}';
-            var bizId   = '${bizId}';
-            var bizName = '${bizName}';
-            var msg     = '连接';
-
-            var value1 = $("#name1").val();
-            var value2 = $("#name2").val();
-            var value3 = $("#name3").val();
-            var value4 = $("#name4").val();
-            var value5 = $("#name5").val();
-            var value6 = $("#name6").val();
-            var value7 = $("#name7").val();
-            var value8 = $("#name8").val();
-
+            // 新增不需要指定主键ID
             data = {
-                    bizId               :bizId,
-                    bizName             :bizName,
-                    dbType              :value1,
-                    name                :value2,
-                    dbDriver            :value3,
-                    dbUrl               :value4,
-                    dbPort              :value5,
-                    dbName              :value6,
-                    dbUsername          :value7,
-                    dbPassword          :value8,
-                    id                  :id
+                id                  :value5,
+                name                :value1,
+                itemType            :value2,
+                topic               :value3,
+                parentId            :value4
             };
 
             if(myValidator()){
@@ -201,15 +116,15 @@
                     success:function (data) {
                         var json = JSON.parse(data);
                         if (json.code == 200) {
-                            showResult("成功 !" + json.info, true);
+                            forward("修改成功!", GLOBAL_URL);
                         } else {
-                            showResult("警告：" + json.info, false);
+                            showResult("警告：" + json.info);
                         }
                     }
                 });
             }
 
-        })
+       })
 
     });
 
