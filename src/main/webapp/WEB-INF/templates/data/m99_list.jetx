@@ -65,7 +65,7 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editM99?id=' + full[0] + '&L1_id=' + full[6] + '&L1_tag=' + full[1] + '&tag=modify">修改</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="js_method(' + full[0] + ')">删除</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/editM99?id=' + full[0] + '&L1_id=' + full[6] + '&L1_tag=' + full[1] + '&tag=modify">修 |- ' + full + ' -| 改</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="js_method(' + full[0] + ')">删除</a>';
                     }
                 }
             ]

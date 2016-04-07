@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface M99FieldsMapper extends ICrudMapper<M99Fields> {
 
-    @Select("SELECT * FROM m99_fields WHERE m1_name=#{m1Name}")
-    List<M99Fields> getM99FieldsByM1Name(@Param("m1Name") String m1Name);
+    @Select("SELECT * FROM m99_fields WHERE level_one_id=#{m1Id}")
+    List<M99Fields> getM99FieldsByM1Id(@Param("m1Id") int m1Id);
 
     @Select("SELECT count(*) FROM m99_fields WHERE m1_name=#{m1Name}")
     int getM99FieldsCountByM1Name(@Param("m1Name") String m1Name);
