@@ -13,7 +13,7 @@
     <description>Shiro安全配置</description>
 
     <!-- Shiro Filter -->
-<!--    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean"
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean"
           p:securityManager-ref="securityManager"
           p:loginUrl="${casServerUrlPrefix}/login?service=${casService}"
           p:successUrl="/"
@@ -30,7 +30,7 @@
                 /** = user
             </value>
         </property>
-    </bean>-->
+    </bean>
 
     <bean id="casFilter" class="org.apache.shiro.cas.CasFilter" p:failureUrl="/unauthorized"/>
 
