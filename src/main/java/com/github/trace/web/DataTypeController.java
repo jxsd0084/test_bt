@@ -269,9 +269,9 @@ public class DataTypeController {
                               @RequestParam("L1_name") String l1_name,
                               @RequestParam("L2_name") String l2_name,
                               @RequestParam("L2_desc") String l2_desc,
-                              @RequestParam("id") int id) {
+                              @RequestParam("L2_id") int l2_id) {
         LevelTwoFields levelTwoFields = new LevelTwoFields();
-        levelTwoFields.setId(id);
+        levelTwoFields.setId(l2_id);
         levelTwoFields.setLevel1FieldTag(l1_tag);
         levelTwoFields.setLevel1FieldName(l1_name);
         levelTwoFields.setLevel2FieldName(l2_name);

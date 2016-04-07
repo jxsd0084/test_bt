@@ -31,17 +31,19 @@
         </div>
         <p class="help-block col-md-offset-2">如：验证码点击次数 (中文汉字)</p>
       </div>
-        <div class="form-group">
-            <label for="profile" class="col-md-2 control-label">事件名称</label>
-            <div class="col-md-3 col-lg-3">
-                <input type="text" class="form-control" name="name5" id="name5" placeholder="必填" value="${obj.level2FieldName}"/>
-            </div>
-            <p class="help-block col-md-offset-2">如：验证码点击次数 (中文汉字)</p>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">事件名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name4" id="name4" placeholder="必填" value="${obj.level2FieldName}"/>
         </div>
+        <p class="help-block col-md-offset-2">如：验证码点击次数 (中文汉字)</p>
+      </div>
+
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">事件描述</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name4" id="name4" placeholder="选填" value="${obj.level2FieldDesc}"/>
+          <input type="text" class="form-control" name="name5" id="name5" placeholder="选填" value="${obj.level2FieldDesc}"/>
         </div>
       </div>
 
@@ -60,7 +62,7 @@
 #end
 #tag layout_block("scriptContent")
 <!-- 隐藏域 -->
-<input type="hidden" id="name5" name="name5" value="${L1_id}" />
+<input type="hidden" id="name6" name="name6" value="${L1_id}" />
 <script>
 
     var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelTwo?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}';
@@ -94,7 +96,7 @@
             var tag  = '${tag}';
             var url  = '${CONTEXT_PATH}/dataType/' + tag + 'LevelTwo';
             var data = '';
-            var id   = '${id}';
+            var L2_id   = '${id}';
             var msg  = '';
 
             var value1 = $("#name1").val();
@@ -102,25 +104,26 @@
             var value3 = $("#name3").val();
             var value4 = $("#name4").val();
             var value5 = $("#name5").val();
+            var value6 = $("#name6").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
                 data = {
-                    L1_tag              :value1,
                     L1_name             :value2,
-                    L2_name             :value3,
-                    L2_desc             :value4,
-                    L1_id               :value5,
-                    id                  :id
+                    L1_tag              :value3,
+                    L2_name             :value4,
+                    L2_desc             :value5,
+                    L1_id               :value6,
+                    L2_id               :L2_id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
-                    L1_tag              :value1,
                     L1_name             :value2,
-                    L2_name             :value3,
-                    L2_desc             :value4,
-                    L1_id               :value5,
+                    L1_tag              :value3,
+                    L2_name             :value4,
+                    L2_desc             :value5,
+                    L1_id               :value6
                 };
             }
 
