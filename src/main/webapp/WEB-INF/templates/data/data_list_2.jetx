@@ -30,6 +30,7 @@
 				<th>名称</th>
 				<th>组件名称</th>
 				<th>组件描述</th>
+				<th>扩展属性维护</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -44,6 +45,8 @@
 <script>
     var l1_id   = '${L1_id}';
     var l1_tag  = '${L1_tag}';
+    var l2_id   = '${L2_id}';
+    var l2_tag  = '${L2_tag}';
     var l1_name = '${L1_name}';
 	var data    = ${data};
 	$(document).ready(function () {
@@ -71,7 +74,7 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelTwo?id=' + full[0] + '&L1_id=' + l1_id + '&L1_tag=' + l1_tag + '&L1_name=' + l1_name + '&tag=modify" >修改</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/editLevelTwo?id=' + full[0] + '&L1_id=' + l1_id + '&L1_tag=' + l1_tag + '&L1_name=' + l1_name + '&tag=modify" + '&L2_id=l2_id" + '&L2_tag=l2_tag" >修改</a>';
                     }
                 }
             ]
