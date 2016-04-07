@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class KafkaServiceTest {
 
   @Autowired
-  KafkaService service;
+  private KafkaService service;
 
   @Test
   public void testGetMessages() throws Exception {
-    service.getMessages("nginx.reverse", "json", 10);
+    service.getMessages("nginx.reverse", 10);
   }
 }

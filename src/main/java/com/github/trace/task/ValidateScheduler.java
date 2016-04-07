@@ -2,13 +2,11 @@ package com.github.trace.task;
 
 import com.google.common.collect.Sets;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.autoconf.ConfigFactory;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.KafkaService;
 import com.github.trace.utils.ElasticSearchHelper;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -49,8 +47,7 @@ class ValidateScheduler {
     }
     Set<String> topics = cepService.getAllTopics();
     topics.forEach(topic -> {
-      String type = "json";
-      Set<String> sampleLogs = kafkaService.getMessages(topic, type, sampleCount);
+      Set<String> sampleLogs = kafkaService.getMessages(topic, sampleCount);
       batchValidate(topic, sampleLogs);
     });
   }
@@ -64,38 +61,7 @@ class ValidateScheduler {
         toEs.add(log);
       }
     });
-    saveToEs(ES_INDEX, topic, toEs);
-  }
-
-  private void saveToEs(String index, String type, Set<String> logs) {
-    Set<String> convertedLogs = handle(logs);
-    ElasticSearchHelper.bulk(index, type, convertedLogs);
-  }
-
-  private Set<String> handle(Set<String> logs) {
-    Set<String> results = Sets.newHashSet();
-
-    logs.forEach(log -> {
-      JSONObject json = JSONObject.parseObject(log);
-      JSONObject object = new JSONObject();
-      json.entrySet().forEach(entry -> {
-        String keyConverted = convertFieldName(entry.getKey());
-        String value = entry.getValue().toString();
-        object.put(keyConverted, value);
-      });
-      results.add(object.toJSONString());
-    });
-    return results;
-  }
-
-  private String convertFieldName(String key) {
-    if (StringUtils.equals(key, "_time")) {
-      return "stamp";
-    }
-    if (StringUtils.contains(key, '.')) {
-      return StringUtils.replaceChars(key, '.', '_');
-    }
-    return key;
+    ElasticSearchHelper.bulk(ES_INDEX, topic, toEs);
   }
 
 }

@@ -152,9 +152,9 @@ public class CEPService {
   }
 
 
-  public Set<String> getServerLog(String str1,int st2) {
+  public Set<String> getServerLog(String str1, int st2) {
     //return kafkaService.getMessages("nginx.reverse","type",1);
-    return kafkaService.getMessages(str1,"type",st2);
+    return kafkaService.getMessages(str1, st2);
   }
 
   public boolean compareByTopic(String topic, String json) {
