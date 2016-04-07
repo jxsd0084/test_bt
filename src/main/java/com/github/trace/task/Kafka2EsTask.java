@@ -3,10 +3,7 @@ package com.github.trace.task;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import com.github.autoconf.ConfigFactory;
@@ -18,16 +15,12 @@ import com.github.trace.utils.ElasticSearchHelper;
 import com.github.trace.utils.JsonLogHandler;
 import com.github.trace.utils.NginxLogHandler;
 
-import org.antlr.v4.runtime.misc.MultiMap;
 import org.apache.commons.lang.StringUtils;
-import org.influxdb.dto.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;

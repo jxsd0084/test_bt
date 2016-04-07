@@ -21,11 +21,17 @@ import org.springframework.stereotype.Service;
 public class ElasticsearchService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ElasticsearchService.class);
-  private static final String INDEX = "datapt-validate";
+  private static final String INDEX = "datapt-buriedtool";
 
   public SearchResponse search(String topic, String keyword, String timeParamName, long from, long to) {
     SearchRequestBuilder builder = build(topic, keyword, timeParamName, from, to);
-    return ElasticSearchHelper.search(builder);
+    SearchResponse response = ElasticSearchHelper.search(builder);
+    long totalHits = 0L;
+    if (response != null && response.getHits() != null) {
+      totalHits = response.getHits().getTotalHits();
+    }
+    LOG.info("Got {} hits for keyword [{}] in topic [{}]", totalHits, keyword, topic);
+    return response;
   }
 
   /**
