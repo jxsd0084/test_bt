@@ -64,7 +64,7 @@
 </div>
 
 
-<textarea id = "textarea1" style="">请输入something...1</textarea>
+<textarea id = "textarea1" style="display:none">请输入something...1</textarea>
 
 
 </div>
