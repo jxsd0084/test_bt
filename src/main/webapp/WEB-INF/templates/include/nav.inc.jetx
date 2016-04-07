@@ -9,6 +9,7 @@
           <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${navObj.parentId}&child_id=${navObj.childId}&parent_name=${navObj.childName}&topic=${navObj.topic}">埋点配置与监控</a></li>
           <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
           <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
+            <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置【慎用】</a></li>
         </ul>
       </div>
       <div>
