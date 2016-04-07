@@ -1,6 +1,7 @@
 package com.github.trace.service;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import com.github.trace.utils.ElasticSearchHelper;
 
@@ -9,9 +10,13 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 处理es相关
@@ -23,15 +28,20 @@ public class ElasticsearchService {
   private static final Logger LOG = LoggerFactory.getLogger(ElasticsearchService.class);
   private static final String INDEX = "datapt-buriedtool";
 
-  public SearchResponse search(String topic, String keyword, String timeParamName, long from, long to) {
+  public List<Map<String, Object>> search(String topic, String keyword, String timeParamName, long from, long to) {
     SearchRequestBuilder builder = build(topic, keyword, timeParamName, from, to);
     SearchResponse response = ElasticSearchHelper.search(builder);
-    long totalHits = 0L;
+
+    List<Map<String, Object>> results = Lists.newArrayList();
+
     if (response != null && response.getHits() != null) {
-      totalHits = response.getHits().getTotalHits();
+      SearchHit[] hits = response.getHits().getHits();
+      for (SearchHit hit : hits) {
+        results.add(hit.getSource());
+      }
     }
-    LOG.info("Got {} hits for keyword [{}] in topic [{}]", totalHits, keyword, topic);
-    return response;
+    LOG.info("Got {} hits for keyword [{}] in topic [{}]", results.size(), keyword, topic);
+    return results;
   }
 
   /**
