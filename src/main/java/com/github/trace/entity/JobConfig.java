@@ -11,6 +11,7 @@ public class JobConfig {
     private String dbSourceName;
     private String selectData;
     private String memo;
+    private String selectTable;
     private Date createTime;
     private Date updateTime;
 
@@ -92,5 +93,13 @@ public class JobConfig {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getSelectTable() {
+        return selectTable;
+    }
+
+    public void setSelectTable(String selectTable) {
+        this.selectTable = selectTable;
     }
 }

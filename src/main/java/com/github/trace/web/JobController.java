@@ -186,6 +186,7 @@ public class JobController {
     public String tablesIndex(@RequestParam(name = "bizId") int bizId,
                               @RequestParam(name = "bizName") String bizName,
                               @RequestParam(name = "dbSourceId") int dbSourceId,
+                              @RequestParam(name = "id") int id,
                               Model model){
 
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
@@ -198,6 +199,7 @@ public class JobController {
             jsonArray2.add(cont);
             jsonArray2.add(databaseInfo.getDbName());
             jsonArray2.add(tableName);
+            jsonArray2.add("<input type=\"checkbox\" checked=\"checked\"/>");
             jsonArray1.add(jsonArray2);
         }
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
@@ -205,7 +207,7 @@ public class JobController {
         model.addAttribute("obj", databaseInfo);
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
-
+        model.addAttribute("jobId", id);
         return "ds/ds_index_2";
     }
 
@@ -234,5 +236,19 @@ public class JobController {
         model.addAttribute("bizName", bizName);
         model.addAttribute("dbSourceId",dbSourceId);
         return "ds/ds_index_3";
+    }
+
+    @RequestMapping("/selectTable")
+    public Map selectTable(@RequestParam(name = "jobId") int jobId,
+                              @RequestParam(name = "tables") String tables,
+                              Model model){
+
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+
+        JobConfig jobConfig = jobServer.getJobById(jobId);
+        jobConfig.setSelectTable(tables);
+        int res = jobServer.updateJob(jobConfig);
+        Map map = ControllerHelper.returnResponseVal(res, "保存");
+        return map;
     }
 }

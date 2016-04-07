@@ -71,7 +71,7 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listM99?id=' + full[0] + '&L1_id=' + l1_id + '&L1_tag=' + l1_tag + '&L1_name=' + l1_name + '&L2_id=' + full[4] + '&L2_tag=' + full[5] + '">属性编辑</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/listM99?id=' + full[0] + '&L1_id=' + l1_id + '&L1_tag=' + l1_tag + '&L1_name=' + l1_name + '&L2_id=' + full[0] + '&L2_tag=' + full[5] + '">属性 -| ' + full + ' |- 编辑</a>';
                     }
                 },
                 {

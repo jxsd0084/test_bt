@@ -41,8 +41,8 @@ public class DataTypeService {
      * @param m1Name
      * @return
      */
-    public List<M99Fields> getM99Fields(String m1Name) {
-        return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
+    public List<M99Fields> getM99FieldsByM1Id(int m1Id) {
+        return m99FieldsMapper.getM99FieldsByM1Id(m1Id);
     }
 
     /**
@@ -71,6 +71,15 @@ public class DataTypeService {
      */
     public int addM99Fields(M99Fields m99Fields) {
         return m99FieldsMapper.insert(m99Fields);
+    }
+
+	/**
+     * 删除M99字段
+     * @param id
+     * @return
+     */
+    public int deleteM99Fields(int id) {
+        return m99FieldsMapper.deleteById(id);
     }
 
     /**
@@ -200,6 +209,5 @@ public class DataTypeService {
         }
         return res;
     }
-
 
 }

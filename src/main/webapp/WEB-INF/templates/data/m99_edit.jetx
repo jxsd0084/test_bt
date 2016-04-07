@@ -13,9 +13,6 @@
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name1" id="name1" readonly="true" value="${L1_tag}"/>
         </div>
-     #*   <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name6" id="name6" readonly="true" value="${L2_tag}"/>
-        </div>*#
       </div>
 
       <div class="form-group">
@@ -67,9 +64,12 @@
 </div>
 #end
 #tag layout_block("scriptContent")
+<!-- 隐藏域 -->
+<input type="hidden" id="name6" name="name6" value="${L2_id}" />
+<input type="hidden" id="name7" name="name7" value="${L2_tag}" />
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}&L2_tag=${L2_tag}';
 
     var myValidator = function(){
         var msg = '';
@@ -101,12 +101,15 @@
 
         $("#confirm").on('click', function () {
 
-            var tag   = '${tag}';
-            var url   = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
-            var data  = '';
-            var id    = '${id}';
-            var L1_id = '${L1_id}'
-            var msg   = '';
+            var tag    = '${tag}';
+            var url    = '${CONTEXT_PATH}/dataType/' + tag + 'M99';
+            var data   = '';
+            var L3_id  = '${id}';
+            var L1_id  = '${L1_id}';
+            var L1_tag = '${L1_tag}';
+            var L2_id  = '${L2_id}';
+            var L2_tag = '${L2_tag}';
+            var msg    = '';
 
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
@@ -119,18 +122,22 @@
                 msg  = '修改';
                 data = {
                     L1_id               :L1_id,
-                    L1_tag              :value1,
+                    L1_tag              :L1_tag,
+                    L2_id               :L2_id,
+                    L2_tag              :L2_tag,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
                     F1_regx             :value5,
-                    id                  :id
+                    L3_id               :L3_id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
                 msg  = '添加';
                 data = {
                     L1_id               :L1_id,
                     L1_tag              :value1,
+                    L2_id               :L2_id,
+                    L2_tag              :L2_tag,
                     F1_name             :value2,
                     F1_desc             :value3,
                     F1_type             :value4,
