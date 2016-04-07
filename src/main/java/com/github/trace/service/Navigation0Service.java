@@ -55,4 +55,13 @@ public class Navigation0Service {
     public NavigationItem0 queryById(int id){
         return navigationItem0Mapper.findById(id);
     }
+
+    /**
+     * 查询单条导航栏项目
+     * @param id
+     * @return
+     */
+    public List<NavigationItem0> queryByParentId(int parentId){
+        return navigationItem0Mapper.findByParentId(parentId);
+    }
 }

@@ -42,6 +42,22 @@ public class ControllerHelper {
         }
     }
 
+    /**
+     * 处理响应信息
+     * @param res
+     * @return
+     */
+    public static Map returnResponseValue(int res, String msg){
+        String result;
+        if(res > 0){
+            result = "数据操作成功!";
+            return ImmutableMap.of("code", 200, "info", result);
+        }else{
+            result = "数据操作失败！失败原因："+msg;
+            return ImmutableMap.of("code", -1, "info", result);
+        }
+    }
+
 	/**
      * 转换为JSONArray
      * @param list

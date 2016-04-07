@@ -1,21 +1,41 @@
-#set(title="导航树新建项")
-#set(navbar="navCreate")
+#set(title="导航树节点新建项")
+#set(navbar="navRootCreate")
 #tag layout_block("bodyContent")
 <div class="container">
 
-  <legend>数据类型配置项</legend>
+  <legend>节点配置项</legend>
 
-  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/nav/create" method="POST">
     <fieldset>
-
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">组件名称</label>
-        <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.level2FieldName}"/>
-        </div>
-        <p class="help-block col-md-offset-2">如：验证码点击次数</p>
+          <label for="profile" class="col-md-2 control-label">节点名称</label>
+          <div class="col-md-3 col-lg-3">
+              <input type="text" class="form-control" name="name" id="name" placeholder="必填" />
+          </div>
+        <p class="help-block col-md-offset-2"></p>
       </div>
-
+        #if (parentId == 0)
+            <input type="hidden" class="form-control" name="item_type" id="item_type" value="0" />
+            <input type="hidden" class="form-control" name="topic" id="topic" />
+        #else
+        <div class="form-group">
+            <label for="profile" class="col-md-2 control-label">节点类型</label>
+            <div class="col-md-3 col-lg-3">
+                <select name="item_type" id="item_type" style="width: 140px">
+                    <option value="0">非叶子节点</option>
+                    <option value="1">叶子节点</option>
+                    <select/>
+            </div>
+            <p class="help-block col-md-offset-2"></p>
+        </div>
+        <div class="form-group" id = "leaf-item" style = "display:none">
+            <label for="profile" class="col-md-2 control-label">节点主题</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control" name="topic" id="topic" placeholder="必填" />
+            </div>
+            <p class="help-block col-md-offset-2"></p>
+        </div>
+        #end
       <!-- 确认按钮 -->
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
@@ -31,26 +51,40 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-
+    var GLOBAL_URL = '${CONTEXT_PATH}/nav/list';
     var showResult = function(msg){
         $('#resultInfo').text(msg);
 	    $('#resultInfo').removeClass("hide");
     }
 
-    var myValidator = function(){
+    var myValidator = function() {
         var msg = '';
         var result = true;
 
-        var value1 = $("#name1").val();
-        var value2 = $("#name2").val();
-        var value3 = $("#name3").val();
+        var name = $("#name").val();
+        var item_type = $("#item_type").val();
+        var topic = $("#topic").val();
+        if (item_type == '0') {
+            if (name == '') {
+                msg = '节点名称不能为空';
+                result = false;
+            }
+        }else {
+            if (name == '') {
+                msg = '节点名称不能为空';
+                result = false;
+            }
 
-        if(value1 == '' ||
-           value2 == '' ||
-           value3 == '' ){
-           msg = '必填项不能为空值!'
-           result = false;
-        }
+            if (item_type == '') {
+                msg = '节点类型不能为空';
+                result = false;
+            }
+
+            if (topic == '') {
+                msg = '叶子节点主题不能为空';
+                result = false;
+            }
+       }
 
         if(!result){
            showResult(msg);
@@ -63,34 +97,20 @@
 
         $("#confirm").on('click', function () {
 
-            var pid = '${parent_id}'
-            var cid = '${child_id}'
-            var tag = '${tag}';
-            var url = '${CONTEXT_PATH}/cep/' + tag + '?parent_id=' + pid + '&child_id=' + cid;
+            var value4 = '${parentId}';
+            var url = '${CONTEXT_PATH}/nav/create';
             var data = '';
-            var id = '${id}';
+            var value1 = $("#name").val();
+            var value2 = $("#item_type").val();
+            var value3 = $("#topic").val();
 
-            var value1 = $("#name1").val();
-            var value2 = $("#name2").val();
-            var value3 = $("#name3").val();
-            var is_checked = $("#name4").is(':checked');
-
-            if(tag == 'modify'){
+           // 新增不需要指定主键ID
                 data = {
-                    bp_name             :value1,
-                    bp_value            :value1,
-                    bp_value_desc       :value3,
-                    is_checked          :is_checked,
-                    id                  :id
+                    name                :value1,
+                    itemType            :value2,
+                    topic               :value3,
+                    parentId            :value4
                 };
-            }else if(tag == 'add'){     // 新增不需要指定主键ID
-                data = {
-                    bp_name             :value1,
-                    bp_value            :value2,
-                    bp_value_desc       :value3,
-                    is_checked          :is_checked
-                };
-            }
 
             if(myValidator()){
                 $.ajax({
@@ -102,7 +122,7 @@
                     success:function (data) {
                         var json = JSON.parse(data);
                         if (json.code == 200) {
-                            showResult(json.info);
+                            forward("添加成功!", GLOBAL_URL);
                         } else {
                             showResult("警告：" + json.info);
                         }
@@ -111,6 +131,15 @@
             }
 
         })
+
+        $("[name='item_type']").change(function () {
+            if(this.value==1){
+                $('#leaf-item').show();
+            }else{
+                $('#topic').val('');
+                $('#leaf-item').hide();
+            }
+        });
     });
 
 </script>

@@ -46,7 +46,6 @@ public class NavigationController {
                       @RequestParam(name = "name") String name,
                       @RequestParam(name = "itemType") int itemType,
                       @RequestParam(name = "topic") String topic){
-        System.out.println("创建开始");
         NavigationItem0 navigationItem0 = new NavigationItem0();
         navigationItem0.setParentId(parentId);
         navigationItem0.setItemType(itemType);
@@ -57,24 +56,31 @@ public class NavigationController {
     }
 
     @RequestMapping("/modify")
-    public String modify(@RequestParam(name = "id") int id,@RequestParam(name = "parentId") int parentId,
+    @ResponseBody
+    public Map modify(@RequestParam(name = "id") int id,@RequestParam(name = "parentId") int parentId,
                          @RequestParam(name = "name") String name,
                          @RequestParam(name = "itemType") int itemType,
                          @RequestParam(name = "topic") String topic){
         NavigationItem0 navigationItem0 = new NavigationItem0();
-        navigationItem0.setParentId(id);
+        navigationItem0.setId(id);
         navigationItem0.setParentId(parentId);
         navigationItem0.setItemType(itemType);
         navigationItem0.setName(name);
         navigationItem0.setTopic(topic);
-        navigation0Service.modify(navigationItem0);
-        return "nav/list";
+        int res=navigation0Service.modify(navigationItem0);
+        return ControllerHelper.returnResponseVal(res,"修改");
     }
 
     @RequestMapping("/delete")
-    public String delete(@RequestParam(name = "id") int id,Model model){
-        navigation0Service.remove(id);
-        return list(model);
+    @ResponseBody
+    public Map delete(@RequestParam(name = "id") int id){
+        List<NavigationItem0> list = navigation0Service.queryByParentId(id);
+        if(list==null||list.isEmpty()){
+            int res = navigation0Service.remove(id);
+            return ControllerHelper.returnResponseVal(res, "删除");
+        }else{
+            return ControllerHelper.returnResponseValue(0, "该节点下挂有子节点，请先删除子节点");
+        }
     }
 
     @RequestMapping("/new")
