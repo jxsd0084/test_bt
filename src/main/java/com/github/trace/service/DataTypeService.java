@@ -73,6 +73,15 @@ public class DataTypeService {
         return m99FieldsMapper.insert(m99Fields);
     }
 
+	/**
+     * 删除M99字段
+     * @param id
+     * @return
+     */
+    public int deleteM99Fields(int id) {
+        return m99FieldsMapper.deleteById(id);
+    }
+
     /**
      * 更新M99字段对应的M1Name
      * @param levelOneFields
@@ -200,6 +209,5 @@ public class DataTypeService {
         }
         return res;
     }
-
 
 }

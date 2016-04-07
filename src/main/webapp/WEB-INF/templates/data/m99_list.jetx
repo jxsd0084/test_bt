@@ -26,7 +26,6 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-                <th>标识</th>
 				<th>名称</th>
 				<th>描述</th>
 				<th>类型</th>
@@ -43,6 +42,8 @@
 #end
 #tag layout_block("scriptContent")
 <script>
+    GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}';
+
 	var data = ${data}
 	$(document).ready(function () {
         var table = $('#datatable').DataTable({
@@ -63,8 +64,8 @@
                     aTargets: [ '_all' ]
                 },
                 {
-                    targets: 6, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editM99?id=' + full[0] + '&L1_id=' + full[6] + '&L1_tag=' + full[1] + '&tag=modify" >修改</a>';
+                    targets: 5, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/dataType/editM99?id=' + full[0] + '&L1_id=' + full[6] + '&L1_tag=' + full[1] + '&tag=modify">修改</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" onclick="js_method(' + full[0] + ')">删除</a>';
                     }
                 }
             ]
@@ -72,7 +73,33 @@
 
     });
 
+    var js_method = function(id){
+        var url   = '${CONTEXT_PATH}/dataType/deleteM99';
+        if(confirm("是否删除?")){
+            data  = {
+                id : id
+            };
+            $.ajax({
+                contentType     :   "application/json",
+                dataType        :   "text",
+                type            :   "GET",
+                url             :   url,
+                data            :   data,
+                success:function (data) {
+                    var json = JSON.parse(data);
+                    if (json.code == 200) {
+                        alert("删除成功 !");
+                    } else {
+                        alert("删除失败 !");
+                    }
+                }
+            });
+//            window.location.href = GLOBAL_URL;
+        }
+    }
+
 </script>
 #end
 #include("/include/layout.jetx")
+#include("/cep/modal.jetx")
 

@@ -129,6 +129,13 @@ public class DataTypeController {
 
     }
 
+    @RequestMapping("/deleteM99")
+    @ResponseBody
+    public Map deleteM99(@RequestParam("id") int id) {
+        int res = dataTypeService.deleteM99Fields(id);
+        return ControllerHelper.returnResponseVal(res, "更新");
+    }
+
     @RequestMapping("/listLevelOne")
     public String listLevelOneFields(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
@@ -336,12 +343,11 @@ public class DataTypeController {
         for (M99Fields m99 : list) {
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(m99.getId());
-            jsonArray2.add(m99.getM1Name());                                        // M1           样例:AV
-            jsonArray2.add(m99.getFieldName());                                     // 字段名称      样例:M2
-            jsonArray2.add(m99.getFieldDesc());                                     // 字段描述      样例:音视频2
-            jsonArray2.add(m99.getFieldType());                                     // 字段类型      样例:文本、日期、数字
-            jsonArray2.add(m99.getFieldRegex());                                    // 正则表达式
-            jsonArray2.add(m99.getLevelOneId());                                    // M1-Id        样例:1
+            jsonArray2.add(m99.getFieldName());                         // 字段名称   样例:M2
+            jsonArray2.add(m99.getFieldDesc());                         // 字段描述   样例:音视频2
+            jsonArray2.add(m99.getFieldType());                         // 字段类型   样例:文本、日期、数字
+            jsonArray2.add(m99.getFieldRegex());                        // 正则表达式
+            jsonArray2.add(m99.getLevelOneId());                        // M1-Id     样例:1
             int m99Count = dataTypeService.getM99FieldsCount(m99.getFieldName());   // M99的扩展字段
             jsonArray2.add(m99Count);
             jsonArray1.add(jsonArray2);
