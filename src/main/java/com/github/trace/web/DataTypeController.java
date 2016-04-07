@@ -31,25 +31,31 @@ public class DataTypeController {
 
     @RequestMapping("/listM99")
     public String listM99(@RequestParam(name = "L1_id")  int    f1_id,
+                          @RequestParam(name = "L2_id")  int    f2_id,
                           @RequestParam(name = "L1_tag") String f1_tag,
                           Model model) {
         JSONArray jsonArray = getM99FieldsList(f1_tag);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
         model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L2_id", f2_id);
         model.addAttribute("L1_tag", f1_tag);
         return "data/m99_list";
     }
 
     @RequestMapping("/newM99")
     public String newM99(@RequestParam(name = "L1_id")  int f1_id,
+                         @RequestParam(name = "L2_id")   int f2_id,
                          @RequestParam(name = "L1_tag") String f1_tag,
+                         @RequestParam(name = "L2_tag") String f2_tag,
                          @RequestParam(name = "tag")    String tag,
                          Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
         model.addAttribute("tag", tag);
         model.addAttribute("L1_id", f1_id);
+        model.addAttribute("L2_id", f2_id);
         model.addAttribute("L1_tag", f1_tag);
+        model.addAttribute("L2_tag", f2_tag);
 
         return "data/m99_edit";
     }
@@ -83,7 +89,7 @@ public class DataTypeController {
                          @RequestParam("id") int id) {
         M99Fields m99Fields = new M99Fields();
         m99Fields.setId(id);
-        m99Fields.setM1Id(f1_id);
+        m99Fields.setLevelOneId(f1_id);
         m99Fields.setM1Name(f1_tag);
         m99Fields.setFieldName(f1_name);
         m99Fields.setFieldDesc(f1_desc);
@@ -104,7 +110,7 @@ public class DataTypeController {
                       @RequestParam("F1_type") String f1_type,
                       @RequestParam("F1_regx") String f1_regx) {
         M99Fields m99Fields = new M99Fields();
-        m99Fields.setM1Id(f1_id);
+        m99Fields.setLevelOneId(f1_id);
         m99Fields.setM1Name(f1_tag);
         m99Fields.setFieldName(f1_name);
         m99Fields.setFieldDesc(f1_desc);
@@ -284,8 +290,8 @@ public class DataTypeController {
             jsonArray2.add(tagName);                                    // 标识 样例:AV
             jsonArray2.add(levelOneFields.getLevel1FieldName());        // 名称 样例:音视频
             jsonArray2.add(levelOneFields.getLevel1FieldDesc());        // 描述
-            int m99Count = dataTypeService.getM99FieldsCount(tagName);  // M99的扩展字段
-            jsonArray2.add(m99Count);
+          /*  int m99Count = dataTypeService.getM99FieldsCount(tagName);  // M99的扩展字段
+            jsonArray2.add(m99Count);*/
             jsonArray1.add(jsonArray2);
         }
         return jsonArray1;
@@ -324,13 +330,14 @@ public class DataTypeController {
         for (M99Fields m99 : list) {
             JSONArray jsonArray2 = new JSONArray();
             jsonArray2.add(m99.getId());
-            jsonArray2.add(m99.getM1Name());                            // M1          样例:AV
-            jsonArray2.add(m99.getFieldName());                         // 字段名称     样例:M2
-            jsonArray2.add(m99.getFieldDesc());                         // 字段描述     样例:音视频2
-            jsonArray2.add(m99.getFieldType());                         // 字段类型     样例:文本、日期、数字
-            jsonArray2.add(m99.getFieldRegex());                        // 正则表达式
-            jsonArray2.add(m99.getM1Id());                              // M1-Id       样例:1
-
+            jsonArray2.add(m99.getM1Name());                                        // M1           样例:AV
+            jsonArray2.add(m99.getFieldName());                                     // 字段名称     样例:M2
+            jsonArray2.add(m99.getFieldDesc());                                     // 字段描述     样例:音视频2
+            jsonArray2.add(m99.getFieldType());                                     // 字段类型     样例:文本、日期、数字
+            jsonArray2.add(m99.getFieldRegex());                                    // 正则表达式
+            jsonArray2.add(m99.getLevelOneId());                                          // M1-Id       样例:1
+            int m99Count = dataTypeService.getM99FieldsCount(m99.getFieldName());   // M99的扩展字段
+            jsonArray2.add(m99Count);
             jsonArray1.add(jsonArray2);
         }
         return jsonArray1;
