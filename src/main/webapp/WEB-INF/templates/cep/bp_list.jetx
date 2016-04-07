@@ -64,7 +64,7 @@
 </div>
 
 
-<textarea id = "textarea1" style="display:none">请输入something...1</textarea>
+<textarea id = "textarea1" style="">请输入something...1</textarea>
 
 
 </div>
@@ -189,7 +189,6 @@
             $('#myModal').modal('show');
         })
 
-
         $("#browseBP").click( function() {
 
             var list = $('#datatable').DataTable().data();
@@ -201,46 +200,21 @@
             }
             as = "{" + as + "}";
             $.ajax({
-                url: "${CONTEXT_PATH}/cep/format",
-                async : false,
-                contentType: "application/json",
-                data:  {BuriedPointList:as},
-                dataType: "text",
-                type: "GET",
-                success: function (data) {
-
-                    $("#textarea1").val(data);
-                }
-            });
-
-            $.ajax({
-                url: "${CONTEXT_PATH}/cep/serverLog",
-                async : false,
-                contentType: "application/json",
-                data:  { str1:$("#select").text(),str2: $("#select2").val()},
-                dataType: "text",
-                type: "GET",
-                success: function (mydata) {
-                    $("#textarea2").val(mydata)
-                }
-            });
-
-            $.ajax({
                 url: "${CONTEXT_PATH}/cep/compare",
                 async : false,
                 contentType: "application/json",
-                data:  { Source:$("#textarea1").val(),Target: $("#textarea2").val()},
+                data:  {BuriedPointList:as, str1:$("#select").text(), str2: $("#select2").val()},
                 dataType: "json",
                 type: "GET",
                 success: function (mydata) {
+                    $("#textarea1").val(mydata.source);
+                    $("#textarea2").val(mydata.target);
                     //重新加载数据前需要做如下操作,否则会报错.
                     $('#datatable2').dataTable().fnDestroy();
-
-
                     $('#datatable2').DataTable( {
                         paging: false,
                         language: lang,
-                        data: mydata,
+                        data: mydata.tableData,
                         columnDefs: [
                             {
                                 sDefaultContent: '',
