@@ -33,7 +33,7 @@ public class DataTypeController {
     public String listM99(
                           @RequestParam(name = "L1_id")   int    l1_id,
                           @RequestParam(name = "L1_tag")  String l1_tag,
-//                          @RequestParam(name = "L1_name") String l1_name,
+                          @RequestParam(name = "L1_name") String l1_name,
                           @RequestParam(name = "L2_id")   int    l2_id,
                           @RequestParam(name = "L2_tag")  String l2_tag,
 //                          @RequestParam(name = "id")      int    id,
@@ -45,48 +45,52 @@ public class DataTypeController {
         model.addAttribute("L1_tag", l1_tag);
         model.addAttribute("L2_id", l2_id);
         model.addAttribute("L2_tag", l2_tag);
-//        model.addAttribute("L1_name", l1_name);
+        model.addAttribute("L1_name", l1_name);
 //        model.addAttribute("id", id);
         return "data/m99_list";
     }
 
     @RequestMapping("/newM99")
-    public String newM99(@RequestParam(name = "L1_id")  int    l1_id,
-                         @RequestParam(name = "L1_tag") String l1_tag,
-                         @RequestParam(name = "L2_id")  int    l2_id,
-                         @RequestParam(name = "L2_tag") String l2_tag,
-                         @RequestParam(name = "tag")    String tag,
+    public String newM99(@RequestParam(name = "L1_id")   int    l1_id,
+                         @RequestParam(name = "L1_tag")  String l1_tag,
+                         @RequestParam(name = "L1_name") String l1_name,
+                         @RequestParam(name = "L2_id")   int    l2_id,
+                         @RequestParam(name = "L2_tag")  String l2_tag,
+                         @RequestParam(name = "tag")     String tag,
                          Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
-        model.addAttribute("L1_id",  l1_id);
-        model.addAttribute("L1_tag", l1_tag);
-        model.addAttribute("L2_id",  l2_id);
-        model.addAttribute("L2_tag", l2_tag);
-        model.addAttribute("tag",    tag);
+        model.addAttribute("L1_id",   l1_id);
+        model.addAttribute("L1_tag",  l1_tag);
+        model.addAttribute("L1_name", l1_name);
+        model.addAttribute("L2_id",   l2_id);
+        model.addAttribute("L2_tag",  l2_tag);
+        model.addAttribute("tag",     tag);
 
         return "data/m99_edit";
     }
 
     @RequestMapping("/editM99")
-    public String editM99(@RequestParam(name = "L3_id")  int    l3_id,
-                          @RequestParam(name = "L1_id")  int    l1_id,
-                          @RequestParam(name = "L1_tag") String l1_tag,
-                          @RequestParam(name = "L2_id")  String l2_id,
-                          @RequestParam(name = "L2_tag") String l2_tag,
-                          @RequestParam(name = "tag")    String tag,
+    public String editM99(@RequestParam(name = "L3_id")   int    l3_id,
+                          @RequestParam(name = "L1_id")   int    l1_id,
+                          @RequestParam(name = "L1_tag")  String l1_tag,
+                          @RequestParam(name = "L1_name") String l1_name,
+                          @RequestParam(name = "L2_id")   String l2_id,
+                          @RequestParam(name = "L2_tag")  String l2_tag,
+                          @RequestParam(name = "tag")     String tag,
                           Model model) {
         M99Fields m99 = dataTypeService.getM99FieldsById(l3_id);
         model.addAttribute("obj", m99);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
-        model.addAttribute("id",     l3_id);
-        model.addAttribute("L1_id",  l1_id);
-        model.addAttribute("L1_tag", l1_tag);
-        model.addAttribute("L2_id",  l2_id);
-        model.addAttribute("L2_tag", l2_tag);
-        model.addAttribute("tag", tag);
+        model.addAttribute("id",      l3_id);
+        model.addAttribute("L1_id",   l1_id);
+        model.addAttribute("L1_tag",  l1_tag);
+        model.addAttribute("L1_name", l1_name);
+        model.addAttribute("L2_id",   l2_id);
+        model.addAttribute("L2_tag",  l2_tag);
+        model.addAttribute("tag",     tag);
         return "data/m99_edit";
     }
 
@@ -143,19 +147,21 @@ public class DataTypeController {
 
     @RequestMapping("/deleteM99")
     @ResponseBody
-    public Map deleteM99(@RequestParam("L3_id")  int l3_id,
-                         @RequestParam("L1_id")  int l1_id,
-                         @RequestParam("L1_tag") String l1_tag,
-                         @RequestParam("L2_id")  int l2_id,
-                         @RequestParam("L2_tag") String l2_tag,
+    public Map deleteM99(@RequestParam("L3_id")   int    l3_id,
+                         @RequestParam("L1_id")   int    l1_id,
+                         @RequestParam("L1_tag")  String l1_tag,
+                         @RequestParam("L1_name") String l1_name,
+                         @RequestParam("L2_id")   int    l2_id,
+                         @RequestParam("L2_tag")  String l2_tag,
                          Model model){
 
         int res = dataTypeService.deleteM99Fields(l3_id);
 
-        model.addAttribute("L1_id", l1_id);
-        model.addAttribute("L1_tag", l1_tag);
-        model.addAttribute("L2_id", l2_id);
-        model.addAttribute("L2_tag", l2_tag);
+        model.addAttribute("L1_id",   l1_id);
+        model.addAttribute("L1_tag",  l1_tag);
+        model.addAttribute("L1_name", l1_name);
+        model.addAttribute("L2_id",   l2_id);
+        model.addAttribute("L2_tag",  l2_tag);
 
         return ControllerHelper.returnResponseVal(res, "更新");
     }
@@ -163,8 +169,8 @@ public class DataTypeController {
     @RequestMapping("/listLevelOne")
     public String listLevelOneFields(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
-        ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
         return "data/data_list";
     }
 
@@ -178,9 +184,9 @@ public class DataTypeController {
 
         JSONArray jsonArray = getLevelTwoFieldList(l1_id);
 
-        model.addAttribute("data", jsonArray);
-        model.addAttribute("L1_id", l1_id);
-        model.addAttribute("L1_tag", l1_tag);
+        model.addAttribute("data",    jsonArray);
+        model.addAttribute("L1_id",   l1_id);
+        model.addAttribute("L1_tag",  l1_tag);
         model.addAttribute("L1_name", l1_name);
         return "data/data_list_2";
     }
@@ -295,7 +301,7 @@ public class DataTypeController {
 
     @RequestMapping("/addLevelTwo")
     @ResponseBody
-    public Map addLevelTwo(@RequestParam("L1_id") int l1_id,
+    public Map addLevelTwo(@RequestParam("L1_id")   int    l1_id,
                            @RequestParam("L1_tag")  String l1_tag,
                            @RequestParam("L1_name") String l1_name,
                            @RequestParam("L2_name") String l2_name,
@@ -327,8 +333,7 @@ public class DataTypeController {
             jsonArray2.add(tagName);                                    // 标识 样例:AV
             jsonArray2.add(levelOneFields.getLevel1FieldName());        // 名称 样例:音视频
             jsonArray2.add(levelOneFields.getLevel1FieldDesc());        // 描述
-          /*  int m99Count = dataTypeService.getM99FieldsCount(tagName);  // M99的扩展字段
-            jsonArray2.add(m99Count);*/
+
             jsonArray1.add(jsonArray2);
         }
         return jsonArray1;
@@ -358,11 +363,11 @@ public class DataTypeController {
 
     /**
      * M99字段列表
-     * @param l1_id
+     * @param l2_id
      * @return
      */
-    private JSONArray getM99FieldsList(int l1_id) {
-        List<M99Fields> list = dataTypeService.getM99FieldsByM1Id(l1_id);
+    private JSONArray getM99FieldsList(int l2_id) {
+        List<M99Fields> list = dataTypeService.getM99FieldsByM1Id(l2_id);
         JSONArray jsonArray1 = new JSONArray();
         for (M99Fields m99 : list) {
             JSONArray jsonArray2 = new JSONArray();
@@ -372,8 +377,7 @@ public class DataTypeController {
             jsonArray2.add(m99.getFieldType());                         // 字段类型   样例:文本、日期、数字
             jsonArray2.add(m99.getFieldRegex());                        // 正则表达式
             jsonArray2.add(m99.getLevelOneId());                        // M1-Id     样例:1
-//            int m99Count = dataTypeService.getM99FieldsCount(m99.getFieldName());   // M99的扩展字段
-//            jsonArray2.add(m99Count);
+
             jsonArray1.add(jsonArray2);
         }
         return jsonArray1;

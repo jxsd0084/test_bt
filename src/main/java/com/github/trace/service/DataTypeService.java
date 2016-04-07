@@ -38,11 +38,11 @@ public class DataTypeService {
     /**
      * 根据M1字段获取所有M99扩展字段的数量
      *
-     * @param m1Name
+     * @param m1Id
      * @return
      */
-    public List<M99Fields> getM99FieldsByM1Id(int m1Id) {
-        return m99FieldsMapper.getM99FieldsByM1Id(m1Id);
+    public List<M99Fields> getM99FieldsByM1Id(int m2Id) {
+        return m99FieldsMapper.getM99FieldsByM1Id(m2Id);
     }
 
     /**
@@ -87,10 +87,10 @@ public class DataTypeService {
      * @param levelOneFields
      * @return
      */
-    private int updateM99FieldsByM1Name(LevelOneFields levelOneFields) {
+    private int updateM99FieldsByM1(LevelOneFields levelOneFields) {
         String tagName = levelOneFields.getLevel1FieldTag();
         int id = levelOneFields.getId().intValue();
-        return m99FieldsMapper.updateM99FieldsByM1Name(tagName, id);
+        return m99FieldsMapper.updateM99FieldsByM1Id(tagName, id);
     }
 
     /**
@@ -178,7 +178,7 @@ public class DataTypeService {
      */
     @Transactional
     public int updateFieldsByCascade(LevelOneFields levelOneFields) {
-        updateM99FieldsByM1Name(levelOneFields);    // 可能存在没有任何数据的情况
+        int res = updateM99FieldsByM1(levelOneFields);    // 可能存在没有任何数据的情况
         return updateLevelTwoByCascade(levelOneFields);
     }
 
