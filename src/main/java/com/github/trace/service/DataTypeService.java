@@ -41,8 +41,8 @@ public class DataTypeService {
      * @param m1Name
      * @return
      */
-    public List<M99Fields> getM99Fields(String m1Name) {
-        return m99FieldsMapper.getM99FieldsByM1Name(m1Name);
+    public List<M99Fields> getM99FieldsByM1Id(int m1Id) {
+        return m99FieldsMapper.getM99FieldsByM1Id(m1Id);
     }
 
     /**
