@@ -74,6 +74,12 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
+                    alert(full);
+                    return '<a href="${CONTEXT_PATH}/dataType/modifyM99?id=' + full[0] + '&L1_id=' + l1_id + '&L1_tag=' + l1_tag + '&L1_name=' + l1_name + '&tag=modify' + '&L2_id=' + l2_id + '&L2_tag=' + l2_tag + '>属性编辑</a>';
+                    }
+                },
+                {
+                    targets: 6, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/dataType/editLevelTwo?id=' + full[0] + '&L1_id=' + l1_id + '&L1_tag=' + l1_tag + '&L1_name=' + l1_name + '&tag=modify' + '&L2_id='+l2_id + '&L2_tag='+l2_tag+'>修改</a>';
                     }
                 }
