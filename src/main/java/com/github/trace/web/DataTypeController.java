@@ -169,8 +169,8 @@ public class DataTypeController {
     @RequestMapping("/listLevelOne")
     public String listLevelOneFields(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
-        ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
         return "data/data_list";
     }
 
@@ -363,11 +363,11 @@ public class DataTypeController {
 
     /**
      * M99字段列表
-     * @param l1_id
+     * @param l2_id
      * @return
      */
-    private JSONArray getM99FieldsList(int l1_id) {
-        List<M99Fields> list = dataTypeService.getM99FieldsByM1Id(l1_id);
+    private JSONArray getM99FieldsList(int l2_id) {
+        List<M99Fields> list = dataTypeService.getM99FieldsByM1Id(l2_id);
         JSONArray jsonArray1 = new JSONArray();
         for (M99Fields m99 : list) {
             JSONArray jsonArray2 = new JSONArray();
