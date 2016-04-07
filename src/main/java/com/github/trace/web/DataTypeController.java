@@ -42,8 +42,8 @@ public class DataTypeController {
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         model.addAttribute("data", jsonArray);
         model.addAttribute("L1_id", l1_id);
-        model.addAttribute("L2_id", l2_id);
         model.addAttribute("L1_tag", l1_tag);
+        model.addAttribute("L2_id", l2_id);
         model.addAttribute("L2_tag", l2_tag);
 //        model.addAttribute("L1_name", l1_name);
 //        model.addAttribute("id", id);
@@ -94,7 +94,7 @@ public class DataTypeController {
     @ResponseBody
     public Map modifyM99(@RequestParam("L1_id")   int    l1_id,
                          @RequestParam("L1_tag")  String l1_tag,
-                         @RequestParam("L2_id")  int    l2_id,
+                         @RequestParam("L2_id")   int    l2_id,
                          @RequestParam("L2_tag")  String l2_tag,
                          @RequestParam("F1_name") String f1_name,
                          @RequestParam("F1_desc") String f1_desc,
@@ -143,8 +143,20 @@ public class DataTypeController {
 
     @RequestMapping("/deleteM99")
     @ResponseBody
-    public Map deleteM99(@RequestParam("id") int id) {
-        int res = dataTypeService.deleteM99Fields(id);
+    public Map deleteM99(@RequestParam("L3_id")  int l3_id,
+                         @RequestParam("L1_id")  int l1_id,
+                         @RequestParam("L1_tag") String l1_tag,
+                         @RequestParam("L2_id")  int l2_id,
+                         @RequestParam("L2_tag") String l2_tag,
+                         Model model){
+
+        int res = dataTypeService.deleteM99Fields(l3_id);
+
+        model.addAttribute("L1_id", l1_id);
+        model.addAttribute("L1_tag", l1_tag);
+        model.addAttribute("L2_id", l2_id);
+        model.addAttribute("L2_tag", l2_tag);
+
         return ControllerHelper.returnResponseVal(res, "更新");
     }
 

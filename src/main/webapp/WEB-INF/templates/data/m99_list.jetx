@@ -42,7 +42,7 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-    GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}';
+    GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?L1_id=${L1_id}&L1_tag=${L1_tag}&L2_id=${L2_id}&L2_tag=${L2_tag}';
 
     var L1_id  = '${L1_id}';
     var L1_tag = '${L1_tag}';
@@ -81,7 +81,11 @@
         var url   = '${CONTEXT_PATH}/dataType/deleteM99';
         if(confirm("是否删除?")){
             data  = {
-                id : id
+                L3_id           :   id,
+                L1_id           :   L1_id,
+                L1_tag          :   L1_tag,
+                L2_id           :   L2_id,
+                L2_tag          :   L2_tag
             };
             $.ajax({
                 contentType     :   "application/json",
@@ -93,12 +97,12 @@
                     var json = JSON.parse(data);
                     if (json.code == 200) {
                         alert("删除成功 !");
+                        window.location.href = GLOBAL_URL;
                     } else {
                         alert("删除失败 !");
                     }
                 }
             });
-//            window.location.href = GLOBAL_URL;
         }
     }
 
