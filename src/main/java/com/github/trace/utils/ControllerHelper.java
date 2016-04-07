@@ -33,7 +33,7 @@ public class ControllerHelper {
      */
     public static Map returnResponseVal(int res, String msg){
         String result;
-        if(res == 1){
+        if(res > 0){
             result = "数据" + msg + "成功!";
             return ImmutableMap.of("code", 200, "info", result);
         }else{
