@@ -2,6 +2,7 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
 import com.github.trace.service.CEPService;
@@ -160,45 +161,18 @@ public class CEPTraceController {
         return "func/bp_list";
     }
 
-    @RequestMapping("/format")
-    @ResponseBody
-    public String format(@RequestParam("BuriedPointList") String BuriedPointList,
-                         Model model) {
-
-        System.out.println("BuriedPointList"+BuriedPointList);
-
-        return BuriedPointList+"";
-    }
-
-    @RequestMapping("/serverLog")
-    @ResponseBody
-    public String serverLog(@RequestParam("str1") String str1,
-                            @RequestParam("str2") int str2,
-                            Model model) {
-
-        Set<String> serverLogSetList = cepService.getServerLog( str1,str2 );
-
-//        String results = "";
-//
-//        for (String string: serverLogSetList ) {
-//            results += string+"\n";
-//        }
-
-        return serverLogSetList.toString();
-    }
-
     @RequestMapping("/compare")
     @ResponseBody
-    public String compare(@RequestParam("Source") String Source,
-                          @RequestParam("Target") String Target,
-                          Model model) {
+    public String compare(@RequestParam("BuriedPointList") String BuriedPointList,
+                              @RequestParam("str1") String str1,
+                              @RequestParam("str2") int str2,
+                              Model model) {
 
-        JSONArray jsonArray  = JSON.parseArray(Target);
-
+        String source = BuriedPointList+"";
+        String target =  cepService.getServerLog( str1,str2 ).toString();
+        JSONArray jsonArray  = JSON.parseArray(target);
         JSONArray ja1 = new JSONArray();
-
-        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(Source, new TypeReference<LinkedHashMap<String, String>>() {});
-
+        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(source, new TypeReference<LinkedHashMap<String, String>>() {});
 
         for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
             JSONArray ja2 = new JSONArray();
@@ -295,28 +269,19 @@ public class CEPTraceController {
                     ja3.add("空值");
                     ja2.add(ja3);
                 }
-
             }
             ja1.add(ja2);
-
         }
-
         // 左边导航条
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-
         System.out.println("BuriedPointList"+ja1.toJSONString());
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("source",source);
+        jsonObj.put("target",target);
+        jsonObj.put("tableData",ja1);
 
-        return ja1.toJSONString();
+        return jsonObj.toJSONString();
     }
-
-//    @RequestMapping("/compareByTopic")
-//    @ResponseBody
-//    public boolean compareByTopic(@RequestParam("topic") String topic,
-//                          @RequestParam("jsonArray") String jsonArray) {
-//        return cepService.compareByTopic(topic,jsonArray);
-//
-//    }
-
 
 }
 
