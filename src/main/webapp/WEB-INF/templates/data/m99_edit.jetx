@@ -13,9 +13,9 @@
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name1" id="name1" readonly="true" value="${L1_tag}"/>
         </div>
-        <div class="col-md-3 col-lg-3">
+     #*   <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name6" id="name6" readonly="true" value="${L2_tag}"/>
-        </div>
+        </div>*#
       </div>
 
       <div class="form-group">
@@ -75,12 +75,13 @@
         var msg = '';
         var result = true;
 
-        var value1 = $("#name1").val();
+//        var value1 = $("#name1").val();
         var value2 = $("#name2").val();
         var value3 = $("#name3").val();
         var value4 = $("#name4").val();
 
-        if(value1 == '' ||
+        if(
+//                value1 == '' ||
            value2 == '' ||
            value3 == '' ||
            value4 == ''
@@ -112,7 +113,7 @@
             var value3 = $("#name3").val();
             var value4 = $("#name4").val();
             var value5 = $("#name5").val();
-            var value6 = $("#name6").val();
+//            var value6 = $("#name6").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
