@@ -216,6 +216,7 @@ public class CEPTraceController {
 
         String source = BuriedPointList+"";
         String target =  cepService.getServerLog( str1,str2 ).toString();
+//        String target = "[{'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':9,'M98':'2016-01-28 20:51:32','M99.M1':'activite','realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':9,'M98':1453985500196,'M99.M1':'unactivite','realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':2,'M98':1453985500196,'M99.avg':0,'M99.M3':0,'M99.M2':0,'M99.failed':0,'M99.M1':0,'realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':2,'M98':1453984760374,'M99.avg':0,'M99.M3':0,'M99.M2':0,'M99.failed':0,'M99.M1':0,'realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':9,'M98':1453984760374,'M99.M1':'unactivite','realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}]";
         JSONArray jsonArray  = JSON.parseArray(target);
         JSONArray ja1 = new JSONArray();
         LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(source, new TypeReference<LinkedHashMap<String, String>>() {});
@@ -244,22 +245,22 @@ public class CEPTraceController {
                         String value = jsonMap2.get(entry1.getKey());
                         Matcher matcher;
                         if(entry1.getValue().split(",")[1].equals("日期")){
-                            try {
-                                long dateTime = Long.valueOf(jsonMap2.get(entry1.getKey()));
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                                Date date = new Date(dateTime);
-                                value = sdf.format(date);
-                            }catch (Exception e){
-                                //转化成日期类型时出错
-                                value = jsonMap2.get(entry1.getKey());
+                            patternString = "(\\d{2}|\\d{4})(?:\\-)?([0]{1}\\d{1}|[1]{1}[0-2]{1})(?:\\-)?([0-2]{1}\\d{1}|[3]{1}[0-1]{1})(?:\\s)?([0-1]{1}\\d{1}|[2]{1}[0-3]{1})(?::)?([0-5]{1}\\d{1})(?::)?([0-5]{1}\\d{1})";
+                            Pattern patt = Pattern.compile("^[0-9]*$");
+                            matcher = patt.matcher(value);
+                            if(matcher.matches()){
+                                try {
+                                    long dateTime = Long.valueOf(value);
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    Date date = new Date(dateTime);
+                                    value = sdf.format(date);
+                                }catch (Exception e){
+
+                                }
                             }
-                            patternString = "^\\d{4}(\\-|\\/|\\.)\\d{1,2}\\1\\d{1,2}$";
-                            Pattern pattern = Pattern.compile(patternString);
-                            matcher = pattern.matcher(value);
-                        }else{
-                            Pattern pattern = Pattern.compile(patternString);
-                            matcher = pattern.matcher(value);
                         }
+                        Pattern pattern = Pattern.compile(patternString);
+                        matcher = pattern.matcher(value);
                         boolean b= matcher.matches();
 
 
