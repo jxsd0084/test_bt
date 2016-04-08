@@ -28,8 +28,8 @@ public class ElasticsearchServiceTest {
   @Test
   public void search() throws Exception {
     List<Map<String, Object>>
-        results = esService.search("dcx.MonitorRequest", "ecf557a77013dafc53b6fd574a80fd7b",
-                                    "stamp", 1459731600000L, 1459735200000L);
+        results = esService.search("dcx.MonitorRequest", "*",
+              "stamp", System.currentTimeMillis(), System.currentTimeMillis() - 24 * 3600 * 1000L);
 
     for (Map<String, Object> source : results) {
       for (Map.Entry<String, Object> entry : source.entrySet()) {

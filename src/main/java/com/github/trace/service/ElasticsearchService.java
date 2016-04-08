@@ -27,6 +27,7 @@ public class ElasticsearchService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ElasticsearchService.class);
   private static final String INDEX = "datapt-buriedtool";
+  private static final int MAX_LOG_ITEMS = 1000;
 
   public List<Map<String, Object>> search(String topic, String keyword, String timeParamName, long from, long to) {
     SearchRequestBuilder builder = build(topic, keyword, timeParamName, from, to);
@@ -68,6 +69,8 @@ public class ElasticsearchService {
       rangeQuery.gte(from).lte(to);
       boolQuery.must(rangeQuery);
     }
+
+    builder.setSize(MAX_LOG_ITEMS);
 
     builder.setQuery(boolQuery);
     return builder;
