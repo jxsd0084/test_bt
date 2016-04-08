@@ -266,7 +266,7 @@ public class CEPTraceController {
                     JSONArray ja3 = new JSONArray();
                     ja3.add(false);
                     ja3.add("");
-                    ja3.add("空值");
+                    ja3.add("缺失");
                     ja2.add(ja3);
                 }
             }
