@@ -3,7 +3,9 @@ package com.github.trace.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.SearchLog;
+import com.github.trace.service.CEPService;
 import com.github.trace.service.SearchService;
+import com.github.trace.utils.ControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +23,13 @@ import java.util.Map;
 public class SearchController {
 
 	@Autowired
+	private CEPService cepService;
+	@Autowired
 	private SearchService searchService;
 
     @RequestMapping("/list")
     public String list(Model model) {
+	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
         return "search/search_list";
     }
 
@@ -33,16 +38,19 @@ public class SearchController {
                          @RequestParam(name = "keyWord") String keyWord,
 		                 Model model) {
 
+	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
+
 	    SearchLog sLog = new SearchLog();
-		sLog.setTopic("dcx.MonitorRequest");                            // 主题
+		sLog.setTopic(topic);                                           // 主题
 		sLog.setKeyWord(keyWord);                                       // 搜索关键词
 		sLog.setTag("stamp");                                           // 暂时写死
 		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
 		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
 
-	    JSONArray jsonArray1 = getSearchLogList(sLog);
-	    model.addAttribute("data", jsonArray1);
-
+	    JSONArray jsonArray = getSearchLogList(sLog);
+	    model.addAttribute("data", jsonArray);
+	    model.addAttribute("topic", topic);
+	    model.addAttribute("keyWord", keyWord);
 	    return "search/search_list";
     }
 

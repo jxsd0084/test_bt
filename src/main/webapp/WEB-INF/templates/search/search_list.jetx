@@ -17,7 +17,15 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-    <input id="search_ipt" type="text" value="请输入搜索关键词..." onclick="this.select()"/>
+    <div>
+        <select id="topic_sel" style="width: 205px">
+            <option value=""> - 选择主题 - </option>
+            #for(item : navigationItemList)
+                <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.topic}</option>
+            #end
+        </select>
+    </div>
+    <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
 </div>
@@ -65,8 +73,17 @@
     });
 
     var searchBtnClick = function(){
+        var topic   = $('#topic_sel').val();
         var keyWord = $('#search_ipt').val();
-        window.location.href = "${CONTEXT_PATH}/search/searchLog?topic=1&keyWord=" + keyWord;
+        if(topic == ''){
+            alert('请选择主题 !')
+            return;
+        }
+        if(keyWord == '') {
+            alert('请填写关键词 !')
+            return;
+        }
+        window.location.href = '${CONTEXT_PATH}/search/searchLog?topic=' + topic + '&keyWord=' + keyWord;
     }
 
 </script>
