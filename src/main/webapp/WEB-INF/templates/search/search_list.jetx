@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-    <input type="text" value="请输入关键字... " onclick="this.select()"/>
+    <input id="search_ipt" type="text" value="请输入搜索关键词..." onclick="this.select()"/>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
 </div>
@@ -65,7 +65,8 @@
     });
 
     var searchBtnClick = function(){
-        window.location.href = "${CONTEXT_PATH}/search/searchLog?topic=1&keyWord=2";
+        var keyWord = $('#search_ipt').val();
+        window.location.href = "${CONTEXT_PATH}/search/searchLog?topic=1&keyWord=" + keyWord;
     }
 
 </script>

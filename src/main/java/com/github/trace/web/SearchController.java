@@ -34,8 +34,8 @@ public class SearchController {
 		                 Model model) {
 
 	    SearchLog sLog = new SearchLog();
-		sLog.setTopic("dcx.MonitorRequest");
-		sLog.setKeyWord("dd48eca1af5f46ec73e457bc92e856a3");
+		sLog.setTopic("dcx.MonitorRequest");                            // 主题
+		sLog.setKeyWord(keyWord);                                       // 搜索关键词
 		sLog.setTag("stamp");                                           // 暂时写死
 		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
 		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
