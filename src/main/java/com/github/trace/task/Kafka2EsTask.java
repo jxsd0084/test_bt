@@ -162,8 +162,9 @@ public class Kafka2EsTask {
     private String convert(String topic, String content) {
       if (StringUtils.startsWith(topic, "nginx")) {
         return NginxLogHandler.parseNginx(content);
+      } else {
+        return JsonLogHandler.convert(content);
       }
-      return JsonLogHandler.convert(content);
     }
   }
 

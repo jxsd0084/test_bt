@@ -105,7 +105,7 @@ public class KafkaService {
     if (StringUtils.startsWith(topic, "nginx")) {
       results = NginxLogHandler.batchParse(logs);
     } else {
-      results = JsonLogHandler.batchConvert(logs);
+      results = logs;
     }
     return results;
   }

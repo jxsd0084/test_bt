@@ -6,7 +6,10 @@ import com.github.autoconf.ConfigFactory;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.KafkaService;
 import com.github.trace.utils.ElasticSearchHelper;
+import com.github.trace.utils.JsonLogHandler;
+import com.github.trace.utils.NginxLogHandler;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -61,7 +64,13 @@ class ValidateScheduler {
         toEs.add(log);
       }
     });
-    ElasticSearchHelper.bulk(ES_INDEX, topic, toEs);
+    Set<String> converted;
+    if (StringUtils.startsWith(topic, "nginx")) {
+      converted = toEs;
+    } else {
+      converted = JsonLogHandler.batchConvert(toEs);
+    }
+    ElasticSearchHelper.bulk(ES_INDEX, topic, converted);
   }
 
 }
