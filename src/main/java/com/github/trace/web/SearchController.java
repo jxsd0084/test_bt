@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.SearchLog;
 import com.github.trace.service.SearchService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,6 @@ import java.util.Map;
 @RequestMapping("/search")
 public class SearchController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger( SearchController.class );
-
 	@Autowired
 	private SearchService searchService;
 
@@ -32,14 +29,16 @@ public class SearchController {
     }
 
     @RequestMapping("/searchLog")
-    public String search(Model model) {
+    public String search(@RequestParam(name = "topic")   String topic,
+                         @RequestParam(name = "keyWord") String keyWord,
+		                 Model model) {
 
 	    SearchLog sLog = new SearchLog();
 		sLog.setTopic("dcx.MonitorRequest");
 		sLog.setKeyWord("dd48eca1af5f46ec73e457bc92e856a3");
-		sLog.setTag("stamp");
-		sLog.setStartTime(System.currentTimeMillis() - 10000000L);
-		sLog.setEndTime(System.currentTimeMillis());
+		sLog.setTag("stamp");                                           // 暂时写死
+		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
+		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
 
 	    JSONArray jsonArray1 = getSearchLogList(sLog);
 	    model.addAttribute("data", jsonArray1);

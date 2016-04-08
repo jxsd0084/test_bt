@@ -65,7 +65,7 @@
     });
 
     var searchBtnClick = function(){
-        window.location.href = "${CONTEXT_PATH}/search/searchLog";
+        window.location.href = "${CONTEXT_PATH}/search/searchLog?topic=1&keyWord=2";
     }
 
 </script>
