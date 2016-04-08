@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint;
+import com.github.trace.entity.BuriedPoint0;
 import com.github.trace.service.CEPService;
 import com.github.trace.utils.ControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class CEPTraceController {
     @Autowired
     private CEPService cepService;
 
-    @RequestMapping("/list")
+ /*   @RequestMapping("/list")
     public String callerList(@RequestParam(name = "parent_id") int parent_id,
                              @RequestParam(name = "child_id") int child_id,
                              @RequestParam(name = "parent_name") String parent_name,
@@ -64,14 +65,44 @@ public class CEPTraceController {
         model.addAttribute("topic", topic);
         model.addAttribute("data", ja1);
         return "cep/bp_list";
-    }
+    }*/
+ @RequestMapping("/list")
+ public String callerList(@RequestParam(name = "navigationId") int navigationId,
+                          @RequestParam(name = "topic") String topic,
+                          @RequestParam(name = "navigationName") String navigationName,
+                          Model model) {
 
+     List<BuriedPoint0> caller = cepService.getBuriedPoint0List(navigationId);
+
+     JSONArray ja1 = new JSONArray();
+
+     // data, type, full, meta
+     for (BuriedPoint0 br : caller) {
+         JSONArray ja2 = new JSONArray();
+         //  ja2.add(br.getId());            // 编号
+         ja2.add(br.getBpName());        // 埋点字段
+         ja2.add(br.getBpValue());       // 埋点数据类型
+         ja2.add(br.getRegex());         // 自定义正则表达式
+         ja2.add(br.getBpValueDesc());   // 埋点字段描述
+         ja2.add(br.getIsChecked());     // 是否必填项
+         ja2.add(br.getId());            // 操作
+
+         ja1.add(ja2);
+     }
+
+     ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+     model.addAttribute("navigation_name", navigationName);
+     model.addAttribute("navigation_id", navigationId);
+     model.addAttribute("topic", topic);
+     model.addAttribute("data", ja1);
+     return "cep/bp_list";
+ }
     @RequestMapping("/new")
     public String createConfig(@RequestParam(name = "id") int id,
                                @RequestParam(name = "tag") String tag,
                                Model model) {
 
-        BuriedPoint caller = cepService.getBuriedPoint(id);
+        BuriedPoint0 caller = cepService.getBuriedPoint0(id);
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
         model.addAttribute("id", id );
@@ -81,15 +112,15 @@ public class CEPTraceController {
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
 
-        model.addAttribute("parent_id", caller.getParentId());
-        model.addAttribute("child_id", caller.getChildId());
-        model.addAttribute("parent_name", caller.getParentName());
-
+ //       model.addAttribute("parent_id", caller.getParentId());
+ //       model.addAttribute("child_id", caller.getChildId());
+ //       model.addAttribute("parent_name", caller.getParentName());
+        model.addAttribute("navigation_id", caller.getNavigationId());
         model.addAttribute("tag", tag);
         return "func/conf_create";
     }
 
-    @RequestMapping("/newConifg")
+   /* @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag,
                             @RequestParam(name = "parent_id") int parent_id,
                             @RequestParam(name = "child_id") int child_id,
@@ -105,6 +136,21 @@ public class CEPTraceController {
         model.addAttribute("topic", topic);
         model.addAttribute("tag", tag);
         return "func/conf_create";
+    }*/
+
+    @RequestMapping("/newConifg")
+    public String newConfig(@RequestParam(name = "tag") String tag,
+                            @RequestParam(name = "navigationId") int navigationId,
+                            @RequestParam(name = "navigationName") String navigationName,
+                            @RequestParam(name = "topic") String topic,
+                            Model model) {
+
+        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+        model.addAttribute("navigation_id", navigationId);
+        model.addAttribute("topic", topic);
+        model.addAttribute("navigation_name", navigationName);
+        model.addAttribute("tag", tag);
+        return "func/conf_create";
     }
 
     @RequestMapping("/modify")
@@ -116,7 +162,7 @@ public class CEPTraceController {
                             @RequestParam("is_checked") boolean is_checked,
                             @RequestParam("id") int id) {
 
-        BuriedPoint buriedPoint = new BuriedPoint();
+        BuriedPoint0 buriedPoint = new BuriedPoint0();
         buriedPoint.setId(id);
         buriedPoint.setBpName(bp_name);
         buriedPoint.setBpValue(bp_value);
@@ -124,7 +170,7 @@ public class CEPTraceController {
         buriedPoint.setBpValueDesc(bp_value_desc);
         buriedPoint.setIsChecked(is_checked==true?1:0);
 
-        int res = cepService.modifyBuriedPoint(buriedPoint);
+        int res = cepService.modifyBuriedPoint0(buriedPoint);
 
         return ControllerHelper.returnResponseVal(res, "更新");
     }
@@ -136,21 +182,21 @@ public class CEPTraceController {
                          @RequestParam("regex") String regex,
                          @RequestParam("bp_value_desc") String bp_value_desc,
                          @RequestParam("is_checked") boolean is_checked,
-                         @RequestParam(name = "parent_id") int parent_id,
-                         @RequestParam(name = "child_id") int child_id) {
+                         @RequestParam(name = "navigationId") int navigation_id
+                        ) {
 
-        BuriedPoint buriedPoint = new BuriedPoint();
+        BuriedPoint0 buriedPoint = new BuriedPoint0();
         buriedPoint.setBpName(bp_name);
         buriedPoint.setBpValue(bp_value);
         buriedPoint.setBpValueDesc(bp_value_desc);
         buriedPoint.setIsChecked(is_checked==true?1:0);
-        buriedPoint.setParentId(parent_id);
+//        buriedPoint.setParentId(parent_id);
 //        buriedPoint.setParentName("");
-        buriedPoint.setChildId(child_id);
+ //       buriedPoint.setChildId(child_id);
 //        buriedPoint.setChildName("");
         buriedPoint.setRegex(regex);
-
-        int res = cepService.addBuriedPoint(buriedPoint);
+        buriedPoint.setNavigationId(navigation_id);
+        int res = cepService.addBuriedPoint0(buriedPoint);
 
         return ControllerHelper.returnResponseVal(res, "添加");
     }

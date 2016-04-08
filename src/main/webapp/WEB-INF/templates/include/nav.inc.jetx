@@ -6,8 +6,8 @@
       <div style="padding-top: 5px">
         <ul class="nav navbar-nav nav-tabs">
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">事件行为定义</a></li>
-          <li ><a href="${CONTEXT_PATH}/cep/list?parent_id=${navObj.parentId}&child_id=${navObj.childId}&parent_name=${navObj.childName}&topic=${navObj.topic}">埋点配置与监控</a></li>
-          <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/cep/list?navigationId=11&&topic=dcx.MonitorRequest&&navigationName=iOS1">埋点配置与监控</a></li>
+            <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
           <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
           <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置【慎用】</a></li>
           <li ><a href="${CONTEXT_PATH}/search/list">日志搜索</a></li>
@@ -31,30 +31,16 @@
 <div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
    	<div class="tree">
         <ul>
-           <li>
-           <span><i class="icon-folder-open"></i>前端埋点</span>
-               #for(item : navigationItemList)
-                #if(item.parentId == 1)
-                   <ul>
-                       <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
-                       </li>
-                   </ul>
+            #for(item : navigationItemList)
+                #if(item.parentId==0)
+                    <li>
+                        <span id="${item.id}"><i class="icon-folder-open"></i>${item.name}</span>
+                        <ul>
+                        </ul>
+                    </li>
                 #end
-               #end
-            </li>
-           <li>
-           <span><i class="icon-folder-open"></i>后端埋点</span>
-               #for(item : navigationItemList)
-                #if(item.parentId == 2)
-                   <ul>
-                       <li>
-                          <span><i class="icon-leaf"></i><a href="${CONTEXT_PATH}/cep/list?parent_id=${item.parentId}&child_id=${item.childId}&parent_name=${item.childName}&topic=${item.topic}"> ${item.childName} </a></span>
-                       </li>
-                   </ul>
-                #end
-               #end
-           </li>
+
+             #end
         </ul>
     </div>
 </div>
@@ -76,4 +62,5 @@
     </div>
 </div>
 #end
+
 

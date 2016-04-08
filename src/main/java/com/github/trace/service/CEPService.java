@@ -1,14 +1,13 @@
 package com.github.trace.service;
 
+import com.github.trace.entity.*;
+import com.github.trace.mapper.BuriedPoint0Mapper;
 import com.google.common.collect.Sets;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.github.trace.entity.BuriedPoint;
-import com.github.trace.entity.DatabaseBiz;
-import com.github.trace.entity.NavigationItem;
 import com.github.trace.mapper.BuriedPointMapper;
 import com.github.trace.mapper.DatabaseBizMapper;
 import com.github.trace.mapper.NavigationItemMapper;
@@ -39,9 +38,14 @@ public class CEPService {
 
   @Autowired
   private BuriedPointMapper buriedPointMapper;
+  @Autowired
+  private BuriedPoint0Mapper buriedPoint0Mapper;
 
   @Autowired
   private NavigationItemMapper navigationItemMapper;
+
+  @Autowired
+  private Navigation0Service navigation0Service;
 
   @Autowired
   private DatabaseBizMapper dataBaseBizMapper;
@@ -63,6 +67,10 @@ public class CEPService {
 //  @Cacheable(value="navigationItemCache")
   public List<NavigationItem> getConfiguration() {
     return navigationItemMapper.findAll();
+  }
+
+  public List<NavigationItem0> getRootItem() {
+    return navigation0Service.queryByParentId(0);
   }
 
   public Set<String> getAllTopics() {
@@ -101,6 +109,15 @@ public class CEPService {
   }
 
   /**
+   * 获取埋点列表
+   *
+   * @return 埋点列表
+   */
+  public List<BuriedPoint0> getBuriedPoint0List(int navigationId) {
+    return buriedPoint0Mapper.findByBizIds(navigationId);
+  }
+
+  /**
    * 删除埋点
    * @param id 业务ID
    * @return  1-删除成功  0-删除失败
@@ -115,8 +132,10 @@ public class CEPService {
    * @return  1-删除成功  0-删除失败
      */
   public int deleteById(int id) {
-    return buriedPointMapper.deleteById(id);
+    return buriedPoint0Mapper.deleteById(id);
   }
+
+
 
   /**
    * 插入新埋点
@@ -128,8 +147,22 @@ public class CEPService {
     return buriedPointMapper.insert(buriedPoint);
   }
 
+  /**
+   * 插入新埋点
+   * @param buriedPoint
+   * @return
+   *
+   */
+  public int addBuriedPoint0(BuriedPoint0 buriedPoint){
+    return buriedPoint0Mapper.insert(buriedPoint);
+  }
+
   public BuriedPoint getBuriedPoint(int id) {
     return buriedPointMapper.findById(id);
+  }
+
+  public BuriedPoint0 getBuriedPoint0(int id) {
+    return buriedPoint0Mapper.findById(id);
   }
 
 
@@ -149,6 +182,10 @@ public class CEPService {
 
   public int modifyBuriedPoint(BuriedPoint buriedPoint) {
     return buriedPointMapper.update(buriedPoint);
+  }
+
+  public int modifyBuriedPoint0(BuriedPoint0 buriedPoint) {
+    return buriedPoint0Mapper.update(buriedPoint);
   }
 
 

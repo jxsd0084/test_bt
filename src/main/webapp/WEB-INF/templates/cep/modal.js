@@ -9,7 +9,7 @@ $("#confirm").on('click', function () {
         dataType: "text",
         type: "GET",
         success: function (data) {
-            window.location.href = '${CONTEXT_PATH}/cep/list?parent_id=${parent_id}&child_id=${child_id}&parent_name=${parent_name}&topic=${topic}';
+            window.location.href = '${CONTEXT_PATH}/cep/list?navigationId=${navigation_id}&topic=${topic}&navigationName=${navigation_name}';
         }
     });
 })

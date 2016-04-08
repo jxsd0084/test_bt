@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,5 +99,12 @@ public class NavigationController {
 
         model.addAttribute("obj",navigationItem0);
         return "nav/nav_edit";
+    }
+
+    @RequestMapping("/getChildItem")
+    public @ResponseBody List<NavigationItem0> queryChildItem(@RequestParam(name = "id") int id){
+        List<NavigationItem0> list = navigation0Service.queryByParentId(id);
+        System.out.println(list.toString());
+        return list;
     }
 }
