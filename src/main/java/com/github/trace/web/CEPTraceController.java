@@ -320,7 +320,6 @@ public class CEPTraceController {
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         System.out.println("BuriedPointList"+ja1.toJSONString());
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("source",source);
         jsonObj.put("target",target.replace("},","},\n"));
         jsonObj.put("tableData",ja1);
 
