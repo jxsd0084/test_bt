@@ -1,0 +1,79 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="navtop">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a id="myHome" class="navbar-brand" href="${CONTEXT_PATH}/">蜂云-埋点工具平台</a>
+            <a class="navbar-brand hidden-md hidden-lg" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
+            <div style="padding-top: 5px">
+                <ul class="nav navbar-nav nav-tabs">
+                    <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">事件行为定义</a></li>
+                    <li ><a href="${CONTEXT_PATH}/cep/list?navigationId=11&&topic=dcx.MonitorRequest&&navigationName=iOS1">埋点配置与监控</a></li>
+                    <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
+                    <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置</a></li>
+                    <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置</a></li>
+                    <li ><a href="${CONTEXT_PATH}/search/list">埋点历史搜索【7天】</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="user-menu">
+                    <li class="dropdown pull-right">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>${principal()}<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/user/password"><span class="glyphicon glyphicon-cog"></span> 修改密码</a></li>
+                            <li><a href="${CONTEXT_PATH}/logout"><span class="glyphicon glyphicon-log-out"></span> 退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+#if(flag != 'ds')
+<div id="sidebar-collapse" class="col-sm-2 col-md-2 col-lg-2 sidebar">
+<div class="tree">
+<ul>
+    #for(item : navigationItemList)
+    #if(item.parentId==0 && item.name=="前端埋点")
+    <li>
+        <span id="${item.id}"><i class="icon-folder-open"></i>${item.name}</span>
+    <ul>
+        #for(childItem:navigationItemList)
+        #if(childItem.parentId == item.id)
+            #if(childItem.itemType==0)
+            <li>
+                <span id="${childItem.id}"><i class="icon-folder-open"></i>${childItem.name}</span>
+            <ul>
+                #for(grandItem:navigationItemList)
+                #if(grandItem.parentId == childItem.id)
+                    #if(grandItem.itemType==0)
+                        <li>
+                            <span id="${grandItem.id}"><i class="icon-folder-open"></i>${grandItem.name}</span>
+                            <ul>
+                            </ul>
+                        </li>
+                    #else
+                        <li>
+                            <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/cep/list?navigationId=${grandItem.id}&&topic=${grandItem.topic}&&navigationName=${grandItem.name}'>${grandItem.name}</a></span>
+                        </li>
+                    #end
+                #end
+            #end
+        </ul>
+        </li>
+        #else
+            <li>
+                <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/cep/list?navigationId=${childItem.id}&&topic=${childItem.topic}&&navigationName=${childItem.name}'>${childItem.name}</a></span>
+            </li>
+        #end
+    #end
+#end
+</ul>
+</li>
+#end
+
+#end
+</ul>
+</div>
+</div>
+#end
+
+
