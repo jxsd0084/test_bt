@@ -207,7 +207,6 @@
                 dataType: "json",
                 type: "GET",
                 success: function (mydata) {
-                    $("#textarea1").val(mydata.source);
                     $("#textarea2").val(mydata.target);
                     //重新加载数据前需要做如下操作,否则会报错.
                     $('#datatable2').dataTable().fnDestroy();
