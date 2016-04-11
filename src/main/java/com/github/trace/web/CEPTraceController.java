@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.github.trace.entity.BuriedPoint;
 import com.github.trace.entity.BuriedPoint0;
 import com.github.trace.service.CEPService;
 import com.github.trace.utils.ControllerHelper;
@@ -322,7 +321,7 @@ public class CEPTraceController {
         System.out.println("BuriedPointList"+ja1.toJSONString());
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("source",source);
-        jsonObj.put("target",target);
+        jsonObj.put("target",target.replace("},","},\n"));
         jsonObj.put("tableData",ja1);
 
         return jsonObj.toJSONString();
