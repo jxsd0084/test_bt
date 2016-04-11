@@ -8,9 +8,9 @@
           <li ><a href="${CONTEXT_PATH}/dataType/listLevelOne">事件行为定义</a></li>
           <li ><a href="${CONTEXT_PATH}/cep/list?navigationId=11&&topic=dcx.MonitorRequest&&navigationName=iOS1">埋点配置与监控</a></li>
             <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
-          <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置【慎用】</a></li>
-          <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置【慎用】</a></li>
-          <li ><a href="${CONTEXT_PATH}/search/list">日志搜索</a></li>
+          <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置</a></li>
+          <li ><a href="${CONTEXT_PATH}/search/list">埋点历史搜索【7天】</a></li>
         </ul>
       </div>
       <div>
