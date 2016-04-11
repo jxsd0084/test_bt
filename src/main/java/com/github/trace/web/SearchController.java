@@ -1,7 +1,6 @@
 package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.SearchLog;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.SearchService;
@@ -59,13 +58,16 @@ public class SearchController {
 		JSONArray jsonArray1 = new JSONArray();
 		int cont = 0;
 		for (Map<String, Object> logMap : list) {
-		    JSONArray  jsonArray2 = new JSONArray();
-			JSONObject jsonObject = new JSONObject();
-		    jsonObject.putAll(logMap);
-		    jsonArray2.add(++ cont);
-		    jsonArray2.add(jsonObject.toString());
+			JSONArray jsonArray2 = new JSONArray();
+			StringBuilder sb = new StringBuilder();
+			for (Map.Entry<String, Object> entry : logMap.entrySet()) {
+				sb.append(entry.getKey() + " : " + entry.getValue()).append("<br/>");
+			}
+			jsonArray2.add(++ cont);
+			jsonArray2.add(sb.toString());
 			jsonArray1.add(jsonArray2);
 		}
+
 		return jsonArray1;
 	}
 
