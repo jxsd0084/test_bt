@@ -70,7 +70,7 @@ public class CEPService {
   }
 
   public List<NavigationItem0> getRootItem() {
-    return navigation0Service.queryByParentId(0);
+    return navigation0Service.queryAll();
   }
 
   public Set<String> getAllTopics() {

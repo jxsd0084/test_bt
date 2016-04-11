@@ -21,7 +21,9 @@
         <select id="topic_sel" style="width: 205px">
             <option value=""> - 选择主题 - </option>
             #for(item : navigationItemList)
-                <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.topic}</option>
+                #if(item.itemType==1)
+                    <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.topic}</option>
+                #end
             #end
         </select>
     </div>

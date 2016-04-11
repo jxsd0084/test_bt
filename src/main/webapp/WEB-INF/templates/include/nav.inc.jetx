@@ -36,6 +36,36 @@
                     <li>
                         <span id="${item.id}"><i class="icon-folder-open"></i>${item.name}</span>
                         <ul>
+                            #for(childItem:navigationItemList)
+                                #if(childItem.parentId == item.id)
+                                    #if(childItem.itemType==0)
+                                        <li>
+                                            <span id="${childItem.id}"><i class="icon-folder-open"></i>${childItem.name}</span>
+                                            <ul>
+                                                #for(grandItem:navigationItemList)
+                                                    #if(grandItem.parentId == childItem.id)
+                                                        #if(grandItem.itemType==0)
+                                                            <li>
+                                                                <span id="${grandItem.id}"><i class="icon-folder-open"></i>${grandItem.name}</span>
+                                                                <ul>
+                                                                </ul>
+                                                            </li>
+                                                        #else
+                                                            <li>
+                                                                <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/cep/list?navigationId=${grandItem.id}&&topic=${grandItem.topic}&&navigationName=${grandItem.name}'>${grandItem.name}</a></span>
+                                                            </li>
+                                                        #end
+                                                    #end
+                                                 #end
+                                            </ul>
+                                        </li>
+                                    #else
+                                        <li>
+                                             <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/cep/list?navigationId=${childItem.id}&&topic=${childItem.topic}&&navigationName=${childItem.name}'>${childItem.name}</a></span>
+                                        </li>
+                                    #end
+                                #end
+                            #end
                         </ul>
                     </li>
                 #end
