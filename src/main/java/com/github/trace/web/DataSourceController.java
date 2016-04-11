@@ -87,6 +87,7 @@ public class DataSourceController {
                    @RequestParam(name = "dbName") String dbName,
                    @RequestParam(name = "dbUsername") String dbUsername,
                    @RequestParam(name = "dbPassword") String dbPassword,
+                   @RequestParam(name = "dbIns") String dbIns,
                    Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
@@ -101,6 +102,7 @@ public class DataSourceController {
         databaseInfo.setDbName(dbName);
         databaseInfo.setDbUsername(dbUsername);
         databaseInfo.setDbPassword(dbPassword);
+        databaseInfo.setDbIns(dbIns);
 
         int res = dataSourceServer.addDatabaseInfo(databaseInfo);
 
@@ -122,6 +124,7 @@ public class DataSourceController {
                       @RequestParam(name = "dbName") String dbName,
                       @RequestParam(name = "dbUsername") String dbUsername,
                       @RequestParam(name = "dbPassword") String dbPassword,
+                      @RequestParam(name = "dbIns") String dbIns,
                       Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
@@ -137,6 +140,7 @@ public class DataSourceController {
         databaseInfo.setDbName(dbName);
         databaseInfo.setDbUsername(dbUsername);
         databaseInfo.setDbPassword(dbPassword);
+        databaseInfo.setDbIns(dbIns);
 
         int res = dataSourceServer.updateDataBaseInfo(databaseInfo);
 
