@@ -2,7 +2,6 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.DatabaseInfo;
-import com.github.trace.entity.TableField;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataSourceServer;
 import com.github.trace.utils.ControllerHelper;
@@ -162,6 +161,7 @@ public class DataSourceController {
                        @RequestParam(name = "dbName") String dbName,
                        @RequestParam(name = "dbUsername") String dbUsername,
                        @RequestParam(name = "dbPassword") String dbPassword,
+                       @RequestParam(name = "dbIns") String dbIns,
                        Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
@@ -177,6 +177,7 @@ public class DataSourceController {
         databaseInfo.setDbName(dbName);
         databaseInfo.setDbUsername(dbUsername);
         databaseInfo.setDbPassword(dbPassword);
+        databaseInfo.setDbIns(dbIns);
 
         int res = dataSourceServer.testJdbcConnection(databaseInfo);
 
