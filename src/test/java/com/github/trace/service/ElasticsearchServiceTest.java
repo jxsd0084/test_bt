@@ -16,7 +16,7 @@ import java.util.Map;
  * ElasticsearchServiceTest
  * Created by wzk on 16/4/7.
  */
-@Ignore
+//@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class ElasticsearchServiceTest {
@@ -26,10 +26,9 @@ public class ElasticsearchServiceTest {
   private ElasticsearchService esService;
 
   @Test
-  public void search() throws Exception {
-    List<Map<String, Object>>
-        results = esService.search("dcx.MonitorRequest", "*",
-              "stamp", System.currentTimeMillis(), System.currentTimeMillis() - 24 * 3600 * 1000L);
+  public void testSearch() throws Exception {
+    List<Map<String, Object>> results = esService.search("dcx.MonitorRequest", "*", "stamp",
+                     System.currentTimeMillis(), System.currentTimeMillis() - 24 * 3600 * 1000L);
 
     for (Map<String, Object> source : results) {
       for (Map.Entry<String, Object> entry : source.entrySet()) {
@@ -38,4 +37,18 @@ public class ElasticsearchServiceTest {
       LOG.info("\n");
     }
   }
+
+  @Test
+  public void testSearchWithSize() throws Exception {
+    List<Map<String, Object>> results = esService.search("dcx.MonitorRequest", "*", "stamp",
+           System.currentTimeMillis(), System.currentTimeMillis() - 24 * 3600 * 1000L, 1, 2);
+
+    for (Map<String, Object> source : results) {
+      for (Map.Entry<String, Object> entry : source.entrySet()) {
+        LOG.info(entry.getKey() + " : " + entry.getValue());
+      }
+      LOG.info("\n");
+    }
+  }
+
 }

@@ -27,14 +27,25 @@ public class ElasticsearchService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ElasticsearchService.class);
   private static final String INDEX = "datapt-buriedtool";
-  private static final int MAX_LOG_ITEMS = 1000;
 
-  public List<Map<String, Object>> search(String topic, String keyword, String timeParamName, long from, long to) {
-    SearchRequestBuilder builder = build(topic, keyword, timeParamName, from, to);
+  /**
+   * 必须同时满足keyword和时间范围
+   * @param topic        topic, 即es中的type
+   * @param keyword      关键词
+   * @param timeParam    使用的时间字段
+   * @param timeFrom     起始时间戳
+   * @param timeTo       截止时间戳
+   * @param from         item起始
+   * @param size         item条数
+   * @return  结果的list
+   */
+  public List<Map<String, Object>> search(String topic, String keyword, String timeParam,
+                                          long timeFrom, long timeTo, int from, int size) {
+
+    SearchRequestBuilder builder = build(topic, keyword, timeParam, timeFrom, timeTo, from, size);
     SearchResponse response = ElasticSearchHelper.search(builder);
 
     List<Map<String, Object>> results = Lists.newArrayList();
-
     if (response != null && response.getHits() != null) {
       SearchHit[] hits = response.getHits().getHits();
       for (SearchHit hit : hits) {
@@ -46,16 +57,31 @@ public class ElasticsearchService {
   }
 
   /**
+   * 必须同时满足keyword和时间范围, 默认返回10条
+   * @param topic        topic, 即es中的type
+   * @param keyword      关键词
+   * @param timeParam    使用的时间字段
+   * @param timeFrom     起始时间戳
+   * @param timeTo       截止时间戳
+   */
+  public List<Map<String, Object>> search(String topic, String keyword, String timeParam,
+                                          long timeFrom, long timeTo) {
+    return search(topic, keyword, timeParam, timeFrom, timeTo, 0, 10);
+  }
+
+  /**
    * 必须同时满足keyword和时间范围
-   * @param topic    topic, 即es中的type
-   * @param keyword  关键词
-   * @param param    使用的时间字段
-   * @param from     起始时间戳
-   * @param to       截止时间戳
+   * @param topic        topic, 即es中的type
+   * @param keyword      关键词
+   * @param timeParam    使用的时间字段
+   * @param timeFrom     起始时间戳
+   * @param timeTo       截止时间戳
+   * @param from         item起始
+   * @param size         item条数
    * @return  {@link SearchRequestBuilder}
    */
-  private SearchRequestBuilder build(String topic, String keyword,
-                                     String param, long from, long to) {
+  private SearchRequestBuilder build(String topic, String keyword, String timeParam, long timeFrom,
+                                     long timeTo, int from, int size) {
     SearchRequestBuilder builder = ElasticSearchHelper.newBuilder(INDEX);
     if (!Strings.isNullOrEmpty(topic)) {
       builder.setTypes(topic);
@@ -64,13 +90,14 @@ public class ElasticsearchService {
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
     boolQuery.must(QueryBuilders.queryStringQuery(keyword));
 
-    if (!Strings.isNullOrEmpty(param) && from > 0 && to > from) {
-      RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(param);
-      rangeQuery.gte(from).lte(to);
+    if (!Strings.isNullOrEmpty(timeParam) && timeFrom > 0 && timeTo >= timeFrom) {
+      RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(timeParam);
+      rangeQuery.gte(timeFrom).lte(timeTo);
       boolQuery.must(rangeQuery);
     }
 
-    builder.setSize(MAX_LOG_ITEMS);
+    builder.setFrom(from);
+    builder.setSize(size);
 
     builder.setQuery(boolQuery);
     return builder;
