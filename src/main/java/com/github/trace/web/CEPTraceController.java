@@ -283,30 +283,20 @@ public class CEPTraceController {
                             Pattern pattern2 = null;
                             pattern2 = Pattern.compile( patternString2);
 
-                            Matcher matcher2 = pattern2.matcher(jsonMap2.get(entry1.getKey()));
+                            Matcher matcher2 = pattern2.matcher(value);
                             b= matcher2.matches();
                         }
                         JSONArray ja3 = new JSONArray();
                         Object err = "";
-                        String val = jsonMap2.get(entry1.getKey());
-                        if(val==null)
+                        if(value==null)
                             err = "null";
-                        else if("".equals(val))
+                        else if("".equals(value))
                             err="空值";
                         else{
-                            if(entry1.getValue().split(",")[1].equals("日期")){
-                                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                try {
-                                    Date date = new Date(Long.valueOf(val));
-                                    val =sdf.format(date);
-                                }catch (NumberFormatException e){
-
-                                }
-                            }
-                            err=val;
+                            err=value;
                         }
                         ja3.add(b);
-                        ja3.add(val);
+                        ja3.add(value);
                         ja3.add(err);
                         ja2.add(ja3);
                     }else{
