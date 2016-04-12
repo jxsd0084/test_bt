@@ -28,7 +28,7 @@
         </select>
         <span class="functions">
             <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()" style="height: 28px;"/>
-            <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/> （备注: 最大提供1000条日志信息.）
+            <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="搜索" onclick="searchBtnClick();" /> （备注: 最大提供1000条日志信息.）
         </span>
 
     </div>
