@@ -42,20 +42,22 @@
           p:casService="${casService}"
           p:casServerUrlPrefix="${casServerUrlPrefix}"/>
 
-    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" p:realm-ref="casRealm" p:subjectFactory-ref="casSubjectFactory" p:cacheManager-ref="shiroCache"/>
-
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" p:realm-ref="casRealm" p:subjectFactory-ref="casSubjectFactory"/>
+<!--p:cacheManager-ref="shiroCache"-->
     <!-- 如果要实现cas的remember me的功能，需要用到下面这个bean，并设置到securityManager的subjectFactory中 -->
     <bean id="casSubjectFactory" class="org.apache.shiro.cas.CasSubjectFactory"/>
 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" p:staticMethod="org.apache.shiro.SecurityUtils.setSecurityManager" p:arguments-ref="securityManager"/>
 
-    <bean id="shiroCache" class="com.github.shiro.support.SpringCacheManagerWrapper" p:cacheManager-ref="cacheManager"/>
-
+    <bean id="shiroCache" class="com.github.shiro.support.SpringCacheManagerWrapper"  />
+    <!--p:cacheManager-ref="cacheManager"-->
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
+<!--
     <bean id="shiroRedis" class="com.github.jedis.support.JedisFactoryBean" p:configName="shiro-redis"/>
 
-    <!-- declare Redis Cache Manager -->
+    &lt;!&ndash; declare Redis Cache Manager &ndash;&gt;
     <bean id="redisCacheManager" class="com.github.spring.RedisCacheManager" c:redis-ref="shiroRedis" c:expiration="86400"/>
+-->
 </beans>

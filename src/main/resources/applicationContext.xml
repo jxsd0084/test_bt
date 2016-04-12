@@ -14,16 +14,14 @@
     <!-- blocked autowire -->
     <context:annotation-config/>
 
-    <bean class="com.fxiaoke.metrics.MetricsConfiguration"/>
-
-    <import resource="classpath:spring/spring-guava.xml"/>
+<!--    <import resource="classpath:spring/spring-guava.xml"/>-->
     <import resource="classpath:spring/spring-db.xml"/>
     <import resource="classpath:spring/spring-shiro.xml"/>
-  <!--  <import resource="classpath:spring/spring-scheduler.xml"/>
-  -->  <!--<import resource="classpath:spring/spring-nav.xml"/>-->
+    <import resource="classpath:spring/spring-scheduler.xml"/>
+    <!--<import resource="classpath:spring/spring-nav.xml"/>-->
 
-    <bean id="redisCache" class="com.github.jedis.support.JedisFactoryBean" p:configName="oss-web-redis"/>
-
+    <!--<bean id="redisCache" class="com.github.jedis.support.JedisFactoryBean" p:configName="oss-web-redis"/>
+-->
     <!-- 使用全局的日期格式化 -->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="registerDefaultFormatters" value="false"/>
@@ -47,13 +45,6 @@
 
     <!-- 启用@AspectJ注解 -->
     <aop:aspectj-autoproxy/>
-
-    <bean id="serviceProfiler" class="com.github.trace.aop.ServiceProfiler"/>
-    <aop:config>
-        <aop:aspect ref="serviceProfiler">
-            <aop:around method="profile" pointcut="execution(* com.github.trace.service.Influx*.*(..))"/>
-        </aop:aspect>
-    </aop:config>
 
     <beans profile="default">
         <context:property-placeholder ignore-resource-not-found="true" location="classpath:application.properties"/>
