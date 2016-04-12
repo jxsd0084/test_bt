@@ -30,6 +30,7 @@
                 <th>自定义正则表达式</th>
                 <th>埋点字段描述</th>
                 <th>是否必填项</th>
+                <th>埋点负责人</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -160,7 +161,7 @@
                 }
                 },
                 {
-                    targets: 5, render: function (data, type, full, meta) {
+                    targets: 6, render: function (data, type, full, meta) {
                     return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
                 }
                 }

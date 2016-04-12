@@ -75,8 +75,12 @@ public class CEPService {
 
   public Set<String> getAllTopics() {
     Set<String> topics = Sets.newHashSet();
-    List<NavigationItem> items = navigationItemMapper.findAll();
-    items.forEach(item -> topics.add(item.getTopic()));
+    List<NavigationItem0> items = navigation0Service.queryAll();
+    for(NavigationItem0 item:items){
+      if(item.getItemType()==1){
+        topics.add(item.getTopic());
+      }
+    }
     return topics;
   }
 

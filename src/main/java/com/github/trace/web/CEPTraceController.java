@@ -85,6 +85,7 @@ public class CEPTraceController {
          ja2.add(br.getRegex());         // 自定义正则表达式
          ja2.add(br.getBpValueDesc());   // 埋点字段描述
          ja2.add(br.getIsChecked());     // 是否必填项
+         ja2.add(br.getManager());      //埋点负责人
          ja2.add(br.getId());            // 操作
 
          ja1.add(ja2);
@@ -111,6 +112,7 @@ public class CEPTraceController {
         model.addAttribute("Regex", caller.getRegex() );
         model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
         model.addAttribute("IsChecked", caller.getIsChecked() );
+        model.addAttribute("manager", caller.getManager());
 
  //       model.addAttribute("parent_id", caller.getParentId());
  //       model.addAttribute("child_id", caller.getChildId());
@@ -160,6 +162,7 @@ public class CEPTraceController {
                             @RequestParam("regex") String regex,
                             @RequestParam("bp_value_desc") String bp_value_desc,
                             @RequestParam("is_checked") boolean is_checked,
+                            @RequestParam("manager") String manager,
                             @RequestParam("id") int id) {
 
         BuriedPoint0 buriedPoint = new BuriedPoint0();
@@ -169,6 +172,8 @@ public class CEPTraceController {
         buriedPoint.setRegex(regex);
         buriedPoint.setBpValueDesc(bp_value_desc);
         buriedPoint.setIsChecked(is_checked==true?1:0);
+        buriedPoint.setManager(manager);
+
 
         int res = cepService.modifyBuriedPoint0(buriedPoint);
 
@@ -182,6 +187,7 @@ public class CEPTraceController {
                          @RequestParam("regex") String regex,
                          @RequestParam("bp_value_desc") String bp_value_desc,
                          @RequestParam("is_checked") boolean is_checked,
+                         @RequestParam("manager") String manager,
                          @RequestParam(name = "navigationId") int navigation_id
                         ) {
 
@@ -196,6 +202,7 @@ public class CEPTraceController {
 //        buriedPoint.setChildName("");
         buriedPoint.setRegex(regex);
         buriedPoint.setNavigationId(navigation_id);
+        buriedPoint.setManager(manager);
         int res = cepService.addBuriedPoint0(buriedPoint);
 
         return ControllerHelper.returnResponseVal(res, "添加");

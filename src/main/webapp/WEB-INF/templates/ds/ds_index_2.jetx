@@ -26,6 +26,7 @@
                 <th>库名</th>
                 <th>表名</th>
                 <th><div  style="display:inline;float:left;"><input type="checkbox" id="selectAll" checked="checked"/></div><div>是否导出</div></th>
+                <th>操作</th>
             </tr>
 			</thead>
 			<tbody>
@@ -38,7 +39,11 @@
 #tag layout_block("scriptContent")
 <script>
  	var data = ${data}
-	$(document).ready(function () {
+    $.each(data, function (n, value) {
+        if(value[3]=='<input type="checkbox" />')
+           $("#selectAll").attr("checked",false);
+    });
+    $(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
             searching: true,
@@ -54,13 +59,18 @@
             columnDefs: [
                 {
                     targets: 2, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/job/fldsIndex?dbSourceId=' + '${obj.id}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + data + '">' + data + '</a>';
+                        return  data ;
                     }
                 },
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                    return data;
-                }
+                       return data;
+                    }
+                },
+                {
+                    targets: 4, render: function (data, type, full, meta) {
+                       return '<a href="${CONTEXT_PATH}/job/fldsIndex?dbSourceId=' + '${obj.id}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + full[2] +'&id='+'${jobId}'+ '">'+data+'</a>';
+                    }
                 }
             ]
         });
@@ -94,7 +104,7 @@
             var cellData = thisCell.data();
             if(cellData.indexOf('checked')>0)
                 thisCell.data('<input type="checkbox" />').draw();
-            else
+            else if(cellData.indexOf('checkbox')>0)
                 thisCell.data('<input type="checkbox" checked="checked"/>').draw();
         } );
 

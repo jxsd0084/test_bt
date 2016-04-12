@@ -9,8 +9,8 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">创建作业</font></a></li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}"><font color="blue">返回 上一级</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}&id=${id}"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
@@ -27,7 +27,8 @@
 				<th>字段类型</th>
                 <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否脱敏</div></th>
                 <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否分区</div></th>
-			</tr>
+                <th><div  style="display:inline;float:left;"><input type="checkbox" id="selectAll" checked="checked"/></div><div>是否导出</div></th>
+            </tr>
 			</thead>
 			<tbody>
 			</tbody>
@@ -62,6 +63,11 @@
                     targets: 4, render: function (data, type, full, meta) {
                         return '<input type="checkbox"/>';
                     }
+                },
+                {
+                    targets: 5, render: function (data, type, full, meta) {
+                    return '<input type="checkbox"/>';
+                }
                 }
             ]
         });
