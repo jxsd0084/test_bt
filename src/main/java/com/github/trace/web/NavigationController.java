@@ -45,6 +45,7 @@ public class NavigationController {
     @ResponseBody
     public Map create(@RequestParam(name = "parentId") int parentId,
                       @RequestParam(name = "name") String name,
+                      @RequestParam(name = "manager") String manager,
                       @RequestParam(name = "itemType") int itemType,
                       @RequestParam(name = "topic") String topic){
         NavigationItem0 navigationItem0 = new NavigationItem0();
@@ -52,6 +53,7 @@ public class NavigationController {
         navigationItem0.setItemType(itemType);
         navigationItem0.setName(name);
         navigationItem0.setTopic(topic);
+        navigationItem0.setManager(manager);
         int res = navigation0Service.insert(navigationItem0);
         return ControllerHelper.returnResponseVal(res, "添加");
     }
@@ -60,6 +62,7 @@ public class NavigationController {
     @ResponseBody
     public Map modify(@RequestParam(name = "id") int id,@RequestParam(name = "parentId") int parentId,
                          @RequestParam(name = "name") String name,
+                         @RequestParam(name = "manager") String manager,
                          @RequestParam(name = "itemType") int itemType,
                          @RequestParam(name = "topic") String topic){
         NavigationItem0 navigationItem0 = new NavigationItem0();
@@ -68,6 +71,7 @@ public class NavigationController {
         navigationItem0.setItemType(itemType);
         navigationItem0.setName(name);
         navigationItem0.setTopic(topic);
+        navigationItem0.setManager(manager);
         int res=navigation0Service.modify(navigationItem0);
         return ControllerHelper.returnResponseVal(res,"修改");
     }
