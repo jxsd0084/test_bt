@@ -13,8 +13,18 @@ public class NavigationItem0 {
 
     private String topic;
 
+    private String manager;
+
     //关联本表中的id
     private int parentId = 0;
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
 
     public String getTopic() {
         return topic;
@@ -60,10 +70,11 @@ public class NavigationItem0 {
     public String toString() {
         return "NavigationItem0{" +
                 "id=" + id +
-                ", parentId=" + parentId +
                 ", name='" + name + '\'' +
                 ", itemType=" + itemType +
                 ", topic='" + topic + '\'' +
+                ", manager='" + manager + '\'' +
+                ", parentId=" + parentId +
                 '}';
     }
 }

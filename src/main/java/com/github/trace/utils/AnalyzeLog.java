@@ -198,15 +198,19 @@ public class AnalyzeLog {
     }
 
 
-    public String handleField(String val,String type,String regex){
+    public List<String> handleField(String val,String type,String regex){
         String patternString = "";
         String patternString2 = "";
         boolean b;
         String err = "";
 
+        List<String> rt=new ArrayList<>(2);
+        rt.add(0,val);
+
         if (Strings.isNullOrEmpty(val)) {
             err="字段值为空ornull";
-            return err;
+            rt.add(1,err);
+            return rt;
         }
 
 
@@ -247,6 +251,8 @@ public class AnalyzeLog {
                 try {
                     Date date = new Date(Long.parseLong(val));
                     String value = timestampFormat.format(date);
+                    System.out.println(value);
+                    rt.add(0,value);
                 }catch(Exception e){
                     LOG.warn("timestamp field exception",e);
                     err="日期类型字段取值异常";
@@ -266,7 +272,9 @@ public class AnalyzeLog {
             }
         }
 
-        return err;
+        rt.add(1,err);
+
+        return rt;
 
     }
 //    public List<List<String>>  process(String Target) {
@@ -278,6 +286,8 @@ public List<Map<String,List<String>>>  process(String Target) {
         String desc,type,regex; //isChecked;
         String desc2,type2,regex2,key2,val2;
         String desc3,type3,regex3,key3,val3,isChecked3;
+
+        List<String>  hfResult;
 
         //List<List<String>> output=new ArrayList<List<String>>();
         List<Map<String,List<String>>> output=new ArrayList<Map<String, List<String>>>(jsonArray.size());
@@ -363,7 +373,9 @@ public List<Map<String,List<String>>>  process(String Target) {
                                    if (jsonMap2.containsKey(key2)) {
                                        val2 = jsonMap2.get(key2);
 
-                                       err = handleField(val2, type2, regex2);
+                                       hfResult = handleField(val2, type2, regex2);
+                                       err=hfResult.get(1);
+                                       val2=hfResult.get(0);
                                        if (!err.equals("")) {
                                            map.get(key2).add(val2);
                                            map.get(key2).add(err);
@@ -449,7 +461,9 @@ public List<Map<String,List<String>>>  process(String Target) {
                                     regex2=tagTwoMap.get(k).get("regex");
 
 
-                                    err=handleField(val2,type2,regex2);
+                                    hfResult=handleField(val2,type2,regex2);
+                                    err=hfResult.get(1);
+                                    val2=hfResult.get(0);
                                     if(!err.equals("")){
                                         map.get(key2).add(val2);
                                         map.get(key2).add(err);
@@ -496,7 +510,9 @@ public List<Map<String,List<String>>>  process(String Target) {
                         val3="";
                         err="字段不存在";
                     }else if(isChecked3.equals("1")){
-                        err=handleField(val3,type3,regex3);
+                        hfResult=handleField(val3,type3,regex3);
+                        err=hfResult.get(1);
+                        val3=hfResult.get(0);
                     }else if(isChecked3.equals("0")){
                         err="";
                     }else{

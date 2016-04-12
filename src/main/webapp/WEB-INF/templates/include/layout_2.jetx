@@ -69,7 +69,7 @@
                                  htmlContent = htmlContent + "<li "+style+"><span id='" + data[i].id +"'><i class='icon-folder-open'></i>"+data[i].name+"</span>"
                                                 + "<ul></ul></li>"
                              }else{
-                                 htmlContent = htmlContent + "<li "+ style +"><span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/cep/list?navigationId="+data[i].id+"&&topic="+data[i].topic+"&&navigationName="+data[i].name+"'>"+data[i].name+"</a></span></li>"
+                                 htmlContent = htmlContent + "<li "+ style +"><span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/dataType/listByNavId?navigationId="+data[i].id+"&&topic="+data[i].topic+"&&navigationName="+data[i].name+"'>"+data[i].name+"</a></span></li>"
                              }
                          }
                          thisLabel.next("ul").html(htmlContent);

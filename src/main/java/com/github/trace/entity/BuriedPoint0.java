@@ -19,16 +19,6 @@ public class BuriedPoint0 {
 
     private String regex;
 
-    private String manager;
-
-    public String getManager() {
-        return manager;
-    }
-
-    public void setManager(String manager) {
-        this.manager = manager;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -95,7 +85,6 @@ public class BuriedPoint0 {
                 ", navigationId=" + navigationId +
                 ", isChecked=" + isChecked +
                 ", regex='" + regex + '\'' +
-                ", manager='" + manager + '\'' +
                 '}';
     }
 }
