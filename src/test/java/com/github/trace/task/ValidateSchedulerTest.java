@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.Assert.*;
-
 /**
  * 定时拉取校验测试
  * Created by wzk on 16/3/24.
@@ -19,11 +17,15 @@ import static org.junit.Assert.*;
 public class ValidateSchedulerTest {
 
   @Autowired
-  ValidateScheduler scheduler;
+  private ValidateScheduler scheduler;
 
   @Test
   public void testScheduler() throws Exception {
     scheduler.scheduler();
   }
 
+  @Test
+  public void testSendMonitor() throws Exception {
+    scheduler.sendMonitor("iOS");
+  }
 }

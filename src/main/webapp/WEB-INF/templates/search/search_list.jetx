@@ -13,7 +13,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active">${parent_name}<font color="blue">日志搜索</font></li>
+		<li class="active">${parent_name}<font color="blue">历史埋点日志搜索</font></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
@@ -22,17 +22,18 @@
             <option value=""> - 选择主题 - </option>
             #for(item : navigationItemList)
                 #if(item.itemType==1)
-                    <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.topic}</option>
+                    <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.name}</option>
                 #end
             #end
         </select>
+        <span class="functions">
+            <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()" style="height: 28px;"/>
+            <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/> （备注: 最大提供1000条日志信息.）
+        </span>
+
     </div>
-    <span>
-        <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()"/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
-        &nbsp;&nbsp;（备注: 最大只提供1000条日志信息.）
-    </span>
+</div>
+
 </div>
 <br/>
 <div class="row">

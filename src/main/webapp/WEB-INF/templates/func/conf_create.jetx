@@ -45,6 +45,13 @@
         <p class="help-block col-md-offset-2">如：用户编号</p>
       </div>
 
+        <div class="form-group">
+            <label for="profile" class="col-md-2 control-label">埋点负责人</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control" name="name6" id="name6" placeholder="必填" value="${manager}"/>
+            </div>
+            <p class="help-block col-md-offset-2">如：zhangs</p>
+        </div>
       <div class="form-group">
         <label for="content" class="col-md-2 control-label">是否必填项</label>
         <div class="col-md-10 col-lg-8">
@@ -115,6 +122,7 @@
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
             var value4 = $("#name4").val();
+            var value5 = $("#name6").val();
             var is_checked = $("#name5").is(':checked');
 
             if(tag == 'modify'){
@@ -124,6 +132,7 @@
                     bp_value            :value2,
                     regex               :value3,
                     bp_value_desc       :value4,
+                    manager             :value5,
                     is_checked          :is_checked,
                     id                  :id
                 };
@@ -134,6 +143,7 @@
                     bp_value            :value2,
                     regex               :value3,
                     bp_value_desc       :value4,
+                    manager             :value5,
                     is_checked          :is_checked
                 };
             }

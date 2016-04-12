@@ -599,7 +599,7 @@ public List<Map<String,List<String>>>  process(String Target) {
         //return ja1.toJSONString();
         return ja1;
     }
-    public  String filterToES(String busiName,String Target,boolean isSentMonitor){
+    public Set<String> filterToES(String busiName,String Target,boolean isSentMonitor){
         AnalyzeLog demo=new AnalyzeLog();
 //        demo.initDbConnection();
 //        demo.configure();
@@ -686,6 +686,6 @@ public List<Map<String,List<String>>>  process(String Target) {
 
 
         }
-        return esOutput.toString();
+        return esOutput;
     }
 }

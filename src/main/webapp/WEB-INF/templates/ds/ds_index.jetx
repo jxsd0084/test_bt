@@ -9,8 +9,8 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-        <li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源配置  </font></a></li>
-        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="#808080">作业管理 </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="#808080">数据源配置  </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理 </font></a></li>
 
 	</ol>
 </div>

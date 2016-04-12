@@ -73,11 +73,8 @@ public class CEPService {
     return navigation0Service.queryAll();
   }
 
-  public Set<String> getAllTopics() {
-    Set<String> topics = Sets.newHashSet();
-    List<NavigationItem> items = navigationItemMapper.findAll();
-    items.forEach(item -> topics.add(item.getTopic()));
-    return topics;
+  public NavigationItem0 getNavigationItem0ByName(String name) {
+    return navigation0Service.queryByName(name);
   }
 
   /**
