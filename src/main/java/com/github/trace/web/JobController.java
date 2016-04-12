@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by chenlong on 2016/4/1.
@@ -191,6 +188,14 @@ public class JobController {
 
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
+
+        JobConfig jobConfig = jobServer.getJobById(id);
+        String tablesStr = jobConfig.getSelectTable();
+        String[] tabs = tablesStr.split(",");
+        Set tabSet = new HashSet();
+        for(int i=0;i<tabs.length;i++){
+            tabSet.add(tabs[i]);
+        }
         JSONArray jsonArray1 = new JSONArray();
         int cont = 0;
         for (String tableName : list){
@@ -199,7 +204,10 @@ public class JobController {
             jsonArray2.add(cont);
             jsonArray2.add(databaseInfo.getDbName());
             jsonArray2.add(tableName);
-            jsonArray2.add("<input type=\"checkbox\" checked=\"checked\"/>");
+            if(tabSet.contains(tableName))
+                jsonArray2.add("<input type=\"checkbox\" checked=\"checked\"/>");
+            else
+                jsonArray2.add("<input type=\"checkbox\" />");
             jsonArray2.add("选择表字段");
             jsonArray1.add(jsonArray2);
         }
@@ -230,6 +238,7 @@ public class JobController {
             jsonArray2.add(++ cont);
             jsonArray2.add(field.getColumnName());
             jsonArray2.add(field.getColumnType());
+            jsonArray2.add("");
             jsonArray1.add(jsonArray2);
         }
 

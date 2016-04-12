@@ -39,7 +39,11 @@
 #tag layout_block("scriptContent")
 <script>
  	var data = ${data}
-	$(document).ready(function () {
+    $.each(data, function (n, value) {
+        if(value[3]=='<input type="checkbox" />')
+           $("#selectAll").attr("checked",false);
+    });
+    $(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
             searching: true,

@@ -27,7 +27,8 @@
 				<th>字段类型</th>
                 <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否脱敏</div></th>
                 <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否分区</div></th>
-			</tr>
+                <th><div  style="display:inline;float:left;"><input type="checkbox" id="selectAll" checked="checked"/></div><div>是否导出</div></th>
+            </tr>
 			</thead>
 			<tbody>
 			</tbody>
@@ -62,6 +63,11 @@
                     targets: 4, render: function (data, type, full, meta) {
                         return '<input type="checkbox"/>';
                     }
+                },
+                {
+                    targets: 5, render: function (data, type, full, meta) {
+                    return '<input type="checkbox"/>';
+                }
                 }
             ]
         });
