@@ -180,7 +180,7 @@
         } );
 
         $("[name='modify']").on('click', function () {
-            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify';
+            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify&navigationId=${navigation_id}&topic=${topic}&navigationName=${navigation_name}';
         });
 
         $("[name='delete']").on('click', function () {
