@@ -200,6 +200,7 @@ public class JobController {
             jsonArray2.add(databaseInfo.getDbName());
             jsonArray2.add(tableName);
             jsonArray2.add("<input type=\"checkbox\" checked=\"checked\"/>");
+            jsonArray2.add("选择表字段");
             jsonArray1.add(jsonArray2);
         }
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
@@ -217,6 +218,7 @@ public class JobController {
                               @RequestParam(name = "bizId") int bizId,
                               @RequestParam(name = "bizName") String bizName,
                               @RequestParam(name = "dbSourceId") int dbSourceId,
+                              @RequestParam(name = "id") int id,
                               Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
@@ -235,6 +237,7 @@ public class JobController {
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
         model.addAttribute("dbSourceId",dbSourceId);
+        model.addAttribute("id", id);
         return "ds/ds_index_3";
     }
 
