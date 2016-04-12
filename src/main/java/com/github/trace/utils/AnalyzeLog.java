@@ -29,7 +29,7 @@ public class AnalyzeLog {
 
     //private Statement stmt;
 
-    private final SimpleDateFormat timestampFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private final SimpleDateFormat timestampFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
     private Map<String,Map<String,String>> buriedMap=new TreeMap<String,Map<String,String>>();
     private Map<String,Set<String>> tagMap=new TreeMap<String,Set<String>>();
     private Set<String> tagSet=new HashSet<String>();
@@ -251,11 +251,11 @@ public class AnalyzeLog {
                 try {
                     Date date = new Date(Long.parseLong(val));
                     String value = timestampFormat.format(date);
-                    System.out.println(value);
+                    //System.out.println(value);
                     rt.add(0,value);
                 }catch(Exception e){
                     LOG.warn("timestamp field exception",e);
-                    err="日期类型字段取值异常";
+                    err="日期类型字段正则取值异常";
                 }
             }else {
                 if (!b) {
@@ -267,8 +267,25 @@ public class AnalyzeLog {
             Pattern pattern = Pattern.compile(patternString);
             Matcher matcher = pattern.matcher(val);
             b = matcher.matches();
-            if(!b){
-                err="类型不匹配";
+
+            if(type.equals("日期")&&b){
+                long nowTimestamp=new Date().getTime();
+                long logTimestamp=Long.parseLong(val);
+
+
+                try {
+                    Date date = new Date(Long.parseLong(val));
+                    String value = timestampFormat.format(date);
+                    System.out.println(value);
+                    rt.add(0,value);
+                }catch(Exception e){
+                    LOG.warn("timestamp field exception",e);
+                    err="日期类型字段取值异常";
+                }
+            }else {
+                if (!b) {
+                    err = "类型不匹配";
+                }
             }
         }
 
@@ -514,7 +531,10 @@ public List<Map<String,List<String>>>  process(String Target) {
                         err=hfResult.get(1);
                         val3=hfResult.get(0);
                     }else if(isChecked3.equals("0")){
-                        err="";
+                        //err="";
+                        hfResult=handleField(val3,type3,regex3);
+                        err=hfResult.get(1);
+                        val3=hfResult.get(0);
                     }else{
                         err="";
                     }
