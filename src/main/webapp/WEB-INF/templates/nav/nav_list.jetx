@@ -29,6 +29,7 @@
 				<th>名称</th>
                 <th>结点类型</th>
 				<th>消费主题</th>
+                <th>负责人</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -73,6 +74,11 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
+                    return full[4];
+                }
+                },
+                {
+                    targets: 5, render: function (data, type, full, meta) {
                         if(full[2]==0) {
                             return '<input name="modify" id ="' + full[0] + '" style="width: 50px;background-color:#006dcc;color: #ffffff;" type="button" value="修改">&nbsp;&nbsp;&nbsp;' +
                                     '<input id ="' + full[0] + '" name = "delete" style="width: 40px;background-color:#006dcc;color: #ffffff;" type="button" value="刪除">&nbsp;&nbsp;&nbsp;'+

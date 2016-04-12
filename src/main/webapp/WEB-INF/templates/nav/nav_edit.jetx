@@ -26,12 +26,19 @@
       </div>
       #if(obj.itemType==0)
           <input type="hidden" class="form-control" name="topic" id="topic" placeholder="必填"/>
+          <input type="hidden" class="form-control" name="manager" id="manager" placeholder="必填"/>
       #else
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">节点主题</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="topic" id="topic" placeholder="必填" value="${obj.topic}"/>
         </div>
+      </div>
+      <div class="form-group">
+          <label for="profile" class="col-md-2 control-label">负责人</label>
+          <div class="col-md-3 col-lg-3">
+              <input type="text" class="form-control" name="manager" id="manager" placeholder="必填" value="${obj.manager}"/>
+          </div>
       </div>
       #end
       <!-- 确认按钮 -->
@@ -96,12 +103,14 @@
             var value1 = $("#name").val();
             var value2 = $("#item_type").val();
             var value3 = $("#topic").val();
+            var value6 = $("#manager").val();
 
             // 新增不需要指定主键ID
             data = {
                 id                  :value5,
                 name                :value1,
                 itemType            :value2,
+                manager             :value6,
                 topic               :value3,
                 parentId            :value4
             };
