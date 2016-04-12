@@ -29,7 +29,7 @@ public class SearchService {
 				                       slog.getStartTime(),
                                        slog.getEndTime());
 		} catch (Exception e) {
-			LOGGER.error("search ElasticSearch failed !");
+			LOGGER.error("search ElasticSearch failed !", e);
 		}
 		return results;
 	}
@@ -45,7 +45,7 @@ public class SearchService {
                                        slog.getPageStart(),
                                        slog.getPageSize());
 		} catch (Exception e) {
-			LOGGER.error("search ElasticSearch failed !");
+			LOGGER.error("search ElasticSearch failed !", e);
 		}
 		return results;
 	}
