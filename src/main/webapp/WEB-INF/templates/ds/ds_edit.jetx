@@ -53,6 +53,14 @@
         <p class="help-block col-md-offset-2">如：3306</p>
       </div>
 
+        <div class="form-group">
+            <label for="profile" class="col-md-2 control-label">数据库实例</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control" name="name9" id="name9" placeholder="选填" value="${obj.dbIns}"/>
+            </div>
+            <p class="help-block col-md-offset-2">sqlServer使用</p>
+        </div>
+
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">数据库名称</label>
         <div class="col-md-3 col-lg-3">
@@ -149,6 +157,7 @@
             var value6 = $("#name6").val();
             var value7 = $("#name7").val();
             var value8 = $("#name8").val();
+            var value9 = $("#name9").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
@@ -163,6 +172,7 @@
                     dbName              :value6,
                     dbUsername          :value7,
                     dbPassword          :value8,
+                    dbIns               :value9,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
@@ -177,7 +187,8 @@
                     dbPort              :value5,
                     dbName              :value6,
                     dbUsername          :value7,
-                    dbPassword          :value8
+                    dbPassword          :value8,
+                    dbIns               :value9
                 };
             }
 
@@ -221,7 +232,7 @@
             var value6 = $("#name6").val();
             var value7 = $("#name7").val();
             var value8 = $("#name8").val();
-
+            var value9 = $("#name9").val();
             data = {
                     bizId               :bizId,
                     bizName             :bizName,
@@ -233,6 +244,7 @@
                     dbName              :value6,
                     dbUsername          :value7,
                     dbPassword          :value8,
+                    dbIns               :value9,
                     id                  :id
             };
 

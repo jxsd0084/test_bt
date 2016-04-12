@@ -45,6 +45,8 @@ public class SearchController {
 		sLog.setTag("stamp");                                           // 暂时写死
 		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
 		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
+		sLog.setPageStart(0);
+		sLog.setPageSize(1000);                                         // 默认1000条
 
 	    JSONArray jsonArray = getSearchLogList(sLog);
 	    model.addAttribute("data", jsonArray);
@@ -54,7 +56,7 @@ public class SearchController {
     }
 
 	private JSONArray getSearchLogList(SearchLog sLog) {
-		List<Map<String, Object>> list = searchService.searchES(sLog);
+		List<Map<String, Object>> list = searchService.searchESWithSize(sLog);
 		JSONArray jsonArray1 = new JSONArray();
 		int cont = 0;
 		for (Map<String, Object> logMap : list) {
@@ -67,7 +69,6 @@ public class SearchController {
 			jsonArray2.add(sb.toString());
 			jsonArray1.add(jsonArray2);
 		}
-
 		return jsonArray1;
 	}
 

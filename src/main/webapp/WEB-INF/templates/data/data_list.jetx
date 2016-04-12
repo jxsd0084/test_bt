@@ -79,5 +79,5 @@
 
 </script>
 #end
-#include("/include/layout.jetx")
+#include("/include/layout_2.jetx")
 

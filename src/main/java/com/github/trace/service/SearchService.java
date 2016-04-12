@@ -34,4 +34,20 @@ public class SearchService {
 		return results;
 	}
 
+	public List<Map<String, Object>> searchESWithSize(SearchLog slog) {
+		List<Map<String, Object>> results = null;
+		try {
+			results = esService.search(slog.getTopic(),
+				                       slog.getKeyWord(),
+                                       slog.getTag(),
+				                       slog.getStartTime(),
+				                       slog.getEndTime(),
+                                       slog.getPageStart(),
+                                       slog.getPageSize());
+		} catch (Exception e) {
+			LOGGER.error("search ElasticSearch failed !");
+		}
+		return results;
+	}
+
 }

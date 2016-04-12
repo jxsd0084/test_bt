@@ -26,6 +26,8 @@ public class DataBaseHelper {
     private static String CONN_USERNAME = "";
     private static String CONN_PASSWORD = "";
     private static String CONN_DB_NAME = "";
+    private static String CONN_DB_TYPE="";
+    private static String CONN_DB_INS="";
 
     /**
      * 获取 数据库连接
@@ -40,7 +42,12 @@ public class DataBaseHelper {
             CONN_USERNAME   = databaseInfo.getDbUsername();
             CONN_PASSWORD   = databaseInfo.getDbPassword();
             CONN_DB_NAME    = databaseInfo.getDbName();
-            CONN_URL        = databaseInfo.getDbUrl() + ":" + CONN_PORT + "/" + CONN_DB_NAME;
+            CONN_DB_TYPE = databaseInfo.getDbType();
+            CONN_DB_INS = databaseInfo.getDbIns();
+            if("SQLServer".equals(CONN_DB_TYPE))
+                CONN_URL        = databaseInfo.getDbUrl() + ":" + CONN_PORT +"\\"+CONN_DB_INS+ ";DatabaseName=" + CONN_DB_NAME;
+            else
+                CONN_URL        = databaseInfo.getDbUrl() + ":" + CONN_PORT + "/" + CONN_DB_NAME;
 
             Class.forName(CONN_DRIVER);
             conn = (Connection) DriverManager.getConnection(CONN_URL, CONN_USERNAME, CONN_PASSWORD);
