@@ -5,7 +5,7 @@
             <a class="navbar-brand hidden-md hidden-lg" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
             <div style="padding-top: 5px">
                 <ul class="nav navbar-nav nav-tabs">
-                    <li ><a href="${CONTEXT_PATH}/dataType/listByNavId?navigationId=11&&navigationName=iOS">事件行为定义</a></li>
+                    <li ><a href="${CONTEXT_PATH}/dataType/listByNavId?navigationId=11&navigationName=iOS">事件行为定义</a></li>
                     <li ><a href="${CONTEXT_PATH}/cep/list?navigationId=11&&topic=dcx.MonitorRequest&&navigationName=iOS">埋点配置与监控</a></li>
                     <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
                     <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置</a></li>
@@ -52,7 +52,7 @@
                         </li>
                     #else
                         <li>
-                            <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/dataType/listByNavId?navigationId=${grandItem.id}&&navigationName=${grandItem.name}'>${grandItem.name}</a></span>
+                            <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/dataType/listByNavId?navigationId=${grandItem.id}&navigationName=${grandItem.name}'>${grandItem.name}</a></span>
                         </li>
                     #end
                 #end
@@ -61,7 +61,7 @@
         </li>
         #else
             <li>
-                <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/dataType/listByNavId?navigationId=${childItem.id}&&navigationName=${childItem.name}'>${childItem.name}</a></span>
+                <span><i class='icon-leaf'></i><a href = '${CONTEXT_PATH}/dataType/listByNavId?navigationId=${childItem.id}&navigationName=${childItem.name}'>${childItem.name}</a></span>
             </li>
         #end
     #end
