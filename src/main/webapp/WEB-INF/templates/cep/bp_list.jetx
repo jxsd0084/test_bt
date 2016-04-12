@@ -284,8 +284,9 @@
                             }
                         ]
                     });
-                },
-                error: function (mydata) {alert("hi");alert(mydata.target);alert(mydata.tableData);;}
+                }
+                //,
+                //error: function (mydata) {alert("hi");alert(mydata.target);alert(mydata.tableData);;}
             });
 
 
