@@ -26,16 +26,14 @@
                 #end
             #end
         </select>
-        <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()"/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
-        &nbsp;&nbsp;（备注: 最大只提供1000条日志信息.）
+        <span class="functions">
+            <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()" style="height: 28px;"/>
+            <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/> （备注: 最大提供1000条日志信息.）
+        </span>
+
     </div>
-    </div>
-    <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()"/>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
-    &nbsp;&nbsp;（备注: 最大只提供1000条日志信息.）
+</div>
+
 </div>
 <br/>
 <div class="row">
