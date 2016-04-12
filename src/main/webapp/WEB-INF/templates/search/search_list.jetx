@@ -22,17 +22,14 @@
             <option value=""> - 选择主题 - </option>
             #for(item : navigationItemList)
                 #if(item.itemType==1)
-                    <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.topic}</option>
+                    <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.name}</option>
                 #end
             #end
         </select>
     </div>
-    <span>
-        <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()"/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
-        &nbsp;&nbsp;（备注: 最大只提供1000条日志信息.）
-    </span>
+    <input id="search_ipt" type="text" placeholder="请输入搜索关键词..." value="${keyWord}" onclick="this.select()"/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input id="submit_btn" class="btn btn-primary" type="button" value="搜索" onclick="searchBtnClick();"/>
 </div>
 <br/>
 <div class="row">
@@ -64,7 +61,6 @@
             fixedHeader: fixedHeaderObject,
             language: lang,
             dom: bootstrapDom,
-            bScrollInfinite: true,
             order: [[0, 'asc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
