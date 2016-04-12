@@ -100,6 +100,9 @@ public class CEPTraceController {
     @RequestMapping("/new")
     public String createConfig(@RequestParam(name = "id") int id,
                                @RequestParam(name = "tag") String tag,
+                               @RequestParam(name = "navigationId") int navigationId,
+                               @RequestParam(name = "navigationName") String navigationName,
+                               @RequestParam(name = "topic") String topic,
                                Model model) {
 
         BuriedPoint0 caller = cepService.getBuriedPoint0(id);
@@ -115,7 +118,9 @@ public class CEPTraceController {
  //       model.addAttribute("parent_id", caller.getParentId());
  //       model.addAttribute("child_id", caller.getChildId());
  //       model.addAttribute("parent_name", caller.getParentName());
-        model.addAttribute("navigation_id", caller.getNavigationId());
+        model.addAttribute("navigation_id", navigationId);
+        model.addAttribute("topic", topic);
+        model.addAttribute("navigation_name", navigationName);
         model.addAttribute("tag", tag);
         return "func/conf_create";
     }
