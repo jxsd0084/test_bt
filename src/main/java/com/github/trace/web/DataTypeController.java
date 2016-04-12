@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.entity.M99Fields;
+import com.github.trace.mapper.LevelOneFieldsMapper;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataTypeService;
 import com.github.trace.utils.ControllerHelper;
@@ -168,6 +169,15 @@ public class DataTypeController {
     public String listLevelOneFields(Model model) {
         JSONArray jsonArray = getLevelOneFieldList();
         model.addAttribute("data", jsonArray);
+        ControllerHelper.setLeftNavigationTree(model, cepService, "");
+        return "data/data_list";
+    }
+
+    @RequestMapping("/listByNavId")
+    public String listLevelOneByNavId(@RequestParam(name = "navigationId") int navigationId, Model model) {
+        List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
+        model.addAttribute("data", list);
+        model.addAttribute("navigation_id",navigationId);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         return "data/data_list";
     }

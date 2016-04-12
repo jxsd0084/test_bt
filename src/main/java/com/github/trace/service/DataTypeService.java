@@ -38,7 +38,7 @@ public class DataTypeService {
     /**
      * 根据M1字段获取所有M99扩展字段的数量
      *
-     * @param m1Id
+     * @param m2Id
      * @return
      */
     public List<M99Fields> getM99FieldsByM1Id(int m2Id) {
@@ -208,6 +208,10 @@ public class DataTypeService {
             res = updateLevelTwo(fields);
         }
         return res;
+    }
+
+    public List<LevelOneFields> queryLevelONeByNavId(int navigationId) {
+        return levelOneFieldMapper.queryByNavId(navigationId);
     }
 
 }

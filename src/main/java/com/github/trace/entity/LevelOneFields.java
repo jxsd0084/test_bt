@@ -36,6 +36,16 @@ public class LevelOneFields {
 
     // 自定义属性
     private Integer m99FieldsCount;
+    //导航栏ID
+    private Integer navigationId;
+
+    public Integer getNavigationId() {
+        return navigationId;
+    }
+
+    public void setNavigationId(Integer navigationId) {
+        this.navigationId = navigationId;
+    }
 
     public Integer getM99FieldsCount() {
         return m99FieldsCount;
