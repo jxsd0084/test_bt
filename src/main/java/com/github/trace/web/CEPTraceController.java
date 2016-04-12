@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.github.trace.entity.BuriedPoint0;
 import com.github.trace.service.CEPService;
+import com.github.trace.utils.AnalyzeLog;
 import com.github.trace.utils.ControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -208,120 +209,130 @@ public class CEPTraceController {
 
     @RequestMapping("/compare")
     @ResponseBody
-    public String compare(@RequestParam("BuriedPointList") String BuriedPointList,
+    public String compare(@RequestParam("navName") String navName,
                               @RequestParam("str1") String str1,
                               @RequestParam("str2") int str2,
                               Model model) {
 
-        String source = BuriedPointList+"";
+        //String source = BuriedPointList+"";
         String target =  cepService.getServerLog( str1,str2 ).toString();
-//        String target = "[{'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':9,'M98':'2016-01-28 20:51:32','M99.M1':'activite','realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':9,'M98':1453985500196,'M99.M1':'unactivite','realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':2,'M98':1453985500196,'M99.avg':0,'M99.M3':0,'M99.M2':0,'M99.failed':0,'M99.M1':0,'realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':2,'M98':1453984760374,'M99.avg':0,'M99.M3':0,'M99.M2':0,'M99.failed':0,'M99.M1':0,'realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}, {'M4':'iPhone OS','M7':'100146','M2':'15820776627','M5':'8.4','M8':'iPhone6,2','M3':'ecf557a77013dafc53b6fd574a80fd7b','M6':'5.1','M1':'fs','M96':'WIFI','M97':9,'M98':1453984760374,'M99.M1':'unactivite','realip':'10.20.0.3','_ip':'172.31.103.120','_time':'2016-04-08 19:33:09.588'}]";
-        JSONArray jsonArray  = JSON.parseArray(target);
-        JSONArray ja1 = new JSONArray();
-        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(source, new TypeReference<LinkedHashMap<String, String>>() {});
-
-        for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
-            JSONArray ja2 = new JSONArray();
-            ja2.add(entry1.getKey()+"");
-            ja2.add(entry1.getValue().split(",")[0]+"");
-            int size = jsonArray.size();
-            for (int i = 0; i < 5; i++) {
-                if(i>=size){
-                    JSONArray ja3 = new JSONArray();
-                    ja3.add(true);
-                    ja3.add("");
-                    ja3.add("");
-                    ja2.add(ja3);
-                    continue;
-                }
-                LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
-
-                if(jsonMap2.containsKey(entry1.getKey()) ){
-                    if(entry1.getValue().split(",")[2].equals("1")){
-                        String patternString = "";
-                        String patternString2 = "";
-
-                        if(entry1.getValue().split(",")[1].equals("文本")){
-                            patternString = ".*";
-                        }
-
-                        if(entry1.getValue().split(",")[1].equals("数字")){
-                            patternString = "^[0-9]*$";
-                        }
-
-                        String value = jsonMap2.get(entry1.getKey());
-                        Matcher matcher;
-                        if(entry1.getValue().split(",")[1].equals("日期")){
-                            patternString = "(\\d{2}|\\d{4})(?:\\-)?([0]{1}\\d{1}|[1]{1}[0-2]{1})(?:\\-)?([0-2]{1}\\d{1}|[3]{1}[0-1]{1})(?:\\s)?([0-1]{1}\\d{1}|[2]{1}[0-3]{1})(?::)?([0-5]{1}\\d{1})(?::)?([0-5]{1}\\d{1})";
-                            Pattern patt = Pattern.compile("^[0-9]*$");
-                            matcher = patt.matcher(value);
-                            if(matcher.matches()){
-                                try {
-                                    long dateTime = Long.valueOf(value);
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    Date date = new Date(dateTime);
-                                    value = sdf.format(date);
-                                }catch (Exception e){
-
-                                }
-                            }
-                        }
-                        Pattern pattern = Pattern.compile(patternString);
-                        matcher = pattern.matcher(value);
-                        boolean b= matcher.matches();
 
 
-                        if(entry1.getValue().split(",").length>=4){
+        AnalyzeLog  analyzeLog=new AnalyzeLog();
+        JSONArray rt=analyzeLog.formatLog(navName,target);
 
-                            try {
-                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
 
-                            Pattern pattern2 = null;
-                            pattern2 = Pattern.compile( patternString2);
+      //  System.out.println(rt.toJSONString());
+      //  return rt;
 
-                            Matcher matcher2 = pattern2.matcher(value);
-                            b= matcher2.matches();
-                        }
-                        JSONArray ja3 = new JSONArray();
-                        Object err = "";
-                        if(value==null)
-                            err = "null";
-                        else if("".equals(value))
-                            err="空值";
-                        else{
-                            err=value;
-                        }
-                        ja3.add(b);
-                        ja3.add(value);
-                        ja3.add(err);
-                        ja2.add(ja3);
-                    }else{
-                        String val = jsonMap2.get(entry1.getKey());
-                        JSONArray ja3 = new JSONArray();
-                        ja3.add(true);
-                        ja3.add(val);
-                        ja3.add(val);
-                        ja2.add(ja3);
-                    }
-                }else{
-                    JSONArray ja3 = new JSONArray();
-                    ja3.add(false);
-                    ja3.add("");
-                    ja3.add("缺失");
-                    ja2.add(ja3);
-                }
-            }
-            ja1.add(ja2);
-        }
+//        JSONArray jsonArray  = JSON.parseArray(target);
+//        JSONArray ja1 = new JSONArray();
+//        LinkedHashMap<String, String> jsonMap1 = JSON.parseObject(source, new TypeReference<LinkedHashMap<String, String>>() {});
+//
+//        for (Map.Entry<String, String> entry1 : jsonMap1.entrySet()) {
+//            JSONArray ja2 = new JSONArray();
+//            ja2.add(entry1.getKey()+"");
+//            ja2.add(entry1.getValue().split(",")[0]+"");
+//            int size = jsonArray.size();
+//            for (int i = 0; i < 5; i++) {
+//                if(i>=size){
+//                    JSONArray ja3 = new JSONArray();
+//                    ja3.add(true);
+//                    ja3.add("");
+//                    ja3.add("");
+//                    ja2.add(ja3);
+//                    continue;
+//                }
+//                LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
+//
+//                if(jsonMap2.containsKey(entry1.getKey()) ){
+//                    if(entry1.getValue().split(",")[2].equals("1")){
+//                        String patternString = "";
+//                        String patternString2 = "";
+//
+//                        if(entry1.getValue().split(",")[1].equals("文本")){
+//                            patternString = ".*";
+//                        }
+//
+//                        if(entry1.getValue().split(",")[1].equals("数字")){
+//                            patternString = "^[0-9]*$";
+//                        }
+//
+//                        String value = jsonMap2.get(entry1.getKey());
+//                        Matcher matcher;
+//                        if(entry1.getValue().split(",")[1].equals("日期")){
+//                            patternString = "(\\d{2}|\\d{4})(?:\\-)?([0]{1}\\d{1}|[1]{1}[0-2]{1})(?:\\-)?([0-2]{1}\\d{1}|[3]{1}[0-1]{1})(?:\\s)?([0-1]{1}\\d{1}|[2]{1}[0-3]{1})(?::)?([0-5]{1}\\d{1})(?::)?([0-5]{1}\\d{1})";
+//                            Pattern patt = Pattern.compile("^[0-9]*$");
+//                            matcher = patt.matcher(value);
+//                            if(matcher.matches()){
+//                                try {
+//                                    long dateTime = Long.valueOf(value);
+//                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                                    Date date = new Date(dateTime);
+//                                    value = sdf.format(date);
+//                                }catch (Exception e){
+//
+//                                }
+//                            }
+//                        }
+//                        Pattern pattern = Pattern.compile(patternString);
+//                        matcher = pattern.matcher(value);
+//                        boolean b= matcher.matches();
+//
+//
+//                        if(entry1.getValue().split(",").length>=4){
+//
+//                            try {
+//                                patternString2 = URLDecoder.decode(entry1.getValue().split(",")[3].toString(), "UTF-8");
+//                            } catch (UnsupportedEncodingException e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                            Pattern pattern2 = null;
+//                            pattern2 = Pattern.compile( patternString2);
+//
+//                            Matcher matcher2 = pattern2.matcher(value);
+//                            b= matcher2.matches();
+//                        }
+//                        JSONArray ja3 = new JSONArray();
+//                        Object err = "";
+//                        if(value==null)
+//                            err = "null";
+//                        else if("".equals(value))
+//                            err="空值";
+//                        else{
+//                            err=value;
+//                        }
+//                        ja3.add(b);
+//                        ja3.add(value);
+//                        ja3.add(err);
+//                        ja2.add(ja3);
+//                    }else{
+//                        String val = jsonMap2.get(entry1.getKey());
+//                        JSONArray ja3 = new JSONArray();
+//                        ja3.add(true);
+//                        ja3.add(val);
+//                        ja3.add(val);
+//                        ja2.add(ja3);
+//                    }
+//                }else{
+//                    JSONArray ja3 = new JSONArray();
+//                    ja3.add(false);
+//                    ja3.add("");
+//                    ja3.add("缺失");
+//                    ja2.add(ja3);
+//                }
+//            }
+//            ja1.add(ja2);
+//        }
+
+
         // 左边导航条
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
-        System.out.println("BuriedPointList"+ja1.toJSONString());
+        //System.out.println("BuriedPointList"+ja1.toJSONString());
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("target",target.replace("},","},\n"));
-        jsonObj.put("tableData",ja1);
+        jsonObj.put("tableData",rt);
 
         return jsonObj.toJSONString();
     }

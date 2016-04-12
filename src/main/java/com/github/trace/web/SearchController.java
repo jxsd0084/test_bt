@@ -63,13 +63,33 @@ public class SearchController {
 			JSONArray jsonArray2 = new JSONArray();
 			StringBuilder sb = new StringBuilder();
 			for (Map.Entry<String, Object> entry : logMap.entrySet()) {
-				sb.append(entry.getKey() + " : " + entry.getValue()).append("<br/>");
+				highLight(sLog, sb, entry);
 			}
 			jsonArray2.add(++ cont);
 			jsonArray2.add(sb.toString());
 			jsonArray1.add(jsonArray2);
 		}
 		return jsonArray1;
+	}
+
+	private void highLight(SearchLog sLog, StringBuilder sb, Map.Entry<String, Object> entry) {
+		String keyWord    = sLog.getKeyWord().trim();
+		String entryKey   = entry.getKey();
+		String entryValue = entry.getValue().toString();
+		String temp       = entryKey + " : " + entryValue;
+		String temp2      = entryKey + ":" + entryValue;
+		if(temp.equals(keyWord) ||
+		   temp2.equals(keyWord) ||
+		   temp.contains(keyWord)) {
+			sb.append("<br/>");
+			sb.append("<font color=\"red\">");
+			sb.append(entryKey + " : " + entryValue);
+			sb.append("</font>");
+			sb.append("<br/>");
+		}else{
+			sb.append(entryKey + " : " + entryValue);
+			sb.append("&nbsp;&nbsp;");
+		}
 	}
 
 }

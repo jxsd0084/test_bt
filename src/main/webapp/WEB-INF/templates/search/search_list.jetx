@@ -16,7 +16,6 @@
 		<li class="active">${parent_name}<font color="blue">日志搜索</font></li>
 	</ol>
 </div>
-##<span style="padding-left: 5px">（备注: 最大只提供1000条日志信息.）</span>
 <div class="row" style="padding:9px 0px 5px 25px;">
     <div>
         <select id="topic_sel" style="width: 205px">
@@ -69,6 +68,7 @@
             order: [[0, 'asc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
+            bInfo: true,
             columnDefs: [
                 {
                     sDefaultContent: ' - ',

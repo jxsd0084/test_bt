@@ -203,13 +203,16 @@
                 url: "${CONTEXT_PATH}/cep/compare",
                 async : false,
                 contentType: "application/json",
-                data:  {BuriedPointList:as, str1:$("#select").text(), str2: $("#select2").val()},
+               // data:  {BuriedPointList:as, str1:$("#select").text(), str2: $("#select2").val()},
+                data:  {navName:'${navigation_name}', str1:$("#select").text(), str2: $("#select2").val()},
                 dataType: "json",
                 type: "GET",
                 success: function (mydata) {
                     $("#textarea2").val(mydata.target);
                     //重新加载数据前需要做如下操作,否则会报错.
                     $('#datatable2').dataTable().fnDestroy();
+
+
                     $('#datatable2').DataTable( {
                         paging: false,
                         language: lang,
@@ -224,6 +227,8 @@
                             {
                                 targets: 2, render: function (data, type, full, meta) {
                                 //var link = full;
+
+
                                 if(data[0] == false){
                                     return '<div style="color:#F00">'+data[2]+'</div> '
                                 }else{
@@ -278,7 +283,8 @@
                             }
                         ]
                     });
-                }
+                },
+                error: function (mydata) {alert("hi");alert(mydata.target);alert(mydata.tableData);;}
             });
 
 
