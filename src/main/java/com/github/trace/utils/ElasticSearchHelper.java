@@ -74,6 +74,9 @@ public class ElasticSearchHelper {
   public static void bulk(String index, String type, Set<String> items) {
     Preconditions.checkNotNull(index, "Elasticsearch index should not be empty");
     Preconditions.checkNotNull(type, "Elasticsearch type should not be empty");
+    if (items == null) {
+      return;
+    }
     BulkRequestBuilder bulkRequest = client.prepareBulk();
     for (String i : items) {
       bulkRequest.add(client.prepareIndex(index, type).setSource(i));

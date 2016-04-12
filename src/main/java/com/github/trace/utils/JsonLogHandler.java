@@ -27,7 +27,9 @@ public class JsonLogHandler {
 
   public static Set<String> batchConvert(Set<String> logs) {
     Set<String> results = Sets.newHashSet();
-    logs.forEach(log -> results.add(convert(log)));
+    if (logs != null) {
+      logs.forEach(log -> results.add(convert(log)));
+    }
     return results;
   }
 
