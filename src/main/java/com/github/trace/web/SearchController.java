@@ -59,15 +59,17 @@ public class SearchController {
 		List<Map<String, Object>> list = searchService.searchESWithSize(sLog);
 		JSONArray jsonArray1 = new JSONArray();
 		int cont = 0;
-		for (Map<String, Object> logMap : list) {
-			JSONArray jsonArray2 = new JSONArray();
-			StringBuilder sb = new StringBuilder();
-			for (Map.Entry<String, Object> entry : logMap.entrySet()) {
-				highLight(sLog, sb, entry);
+		if (list != null) {
+			for (Map<String, Object> logMap : list) {
+				JSONArray jsonArray2 = new JSONArray();
+				StringBuilder sb = new StringBuilder();
+				for (Map.Entry<String, Object> entry : logMap.entrySet()) {
+					highLight(sLog, sb, entry);
+				}
+				jsonArray2.add(++ cont);
+				jsonArray2.add(sb.toString());
+				jsonArray1.add(jsonArray2);
 			}
-			jsonArray2.add(++ cont);
-			jsonArray2.add(sb.toString());
-			jsonArray1.add(jsonArray2);
 		}
 		return jsonArray1;
 	}
