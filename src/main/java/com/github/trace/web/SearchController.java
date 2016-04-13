@@ -1,8 +1,10 @@
 package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
+import com.github.trace.entity.NavigationItem0;
 import com.github.trace.entity.SearchLog;
 import com.github.trace.service.CEPService;
+import com.github.trace.service.Navigation0Service;
 import com.github.trace.service.SearchService;
 import com.github.trace.utils.ControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,8 @@ public class SearchController {
 	private CEPService cepService;
 	@Autowired
 	private SearchService searchService;
-
+	@Autowired
+	private Navigation0Service navigation0Service;
     @RequestMapping("/list")
     public String list(Model model) {
 	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
@@ -33,12 +36,16 @@ public class SearchController {
     }
 
     @RequestMapping("/searchLog")
-    public String search(@RequestParam(name = "topic")   String topic,
+    public String search(@RequestParam(name = "id")   int id,
                          @RequestParam(name = "keyWord") String keyWord,
 		                 Model model) {
 
 	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
-
+		NavigationItem0 navigationItem0 = (navigation0Service.queryById(id));
+		String topic = "";
+		if(navigationItem0!=null){
+			topic = navigationItem0.getTopic();
+		}
 	    SearchLog sLog = new SearchLog();
 		sLog.setTopic(topic);                                           // 主题
 		sLog.setKeyWord(keyWord);                                       // 搜索关键词
@@ -50,7 +57,7 @@ public class SearchController {
 
 	    JSONArray jsonArray = getSearchLogList(sLog);
 	    model.addAttribute("data", jsonArray);
-	    model.addAttribute("topic", topic);
+	    model.addAttribute("id", id);
 	    model.addAttribute("keyWord", keyWord);
 	    return "search/search_list";
     }
