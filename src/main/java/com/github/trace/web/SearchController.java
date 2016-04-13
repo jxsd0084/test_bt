@@ -67,11 +67,28 @@ public class SearchController {
 					highLight(sLog, sb, entry);
 				}
 				jsonArray2.add(++ cont);
-				jsonArray2.add(sb.toString());
+				String value =sb.toString();
+				String[] vals = value.split("<br/>");
+				StringBuffer valueSb = new StringBuffer();
+				for(String s :vals){
+					s = getStr(s);
+					valueSb.append(s+"<br/>");
+				}
+				jsonArray2.add(valueSb.toString());
 				jsonArray1.add(jsonArray2);
 			}
 		}
 		return jsonArray1;
+	}
+
+	private String getStr(String str){
+		if(str.length()>240){
+            String newStr  = str.substring(240);
+			return str.substring(0,240)+"<br/>"+getStr(newStr);
+		}
+
+		else
+			return str;
 	}
 
 	private void highLight(SearchLog sLog, StringBuilder sb, Map.Entry<String, Object> entry) {
@@ -90,7 +107,7 @@ public class SearchController {
 			sb.append("<br/>");
 		}else{
 			sb.append(entryKey + " : " + entryValue);
-			sb.append("&nbsp;&nbsp;");
+			sb.append("  ");
 		}
 	}
 
