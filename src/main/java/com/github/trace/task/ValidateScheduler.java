@@ -9,7 +9,6 @@ import com.github.autoconf.ConfigFactory;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.KafkaService;
-import com.github.trace.utils.AnalyzeLog;
 import com.github.trace.utils.ElasticSearchHelper;
 import com.github.trace.utils.JsonLogHandler;
 
