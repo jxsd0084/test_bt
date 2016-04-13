@@ -22,7 +22,7 @@
             <option value=""> - 选择主题 - </option>
             #for(item : navigationItemList)
                 #if(item.itemType==1)
-                    <option value="${item.topic}" #if(topic == item.topic) selected #end>${item.name}</option>
+                    <option value="${item.topic};${item.name}" #if(topic == item.name) selected #end>${item.name}</option>
                 #end
             #end
         </select>

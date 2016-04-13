@@ -2,9 +2,12 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.SearchLog;
+import com.github.trace.intern.DateUtil;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.SearchService;
 import com.github.trace.utils.ControllerHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +24,13 @@ import java.util.Map;
 @RequestMapping("/search")
 public class SearchController {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger( SearchController.class );
+
 	@Autowired
 	private CEPService cepService;
 	@Autowired
 	private SearchService searchService;
+
 
     @RequestMapping("/list")
     public String list(Model model) {
@@ -36,11 +42,14 @@ public class SearchController {
     public String search(@RequestParam(name = "topic")   String topic,
                          @RequestParam(name = "keyWord") String keyWord,
 		                 Model model) {
+	    String[] topicArr = topic.split(";");
+	    String   topicVal = topicArr[0];
+	    String    bizName = topicArr[1];
 
 	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
 
 	    SearchLog sLog = new SearchLog();
-		sLog.setTopic(topic);                                           // 主题
+		sLog.setTopic(topicVal);                                        // 主题
 		sLog.setKeyWord(keyWord);                                       // 搜索关键词
 		sLog.setTag("stamp");                                           // 暂时写死
 		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
@@ -50,7 +59,7 @@ public class SearchController {
 
 	    JSONArray jsonArray = getSearchLogList(sLog);
 	    model.addAttribute("data", jsonArray);
-	    model.addAttribute("topic", topic);
+	    model.addAttribute("topic", bizName);
 	    model.addAttribute("keyWord", keyWord);
 	    return "search/search_list";
     }
@@ -80,6 +89,16 @@ public class SearchController {
 		String entryValue = entry.getValue().toString();
 		String temp       = entryKey + " : " + entryValue;
 		String temp2      = entryKey + ":" + entryValue;
+
+		if("stamp".equals(entryKey) ||
+		    "M98".equals(entryKey)){
+			try{
+				entryValue = DateUtil.formatYmdHis(Long.parseLong(entryValue));
+			} catch (NumberFormatException e){
+				LOGGER.error("cast EntryString to Long type failed !", e);
+			}
+		}
+
 		if(temp.equals(keyWord) ||
 		   temp2.equals(keyWord) ||
 		   temp.contains(keyWord)) {
