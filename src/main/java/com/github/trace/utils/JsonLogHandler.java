@@ -1,8 +1,10 @@
 package com.github.trace.utils;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.autoconf.ConfigFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -11,6 +13,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,6 +24,12 @@ public class JsonLogHandler {
   private static final Logger LOG = LoggerFactory.getLogger(JsonLogHandler.class);
   private static final String DATEFORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern(DATEFORMAT);
+  private static Map<String, String> keyMap = Maps.newLinkedHashMap();
+  static {
+    ConfigFactory.getInstance().getConfig("buriedtool-es-keymap").addListener(config -> {
+      keyMap = config.getAll();
+    });
+  }
 
   private JsonLogHandler() {
   }
@@ -56,14 +65,18 @@ public class JsonLogHandler {
     return object.toJSONString();
   }
 
-  private static String convertFieldName(String key) {
-    if (StringUtils.equals(key, "_time")) {
-      return "stamp";
+  public static String convertFieldName(String originKey) {
+    for (Map.Entry<String, String> entry : keyMap.entrySet()) {
+      String oKey = entry.getKey();
+      String nKey = entry.getValue();
+      if (StringUtils.equals(oKey, originKey)) {
+        return nKey;
+      }
+      if (StringUtils.contains(originKey, '.')) {
+        return StringUtils.replaceChars(originKey, '.', '_');
+      }
     }
-    if (StringUtils.contains(key, '.')) {
-      return StringUtils.replaceChars(key, '.', '_');
-    }
-    return key;
+    return originKey;
   }
 
 }

@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import com.alibaba.fastjson.JSON;
+import com.github.autoconf.ConfigFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -72,7 +73,9 @@ public class NginxLogHandler {
     paramList.forEach(param -> {
       List<String> kv = Splitter.on("=").omitEmptyStrings().splitToList(param);
       if (kv.size() == 2) {
-        map.put(kv.get(0), kv.get(1));
+        String key = JsonLogHandler.convertFieldName(kv.get(0));
+        String value = kv.get(1);
+        map.put(key, value);
       }
     });
     return JSON.toJSONString(map);
