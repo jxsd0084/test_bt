@@ -17,6 +17,7 @@
         #if (parentId == 0)
             <input type="hidden" class="form-control" name="item_type" id="item_type" value="0" />
             <input type="hidden" class="form-control" name="topic" id="topic" />
+            <input type="hidden" class="form-control" name="manager" id="manager" />
         #else
         <div class="form-group">
             <label for="profile" class="col-md-2 control-label">节点类型</label>
@@ -32,6 +33,13 @@
             <label for="profile" class="col-md-2 control-label">节点主题</label>
             <div class="col-md-3 col-lg-3">
                 <input type="text" class="form-control" name="topic" id="topic" placeholder="必填" />
+            </div>
+            <p class="help-block col-md-offset-2"></p>
+        </div>
+        <div class="form-group" id = "leaf-item2" style = "display:none">
+            <label for="profile" class="col-md-2 control-label">负责人</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control" name="manager" id="manager" placeholder="必填" />
             </div>
             <p class="help-block col-md-offset-2"></p>
         </div>
@@ -103,12 +111,14 @@
             var value1 = $("#name").val();
             var value2 = $("#item_type").val();
             var value3 = $("#topic").val();
+            var value5 = $("#manager").val();
 
            // 新增不需要指定主键ID
                 data = {
                     name                :value1,
                     itemType            :value2,
                     topic               :value3,
+                    manager             :value5,
                     parentId            :value4
                 };
 
@@ -135,9 +145,12 @@
         $("[name='item_type']").change(function () {
             if(this.value==1){
                 $('#leaf-item').show();
+                $('#leaf-item2').show();
             }else{
                 $('#topic').val('');
+                $('#manager').val('');
                 $('#leaf-item').hide();
+                $('#leaf-item2').hide();
             }
         });
     });

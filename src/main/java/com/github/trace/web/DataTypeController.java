@@ -1,6 +1,7 @@
 package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
 import com.github.trace.entity.M99Fields;
@@ -167,17 +168,19 @@ public class DataTypeController {
 
     @RequestMapping("/listLevelOne")
     public String listLevelOneFields(Model model) {
-        JSONArray jsonArray = getLevelOneFieldList();
+        JSONArray jsonArray = getLevelOneFieldList(11);
         model.addAttribute("data", jsonArray);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         return "data/data_list";
     }
 
     @RequestMapping("/listByNavId")
-    public String listLevelOneByNavId(@RequestParam(name = "navigationId") int navigationId, Model model) {
-        List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
-        model.addAttribute("data", list);
+    public String listLevelOneByNavId(@RequestParam(name = "navigationId") int navigationId,@RequestParam(name = "navigationName") String navigationName, Model model) {
+        JSONArray jsonArray = getLevelOneFieldList(navigationId);
+ //       List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
+        model.addAttribute("data", jsonArray);
         model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
         return "data/data_list";
     }
@@ -238,12 +241,14 @@ public class DataTypeController {
                             @RequestParam(name = "lev") int lev,
                             @RequestParam(name = "L1_id", required = false) String l1_id,
                             @RequestParam(name = "L1_tag", required = false) String l1_tag,
+                            @RequestParam(name = "navigationId", required = false) String navigationId,
                             @RequestParam(name = "L1_name", required = false) String l1_name,
                             Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
         model.addAttribute("tag", tag);
 
         if (lev == 1){
+            model.addAttribute("navigation_id",navigationId);
             return "data/data_edit";
         }else{
             model.addAttribute("L1_id", l1_id);
@@ -257,6 +262,7 @@ public class DataTypeController {
     @ResponseBody
     public Map modifyLevelOne(@RequestParam("L1_tag")  String l1_tag,
                               @RequestParam("L1_name") String l1_name,
+                              @RequestParam("navigationId") int navigation_id,
                               @RequestParam("L1_desc") String l1_desc,
                               @RequestParam("id") int id) {
         LevelOneFields levelOneFields = new LevelOneFields();
@@ -264,6 +270,7 @@ public class DataTypeController {
         levelOneFields.setLevel1FieldTag(l1_tag);
         levelOneFields.setLevel1FieldName(l1_name);
         levelOneFields.setLevel1FieldDesc(l1_desc);
+        levelOneFields.setNavigationId(navigation_id);
 
         int res = dataTypeService.updateFieldsByCascade(levelOneFields);
 
@@ -294,11 +301,13 @@ public class DataTypeController {
     @RequestMapping("/addLevelOne")
     @ResponseBody
     public Map addLevelOne(@RequestParam("L1_tag")  String l1_tag,
+                           @RequestParam("navigationId") int navigation_id,
                            @RequestParam("L1_name") String l1_name,
                            @RequestParam("L1_desc") String l1_desc) {
         LevelOneFields levelOneFields = new LevelOneFields();
         levelOneFields.setLevel1FieldTag(l1_tag);
         levelOneFields.setLevel1FieldName(l1_name);
+        levelOneFields.setNavigationId(navigation_id);
         levelOneFields.setLevel1FieldDesc(l1_desc);
 
         int res = dataTypeService.addLevelOneFields(levelOneFields);
@@ -331,8 +340,10 @@ public class DataTypeController {
      * 一级字段列表
      * @return
      */
-    public JSONArray getLevelOneFieldList() {
-        List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
+    public JSONArray getLevelOneFieldList(int navigationId) {
+        List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
+
+      //  List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
         JSONArray jsonArray1 = new JSONArray();
         for (LevelOneFields levelOneFields : list ) {
             JSONArray jsonArray2 = new JSONArray();
