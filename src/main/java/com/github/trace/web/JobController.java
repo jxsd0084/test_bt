@@ -190,7 +190,9 @@ public class JobController {
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
 
         JobConfig jobConfig = jobServer.getJobById(id);
-        String tablesStr = jobConfig.getSelectTable();
+        String tablesStr ="";
+        if(jobConfig!=null&&jobConfig.getSelectTable()!=null)
+            tablesStr = jobConfig.getSelectTable();
         String[] tabs = tablesStr.split(",");
         Set tabSet = new HashSet();
         for(int i=0;i<tabs.length;i++){
@@ -229,6 +231,17 @@ public class JobController {
                               @RequestParam(name = "id") int id,
                               Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        JobConfig jobConfig = jobServer.getJobById(id);
+        String tablesStr = jobConfig.getSelectData();
+        JSONObject jsonObj = JSONObject.parseObject(tablesStr);
+        String fieldArrJson ="[]";
+        if(jsonObj!=null){
+            Object obj = jsonObj.get(tableName);
+            if(obj!=null){
+                fieldArrJson = (JSONArray.toJSONString(obj));
+            }
+        }
+
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
         List<TableField> list = dataSourceServer.getTableFields(databaseInfo, tableName);
         JSONArray jsonArray1 = new JSONArray();
@@ -238,7 +251,6 @@ public class JobController {
             jsonArray2.add(++ cont);
             jsonArray2.add(field.getColumnName());
             jsonArray2.add(field.getColumnType());
-//            jsonArray2.add("");
             jsonArray1.add(jsonArray2);
         }
 
@@ -248,6 +260,8 @@ public class JobController {
         model.addAttribute("dbSourceId",dbSourceId);
         model.addAttribute("id", id);
         model.addAttribute("table",tableName);
+        model.addAttribute("fieldArrJson",fieldArrJson);
+
         return "ds/ds_index_3";
     }
 
@@ -273,6 +287,21 @@ public class JobController {
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         JobConfig jobConfig = jobServer.getJobById(jobId);
+        String selectTable = jobConfig.getSelectTable();
+        if(selectTable==null||"".equals(selectTable)){
+            selectTable = table;
+        }else{
+            boolean flag = false;
+            String[] tables = selectTable.split(",");
+            for(String t : tables){
+                if(table.trim().equals(t.trim()))
+                    flag = true;
+            }
+            if(!flag)
+                selectTable = selectTable+","+table;
+        }
+        jobConfig.setSelectTable(selectTable);
+
         String selectData = jobConfig.getSelectData();
         JSONObject json = JSONObject.parseObject(selectData);
         if(json == null)

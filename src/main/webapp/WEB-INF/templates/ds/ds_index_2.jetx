@@ -109,6 +109,12 @@
                 thisCell.data('<input type="checkbox" checked="checked"/>').draw();
                 var rowx = thisCell.index()['row']+1;
                 $("#a_" + rowx).css('display', '');
+
+                var flag = true
+                $.each(data, function (n, value) {
+                    if(value[3]=='<input type="checkbox" />') flag = false;
+                });
+                $("#selectAll").prop("checked", flag);
             }
         } );
 
