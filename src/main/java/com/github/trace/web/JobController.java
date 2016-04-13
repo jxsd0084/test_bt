@@ -238,7 +238,7 @@ public class JobController {
             jsonArray2.add(++ cont);
             jsonArray2.add(field.getColumnName());
             jsonArray2.add(field.getColumnType());
-            jsonArray2.add("");
+//            jsonArray2.add("");
             jsonArray1.add(jsonArray2);
         }
 
@@ -247,6 +247,7 @@ public class JobController {
         model.addAttribute("bizName", bizName);
         model.addAttribute("dbSourceId",dbSourceId);
         model.addAttribute("id", id);
+        model.addAttribute("table",tableName);
         return "ds/ds_index_3";
     }
 
@@ -261,6 +262,26 @@ public class JobController {
         jobConfig.setSelectTable(tables);
         int res = jobServer.updateJob(jobConfig);
         Map map = ControllerHelper.returnResponseVal(res, "保存");
+        return map;
+    }
+
+    @RequestMapping("/selectField")
+    public Map selectField(@RequestParam(name = "jobId") int jobId,
+                           @RequestParam(name = "table") String table,
+                           @RequestParam(name = "fields") String fields,
+                           Model model){
+
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        JobConfig jobConfig = jobServer.getJobById(jobId);
+        String selectData = jobConfig.getSelectData();
+        JSONObject json = JSONObject.parseObject(selectData);
+        if(json == null)
+            json = new JSONObject();
+        JSONArray fieldArr = JSONArray.parseArray(fields);
+        json.put(table,fieldArr);
+        jobConfig.setSelectData(json.toJSONString());
+        int res = jobServer.updateJob(jobConfig);
+        Map map = ControllerHelper.returnResponseVal(res, "保存ds");
         return map;
     }
 }

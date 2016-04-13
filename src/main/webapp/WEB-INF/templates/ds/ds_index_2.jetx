@@ -39,10 +39,7 @@
 #tag layout_block("scriptContent")
 <script>
  	var data = ${data}
-    $.each(data, function (n, value) {
-        if(value[3]=='<input type="checkbox" />')
-           $("#selectAll").attr("checked",false);
-    });
+
     $(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
@@ -69,7 +66,7 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                       return '<a href="${CONTEXT_PATH}/job/fldsIndex?dbSourceId=' + '${obj.id}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + full[2] +'&id='+'${jobId}'+ '">'+data+'</a>';
+                       return '<a id ="a_'+full[0]+'" href="${CONTEXT_PATH}/job/fldsIndex?dbSourceId=' + '${obj.id}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + full[2] +'&id='+'${jobId}'+ '">'+data+'</a>';
                     }
                 }
             ]
@@ -102,10 +99,17 @@
         $('#datatable tbody').on( 'click', 'td', function () {
             var thisCell =  table.cell( this );
             var cellData = thisCell.data();
-            if(cellData.indexOf('checked')>0)
+            if(cellData.indexOf('checked')>0) {
                 thisCell.data('<input type="checkbox" />').draw();
-            else if(cellData.indexOf('checkbox')>0)
+                var rowx = thisCell.index()['row']+1;
+                var columnx = thisCell.index()['column'];
+                $("#a_"+rowx).css('display','none');
+                $("#selectAll").attr("checked", false);
+            }else if(cellData.indexOf('checkbox')>0) {
                 thisCell.data('<input type="checkbox" checked="checked"/>').draw();
+                var rowx = thisCell.index()['row']+1;
+                $("#a_" + rowx).css('display', '');
+            }
         } );
 
         $('#selectAll').on('click', function () {
@@ -114,15 +118,24 @@
                     var d = this.data();
                     d[3] ='<input type="checkbox" checked="checked"/>';
                     this.invalidate();
+                    $("#a_"+d[0]).css('display','');
                 });
             }else{
                 table.rows().every(function(){
                     var d = this.data();
                     d[3] ='<input type="checkbox" />';
                     this.invalidate();
+                    $("#a_"+d[0]).css('display','none');
                 });
             }
             table.draw();
+        });
+
+        $.each(data, function (n, value) {
+            if(value[3]=='<input type="checkbox" />') {
+                $("#selectAll").attr("checked", false);
+                $("#a_"+eval(n+1)).css('display','none');
+            }
         });
     });
 </script>
