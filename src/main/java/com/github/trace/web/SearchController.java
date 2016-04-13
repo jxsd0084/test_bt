@@ -3,10 +3,13 @@ package com.github.trace.web;
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.entity.SearchLog;
+import com.github.trace.intern.DateUtil;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.Navigation0Service;
 import com.github.trace.service.SearchService;
 import com.github.trace.utils.ControllerHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +25,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/search")
 public class SearchController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger( SearchController.class );
 
 	@Autowired
 	private CEPService cepService;
@@ -87,6 +92,17 @@ public class SearchController {
 		String entryValue = entry.getValue().toString();
 		String temp       = entryKey + " : " + entryValue;
 		String temp2      = entryKey + ":" + entryValue;
+
+		if("stamp".equals(entryKey) ||
+		    "Time".equals(entryKey) ||
+			 "M98".equals(entryKey)) {
+			try{
+				entryValue = DateUtil.formatYmdHis( Long.parseLong(entryValue) );
+			}catch (NumberFormatException e){
+				LOGGER.error("cast EntryString to long type failed !", e);
+			}
+		}
+
 		if(temp.equals(keyWord) ||
 		   temp2.equals(keyWord) ||
 		   temp.contains(keyWord)) {
