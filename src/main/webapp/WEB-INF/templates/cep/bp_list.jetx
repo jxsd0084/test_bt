@@ -161,8 +161,10 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                    return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
-                }
+//                    return '<input name="modify" id ="'+data+'"  style="width: 40px" type="button" value="更新">&nbsp;&nbsp;&nbsp;<input id ="'+data+'" name = "delete" style="width: 40px" type="button" value="刪除">'
+                    return '<a name="modify" id ="'+data+'"  style="width: 40px;cursor: pointer;">更新</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a id ="'+data+'" name = "delete" style="width: 40px;cursor: pointer">刪除</a>'
+
+                    }
                 }
 
             ]
@@ -180,7 +182,7 @@
         } );
 
         $("[name='modify']").on('click', function () {
-            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify';
+            window.location.href='${CONTEXT_PATH}/cep/new?id='+this.id+'&tag=modify&navigationId=${navigation_id}&topic=${topic}&navigationName=${navigation_name}';
         });
 
         $("[name='delete']").on('click', function () {

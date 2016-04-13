@@ -14,7 +14,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-    <input id="submit_btn" class="btn btn-primary" type="button" value="保存" onclick="window.location.href='${CONTEXT_PATH}/ds/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
+    <input id="submit_btn" class="btn btn-primary" type="button" value="保存" "/>
 </div>
 <br/>
 <div class="row">
@@ -56,22 +56,57 @@
             columnDefs: [
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                        return '<input type="checkbox"/>';
+                        return '<input type="checkbox" id="des_'+full[0]+'"/>';
                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<input type="checkbox"/>';
+                    return '<input type="checkbox" id="par_'+full[0]+'"/>';
                     }
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                    return '<input type="checkbox"/>';
+                    return '<input type="checkbox" id="exp_'+full[0]+'" checked="checked"/>';
                 }
                 }
             ]
         });
+
+        $('#submit_btn').on('click', function () {
+            var fieldArrJson = [];
+            table.rows().every(function(){
+                var d = this.data();
+                var fieldJson = {};
+                fieldJson['name']=d[1];
+                fieldJson['type']=d[2];
+                fieldJson['des']=getCheckBoxValue("des_"+d[0]);
+                fieldJson['par']=getCheckBoxValue("par_"+d[0]);
+                fieldJson['exp']=getCheckBoxValue("exp_"+d[0]);
+                fieldArrJson.push(fieldJson);
+            });
+            var url     = '${CONTEXT_PATH}/job/selectField';
+            var data = { jobId : ${id},
+                         table : '${table}',
+                         fields  :  JSON.stringify(fieldArrJson)};
+            $.ajax({
+                url                 :url,
+                contentType         :"application/json",
+                data                :data,
+                dataType            :"text",
+                type                :"GET",
+                success:function (data) {
+                    alert("保存成功!");
+                }
+            });
+        });
     });
+    function getCheckBoxValue(id){
+        var checkBox = $("#"+id)
+        if(checkBox.is(':checked'))
+                return 1;
+        else
+                return 0;
+    }
 </script>
 #end
 #include("/include/layout.jetx")

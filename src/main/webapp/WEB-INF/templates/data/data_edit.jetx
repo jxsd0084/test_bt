@@ -30,13 +30,13 @@
           <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.level1FieldDesc}"/>
         </div>
       </div>
-
+        <input type="hidden" class="form-control" name="name4" id="name4" placeholder="必填" value="${obj.navigationId}"/>
       <!-- 确认按钮 -->
       <div class="form-group well well-sm">
         <div class="col-md-offset-2 col-md-10 col-lg-8">
           <p align="lefts" class="hide" id="resultInfo"></p>
           <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
-          <input id="cancel_btn" class="btn" type="button" value="返回"/>
+          <input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.go(-1)"/>
         </div>
       </div>
 
@@ -83,11 +83,17 @@
             var value1 = $("#name1").val();
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
+            var value4 = $("#name4").val();
+            alert(value4);
+            if(value4==''){
+                value4 = '${navigation_id}';
+            }
 
             if(tag == 'modify'){
                 msg  = '修改';
                 data = {
                     L1_tag              :value1,
+                    navigationId        :value4,
                     L1_name             :value2,
                     L1_desc             :value3,
                     id                  :id
@@ -98,6 +104,7 @@
                     L1_tag              :value1,
                     L1_name             :value2,
                     L1_desc             :value3,
+                    navigationId        :value4
                 };
             }
 
@@ -121,12 +128,9 @@
 
         })
 
-        $("#cancel_btn").on('click', function () {
-            window.location.href = GLOBAL_URL;
-        })
 
     });
 
 </script>
 #end
-#include("/include/form-layout.jetx")
+#include("/include/form-layout_2.jetx")

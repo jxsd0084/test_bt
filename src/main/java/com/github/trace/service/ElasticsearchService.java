@@ -11,6 +11,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,8 @@ public class ElasticsearchService {
     if (!Strings.isNullOrEmpty(topic)) {
       builder.setTypes(topic);
     }
+
+    builder.addSort(timeParam, SortOrder.DESC);
 
     BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
     boolQuery.must(QueryBuilders.queryStringQuery(keyword));
