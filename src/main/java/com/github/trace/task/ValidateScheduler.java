@@ -1,5 +1,6 @@
 package com.github.trace.task;
 
+import com.github.trace.service.AnalyzeLogService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
@@ -40,7 +41,11 @@ class ValidateScheduler {
   private KafkaService kafkaService;
   @Autowired
   private CEPService cepService;
-  private AnalyzeLog analyzeLog = new AnalyzeLog();
+
+  @Autowired
+  private AnalyzeLogService analyzeLogService;
+
+ // private AnalyzeLog analyzeLog = new AnalyzeLog();
 
   @PostConstruct
   public void init() {
@@ -82,7 +87,8 @@ class ValidateScheduler {
 
   @Async
   private void batchValidate(String name, String topic, Set<String> set, boolean sendMonitor) {
-    Set<String> toEs = analyzeLog.filterToES(name, JSONArray.toJSONString(set), sendMonitor);
+    //Set<String> toEs = analyzeLog.filterToES(name, JSONArray.toJSONString(set), sendMonitor);
+    Set<String> toEs = analyzeLogService.filterToES(name, JSONArray.toJSONString(set), sendMonitor);
     Set<String> converted;
     if (StringUtils.startsWith(topic, "nginx")) {
       converted = toEs;
