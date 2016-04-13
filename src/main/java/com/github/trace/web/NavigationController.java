@@ -2,6 +2,7 @@ package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.NavigationItem0;
+import com.github.trace.service.AnalyzeLogService;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.Navigation0Service;
 import com.github.trace.utils.ControllerHelper;
@@ -28,6 +29,8 @@ public class NavigationController {
 
     @Autowired
     CEPService cepService;
+    @Autowired
+    AnalyzeLogService analyzeLogService;
 
     @RequestMapping("/list")
     public String list(Model model) {
@@ -108,7 +111,12 @@ public class NavigationController {
     @RequestMapping("/getChildItem")
     public @ResponseBody List<NavigationItem0> queryChildItem(@RequestParam(name = "id") int id){
         List<NavigationItem0> list = navigation0Service.queryByParentId(id);
-        System.out.println(list.toString());
         return list;
+    }
+
+    @RequestMapping("/triggerWarn")
+    public @ResponseBody Map triggerWarning(@RequestParam(name = "navigationName") String navigationName){
+       analyzeLogService.sendMonitorByNavName(navigationName);
+        return ControllerHelper.returnResponseVal(1, "报警");
     }
 }

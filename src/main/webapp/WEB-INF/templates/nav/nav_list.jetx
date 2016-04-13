@@ -93,7 +93,7 @@
 //                                    '<input id ="' + full[0] + '" name = "addChildItem" style="width: 90px;background-color:darkgrey;color: #ffffff;" type="button" value="添加子节点" disabled="disabled">';
                             return '<a name="modify" id ="' + full[0] + '" style="width: 50px;cursor:pointer;" >修改</a>&nbsp;&nbsp;&nbsp;' +
                                     '|&nbsp;&nbsp;&nbsp;<a id ="' + full[0] + '" name = "delete" style="width: 40px;cursor:pointer;">刪除</a>&nbsp;&nbsp;&nbsp;'+
-                                    '|&nbsp;&nbsp;&nbsp;<a id ="' + full[0] + '" name = "warning" style="width: 90px;cursor:pointer;">触发报警</a>';
+                                    '|&nbsp;&nbsp;&nbsp;<a id ="' + full[1] + '" name = "warning" style="width: 90px;cursor:pointer;">触发报警</a>';
                         }
                     }
                 }
@@ -126,6 +126,24 @@
                     }
                 });
             }
+        })
+
+        $("[name='warning']").on('click', function () {
+                $.ajax({
+                    url: "${CONTEXT_PATH}/nav/triggerWarn",
+                    contentType: "application/json",
+                    data: {navigationName: this.id},
+                    dataType: "text",
+                    type: "GET",
+                    success: function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            location.reload();
+                        } else {
+                            alert("警告：" + json.info);
+                        }
+                    }
+                });
         })
     });
 
