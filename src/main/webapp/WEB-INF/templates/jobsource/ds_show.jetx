@@ -90,7 +90,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}';
 
     $("#cancel_btn").on('click', function () {
         window.location.href = GLOBAL_URL;
