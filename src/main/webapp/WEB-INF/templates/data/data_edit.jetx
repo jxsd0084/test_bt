@@ -84,7 +84,6 @@
             var value2 = $("#name2").val();
             var value3 = $("#name3").val();
             var value4 = $("#name4").val();
-            alert(value4);
             if(value4==''){
                 value4 = '${navigation_id}';
             }
