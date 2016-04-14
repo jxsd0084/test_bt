@@ -341,10 +341,10 @@ public class DataTypeController {
         for (LevelOneFields levelOneFields : list ) {
             JSONArray jsonArray2 = new JSONArray();
             String tagName = levelOneFields.getLevel1FieldTag();
-            jsonArray2.add(levelOneFields.getId());
             jsonArray2.add(tagName);                                    // 标识 样例:AV
             jsonArray2.add(levelOneFields.getLevel1FieldName());        // 名称 样例:音视频
             jsonArray2.add(levelOneFields.getLevel1FieldDesc());        // 描述
+            jsonArray2.add(levelOneFields.getId());                     // 编号 不展示, 以免混淆
 
             jsonArray1.add(jsonArray2);
         }
