@@ -76,33 +76,38 @@ public class SearchController {
 				JSONArray jsonArray2 = new JSONArray();
 				StringBuilder sb = new StringBuilder();
 				for (Map.Entry<String, Object> entry : logMap.entrySet()) {
-					highLight(sLog, sb, entry);
+					highLight( sLog, sb, entry );
 				}
 				jsonArray2.add(++ cont);
-				String value =sb.toString();
-				String[] vals = value.split("<br/>");
-				StringBuilder valueSb = new StringBuilder();
-				for(String s :vals){
-					s = getStr(s);
-					valueSb.append(s+"<br/>");
-				}
-				jsonArray2.add(valueSb.toString());
+				jsonArray2.add( autoIndent(sb).toString() );
 				jsonArray1.add(jsonArray2);
 			}
 		}
 		return jsonArray1;
 	}
 
-	private String getStr(String str){
-		if(str.length()>240){
-            String newStr  = str.substring(240);
-			return str.substring(0,240)+"<br/>"+getStr(newStr);
+	// 自动缩进
+	private StringBuilder autoIndent(StringBuilder sb) {
+		String  value = sb.toString();
+		String[] vals = value.split("<br/>");
+		StringBuilder valueSb = new StringBuilder();
+		for(String s : vals){
+			s = getStr(s);
+			valueSb.append(s + "<br/>");
 		}
-
-		else
-			return str;
+		return valueSb;
 	}
 
+	private String getStr(String str){
+		if(str.length() > 240){
+            String newStr = str.substring(240);
+			return str.substring(0, 240) + "<br/>" + getStr(newStr);
+		}else{
+			return str;
+		}
+	}
+
+	// 高亮
 	private void highLight(SearchLog sLog, StringBuilder sb, Map.Entry<String, Object> entry) {
 		String keyWord    = sLog.getKeyWord().trim();
 		String entryKey   = entry.getKey();
@@ -113,7 +118,7 @@ public class SearchController {
 		if("stamp".equals(entryKey) ||
 		    "Time".equals(entryKey) ||
 			 "M98".equals(entryKey)) {
-			try{
+			try{ // 时间戳格式化
 				entryValue = DateUtil.formatYmdHis( Long.parseLong(entryValue) );
 			}catch (NumberFormatException e){
 				LOGGER.error("cast EntryString to long type failed !", e);
