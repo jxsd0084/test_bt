@@ -47,7 +47,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelOne';
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listByNavId?navigationId=${navigation_id}&navigationName=${navigation_name}';
 
     var myValidator = function(){
         var msg = '';

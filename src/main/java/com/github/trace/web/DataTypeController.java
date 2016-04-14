@@ -36,6 +36,8 @@ public class DataTypeController {
                           @RequestParam(name = "L1_tag")  String l1_tag,
                           @RequestParam(name = "L1_name") String l1_name,
                           @RequestParam(name = "L2_id")   int    l2_id,
+                          @RequestParam(name = "navigationId") int navigationId,
+                          @RequestParam(name = "navigationName") String navigationName,
                           @RequestParam(name = "L2_tag")  String l2_tag,
                           Model model) {
         JSONArray jsonArray = getM99FieldsList(l2_id);
@@ -46,6 +48,8 @@ public class DataTypeController {
         model.addAttribute("L2_id", l2_id);
         model.addAttribute("L2_tag", l2_tag);
         model.addAttribute("L1_name", l1_name);
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
 //        model.addAttribute("id", id);
         return "data/m99_list";
     }
@@ -57,6 +61,8 @@ public class DataTypeController {
                          @RequestParam(name = "L2_id")   int    l2_id,
                          @RequestParam(name = "L2_tag")  String l2_tag,
                          @RequestParam(name = "tag")     String tag,
+                         @RequestParam(name = "navigationId") int navigationId,
+                         @RequestParam(name = "navigationName") String navigationName,
                          Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
@@ -66,6 +72,8 @@ public class DataTypeController {
         model.addAttribute("L2_id",   l2_id);
         model.addAttribute("L2_tag",  l2_tag);
         model.addAttribute("tag",     tag);
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
 
         return "data/m99_edit";
     }
@@ -78,6 +86,8 @@ public class DataTypeController {
                           @RequestParam(name = "L2_id")   String l2_id,
                           @RequestParam(name = "L2_tag")  String l2_tag,
                           @RequestParam(name = "tag")     String tag,
+                          @RequestParam(name = "navigationId") int navigationId,
+                          @RequestParam(name = "navigationName") String navigationName,
                           Model model) {
         M99Fields m99 = dataTypeService.getM99FieldsById(l3_id);
         model.addAttribute("obj", m99);
@@ -91,6 +101,8 @@ public class DataTypeController {
         model.addAttribute("L2_id",   l2_id);
         model.addAttribute("L2_tag",  l2_tag);
         model.addAttribute("tag",     tag);
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
         return "data/m99_edit";
     }
 
@@ -187,6 +199,8 @@ public class DataTypeController {
 
     @RequestMapping("/listLevelTwo")
     public String listLevelTwoFields(@RequestParam(name = "L1_id")   int    l1_id,
+                                     @RequestParam(name = "navigationId") int navigationId,
+                                     @RequestParam(name = "navigationName") String navigationName,
                                      @RequestParam(name = "L1_tag")  String l1_tag,
                                      @RequestParam(name = "L1_name") String l1_name,
                                      Model model) {
@@ -199,12 +213,16 @@ public class DataTypeController {
         model.addAttribute("L1_id",   l1_id);
         model.addAttribute("L1_tag",  l1_tag);
         model.addAttribute("L1_name", l1_name);
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
         return "data/data_list_2";
     }
 
     @RequestMapping("/editLevelOne")
     public String editLevelOne(@RequestParam(name = "L1_id") int l1_id,
                                @RequestParam(name = "tag") String tag,
+                               @RequestParam(name = "navigationId") int navigationId,
+                               @RequestParam(name = "navigationName") String navigationName,
                                Model model) {
         LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(l1_id);
         model.addAttribute("obj", fieldObj);
@@ -213,12 +231,16 @@ public class DataTypeController {
 
         model.addAttribute("id", l1_id);
         model.addAttribute("tag", tag);
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
         return "data/data_edit";
     }
 
     @RequestMapping("/editLevelTwo")
     public String editLevelTwo(@RequestParam(name = "id") int id,
                                @RequestParam(name = "tag") String tag,
+                               @RequestParam(name = "navigationId") int navigationId,
+                               @RequestParam(name = "navigationName") String navigationName,
                                @RequestParam(name = "L1_id") String l1_id,
                                @RequestParam(name = "L1_tag") String l1_tag,
                                @RequestParam(name = "L1_name") String l1_name,
@@ -233,6 +255,8 @@ public class DataTypeController {
         model.addAttribute("L1_id", l1_id);
         model.addAttribute("L1_tag", l1_tag);
         model.addAttribute("L1_name", l1_name);
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
         return "data/data_edit_2";
     }
 
@@ -241,14 +265,15 @@ public class DataTypeController {
                             @RequestParam(name = "lev") int lev,
                             @RequestParam(name = "L1_id", required = false) String l1_id,
                             @RequestParam(name = "L1_tag", required = false) String l1_tag,
-                            @RequestParam(name = "navigationId", required = false) String navigationId,
+                            @RequestParam(name = "navigationId") int navigationId,
+                            @RequestParam(name = "navigationName") String navigationName,
                             @RequestParam(name = "L1_name", required = false) String l1_name,
                             Model model) {
         ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
         model.addAttribute("tag", tag);
-
+        model.addAttribute("navigation_id",navigationId);
+        model.addAttribute("navigation_name",navigationName);
         if (lev == 1){
-            model.addAttribute("navigation_id",navigationId);
             return "data/data_edit";
         }else{
             model.addAttribute("L1_id", l1_id);

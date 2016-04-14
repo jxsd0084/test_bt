@@ -65,7 +65,7 @@
 <input type="hidden" id="name6" name="name6" value="${L1_id}" />
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelTwo?L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listLevelTwo?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}';
 
     var myValidator = function(){
         var msg = '';

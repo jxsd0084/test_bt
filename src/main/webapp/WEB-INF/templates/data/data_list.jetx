@@ -17,7 +17,7 @@
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-     <input id="submit_btn" class="btn btn-primary" type="button" value="新建一级字段配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1&&navigationId=${navigation_id}'"/>
+     <input id="submit_btn" class="btn btn-primary" type="button" value="新建一级字段配置项" onclick="window.location.href='${CONTEXT_PATH}/dataType/new?tag=add&lev=1&&navigationId=${navigation_id}&navigationName=${navigation_name}'"/>
 </div>
 <br/>
 <div class="row">
@@ -64,12 +64,12 @@
                 },
                 {
                     targets: 1, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id='+ full[0] +'&L1_tag=' + full[1] + '&L1_name=' + full[2] + '">' + data + '</a>';
                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?L1_id=' + full[0] + '&tag=modify" >修改</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=' + full[0] + '&tag=modify" >修改</a>';
                     }
                 }
             ]
