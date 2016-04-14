@@ -41,7 +41,7 @@ public class JobSourceController {
     }
 
     private String setCommonParam(int bizId, String bizName, Model model, String retPath){
-        List<JobSource> list = jobServer.getJobListByBizId(bizId);
+        List<JobSource> list = jobServer.getJobSouListByBizId(bizId);
         JSONArray jsonArray = ControllerHelper.convertToJSON(list);
         model.addAttribute("data", jsonArray);
         model.addAttribute("bizId", bizId);
@@ -97,7 +97,7 @@ public class JobSourceController {
         jobSource.setDbSourceName(dbSourceName);
         jobSource.setMemo(memo);
         jobSource.setCreateTime(new Date());
-        int res = jobServer.addJob(jobSource);
+        int res = jobServer.addJobSou(jobSource);
 
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
@@ -128,7 +128,7 @@ public class JobSourceController {
                          @RequestParam(name = "tag") String tag,
                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobSource jobSource = jobServer.getJobById(id);
+        JobSource jobSource = jobServer.getJobSouById(id);
 
         model.addAttribute("id", id);
         model.addAttribute("bizId", bizId);
@@ -162,7 +162,7 @@ public class JobSourceController {
         jobSource.setMemo(memo);
         jobSource.setUpdateTime(new Date());
 
-        int res = jobServer.updateJob(jobSource);
+        int res = jobServer.updateJobSou(jobSource);
 
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
@@ -176,7 +176,7 @@ public class JobSourceController {
                          @RequestParam(name = "bizName") String bizName,
                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        jobServer.deleteJobById(id);
+        jobServer.deleteJobSouById(id);
         return setCommonParam(bizId, bizName, model, "jobsource/jobsource_index");
     }
 
@@ -190,7 +190,7 @@ public class JobSourceController {
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
 
-        JobSource jobSource = jobServer.getJobById(id);
+        JobSource jobSource = jobServer.getJobSouById(id);
         String tablesStr ="";
         if(jobSource!=null&&jobSource.getSelectTable()!=null)
             tablesStr = jobSource.getSelectTable();
@@ -232,7 +232,7 @@ public class JobSourceController {
                               @RequestParam(name = "id") int id,
                               Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobSource jobSource = jobServer.getJobById(id);
+        JobSource jobSource = jobServer.getJobSouById(id);
         String tablesStr = jobSource.getSelectData();
         JSONObject jsonObj = JSONObject.parseObject(tablesStr);
         String fieldArrJson ="[]";
@@ -273,7 +273,7 @@ public class JobSourceController {
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
-        JobSource jobSource = jobServer.getJobById(jobId);
+        JobSource jobSource = jobServer.getJobSouById(jobId);
 
         String selectData="";
         if(tables!=null&&!"".equals(tables)){
@@ -297,7 +297,7 @@ public class JobSourceController {
         }
         jobSource.setSelectData(selectData);
         jobSource.setSelectTable(tables);
-        int res = jobServer.updateJob(jobSource);
+        int res = jobServer.updateJobSou(jobSource);
         Map map = ControllerHelper.returnResponseVal(res, "保存");
         return map;
     }
@@ -309,7 +309,7 @@ public class JobSourceController {
                            Model model){
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobSource jobSource = jobServer.getJobById(jobId);
+        JobSource jobSource = jobServer.getJobSouById(jobId);
         String selectTable = jobSource.getSelectTable();
         if(selectTable==null||"".equals(selectTable)){
             selectTable = table;
@@ -332,7 +332,7 @@ public class JobSourceController {
         JSONArray fieldArr = JSONArray.parseArray(fields);
         json.put(table,fieldArr);
         jobSource.setSelectData(json.toJSONString());
-        int res = jobServer.updateJob(jobSource);
+        int res = jobServer.updateJobSou(jobSource);
         Map map = ControllerHelper.returnResponseVal(res, "保存");
         return map;
     }
