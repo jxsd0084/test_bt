@@ -132,10 +132,11 @@ public class SearchController {
 			sb.append("<font color=\"red\">");
 			sb.append(entryKey + " : " + entryValue);
 			sb.append("</font>");
+			sb.append(",");
 			sb.append("<br/>");
 		}else{
 			sb.append(entryKey + " : " + entryValue);
-			sb.append("  ");
+			sb.append(",  ");
 		}
 	}
 
