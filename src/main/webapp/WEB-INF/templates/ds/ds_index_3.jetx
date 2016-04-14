@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_源</font></a></li>
 		<li class="active"><a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}&id=${id}"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>

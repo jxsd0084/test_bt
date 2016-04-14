@@ -9,12 +9,12 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源配置  </font></a></li>
-        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="#808080">作业管理</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源管理  </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="#808080">作业_源</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业" onclick="window.location.href='${CONTEXT_PATH}/job/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
+    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业源" onclick="window.location.href='${CONTEXT_PATH}/job/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
 </div>
 <br/>
 <div class="row">

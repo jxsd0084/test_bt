@@ -23,7 +23,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/job")
-public class JobController {
+public class JobSourceController {
 
     @Autowired
     private CEPService cepService;
