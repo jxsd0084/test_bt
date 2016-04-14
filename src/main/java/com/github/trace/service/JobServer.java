@@ -1,7 +1,9 @@
 package com.github.trace.service;
 
+import com.github.trace.entity.JobInfo;
 import com.github.trace.entity.JobSource;
 import com.github.trace.entity.JobTarget;
+import com.github.trace.mapper.JobInfoMapper;
 import com.github.trace.mapper.JobSourceMapper;
 import com.github.trace.mapper.JobTargetMapper;
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ public class JobServer {
     @Autowired
     private JobTargetMapper jobTargetMapper;
 
+    @Autowired
+    private JobInfoMapper jobInfoMapper;
     /**
      * 根据bizId查询 作业_源列表
      */
@@ -107,6 +111,47 @@ public class JobServer {
      */
     public int addJobTar(JobTarget jobTarget) {
         return jobTargetMapper.insert(jobTarget);
+    }
+
+    /**
+     * 根据bizId查询 作业
+     */
+    public List<JobInfo> getJobInfoListByBizId(int id){
+        return jobInfoMapper.findJobInfoListByBizId(id);
+    }
+
+    /**
+     * 根据Id查询 作业
+     * @param id
+     */
+    public JobInfo getJobInfoById(int id) {
+        return jobInfoMapper.findById(id);
+    }
+
+    /**
+     * 根据Id更新 作业
+     * @param jobInfo
+     * @return
+     */
+    public int updateJobInfo(JobInfo jobInfo) {
+        return jobInfoMapper.update(jobInfo);
+    }
+
+    /**
+     * 根据Id删除 作业
+     * @param id
+     * @return
+     */
+    public int deleteJobInfoById(int id) {
+        return jobInfoMapper.deleteById(id);
+    }
+
+    /**
+     * 插入 作业
+     * @param jobInfo
+     */
+    public int addJobInfo(JobInfo jobInfo) {
+        return jobInfoMapper.insert(jobInfo);
     }
 }
 

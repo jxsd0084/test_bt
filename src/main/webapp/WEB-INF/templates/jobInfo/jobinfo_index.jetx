@@ -1,5 +1,5 @@
-#set(title="作业源")
-#set(navbar="jobSource")
+#set(title="作业")
+#set(navbar="jobInfo")
 #tag layout_block("headContent")
 <style>
 </style>
@@ -10,13 +10,13 @@
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
 		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源管理  </font></a></li>
-        <li class="active"><a href="${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}"><font color="#808080">作业_源</font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_源</font></a></li>
         <li class="active"><a href="${CONTEXT_PATH}/jobtarget/listJobTarget?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_目标 </font></a></li>
-        <li class="active"><a href="${CONTEXT_PATH}/jobinfo/listJobInfo?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理 </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/jobinfo/listJobInfo?bizId=${bizId}&bizName=${bizName}"><font color="#808080">作业管理 </font></a></li>
     </ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业源" onclick="window.location.href='${CONTEXT_PATH}/jobsource/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
+    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业" onclick="window.location.href='${CONTEXT_PATH}/jobinfo/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
 </div>
 <br/>
 <div class="row">
@@ -26,7 +26,10 @@
 			<tr>
                 <th>编号</th>
                 <th>名称</th>
-                <th>数据源</th>
+                <th>源库</th>
+                <th>目标库</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
                 <th>备注</th>
                 <th>操作</th>
 			</tr>
@@ -57,23 +60,38 @@
             columnDefs: [
                 {
                     targets: 1, render: function (data, type, full, meta) {
-                        return full[3];
+                    return  full[3];
                     }
                 },
                 {
                     targets: 2, render: function (data, type, full, meta) {
-                    return '<a href="${CONTEXT_PATH}/jobsource/ds_show?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >'+full[5]+'</a>';
+                    return    full[5];
                     }
                 },
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                    return full[7];
-                     }
+                    return   full[7];
+                    }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/jobsource/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
-                                ');">删除</a> | <a href="${CONTEXT_PATH}/jobsource/tblsIndex?id=' + full[0] + '&dbSourceId=' + full[4] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">选择数据</a>';
+                    return full[8];
+                }
+                },
+                {
+                    targets: 5, render: function (data, type, full, meta) {
+                    return   full[9];
+                    }
+                },
+                {
+                    targets: 6, render: function (data, type, full, meta) {
+                    return full[10];
+                }
+                },
+                {
+                    targets: 7, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/jobinfo/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
+                                ');">删除</a>';
                     }
                 }
             ]
@@ -84,7 +102,7 @@
     var js_method   = function(id){
         var bizId   = '${bizId}';
         var bizName = '${bizName}';
-        var url     = "${CONTEXT_PATH}/jobsource/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
+        var url     = "${CONTEXT_PATH}/jobinfo/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
         if(confirm("是否确定删除?")){
             window.location.href = url;
         }
