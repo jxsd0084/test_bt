@@ -1,7 +1,7 @@
 package com.github.trace.service;
 
-import com.github.trace.entity.JobConfig;
-import com.github.trace.mapper.JobConfigMapper;
+import com.github.trace.entity.JobSource;
+import com.github.trace.mapper.JobSourceMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +19,30 @@ public class JobServer {
     private static final Logger LOG = LoggerFactory.getLogger( JobServer.class );
 
     @Autowired
-    private JobConfigMapper jobConfigMapper;
+    private JobSourceMapper jobSourceMapper;
 
     /**
      * 根据bizId查询 作业列表
      */
-    public List<JobConfig> getJobListByBizId(int id){
-        return jobConfigMapper.findJobListByBizId(id);
+    public List<JobSource> getJobListByBizId(int id){
+        return jobSourceMapper.findJobListByBizId(id);
     }
 
     /**
      * 根据Id查询 作业
      * @param id
      */
-    public JobConfig getJobById(int id) {
-        return jobConfigMapper.findById(id);
+    public JobSource getJobById(int id) {
+        return jobSourceMapper.findById(id);
     }
 
     /**
      * 根据Id更新 作业
-     * @param jobConfig
+     * @param jobSource
      * @return
      */
-    public int updateJob(JobConfig jobConfig) {
-        return jobConfigMapper.update(jobConfig);
+    public int updateJob(JobSource jobSource) {
+        return jobSourceMapper.update(jobSource);
     }
 
     /**
@@ -51,15 +51,15 @@ public class JobServer {
      * @return
      */
     public int deleteJobById(int id) {
-        return jobConfigMapper.deleteById(id);
+        return jobSourceMapper.deleteById(id);
     }
 
     /**
      * 插入
-     * @param jobConfig
+     * @param jobSource
      */
-    public int addJob(JobConfig jobConfig) {
-        return jobConfigMapper.insert(jobConfig);
+    public int addJob(JobSource jobSource) {
+        return jobSourceMapper.insert(jobSource);
     }
 
 }

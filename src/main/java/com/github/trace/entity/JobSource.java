@@ -2,7 +2,7 @@ package com.github.trace.entity;
 
 import java.util.Date;
 
-public class JobConfig {
+public class JobSource {
     private Integer id;
     private Integer bizId;
     private String bizName;
