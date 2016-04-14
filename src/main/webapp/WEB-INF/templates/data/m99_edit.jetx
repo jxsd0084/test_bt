@@ -5,7 +5,7 @@
 
   <legend>数据类型配置项</legend>
 
-  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+  <form id="form1" class="form-horizontal" role="form">
     <fieldset>
 
       <div class="form-group">
@@ -149,15 +149,14 @@
                 $.ajax({
                     url                 :url,
                     contentType         :"application/json",
-                    data                :data,
-                    dataType            :"text",
-                    type                :"GET",
+                    dataType            :"json",
+                    data                :JSON.stringify(data),
+                    type                :"POST",
                     success:function (data) {
-                        var json = JSON.parse(data);
-                        if (json.code == 200) {
+                        if (data.code == 200) {
                             forward(msg + "成功!", GLOBAL_URL);
                         } else {
-                            showResult("警告：" + json.info, false);
+                            showResult("警告：" + data.info, false);
                         }
                     }
                 });

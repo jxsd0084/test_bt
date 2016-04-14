@@ -5,7 +5,7 @@
 
   <legend>数据类型配置项</legend>
 
-  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+  <form id="form1" class="form-horizontal" role="form">
     <fieldset>
 
       <div class="form-group">
@@ -113,7 +113,7 @@
                     L1_tag              :value3,
                     L2_name             :value4,
                     L2_desc             :value5,
-                    L1_id               :value6,
+                    L1_id               :value6,  // 修改的时候是修改二级字段的内容, 有没有L1_id都不重要
                     L2_id               :L2_id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
@@ -131,15 +131,14 @@
                 $.ajax({
                     url                 :url,
                     contentType         :"application/json",
-                    data                :data,
-                    dataType            :"text",
-                    type                :"GET",
+                    dataType            :"json",
+                    data                :JSON.stringify(data),
+                    type                :"POST",
                     success:function (data) {
-                        var json = JSON.parse(data);
-                        if (json.code == 200) {
+                        if (data.code == 200) {
                             forward(msg + "成功!", GLOBAL_URL);
                         } else {
-                            showResult("警告：" + json.info);
+                            showResult("警告：" + data.info);
                         }
                     }
                 });
