@@ -12,7 +12,7 @@
         <li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="#808080">数据源管理  </font></a></li>
         <li class="active"><a href="${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_源 </font></a></li>
         <li class="active"><a href="${CONTEXT_PATH}/jobtarget/listJobTarget?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_目标 </font></a></li>
-        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理 </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/jobinfo/listJobInfo?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理 </font></a></li>
     </ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
