@@ -33,7 +33,7 @@ public class DataTypeController {
                           @RequestParam(name = "L1_tag")  String l1_tag,
                           @RequestParam(name = "L1_name") String l1_name,
                           @RequestParam(name = "L2_id")   int    l2_id,
-                          @RequestParam(name = "navigationId") int navigationId,
+                          @RequestParam(name = "navigationId")   int navigationId,
                           @RequestParam(name = "navigationName") String navigationName,
                           @RequestParam(name = "L2_tag")  String l2_tag,
                           Model model) {
@@ -170,9 +170,10 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listByNavId")
-    public String listLevelOneByNavId(@RequestParam(name = "navigationId") int navigationId,@RequestParam(name = "navigationName") String navigationName, Model model) {
+    public String listLevelOneByNavId(@RequestParam(name = "navigationId")   int navigationId,
+                                      @RequestParam(name = "navigationName") String navigationName,
+                                      Model model) {
         JSONArray jsonArray = getLevelOneFieldList(navigationId);
- //       List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
         model.addAttribute("data", jsonArray);
         model.addAttribute("navigation_id",navigationId);
         model.addAttribute("navigation_name",navigationName);
@@ -181,8 +182,8 @@ public class DataTypeController {
     }
 
     @RequestMapping("/listLevelTwo")
-    public String listLevelTwoFields(@RequestParam(name = "L1_id")   int    l1_id,
-                                     @RequestParam(name = "navigationId") int navigationId,
+    public String listLevelTwoFields(@RequestParam(name = "L1_id")          int l1_id,
+                                     @RequestParam(name = "navigationId")   int navigationId,
                                      @RequestParam(name = "navigationName") String navigationName,
                                      @RequestParam(name = "L1_tag")  String l1_tag,
                                      @RequestParam(name = "L1_name") String l1_name,
@@ -202,9 +203,9 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editLevelOne")
-    public String editLevelOne(@RequestParam(name = "L1_id") int l1_id,
-                               @RequestParam(name = "tag") String tag,
-                               @RequestParam(name = "navigationId") int navigationId,
+    public String editLevelOne(@RequestParam(name = "L1_id")          int l1_id,
+                               @RequestParam(name = "tag")            String tag,
+                               @RequestParam(name = "navigationId")   int navigationId,
                                @RequestParam(name = "navigationName") String navigationName,
                                Model model) {
         LevelOneFields fieldObj = dataTypeService.getLevelOneFieldById(l1_id);
@@ -220,12 +221,12 @@ public class DataTypeController {
     }
 
     @RequestMapping("/editLevelTwo")
-    public String editLevelTwo(@RequestParam(name = "id") int id,
-                               @RequestParam(name = "tag") String tag,
-                               @RequestParam(name = "navigationId") int navigationId,
+    public String editLevelTwo(@RequestParam(name = "id")      int id,
+                               @RequestParam(name = "tag")     String tag,
+                               @RequestParam(name = "navigationId")   int navigationId,
                                @RequestParam(name = "navigationName") String navigationName,
-                               @RequestParam(name = "L1_id") String l1_id,
-                               @RequestParam(name = "L1_tag") String l1_tag,
+                               @RequestParam(name = "L1_id")   String l1_id,
+                               @RequestParam(name = "L1_tag")  String l1_tag,
                                @RequestParam(name = "L1_name") String l1_name,
                                Model model) {
         LevelTwoFields fieldObj = dataTypeService.getLevelTwoFieldById(id);
@@ -335,8 +336,6 @@ public class DataTypeController {
      */
     public JSONArray getLevelOneFieldList(int navigationId) {
         List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
-
-      //  List<LevelOneFields> list = dataTypeService.getLevelOneFieldList();
         JSONArray jsonArray1 = new JSONArray();
         for (LevelOneFields levelOneFields : list ) {
             JSONArray jsonArray2 = new JSONArray();
