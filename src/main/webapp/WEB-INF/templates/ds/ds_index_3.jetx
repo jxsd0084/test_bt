@@ -27,7 +27,7 @@
 				<th>字段类型</th>
                 <th><div  style="display:inline;float:left;"><input id="desAll" type="checkbox"/></div><div>是否脱敏</div></th>
                 <th><div  style="display:inline;float:left;"><input id="parAll" type="checkbox"/></div><div>是否分区</div></th>
-                <th><div  style="display:inline;float:left;"><input id="expAll" type="checkbox" id="selectAll" checked="checked"/></div><div>是否导出</div></th>
+                <th><div  style="display:inline;float:left;"><input id="expAll" type="checkbox"/></div><div>是否导出</div></th>
             </tr>
 			</thead>
 			<tbody>
@@ -66,7 +66,7 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                    return '<input class="exp" type="checkbox" id="exp_'+full[0]+'" checked="checked"/>';
+                    return '<input class="exp" type="checkbox" id="exp_'+full[0]+'"/>';
                 }
                 }
             ]
@@ -122,8 +122,8 @@
                 $("#par_"+id).attr("checked",true);
             if(this.des==1)
                 $("#des_"+id).attr("checked",true);
-            if(this.exp==0)
-                $("#exp_"+id).attr("checked",false);
+            if(this.exp==1)
+                $("#exp_"+id).attr("checked",true);
         });
 
         setSelectAllValue("des");

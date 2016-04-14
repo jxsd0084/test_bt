@@ -273,6 +273,28 @@ public class JobController {
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
         JobConfig jobConfig = jobServer.getJobById(jobId);
+
+        String selectData="";
+        if(tables!=null&&!"".equals(tables)){
+            String[] ts = tables.split(",");
+            Set tableSet = new HashSet();
+            for(String t : ts){
+                tableSet.add(t);
+            }
+            String data = jobConfig.getSelectData();
+            JSONObject json = JSONObject.parseObject(data);
+            if(json == null)
+                json = new JSONObject();
+            Set keySet = json.keySet();
+            Iterator iter = keySet.iterator();
+            while(iter.hasNext()){
+                String key = (String)iter.next();
+                if(!tableSet.contains(key))
+                    json.remove(key);
+            }
+            selectData = json.toJSONString();
+        }
+        jobConfig.setSelectData(selectData);
         jobConfig.setSelectTable(tables);
         int res = jobServer.updateJob(jobConfig);
         Map map = ControllerHelper.returnResponseVal(res, "保存");
@@ -310,7 +332,7 @@ public class JobController {
         json.put(table,fieldArr);
         jobConfig.setSelectData(json.toJSONString());
         int res = jobServer.updateJob(jobConfig);
-        Map map = ControllerHelper.returnResponseVal(res, "保存ds");
+        Map map = ControllerHelper.returnResponseVal(res, "保存");
         return map;
     }
 }
