@@ -22,7 +22,7 @@ import java.util.*;
  * Created by chenlong on 2016/4/1.
  */
 @Controller
-@RequestMapping("/job")
+@RequestMapping("/jobsource")
 public class JobSourceController {
 
     @Autowired
@@ -32,12 +32,12 @@ public class JobSourceController {
     @Autowired
     private DataSourceServer dataSourceServer;
 
-    @RequestMapping("/listJob")
-    public String index(@RequestParam(name = "bizId") int bizId,
+    @RequestMapping("/listJobSource")
+    public String listJobSource(@RequestParam(name = "bizId") int bizId,
                         @RequestParam(name = "bizName") String bizName,
                         Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        return setCommonParam(bizId, bizName, model, "job/job_index");
+        return setCommonParam(bizId, bizName, model, "jobsource/jobsource_index");
     }
 
     private String setCommonParam(int bizId, String bizName, Model model, String retPath){
@@ -60,7 +60,7 @@ public class JobSourceController {
         model.addAttribute("tag", tag);
         JSONArray jsonArr = getDataSouresByBizId(bizId);
         model.addAttribute("dss",jsonArr);
-        return "job/job_edit";
+        return "jobsource/jobsource_edit";
     }
 
     private JSONArray  getDataSouresByBizId(int bizId){
@@ -118,7 +118,7 @@ public class JobSourceController {
         model.addAttribute("bizName", bizName);
         model.addAttribute("tag", tag);
         model.addAttribute("obj", dataBaseInfo);
-        return "job/ds_show";
+        return "jobsource/ds_show";
     }
 
     @RequestMapping("/edit")
@@ -137,7 +137,7 @@ public class JobSourceController {
         model.addAttribute("obj", jobSource);
         JSONArray jsonArr = getDataSouresByBizId(bizId);
         model.addAttribute("dss",jsonArr);
-        return "job/job_edit";
+        return "jobsource/jobsource_edit";
     }
 
     @RequestMapping("/modify")
@@ -177,7 +177,7 @@ public class JobSourceController {
                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         jobServer.deleteJobById(id);
-        return setCommonParam(bizId, bizName, model, "job/job_index");
+        return setCommonParam(bizId, bizName, model, "jobsource/jobsource_index");
     }
 
     @RequestMapping("/tblsIndex")

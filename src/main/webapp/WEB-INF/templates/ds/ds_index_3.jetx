@@ -9,8 +9,8 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_源</font></a></li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}&id=${id}"><font color="blue">返回 上一级</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_源</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/jobsource/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}&id=${id}"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
@@ -143,7 +143,7 @@
                 fieldJson['exp']=getCheckBoxValue("exp_"+d[0]);
                 fieldArrJson.push(fieldJson);
             });
-            var url     = '${CONTEXT_PATH}/job/selectField';
+            var url     = '${CONTEXT_PATH}/jobsource/selectField';
             var data = { jobId : ${id},
                          table : '${table}',
                          fields  :  JSON.stringify(fieldArrJson)};

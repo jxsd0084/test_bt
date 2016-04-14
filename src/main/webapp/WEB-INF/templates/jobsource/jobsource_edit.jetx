@@ -50,7 +50,7 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}';
 
     var myValidator = function(){
         var msg = '';
@@ -89,7 +89,7 @@
         $("#confirm").on('click', function () {
 
             var tag     = '${tag}';
-            var url     = '${CONTEXT_PATH}/job/' + tag;
+            var url     = '${CONTEXT_PATH}/jobsource/' + tag;
             var data    = '';
             var id      = '${id}';
             var bizId   = '${bizId}';
