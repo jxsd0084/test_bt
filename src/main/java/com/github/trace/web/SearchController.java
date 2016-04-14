@@ -81,7 +81,7 @@ public class SearchController {
 				jsonArray2.add(++ cont);
 				String value =sb.toString();
 				String[] vals = value.split("<br/>");
-				StringBuffer valueSb = new StringBuffer();
+				StringBuilder valueSb = new StringBuilder();
 				for(String s :vals){
 					s = getStr(s);
 					valueSb.append(s+"<br/>");
