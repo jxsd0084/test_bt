@@ -178,7 +178,7 @@ public class DataTypeService {
      */
     @Transactional
     public int updateFieldsByCascade(LevelOneFields levelOneFields) {
-        int res = updateM99FieldsByM1(levelOneFields);    // 可能存在没有任何数据的情况
+        updateM99FieldsByM1(levelOneFields);    // 可能存在没有任何数据的情况
         return updateLevelTwoByCascade(levelOneFields);
     }
 
@@ -197,7 +197,7 @@ public class DataTypeService {
     private int updateLevelTwoByL1Obj(int l1_id, String l1_tag, String l1_name) {
         int res = 0;
         List<LevelTwoFields> list = getLevelTwoFieldList(l1_id);
-        if (list.size() == 0) { // 有一级字段,没有二级字段
+        if (list.isEmpty()) { // 有一级字段,没有二级字段
             res = 1;
             return res;
         }
