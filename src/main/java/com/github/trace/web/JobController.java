@@ -160,6 +160,7 @@ public class JobController {
         jobSource.setDbSourceId(dbSourceId);
         jobSource.setDbSourceName(dbSourceName);
         jobSource.setMemo(memo);
+        jobSource.setUpdateTime(new Date());
 
         int res = jobServer.updateJob(jobSource);
 
