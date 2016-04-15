@@ -3,14 +3,14 @@
 #tag layout_block("bodyContent")
 <div class="container">
 
-  <legend>新建作业</legend>
+  <legend>新建作业源</legend>
 
   <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>
 
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">作业名称</label>
+        <label for="profile" class="col-md-2 control-label">作业源名称</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" value="${obj.name}"/>
         </div>
