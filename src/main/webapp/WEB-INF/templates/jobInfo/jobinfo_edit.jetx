@@ -73,10 +73,6 @@
 </div>
 #end
 #tag layout_block("scriptContent")
-<link href="${CONTEXT_PATH}/img/css/jquery.datetimepicker.css" rel="stylesheet" type="text/css">
-
-<script src="${CONTEXT_PATH}/img/js/jquery.datetimepicker.js"></script>
-
 <script>
 
     var GLOBAL_URL = '${CONTEXT_PATH}/jobinfo/listJobInfo?bizId=${bizId}&bizName=${bizName}';
@@ -106,14 +102,14 @@
     }
 
     $(document).ready(function () {
-        $('#startTime').datetimepicker();
-        $('#startTime').click(function(){
-            $('#startTime').datetimepicker('show');
-        });
-        $('#endTime').datetimepicker();
-        $('#endTime').click(function(){
-            $('#endTime').datetimepicker('show');
-        });
+//        $('#startTime').datetimepicker();
+//        $('#startTime').click(function(){
+//            $('#startTime').datetimepicker('show');
+//        });
+//        $('#endTime').datetimepicker();
+//        $('#endTime').click(function(){
+//            $('#endTime').datetimepicker('show');
+//        });
 
         var sou = $("#sou");
         var souJson = '${souJson}';
