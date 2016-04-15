@@ -26,7 +26,7 @@
                 <th>字段名称</th>
 				<th>字段类型</th>
                 <th><div  style="display:inline;float:left;"><input id="priAll" type="checkbox"/></div><div>是否主键</div></th>
-                <th><div  style="display:inline;float:left;"><input id="incAll" type="checkbox"/></div><div>是否自增长</div></th>
+                <th><div  style="display:inline;float:left;"></div><div>是否自增长</div></th>
                 <th><div  style="display:inline;float:left;"><input id="desAll" type="checkbox"/></div><div>是否脱敏</div></th>
                 <th><div  style="display:inline;float:left;"><input id="parAll" type="checkbox"/></div><div>是否分区</div></th>
                 <th><div  style="display:inline;float:left;"><input id="expAll" type="checkbox"/></div><div>是否导出</div></th>
@@ -89,11 +89,6 @@
                 $(this).prop("checked",!!$("#priAll").prop("checked"));
             });
         });
-        $("#incAll").on('click', function () {
-            $(".inc").each(function(){
-                $(this).prop("checked",!!$("#incAll").prop("checked"));
-            });
-        });
 
         $("#desAll").on('click', function () {
             $(".des").each(function(){
@@ -122,9 +117,10 @@
         $(".inc").on('click', function () {
             var val = $(this).prop("checked");
             if(val){
-                setSelectAllValue("inc");
-            }else{
-                $("#incAll").prop("checked",false);
+                $(".inc").each(function(){
+                    $(this).prop("checked",false);
+                });
+                $(this).prop("checked",true);
             }
         });
 
