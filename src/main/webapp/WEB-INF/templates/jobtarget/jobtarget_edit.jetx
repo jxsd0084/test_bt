@@ -3,13 +3,13 @@
 #tag layout_block("bodyContent")
 <div class="container">
 
-  <legend>新建作业</legend>
+  <legend>新建作业目标</legend>
 
   <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">名称</label>
+        <label for="profile" class="col-md-2 control-label">作业目标名称</label>
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name" id="name" placeholder="必填" value="${obj.name}"/>
         </div>
@@ -25,7 +25,7 @@
                 <option value="ES">ES</option>
                 <select/>
         </div>
-        <p class="help-block col-md-offset-2">如：HDFS</p>
+        <p class="help-block col-md-offset-2"></p>
       </div>
 
       <div class="form-group">
@@ -33,7 +33,7 @@
         <div class="col-md-3 col-lg-3">
             <input type="text" class="form-control" name="ip" id="ip" placeholder="必填" value="${obj.ip}"/>
         </div>
-        <p class="help-block col-md-offset-2"></p>
+        <p class="help-block col-md-offset-2">如：172.31.101.12</p>
       </div>
 
         <div class="form-group">
@@ -41,7 +41,7 @@
             <div class="col-md-3 col-lg-3">
                 <input type="text" class="form-control" name="port" id="port" placeholder="必填" value="${obj.port}"/>
             </div>
-            <p class="help-block col-md-offset-2"></p>
+            <p class="help-block col-md-offset-2">如：3306</p>
         </div>
 
         <div class="form-group">
@@ -49,7 +49,7 @@
             <div class="col-md-3 col-lg-3">
                 <input type="text" class="form-control" name="path" id="path" placeholder="必填" value="${obj.path}"/>
             </div>
-            <p class="help-block col-md-offset-2"></p>
+            <p class="help-block col-md-offset-2">如：dcx.MonitorRequest</p>
         </div>
 
       <div class="form-group">
