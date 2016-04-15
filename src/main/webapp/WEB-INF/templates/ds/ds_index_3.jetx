@@ -85,7 +85,7 @@
         });
 
         $("#priAll").on('click', function () {
-            $(".des").each(function(){
+            $(".pri").each(function(){
                 $(this).prop("checked",!!$("#priAll").prop("checked"));
             });
         });
