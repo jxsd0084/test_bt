@@ -25,6 +25,8 @@
                 <th>编号</th>
                 <th>字段名称</th>
 				<th>字段类型</th>
+                <th><div  style="display:inline;float:left;"><input id="priAll" type="checkbox"/></div><div>是否主键</div></th>
+                <th><div  style="display:inline;float:left;"><input id="incAll" type="checkbox"/></div><div>是否自增长</div></th>
                 <th><div  style="display:inline;float:left;"><input id="desAll" type="checkbox"/></div><div>是否脱敏</div></th>
                 <th><div  style="display:inline;float:left;"><input id="parAll" type="checkbox"/></div><div>是否分区</div></th>
                 <th><div  style="display:inline;float:left;"><input id="expAll" type="checkbox"/></div><div>是否导出</div></th>
@@ -56,22 +58,42 @@
             columnDefs: [
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                        return '<input class="des" type="checkbox" id="des_'+full[0]+'"/>';
-                    }
+                    return '<input class="pri" type="checkbox" id="pri_'+full[0]+'"/>';
+                }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                    return '<input class="par" type="checkbox" id="par_'+full[0]+'"/>';
+                        return '<input class="inc" type="checkbox" id="inc_'+full[0]+'"/>';
                     }
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
+                        return '<input class="des" type="checkbox" id="des_'+full[0]+'"/>';
+                    }
+                },
+                {
+                    targets: 6, render: function (data, type, full, meta) {
+                    return '<input class="par" type="checkbox" id="par_'+full[0]+'"/>';
+                    }
+                },
+                {
+                    targets: 7, render: function (data, type, full, meta) {
                     return '<input class="exp" type="checkbox" id="exp_'+full[0]+'"/>';
                 }
                 }
             ]
         });
 
+        $("#priAll").on('click', function () {
+            $(".des").each(function(){
+                $(this).prop("checked",!!$("#priAll").prop("checked"));
+            });
+        });
+        $("#incAll").on('click', function () {
+            $(".inc").each(function(){
+                $(this).prop("checked",!!$("#incAll").prop("checked"));
+            });
+        });
 
         $("#desAll").on('click', function () {
             $(".des").each(function(){
@@ -88,6 +110,24 @@
                 $(this).prop("checked",!!$("#expAll").prop("checked"));
             });
         });
+
+        $(".pri").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                setSelectAllValue("pri");
+            }else{
+                $("#priAll").prop("checked",false);
+            }
+        });
+        $(".inc").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                setSelectAllValue("inc");
+            }else{
+                $("#incAll").prop("checked",false);
+            }
+        });
+
         $(".des").on('click', function () {
                var val = $(this).prop("checked");
                if(val){
@@ -118,6 +158,10 @@
         var id =0;
         $.each(jsonArr, function() {
             id++;
+            if(this.pri==1)
+                $("#pri_"+id).attr("checked",true);
+            if(this.inc==1)
+                $("#inc_"+id).attr("checked",true);
             if(this.par==1)
                 $("#par_"+id).attr("checked",true);
             if(this.des==1)
@@ -125,7 +169,8 @@
             if(this.exp==1)
                 $("#exp_"+id).attr("checked",true);
         });
-
+        setSelectAllValue("pri");
+        setSelectAllValue("inc");
         setSelectAllValue("des");
         setSelectAllValue("par");
         setSelectAllValue("exp");
@@ -138,6 +183,8 @@
                 var fieldJson = {};
                 fieldJson['name']=d[1];
                 fieldJson['type']=d[2];
+                fieldJson['pri']=getCheckBoxValue("pri_"+d[0]);
+                fieldJson['inc']=getCheckBoxValue("inc_"+d[0]);
                 fieldJson['des']=getCheckBoxValue("des_"+d[0]);
                 fieldJson['par']=getCheckBoxValue("par_"+d[0]);
                 fieldJson['exp']=getCheckBoxValue("exp_"+d[0]);
