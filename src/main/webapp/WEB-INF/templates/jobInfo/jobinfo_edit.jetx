@@ -17,7 +17,7 @@
       </div>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">源库</label>
+        <label for="profile" class="col-md-2 control-label">作业_源</label>
         <div class="col-md-3 col-lg-3">
             <select name="sou" id="sou" style="width: 200px">
                 <option value="" default> - 必选 - </option>
@@ -27,7 +27,7 @@
       </div>
 
         <div class="form-group">
-            <label for="profile" class="col-md-2 control-label">目标库</label>
+            <label for="profile" class="col-md-2 control-label">作业_目标</label>
             <div class="col-md-3 col-lg-3">
                 <select name="tar" id="tar" style="width: 200px">
                     <option value="" default> - 必选 - </option>
