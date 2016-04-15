@@ -41,6 +41,12 @@ public class JobInfoController {
 
     private String setCommonParam(int bizId, String bizName, Model model, String retPath){
         List<JobInfo> list = jobServer.getJobInfoListByBizId(bizId);
+        for(JobInfo ji:list){
+            if("1".equals(ji.getExpType()))
+                ji.setExpType("全量");
+            else  if("2".equals(ji.getExpType()))
+                ji.setExpType("增量");
+        }
         JSONArray jsonArray = ControllerHelper.convertToJSON(list);
         model.addAttribute("data", jsonArray);
         model.addAttribute("bizId", bizId);
@@ -99,8 +105,10 @@ public class JobInfoController {
                    @RequestParam(name = "souName") String souName,
                    @RequestParam(name = "tarId") int tarId,
                    @RequestParam(name = "tarName") String tarName,
+                   @RequestParam(name = "expType") String expType,
                    @RequestParam(name = "startTime") String startTime,
                    @RequestParam(name = "endTime") String endTime,
+                   @RequestParam(name = "exeTime") String exeTime,
                    @RequestParam(name = "memo") String memo,
                    Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
@@ -112,8 +120,10 @@ public class JobInfoController {
         jobInfo.setSouName(souName);
         jobInfo.setTarId(tarId);
         jobInfo.setTarName(tarName);
+        jobInfo.setExpType(expType);
         jobInfo.setStartTime(startTime);
         jobInfo.setEndTime(endTime);
+        jobInfo.setExeTime(exeTime);
         jobInfo.setCreateTime(new Date());
         jobInfo.setMemo(memo);
         int res = jobServer.addJobInfo(jobInfo);
@@ -152,8 +162,10 @@ public class JobInfoController {
                       @RequestParam(name = "souName") String souName,
                       @RequestParam(name = "tarId") int tarId,
                       @RequestParam(name = "tarName") String tarName,
+                      @RequestParam(name = "expType") String expType,
                       @RequestParam(name = "startTime") String startTime,
                       @RequestParam(name = "endTime") String endTime,
+                      @RequestParam(name = "exeTime") String exeTime,
                       @RequestParam(name = "memo") String memo,
                       Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
@@ -166,9 +178,11 @@ public class JobInfoController {
         jobInfo.setSouName(souName);
         jobInfo.setTarId(tarId);
         jobInfo.setTarName(tarName);
+        jobInfo.setExpType(expType);
         jobInfo.setStartTime(startTime);
         jobInfo.setEndTime(endTime);
-        jobInfo.setCreateTime(new Date());
+        jobInfo.setExeTime(exeTime);
+        jobInfo.setUpdateTime(new Date());
         jobInfo.setMemo(memo);
         int res = jobServer.updateJobInfo(jobInfo);
 

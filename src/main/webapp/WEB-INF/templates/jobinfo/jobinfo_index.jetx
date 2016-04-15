@@ -28,8 +28,10 @@
                 <th>名称</th>
                 <th>源库</th>
                 <th>目标库</th>
-                <th>开始时间</th>
+                <th>导入方式</th>
+                <th>起始时间</th>
                 <th>结束时间</th>
+                <th>执行时间</th>
                 <th>备注</th>
                 <th>操作</th>
 			</tr>
@@ -80,16 +82,26 @@
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                    return   full[9];
-                    }
-                },
-                {
-                    targets: 6, render: function (data, type, full, meta) {
-                    return full[10];
+                    return full[9];
                 }
                 },
                 {
+                    targets: 6, render: function (data, type, full, meta) {
+                    return   full[10];
+                    }
+                },
+                {
                     targets: 7, render: function (data, type, full, meta) {
+                    return full[11];
+                }
+                },
+                {
+                    targets: 8, render: function (data, type, full, meta) {
+                    return full[12];
+                }
+                },
+                {
+                    targets: 9, render: function (data, type, full, meta) {
                         return '<a href="${CONTEXT_PATH}/jobinfo/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
                                 ');">删除</a>';
                     }

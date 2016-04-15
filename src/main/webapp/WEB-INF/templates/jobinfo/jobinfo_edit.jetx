@@ -97,14 +97,10 @@
         var value1 = $("#name").val();
         var value2 = $("#sou").val();
         var value3 = $("#tar").val();
-        var value4 = $("#startTime").val();
-        var value5 = $("#endTime").val();
 
         if(value1 == '' ||
            value2 == '' ||
-           value3 == '' ||
-           value4 == '' ||
-           value5 == ''
+           value3 == ''
         ){
            msg = '必填项不能为空值!'
            result = false;
@@ -113,6 +109,13 @@
            showResult(msg);
         }
         return result;
+    }
+
+    function ifHidden(){
+        if($("#expType").val()==1)
+            $("#timeextend").css("display","none");
+        else if($("#expType").val()==2)
+            $("#timeextend").css("display","");
     }
 
     $(document).ready(function () {
@@ -130,11 +133,13 @@
         });
 
         $("#expType").on('click', function () {
-            if($("#expType").val()==1)
-                $("#timeextend").css("display","none");
-            else if($("#expType").val()==2)
-                $("#timeextend").css("display","");
+            ifHidden()
         });
+
+        var expType = $("#expType");
+        if('modify'=='${tag}')
+           expType.val( '${obj.expType}');
+        ifHidden();
 
         var sou = $("#sou");
         var souJson = '${souJson}';
@@ -170,6 +175,8 @@
             var value6 = $("#startTime").val();
             var value7 = $("#endTime").val();
             var value8 = $("#memo").val();
+            var value9 = $("#expType").val();
+            var value10 = $("#exeTime").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
@@ -181,8 +188,10 @@
                     souName             :value3,
                     tarId               :value4,
                     tarName             :value5,
+                    expType             :value9,
                     startTime           :value6,
                     endTime             :value7,
+                    exeTime             :value10,
                     memo                :value8,
                     id                  :id
                 };
@@ -196,8 +205,10 @@
                     souName             :value3,
                     tarId               :value4,
                     tarName             :value5,
+                    expType             :value9,
                     startTime           :value6,
                     endTime             :value7,
+                    exeTime             :value10,
                     memo                :value8
                 };
             }

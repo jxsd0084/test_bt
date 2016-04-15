@@ -11,8 +11,10 @@ public class JobInfo {
     private String souName;
     private int tarId;
     private String tarName;
+    private String expType;
     private String startTime;
     private String endTime;
+    private String exeTime;
     private String memo;
     private Date createTime;
     private Date updateTime;
@@ -119,5 +121,21 @@ public class JobInfo {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getExpType() {
+        return expType;
+    }
+
+    public void setExpType(String expType) {
+        this.expType = expType;
+    }
+
+    public String getExeTime() {
+        return exeTime;
+    }
+
+    public void setExeTime(String exeTime) {
+        this.exeTime = exeTime;
     }
 }
