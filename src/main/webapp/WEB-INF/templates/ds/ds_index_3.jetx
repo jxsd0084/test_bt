@@ -25,8 +25,8 @@
                 <th>编号</th>
                 <th>字段名称</th>
 				<th>字段类型</th>
-                <th><div  style="display:inline;float:left;"><input id="priAll" type="checkbox"/></div><div>是否主键</div></th>
                 <th><div  style="display:inline;float:left;"></div><div>是否自增长</div></th>
+                <th><div  style="display:inline;float:left;"><input id="priAll" type="checkbox"/></div><div>是否主键</div></th>
                 <th><div  style="display:inline;float:left;"><input id="desAll" type="checkbox"/></div><div>是否脱敏</div></th>
                 <th><div  style="display:inline;float:left;"><input id="parAll" type="checkbox"/></div><div>是否分区</div></th>
                 <th><div  style="display:inline;float:left;"><input id="expAll" type="checkbox"/></div><div>是否导出</div></th>
@@ -58,13 +58,13 @@
             columnDefs: [
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                    return '<input class="pri" type="checkbox" id="pri_'+full[0]+'"/>';
+                    return '<input class="inc" type="checkbox" id="inc_'+full[0]+'"/>';
                 }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<input class="inc" type="checkbox" id="inc_'+full[0]+'"/>';
-                    }
+                    return '<input class="pri" type="checkbox" id="pri_'+full[0]+'"/>';
+                }
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
