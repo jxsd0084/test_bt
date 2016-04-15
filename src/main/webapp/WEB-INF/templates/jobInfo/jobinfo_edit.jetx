@@ -39,7 +39,7 @@
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">开始时间</label>
         <div class="col-md-3 col-lg-3">
-            <input type="text" class="form-control" name="startTime" id="startTime" placeholder="必填" value="${obj.startTime}"/>
+            <input type="text" class="form-control" name="startTime" id="startTime" placeholder="必填"  value="${obj.startTime}"/>
         </div>
         <p class="help-block col-md-offset-2"></p>
       </div>
@@ -47,7 +47,7 @@
         <div class="form-group">
             <label for="profile" class="col-md-2 control-label">结束时间</label>
             <div class="col-md-3 col-lg-3">
-                <input type="text" class="form-control" name="endTime" id="endTime" placeholder="必填" value="${obj.endTime}"/>
+                <input type="text" class="form-control" name="endTime" id="endTime" placeholder="必填"  value="${obj.endTime}"/>
             </div>
             <p class="help-block col-md-offset-2"></p>
         </div>
@@ -73,6 +73,10 @@
 </div>
 #end
 #tag layout_block("scriptContent")
+<link href="${CONTEXT_PATH}/img/css/jquery.datetimepicker.css" rel="stylesheet" type="text/css">
+
+<script src="${CONTEXT_PATH}/img/js/jquery.datetimepicker.js"></script>
+
 <script>
 
     var GLOBAL_URL = '${CONTEXT_PATH}/jobinfo/listJobInfo?bizId=${bizId}&bizName=${bizName}';
@@ -81,10 +85,10 @@
         var msg = '';
         var result = true;
         var value1 = $("#name").val();
-        var value2 = $("#type").val();
-        var value3 = $("#ip").val();
-        var value4 = $("#port").val();
-        var value5 = $("#path").val();
+        var value2 = $("#sou").val();
+        var value3 = $("#tar").val();
+        var value4 = $("#startTime").val();
+        var value5 = $("#endTime").val();
 
         if(value1 == '' ||
            value2 == '' ||
@@ -102,12 +106,36 @@
     }
 
     $(document).ready(function () {
-        var type = $("#type");
-        type.val('${obj.type}');
+        $('#startTime').datetimepicker();
+        $('#startTime').click(function(){
+            $('#startTime').datetimepicker('show');
+        });
+        $('#endTime').datetimepicker();
+        $('#endTime').click(function(){
+            $('#endTime').datetimepicker('show');
+        });
+
+        var sou = $("#sou");
+        var souJson = '${souJson}';
+        var source = $.parseJSON(souJson);
+        $.each(source,function(i,item){
+            sou.append("<option value='"+item.key+"'>"+item.value+"</option>");
+        });
+        sou.val( '${obj.souId}');
+
+
+        var tar = $("#tar");
+        var tarJson = '${tarJson}';
+        var target = $.parseJSON(tarJson);
+        $.each(target,function(i,item){
+            tar.append("<option value='"+item.key+"'>"+item.value+"</option>");
+        });
+        tar.val( '${obj.tarId}');
+
         $("#confirm").on('click', function () {
 
             var tag     = '${tag}';
-            var url     = '${CONTEXT_PATH}/jobtarget/' + tag;
+            var url     = '${CONTEXT_PATH}/jobinfo/' + tag;
             var data    = '';
             var id      = '${id}';
             var bizId   = '${bizId}';
@@ -116,10 +144,12 @@
 
             var value1 = $("#name").val();
             var value2 = $("#sou").val();
-            var value3 = $("#tar").val();
-            var value4 = $("#startTime").val();
-            var value5 = $("#endTime").val();
-            var value6 = $("#memo").val();
+            var value3 = $("#sou option:selected").text();
+            var value4 = $("#tar").val();
+            var value5 = $("#tar option:selected").text();
+            var value6 = $("#startTime").val();
+            var value7 = $("#endTime").val();
+            var value8 = $("#memo").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
@@ -127,11 +157,13 @@
                     bizId               :bizId,
                     bizName             :bizName,
                     name                :value1,
-                    sou                 :value2,
-                    tar                 :value3,
-                    startTime           :value4,
-                    endTime             :value5,
-                    memo                :value6,
+                    souId               :value2,
+                    souName             :value3,
+                    tarId               :value4,
+                    tarName             :value5,
+                    startTime           :value6,
+                    endTime             :value7,
+                    memo                :value8,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
@@ -140,11 +172,13 @@
                     bizId               :bizId,
                     bizName             :bizName,
                     name                :value1,
-                    sou                 :value2,
-                    tar                 :value3,
-                    startTime           :value4,
-                    endTime             :value5,
-                    memo                :value6,
+                    souId               :value2,
+                    souName             :value3,
+                    tarId               :value4,
+                    tarName             :value5,
+                    startTime           :value6,
+                    endTime             :value7,
+                    memo                :value8
                 };
             }
 
