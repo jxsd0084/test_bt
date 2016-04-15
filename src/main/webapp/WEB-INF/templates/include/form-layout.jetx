@@ -10,7 +10,8 @@
   <link href="//www.fspage.com/oss/css/styles.css" rel="stylesheet" type="text/css"/>
   <link href="${CONTEXT_PATH}/img/css/bootstrap.css" rel="stylesheet">
   <link href="${CONTEXT_PATH}/img/css/tree.css" rel="stylesheet">
-  #tag layout_block_default("headContent")#end
+  <link href="${CONTEXT_PATH}/img/css/jquery.datetimepicker.css" rel="stylesheet  type="text/css">
+    #tag layout_block_default("headContent")#end
   <style>
     body {
       font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
@@ -63,6 +64,7 @@
 <script src="${CONTEXT_PATH}/img/js/common.js"></script>
 <script src="${CONTEXT_PATH}/img/js/jquery.js"></script>
 <script src="${CONTEXT_PATH}/img/js/bootstrap.js"></script>
+<script src="${CONTEXT_PATH}/img/js/jquery.datetimepicker.js"></script>
 <script src="//www.fspage.com/oss/datatables.min.js"></script>
 <script src="//www.fspage.com/oss/jquery/jquery.validate.min.js"></script>
 <script src="//www.fspage.com/oss/jquery/jquery.validate-messages_cn.js"></script>
