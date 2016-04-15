@@ -27,27 +27,39 @@
       </div>
 
         <div class="form-group">
-            <label for="profile" class="col-md-2 control-label">作业_目标</label>
+        <label for="profile" class="col-md-2 control-label">作业_目标</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="tar" id="tar" style="width: 200px">
+                <option value="" default> - 必选 - </option>
+                <select/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+    </div>
+
+        <div class="form-group">
+            <label for="profile" class="col-md-2 control-label">导入方式</label>
             <div class="col-md-3 col-lg-3">
-                <select name="tar" id="tar" style="width: 200px">
-                    <option value="" default> - 必选 - </option>
-                    <select/>
+                <select name="expType" id="expType" style="width: 200px">
+                    <option value="1" default> 全量 </option>
+                    <option value="2" > 增量 </option>
+               <select/>
             </div>
             <p class="help-block col-md-offset-2"></p>
         </div>
 
-      <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">开始时间</label>
+      <div class="form-group" style="display: none;" id="timeextend">
+        <label for="profile" class="col-md-2 control-label">增量时间段</label>
         <div class="col-md-3 col-lg-3">
-            <input type="text" class="form-control" name="startTime" id="startTime" placeholder="必填"  value="${obj.startTime}"/>
+            <input type="text" class="form-control" name="startTime" id="startTime" placeholder="起始时间"  value="${obj.startTime}"/>
+            <input type="text" class="form-control" name="endTime" id="endTime" placeholder="结束时间"  value="${obj.endTime}"/>
         </div>
         <p class="help-block col-md-offset-2"></p>
       </div>
 
         <div class="form-group">
-            <label for="profile" class="col-md-2 control-label">结束时间</label>
+            <label for="profile" class="col-md-2 control-label">执行时间</label>
             <div class="col-md-3 col-lg-3">
-                <input type="text" class="form-control" name="endTime" id="endTime" placeholder="必填"  value="${obj.endTime}"/>
+                <input type="text" class="form-control" name="exeTime" id="exeTime" placeholder="必填"  value="${obj.exeTime}"/>
             </div>
             <p class="help-block col-md-offset-2"></p>
         </div>
@@ -112,6 +124,17 @@
         $('#endTime').click(function(){
             $('#endTime').datetimepicker('show');
         });
+        $('#exeTime').datetimepicker();
+        $('#exeTime').click(function(){
+            $('#exeTime').datetimepicker('show');
+        });
+
+        $("#expType").on('click', function () {
+            if($("#expType").val()==1)
+                $("#timeextend").css("display","none");
+            else if($("#expType").val()==2)
+                $("#timeextend").css("display","");
+        });
 
         var sou = $("#sou");
         var souJson = '${souJson}';
@@ -120,7 +143,6 @@
             sou.append("<option value='"+item.key+"'>"+item.value+"</option>");
         });
         sou.val( '${obj.souId}');
-
 
         var tar = $("#tar");
         var tarJson = '${tarJson}';
