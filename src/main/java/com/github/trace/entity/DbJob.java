@@ -1,59 +1,91 @@
 package com.github.trace.entity;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by weilei on 2016/4/11.
  */
 public class DbJob {
+    /**
+     * souName:数据库名称
+     */
     private String souName;
-    private String souUser;
+    /**
+     * souType:数据库类型，MySql，SQLServer,MongoDB,
+     */
     private String souType;
+    /**
+     * souUrl:链接地址
+     */
     private String souUrl;
+    /**
+     * souDriver:驱动名称
+     */
     private String souDriver;
+    /**
+     * souUser:用户名
+     */
+    private String souUser;
+    /**
+     * souPassword:密码
+     */
     private String souPassword;
+    /**
+     * souIns:数据库实例（sqlserver使用）
+     */
     private String souIns;
+    /**
+     * souTable:要导出的表
+     */
     private String souTable;
+    /**
+     * fields:要导出的表字段属性
+     */
     private List<SouTableField> fields;
+    /**
+     * incrementField:自增长字段
+     */
     private String incrementField;
+    /**
+     * primaryKey:主键
+     */
+    private String[] primaryKey;
+    /**
+     * expType:导出类型：0：全量导入，1：增量导入
+     */
+    private boolean expType;
+    /**
+     * startTime:增量导入时的开始起始时间
+     */
+    private Date startTime;
+    /**
+     * endTime:增量导入时的截止时间
+     */
+    private Date endTime;
 
+    /**
+     * tarUrl:目标地址
+     */
     private String tarUrl;
+    /**
+     * tarName:目标名称
+     */
     private String tarName;
+    /**
+     * tarType:目标类型：ES或者HDFS
+     */
     private String tarType;
+    /**
+     * tarPath:主题或路径
+     */
     private String tarPath;
 
     public void addField(SouTableField field){
         if(fields==null)
             fields = new ArrayList<SouTableField>();
         fields.add(field);
-    }
-
-    public String getIncrementField() {
-        return incrementField;
-    }
-
-    public void setIncrementField(String incrementField) {
-        this.incrementField = incrementField;
-    }
-
-    public String getSouIns() {
-        return souIns;
-    }
-
-    public void setSouIns(String souIns) {
-        this.souIns = souIns;
-    }
-
-    public String getSouUrl() {
-        return souUrl;
-    }
-
-    public void setSouUrl(String souUrl) {
-        this.souUrl = souUrl;
     }
 
     public String getSouName() {
@@ -64,20 +96,20 @@ public class DbJob {
         this.souName = souName;
     }
 
-    public String getSouUser() {
-        return souUser;
-    }
-
-    public void setSouUser(String souUser) {
-        this.souUser = souUser;
-    }
-
     public String getSouType() {
         return souType;
     }
 
     public void setSouType(String souType) {
         this.souType = souType;
+    }
+
+    public String getSouUrl() {
+        return souUrl;
+    }
+
+    public void setSouUrl(String souUrl) {
+        this.souUrl = souUrl;
     }
 
     public String getSouDriver() {
@@ -88,12 +120,28 @@ public class DbJob {
         this.souDriver = souDriver;
     }
 
+    public String getSouUser() {
+        return souUser;
+    }
+
+    public void setSouUser(String souUser) {
+        this.souUser = souUser;
+    }
+
     public String getSouPassword() {
         return souPassword;
     }
 
     public void setSouPassword(String souPassword) {
         this.souPassword = souPassword;
+    }
+
+    public String getSouIns() {
+        return souIns;
+    }
+
+    public void setSouIns(String souIns) {
+        this.souIns = souIns;
     }
 
     public String getSouTable() {
@@ -110,6 +158,46 @@ public class DbJob {
 
     public void setFields(List<SouTableField> fields) {
         this.fields = fields;
+    }
+
+    public String getIncrementField() {
+        return incrementField;
+    }
+
+    public void setIncrementField(String incrementField) {
+        this.incrementField = incrementField;
+    }
+
+    public String[] getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(String[] primaryKey) {
+        this.primaryKey = primaryKey;
+    }
+
+    public boolean isExpType() {
+        return expType;
+    }
+
+    public void setExpType(boolean expType) {
+        this.expType = expType;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public String getTarUrl() {
@@ -143,5 +231,4 @@ public class DbJob {
     public void setTarPath(String tarPath) {
         this.tarPath = tarPath;
     }
-
 }
