@@ -5,11 +5,11 @@ package com.github.trace.entity;
  */
 public class SouTableField {
 
-    private static final String DB_INT = "int";
-    private static final String DB_DOUBLE = "double";
-    private static final String DB_LONG = "long";
-    private static final String DB_STRING = "string";
-    private static final String DB_DATETIME = "dateTime";
+    public static final String DB_INT = "int";
+    public static final String DB_DOUBLE = "double";
+    public static final String DB_LONG = "long";
+    public static final String DB_STRING = "string";
+    public static final String DB_DATETIME = "dateTime";
     /**
      * name ：表字段字段名称
      */

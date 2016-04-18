@@ -1,10 +1,13 @@
 package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.github.trace.entity.DbJob;
 import com.github.trace.entity.JobInfo;
 import com.github.trace.entity.JobSource;
 import com.github.trace.entity.JobTarget;
 import com.github.trace.service.CEPService;
+import com.github.trace.service.JobSchedueService;
 import com.github.trace.service.JobServer;
 import com.github.trace.utils.ControllerHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class JobInfoController {
     private CEPService cepService;
     @Autowired
     private JobServer jobServer;
+    @Autowired
+    private JobSchedueService jobSchedueService;
 
     @RequestMapping("/listJobInfo")
     public String listJobInfo(@RequestParam(name = "bizId") int bizId,
@@ -200,5 +205,15 @@ public class JobInfoController {
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         jobServer.deleteJobInfoById(id);
         return setCommonParam(bizId, bizName, model, "jobinfo/jobinfo_index");
+    }
+
+    @RequestMapping("/importDB")
+    public void importDB(@RequestParam(name = "id") int id,
+                           @RequestParam(name = "bizId") int bizId,
+                           @RequestParam(name = "bizName") String bizName,
+                           Model model){
+        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        List<DbJob> jobList = jobSchedueService.getDbJobList(id);
+        System.out.println("导入完毕");
     }
 }

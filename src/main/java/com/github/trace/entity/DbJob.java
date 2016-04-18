@@ -20,6 +20,11 @@ public class DbJob {
      * souUrl:链接地址
      */
     private String souUrl;
+
+    /**
+     * souPort:端口号
+     */
+    private Integer souPort;
     /**
      * souDriver:驱动名称
      */
@@ -51,9 +56,9 @@ public class DbJob {
     /**
      * primaryKey:主键
      */
-    private String[] primaryKey;
+    private String primaryKey;
     /**
-     * expType:导出类型：0：全量导入，1：增量导入
+     * expType:导出类型：false：全量导入，true：增量导入
      */
     private boolean expType;
     /**
@@ -65,10 +70,16 @@ public class DbJob {
      */
     private Date endTime;
 
+    private String dateField;
+
     /**
      * tarUrl:目标地址
      */
     private String tarUrl;
+    /**
+     * tarUrl:目标端口号
+     */
+    private int tarPort;
     /**
      * tarName:目标名称
      */
@@ -168,11 +179,11 @@ public class DbJob {
         this.incrementField = incrementField;
     }
 
-    public String[] getPrimaryKey() {
+    public String getPrimaryKey() {
         return primaryKey;
     }
 
-    public void setPrimaryKey(String[] primaryKey) {
+    public void setPrimaryKey(String primaryKey) {
         this.primaryKey = primaryKey;
     }
 
@@ -216,6 +227,23 @@ public class DbJob {
         this.tarName = tarName;
     }
 
+    public String getDateField() {
+        return dateField;
+    }
+
+    public void setDateField(String dateField) {
+        this.dateField = dateField;
+    }
+
+    public int getTarPort() {
+
+        return tarPort;
+    }
+
+    public void setTarPort(int tarPort) {
+        this.tarPort = tarPort;
+    }
+
     public String getTarType() {
         return tarType;
     }
@@ -230,5 +258,13 @@ public class DbJob {
 
     public void setTarPath(String tarPath) {
         this.tarPath = tarPath;
+    }
+
+    public Integer getSouPort() {
+        return souPort;
+    }
+
+    public void setSouPort(Integer souPort) {
+        this.souPort = souPort;
     }
 }
