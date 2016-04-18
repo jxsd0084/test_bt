@@ -51,7 +51,7 @@
         <label for="profile" class="col-md-2 control-label">增量时间段</label>
         <div class="col-md-3 col-lg-3">
             <input type="text" class="form-control" name="startTime" id="startTime" placeholder="起始时间"  value="${obj.startTime}"/>
-            <input type="text" class="form-control" name="endTime" id="endTime" placeholder="结束时间"  value="${obj.endTime}"/>
+            <input type="text" class="form-control" name="endTime" id="endTime" placeholder="截止时间"  value="${obj.endTime}"/>
         </div>
         <p class="help-block col-md-offset-2"></p>
       </div>
@@ -112,9 +112,9 @@
     }
 
     function ifHidden(){
-        if($("#expType").val()==1)
+        if($("#expType").val()==0)
             $("#timeextend").css("display","none");
-        else if($("#expType").val()==2)
+        else if($("#expType").val()==1)
             $("#timeextend").css("display","");
     }
 
