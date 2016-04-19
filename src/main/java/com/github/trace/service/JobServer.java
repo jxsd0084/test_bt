@@ -1,7 +1,11 @@
 package com.github.trace.service;
 
-import com.github.trace.entity.JobConfig;
-import com.github.trace.mapper.JobConfigMapper;
+import com.github.trace.entity.JobInfo;
+import com.github.trace.entity.JobSource;
+import com.github.trace.entity.JobTarget;
+import com.github.trace.mapper.JobInfoMapper;
+import com.github.trace.mapper.JobSourceMapper;
+import com.github.trace.mapper.JobTargetMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +23,118 @@ public class JobServer {
     private static final Logger LOG = LoggerFactory.getLogger( JobServer.class );
 
     @Autowired
-    private JobConfigMapper jobConfigMapper;
+    private JobSourceMapper jobSourceMapper;
+
+    @Autowired
+    private JobTargetMapper jobTargetMapper;
+
+    @Autowired
+    private JobInfoMapper jobInfoMapper;
+    /**
+     * 根据bizId查询 作业_源列表
+     */
+    public List<JobSource> getJobSouListByBizId(int id){
+        return jobSourceMapper.findJobListByBizId(id);
+    }
 
     /**
-     * 根据bizId查询 作业列表
+     * 根据Id查询 作业_源
+     * @param id
      */
-    public List<JobConfig> getJobListByBizId(int id){
-        return jobConfigMapper.findJobListByBizId(id);
+    public JobSource getJobSouById(int id) {
+        return jobSourceMapper.findById(id);
+    }
+
+    /**
+     * 根据Id更新 作业_源
+     * @param jobSource
+     * @return
+     */
+    public int updateJobSou(JobSource jobSource) {
+        return jobSourceMapper.update(jobSource);
+    }
+
+    /**
+     * 根据Id删除 作业_源
+     * @param id
+     * @return
+     */
+    public int deleteJobSouById(int id) {
+        return jobSourceMapper.deleteById(id);
+    }
+
+    /**
+     * 插入 作业_源
+     * @param jobSource
+     */
+    public int addJobSou(JobSource jobSource) {
+        return jobSourceMapper.insert(jobSource);
+    }
+
+
+    /**
+     * 根据bizId查询 作业_目标列表
+     */
+    public List<JobTarget> getJobTarListByBizId(int id){
+        return jobTargetMapper.findJobListByBizId(id);
+    }
+
+    /**
+     * 根据Id查询 作业_目标
+     * @param id
+     */
+    public JobTarget getJobTarById(int id) {
+        return jobTargetMapper.findById(id);
+    }
+
+    /**
+     * 根据Id更新 作业_目标
+     * @param jobTarget
+     * @return
+     */
+    public int updateJobTar(JobTarget jobTarget) {
+        return jobTargetMapper.update(jobTarget);
+    }
+
+    /**
+     * 根据Id删除 作业_目标
+     * @param id
+     * @return
+     */
+    public int deleteJobTarById(int id) {
+        return jobTargetMapper.deleteById(id);
+    }
+
+    /**
+     * 插入 作业_目标
+     * @param jobTarget
+     */
+    public int addJobTar(JobTarget jobTarget) {
+        return jobTargetMapper.insert(jobTarget);
+    }
+
+    /**
+     * 根据bizId查询 作业
+     */
+    public List<JobInfo> getJobInfoListByBizId(int id){
+        return jobInfoMapper.findJobInfoListByBizId(id);
     }
 
     /**
      * 根据Id查询 作业
      * @param id
      */
-    public JobConfig getJobById(int id) {
-        return jobConfigMapper.findById(id);
+    public JobInfo getJobInfoById(int id) {
+        return jobInfoMapper.findById(id);
     }
 
     /**
      * 根据Id更新 作业
-     * @param jobConfig
+     * @param jobInfo
      * @return
      */
-    public int updateJob(JobConfig jobConfig) {
-        return jobConfigMapper.update(jobConfig);
+    public int updateJobInfo(JobInfo jobInfo) {
+        return jobInfoMapper.update(jobInfo);
     }
 
     /**
@@ -50,18 +142,17 @@ public class JobServer {
      * @param id
      * @return
      */
-    public int deleteJobById(int id) {
-        return jobConfigMapper.deleteById(id);
+    public int deleteJobInfoById(int id) {
+        return jobInfoMapper.deleteById(id);
     }
 
     /**
-     * 插入
-     * @param jobConfig
+     * 插入 作业
+     * @param jobInfo
      */
-    public int addJob(JobConfig jobConfig) {
-        return jobConfigMapper.insert(jobConfig);
+    public int addJobInfo(JobInfo jobInfo) {
+        return jobInfoMapper.insert(jobInfo);
     }
-
 }
 
 

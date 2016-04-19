@@ -20,14 +20,14 @@ public class DataBaseHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( DataBaseHelper.class );
 
-    private static String CONN_DRIVER = "";
-    private static String CONN_URL = "";
-    private static String CONN_PORT = "";
+    private static String CONN_DRIVER   = "";
+    private static String CONN_URL      = "";
+    private static String CONN_PORT     = "";
     private static String CONN_USERNAME = "";
     private static String CONN_PASSWORD = "";
-    private static String CONN_DB_NAME = "";
-    private static String CONN_DB_TYPE="";
-    private static String CONN_DB_INS="";
+    private static String CONN_DB_NAME  = "";
+    private static String CONN_DB_TYPE  = "";
+    private static String CONN_DB_INS   = "";
 
     /**
      * 获取 数据库连接
@@ -37,22 +37,24 @@ public class DataBaseHelper {
     private static Connection getConnection(DatabaseInfo databaseInfo){
         Connection conn = null;
         try{
-            CONN_DRIVER     = databaseInfo.getDbDriver();
-            CONN_PORT       = databaseInfo.getDbPort().toString();
-            CONN_USERNAME   = databaseInfo.getDbUsername();
-            CONN_PASSWORD   = databaseInfo.getDbPassword();
-            CONN_DB_NAME    = databaseInfo.getDbName();
-            CONN_DB_TYPE = databaseInfo.getDbType();
-            CONN_DB_INS = databaseInfo.getDbIns();
-            if("SQLServer".equals(CONN_DB_TYPE))
-                CONN_URL        = databaseInfo.getDbUrl() + ":" + CONN_PORT +"\\"+CONN_DB_INS+ ";DatabaseName=" + CONN_DB_NAME;
-            else
-                CONN_URL        = databaseInfo.getDbUrl() + ":" + CONN_PORT + "/" + CONN_DB_NAME;
+            CONN_DRIVER   = databaseInfo.getDbDriver();
+            CONN_PORT     = databaseInfo.getDbPort().toString();
+            CONN_USERNAME = databaseInfo.getDbUsername();
+            CONN_PASSWORD = databaseInfo.getDbPassword();
+            CONN_DB_NAME  = databaseInfo.getDbName();
+            CONN_DB_TYPE  = databaseInfo.getDbType();
+            CONN_DB_INS   = databaseInfo.getDbIns();
+
+            if("SQLServer".equals(CONN_DB_TYPE)) {
+                CONN_URL = databaseInfo.getDbUrl() + ":" + CONN_PORT + "\\" + CONN_DB_INS + ";DatabaseName=" + CONN_DB_NAME;
+            } else {
+                CONN_URL = databaseInfo.getDbUrl() + ":" + CONN_PORT + "/" + CONN_DB_NAME;
+            }
 
             Class.forName(CONN_DRIVER);
             conn = (Connection) DriverManager.getConnection(CONN_URL, CONN_USERNAME, CONN_PASSWORD);
         } catch (Exception e){
-            LOGGER.error("get connection failed !", e);
+            LOGGER.error("get Connection failed !", e);
         }
         return conn;
     }

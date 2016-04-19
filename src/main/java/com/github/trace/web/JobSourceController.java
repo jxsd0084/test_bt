@@ -3,7 +3,7 @@ package com.github.trace.web;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.DatabaseInfo;
-import com.github.trace.entity.JobConfig;
+import com.github.trace.entity.JobSource;
 import com.github.trace.entity.TableField;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.DataSourceServer;
@@ -22,8 +22,8 @@ import java.util.*;
  * Created by chenlong on 2016/4/1.
  */
 @Controller
-@RequestMapping("/job")
-public class JobController {
+@RequestMapping("/jobsource")
+public class JobSourceController {
 
     @Autowired
     private CEPService cepService;
@@ -32,16 +32,16 @@ public class JobController {
     @Autowired
     private DataSourceServer dataSourceServer;
 
-    @RequestMapping("/listJob")
-    public String index(@RequestParam(name = "bizId") int bizId,
+    @RequestMapping("/listJobSource")
+    public String listJobSource(@RequestParam(name = "bizId") int bizId,
                         @RequestParam(name = "bizName") String bizName,
                         Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        return setCommonParam(bizId, bizName, model, "job/job_index");
+        return setCommonParam(bizId, bizName, model, "jobsource/jobsource_index");
     }
 
     private String setCommonParam(int bizId, String bizName, Model model, String retPath){
-        List<JobConfig> list = jobServer.getJobListByBizId(bizId);
+        List<JobSource> list = jobServer.getJobSouListByBizId(bizId);
         JSONArray jsonArray = ControllerHelper.convertToJSON(list);
         model.addAttribute("data", jsonArray);
         model.addAttribute("bizId", bizId);
@@ -60,7 +60,7 @@ public class JobController {
         model.addAttribute("tag", tag);
         JSONArray jsonArr = getDataSouresByBizId(bizId);
         model.addAttribute("dss",jsonArr);
-        return "job/job_edit";
+        return "jobsource/jobsource_edit";
     }
 
     private JSONArray  getDataSouresByBizId(int bizId){
@@ -89,15 +89,15 @@ public class JobController {
                    @RequestParam(name = "memo") String memo,
                    Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobConfig jobConfig = new JobConfig();
-        jobConfig.setBizId(bizId);
-        jobConfig.setBizName(bizName);
-        jobConfig.setName(name);
-        jobConfig.setDbSourceId(dbSourceId);
-        jobConfig.setDbSourceName(dbSourceName);
-        jobConfig.setMemo(memo);
-        jobConfig.setCreateTime(new Date());
-        int res = jobServer.addJob(jobConfig);
+        JobSource jobSource = new JobSource();
+        jobSource.setBizId(bizId);
+        jobSource.setBizName(bizName);
+        jobSource.setName(name);
+        jobSource.setDbSourceId(dbSourceId);
+        jobSource.setDbSourceName(dbSourceName);
+        jobSource.setMemo(memo);
+        jobSource.setCreateTime(new Date());
+        int res = jobServer.addJobSou(jobSource);
 
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
@@ -118,7 +118,7 @@ public class JobController {
         model.addAttribute("bizName", bizName);
         model.addAttribute("tag", tag);
         model.addAttribute("obj", dataBaseInfo);
-        return "job/ds_show";
+        return "jobsource/ds_show";
     }
 
     @RequestMapping("/edit")
@@ -128,16 +128,16 @@ public class JobController {
                          @RequestParam(name = "tag") String tag,
                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobConfig jobConfig = jobServer.getJobById(id);
+        JobSource jobSource = jobServer.getJobSouById(id);
 
         model.addAttribute("id", id);
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
         model.addAttribute("tag", tag);
-        model.addAttribute("obj", jobConfig);
+        model.addAttribute("obj", jobSource);
         JSONArray jsonArr = getDataSouresByBizId(bizId);
         model.addAttribute("dss",jsonArr);
-        return "job/job_edit";
+        return "jobsource/jobsource_edit";
     }
 
     @RequestMapping("/modify")
@@ -152,16 +152,17 @@ public class JobController {
                       Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
-        JobConfig jobConfig = new JobConfig();
-        jobConfig.setId(id);
-        jobConfig.setBizId(bizId);
-        jobConfig.setBizName(bizName);
-        jobConfig.setName(name);
-        jobConfig.setDbSourceId(dbSourceId);
-        jobConfig.setDbSourceName(dbSourceName);
-        jobConfig.setMemo(memo);
+        JobSource jobSource = new JobSource();
+        jobSource.setId(id);
+        jobSource.setBizId(bizId);
+        jobSource.setBizName(bizName);
+        jobSource.setName(name);
+        jobSource.setDbSourceId(dbSourceId);
+        jobSource.setDbSourceName(dbSourceName);
+        jobSource.setMemo(memo);
+        jobSource.setUpdateTime(new Date());
 
-        int res = jobServer.updateJob(jobConfig);
+        int res = jobServer.updateJobSou(jobSource);
 
         model.addAttribute("bizId", bizId);
         model.addAttribute("bizName", bizName);
@@ -175,8 +176,8 @@ public class JobController {
                          @RequestParam(name = "bizName") String bizName,
                          Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        jobServer.deleteJobById(id);
-        return setCommonParam(bizId, bizName, model, "job/job_index");
+        jobServer.deleteJobSouById(id);
+        return setCommonParam(bizId, bizName, model, "jobsource/jobsource_index");
     }
 
     @RequestMapping("/tblsIndex")
@@ -189,8 +190,10 @@ public class JobController {
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
         List<String> list = dataSourceServer.getDatabaseTables(databaseInfo);
 
-        JobConfig jobConfig = jobServer.getJobById(id);
-        String tablesStr = jobConfig.getSelectTable();
+        JobSource jobSource = jobServer.getJobSouById(id);
+        String tablesStr ="";
+        if(jobSource!=null&&jobSource.getSelectTable()!=null)
+            tablesStr = jobSource.getSelectTable();
         String[] tabs = tablesStr.split(",");
         Set tabSet = new HashSet();
         for(int i=0;i<tabs.length;i++){
@@ -229,6 +232,17 @@ public class JobController {
                               @RequestParam(name = "id") int id,
                               Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+        JobSource jobSource = jobServer.getJobSouById(id);
+        String tablesStr = jobSource.getSelectData();
+        JSONObject jsonObj = JSONObject.parseObject(tablesStr);
+        String fieldArrJson ="[]";
+        if(jsonObj!=null){
+            Object obj = jsonObj.get(tableName);
+            if(obj!=null){
+                fieldArrJson = (JSONArray.toJSONString(obj));
+            }
+        }
+
         DatabaseInfo databaseInfo = dataSourceServer.getDataBaseInfoById(dbSourceId);
         List<TableField> list = dataSourceServer.getTableFields(databaseInfo, tableName);
         JSONArray jsonArray1 = new JSONArray();
@@ -238,7 +252,6 @@ public class JobController {
             jsonArray2.add(++ cont);
             jsonArray2.add(field.getColumnName());
             jsonArray2.add(field.getColumnType());
-//            jsonArray2.add("");
             jsonArray1.add(jsonArray2);
         }
 
@@ -248,6 +261,8 @@ public class JobController {
         model.addAttribute("dbSourceId",dbSourceId);
         model.addAttribute("id", id);
         model.addAttribute("table",tableName);
+        model.addAttribute("fieldArrJson",fieldArrJson);
+
         return "ds/ds_index_3";
     }
 
@@ -258,9 +273,31 @@ public class JobController {
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
 
-        JobConfig jobConfig = jobServer.getJobById(jobId);
-        jobConfig.setSelectTable(tables);
-        int res = jobServer.updateJob(jobConfig);
+        JobSource jobSource = jobServer.getJobSouById(jobId);
+
+        String selectData="";
+        if(tables!=null&&!"".equals(tables)){
+            String[] ts = tables.split(",");
+            Set tableSet = new HashSet();
+            for(String t : ts){
+                tableSet.add(t);
+            }
+            String data = jobSource.getSelectData();
+            JSONObject json = JSONObject.parseObject(data);
+            if(json == null)
+                json = new JSONObject();
+            Set keySet = json.keySet();
+            Iterator iter = keySet.iterator();
+            while(iter.hasNext()){
+                String key = (String)iter.next();
+                if(!tableSet.contains(key))
+                    json.remove(key);
+            }
+            selectData = json.toJSONString();
+        }
+        jobSource.setSelectData(selectData);
+        jobSource.setSelectTable(tables);
+        int res = jobServer.updateJobSou(jobSource);
         Map map = ControllerHelper.returnResponseVal(res, "保存");
         return map;
     }
@@ -272,16 +309,31 @@ public class JobController {
                            Model model){
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobConfig jobConfig = jobServer.getJobById(jobId);
-        String selectData = jobConfig.getSelectData();
+        JobSource jobSource = jobServer.getJobSouById(jobId);
+        String selectTable = jobSource.getSelectTable();
+        if(selectTable==null||"".equals(selectTable)){
+            selectTable = table;
+        }else{
+            boolean flag = false;
+            String[] tables = selectTable.split(",");
+            for(String t : tables){
+                if(table.trim().equals(t.trim()))
+                    flag = true;
+            }
+            if(!flag)
+                selectTable = selectTable+","+table;
+        }
+        jobSource.setSelectTable(selectTable);
+
+        String selectData = jobSource.getSelectData();
         JSONObject json = JSONObject.parseObject(selectData);
         if(json == null)
             json = new JSONObject();
         JSONArray fieldArr = JSONArray.parseArray(fields);
         json.put(table,fieldArr);
-        jobConfig.setSelectData(json.toJSONString());
-        int res = jobServer.updateJob(jobConfig);
-        Map map = ControllerHelper.returnResponseVal(res, "保存ds");
+        jobSource.setSelectData(json.toJSONString());
+        int res = jobServer.updateJobSou(jobSource);
+        Map map = ControllerHelper.returnResponseVal(res, "保存");
         return map;
     }
 }

@@ -1,36 +1,61 @@
-#set(title="作业编辑")
-#set(navbar="dataSourceEdit")
+#set(title="作业目标编辑")
+#set(navbar="jobTargetEdit")
 #tag layout_block("bodyContent")
 <div class="container">
 
-  <legend>新建作业</legend>
+  <legend>新建作业目标</legend>
 
   <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
     <fieldset>
 
-
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">作业名称</label>
+        <label for="profile" class="col-md-2 control-label">作业目标名称</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" value="${obj.name}"/>
+          <input type="text" class="form-control" name="name" id="name" placeholder="必填" value="${obj.name}"/>
         </div>
         <p class="help-block col-md-offset-2"></p>
       </div>
 
       <div class="form-group">
-        <label for="profile" class="col-md-2 control-label">数据源</label>
+        <label for="profile" class="col-md-2 control-label">目标类型</label>
         <div class="col-md-3 col-lg-3">
-            <select name="name2" id="name2" style="width: 140px">
+            <select name="type" id="type" style="width: 200px">
                 <option value="" default> - 必选 - </option>
-            <select/>
+                <option value="HDFS" >HDFS</option>
+                <option value="ES">ES</option>
+                <select/>
         </div>
         <p class="help-block col-md-offset-2"></p>
       </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">IP地址</label>
+        <div class="col-md-3 col-lg-3">
+            <input type="text" class="form-control" name="ip" id="ip" placeholder="必填" value="${obj.ip}"/>
+        </div>
+        <p class="help-block col-md-offset-2">如：172.31.101.12</p>
+      </div>
+
+        <div class="form-group">
+            <label for="profile" class="col-md-2 control-label">端口号</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control" name="port" id="port" placeholder="必填" value="${obj.port}"/>
+            </div>
+            <p class="help-block col-md-offset-2">如：3306</p>
+        </div>
+
+        <div class="form-group">
+            <label for="profile" class="col-md-2 control-label">主题/路径</label>
+            <div class="col-md-3 col-lg-3">
+                <input type="text" class="form-control" name="path" id="path" placeholder="必填" value="${obj.path}"/>
+            </div>
+            <p class="help-block col-md-offset-2">如：dcx.MonitorRequest</p>
+        </div>
 
       <div class="form-group">
         <label for="profile" class="col-md-2 control-label">备注</label>
         <div class="col-md-3 col-lg-3">
-          <input type="text" class="form-control" name="name3" id="name3" placeholder="必填" value="${obj.memo}"/>
+          <input type="text" class="form-control" name="memo" id="memo" placeholder="选填" value="${obj.memo}"/>
         </div>
         <p class="help-block col-md-offset-2"></p>
       </div>
@@ -50,61 +75,51 @@
 #tag layout_block("scriptContent")
 <script>
 
-    var GLOBAL_URL = '${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}';
+    var GLOBAL_URL = '${CONTEXT_PATH}/jobtarget/listJobTarget?bizId=${bizId}&bizName=${bizName}';
 
     var myValidator = function(){
         var msg = '';
         var result = true;
-
-        var value1 = $("#name1").val();
-        var value2 = $("#name2").val();
-        var value3 = $("#name3").val();
+        var value1 = $("#name").val();
+        var value2 = $("#type").val();
+        var value3 = $("#ip").val();
+        var value4 = $("#port").val();
+        var value5 = $("#path").val();
 
         if(value1 == '' ||
            value2 == '' ||
-           value3 == ''
+           value3 == '' ||
+           value4 == '' ||
+           value5 == ''
         ){
            msg = '必填项不能为空值!'
            result = false;
         }
-
         if(!result){
            showResult(msg);
         }
-
         return result;
     }
 
     $(document).ready(function () {
-        var selid = $("#name2");
-        var dss1 = '${dss}';
-        var dss = $.parseJSON(dss1);
-        $.each(dss,function(i,item){
-            selid.append("<option value='"+item.key+"'>"+item.value+"</option>");
-        });
-
-       var dbSourceId =  '${obj.dbSourceId}';
-        selid.val(dbSourceId);
-
+        var type = $("#type");
+        type.val('${obj.type}');
         $("#confirm").on('click', function () {
 
             var tag     = '${tag}';
-            var url     = '${CONTEXT_PATH}/job/' + tag;
+            var url     = '${CONTEXT_PATH}/jobtarget/' + tag;
             var data    = '';
             var id      = '${id}';
             var bizId   = '${bizId}';
             var bizName = '${bizName}';
             var msg     = '';
 
-            var value1 = $("#name1").val();
-            var value2 = $("#name2").val();
-            var value3 = $("#name3").val();
-            var value4 = "";
-
-            $.each(dss,function(i,item){
-                if(item.key==value2)
-                    value4 = item.value;
-            });
+            var value1 = $("#name").val();
+            var value2 = $("#type").val();
+            var value3 = $("#ip").val();
+            var value4 = $("#port").val();
+            var value5 = $("#path").val();
+            var value6 = $("#memo").val();
 
             if(tag == 'modify'){
                 msg  = '修改';
@@ -112,9 +127,11 @@
                     bizId               :bizId,
                     bizName             :bizName,
                     name                :value1,
-                    dbSourceId          :value2,
-                    dbSourceName        :value4,
-                    memo                :value3,
+                    type                :value2,
+                    ip                  :value3,
+                    port                :value4,
+                    path                :value5,
+                    memo                :value6,
                     id                  :id
                 };
             }else if(tag == 'add'){     // 新增不需要指定主键ID
@@ -123,9 +140,11 @@
                     bizId               :bizId,
                     bizName             :bizName,
                     name                :value1,
-                    dbSourceId          :value2,
-                    dbSourceName        :value4,
-                    memo                :value3
+                    type                :value2,
+                    ip                  :value3,
+                    port                :value4,
+                    path                :value5,
+                    memo                :value6
                 };
             }
 

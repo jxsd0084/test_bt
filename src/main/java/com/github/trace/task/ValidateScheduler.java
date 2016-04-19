@@ -9,11 +9,9 @@ import com.github.autoconf.ConfigFactory;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.KafkaService;
-import com.github.trace.utils.AnalyzeLog;
 import com.github.trace.utils.ElasticSearchHelper;
 import com.github.trace.utils.JsonLogHandler;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -87,14 +85,8 @@ class ValidateScheduler {
 
   @Async
   private void batchValidate(String name, String topic, Set<String> set, boolean sendMonitor) {
-    //Set<String> toEs = analyzeLog.filterToES(name, JSONArray.toJSONString(set), sendMonitor);
     Set<String> toEs = analyzeLogService.filterToES(name, JSONArray.toJSONString(set), sendMonitor);
-    Set<String> converted;
-    if (StringUtils.startsWith(topic, "nginx")) {
-      converted = toEs;
-    } else {
-      converted = JsonLogHandler.batchConvert(toEs);
-    }
+    Set<String> converted = JsonLogHandler.batchConvert(toEs);
     ElasticSearchHelper.bulk(ES_INDEX, topic, converted);
   }
 

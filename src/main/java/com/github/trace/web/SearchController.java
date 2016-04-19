@@ -3,10 +3,13 @@ package com.github.trace.web;
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.entity.SearchLog;
+import com.github.trace.intern.DateUtil;
 import com.github.trace.service.CEPService;
 import com.github.trace.service.Navigation0Service;
 import com.github.trace.service.SearchService;
 import com.github.trace.utils.ControllerHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +25,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/search")
 public class SearchController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger( SearchController.class );
 
 	@Autowired
 	private CEPService cepService;
@@ -71,22 +76,55 @@ public class SearchController {
 				JSONArray jsonArray2 = new JSONArray();
 				StringBuilder sb = new StringBuilder();
 				for (Map.Entry<String, Object> entry : logMap.entrySet()) {
-					highLight(sLog, sb, entry);
+					highLight( sLog, sb, entry );
 				}
 				jsonArray2.add(++ cont);
-				jsonArray2.add(sb.toString());
+				jsonArray2.add( autoIndent(sb).toString() );
 				jsonArray1.add(jsonArray2);
 			}
 		}
 		return jsonArray1;
 	}
 
+	// 自动缩进
+	private StringBuilder autoIndent(StringBuilder sb) {
+		String  value = sb.toString();
+		String[] vals = value.split("<br/>");
+		StringBuilder valueSb = new StringBuilder();
+		for(String s : vals){
+			s = getStr(s);
+			valueSb.append(s + "<br/>");
+		}
+		return valueSb;
+	}
+
+	private String getStr(String str){
+		if(str.length() > 240){
+            String newStr = str.substring(240);
+			return str.substring(0, 240) + "<br/>" + getStr(newStr);
+		}else{
+			return str;
+		}
+	}
+
+	// 高亮
 	private void highLight(SearchLog sLog, StringBuilder sb, Map.Entry<String, Object> entry) {
 		String keyWord    = sLog.getKeyWord().trim();
 		String entryKey   = entry.getKey();
 		String entryValue = entry.getValue().toString();
 		String temp       = entryKey + " : " + entryValue;
 		String temp2      = entryKey + ":" + entryValue;
+
+		if("stamp".equals(entryKey) ||
+		    "Time".equals(entryKey) ||
+			 "M98".equals(entryKey)) {
+			try{ // 时间戳格式化
+				entryValue = DateUtil.formatYmdHis( Long.parseLong(entryValue) );
+			}catch (NumberFormatException e){
+				LOGGER.error("cast EntryString to long type failed !", e);
+			}
+		}
+
 		if(temp.equals(keyWord) ||
 		   temp2.equals(keyWord) ||
 		   temp.contains(keyWord)) {
@@ -94,10 +132,11 @@ public class SearchController {
 			sb.append("<font color=\"red\">");
 			sb.append(entryKey + " : " + entryValue);
 			sb.append("</font>");
+			sb.append(",");
 			sb.append("<br/>");
 		}else{
 			sb.append(entryKey + " : " + entryValue);
-			sb.append("&nbsp;&nbsp;");
+			sb.append(",  ");
 		}
 	}
 

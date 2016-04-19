@@ -9,8 +9,8 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理</font></a></li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}&id=${id}"><font color="blue">返回 上一级</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_源</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/jobsource/tblsIndex?dbSourceId=${dbSourceId}&bizId=${bizId}&bizName=${bizName}&id=${id}"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
@@ -25,9 +25,12 @@
                 <th>编号</th>
                 <th>字段名称</th>
 				<th>字段类型</th>
-                <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否脱敏</div></th>
-                <th><div  style="display:inline;float:left;"><input type="checkbox"/></div><div>是否分区</div></th>
-                <th><div  style="display:inline;float:left;"><input type="checkbox" id="selectAll" checked="checked"/></div><div>是否导出</div></th>
+                <th><div  style="display:inline;float:left;"></div><div>是否自增长</div></th>
+                <th><div  style="display:inline;float:left;"></div><div>是否时间字段</div></th>
+                <th><div  style="display:inline;float:left;"><input id="priAll" type="checkbox"/></div><div>是否主键</div></th>
+                <th><div  style="display:inline;float:left;"><input id="desAll" type="checkbox"/></div><div>是否脱敏</div></th>
+                <th><div  style="display:inline;float:left;"><input id="parAll" type="checkbox"/></div><div>是否分区</div></th>
+                <th><div  style="display:inline;float:left;"><input id="expAll" type="checkbox"/></div><div>是否导出</div></th>
             </tr>
 			</thead>
 			<tbody>
@@ -39,7 +42,7 @@
 #end
 #tag layout_block("scriptContent")
 <script>
-    var data = ${data}
+    var data = ${data};
 	$(document).ready(function () {
         var table = $('#datatable').DataTable({
             stateSave: true,
@@ -56,21 +59,131 @@
             columnDefs: [
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                        return '<input type="checkbox" id="des_'+full[0]+'"/>';
+                    return '<input class="inc" type="checkbox" id="inc_'+full[0]+'"/>';
                     }
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                    return '<input type="checkbox" id="par_'+full[0]+'"/>';
-                    }
+                    return '<input class="tfd" type="checkbox" id="tfd_'+full[0]+'"/>';
+
+                }
                 },
                 {
                     targets: 5, render: function (data, type, full, meta) {
-                    return '<input type="checkbox" id="exp_'+full[0]+'" checked="checked"/>';
+                    return '<input class="pri" type="checkbox" id="pri_'+full[0]+'"/>';
+                }
+                },
+                {
+                    targets: 6, render: function (data, type, full, meta) {
+                        return '<input class="des" type="checkbox" id="des_'+full[0]+'"/>';
+                    }
+                },
+                {
+                    targets: 7, render: function (data, type, full, meta) {
+                    return '<input class="par" type="checkbox" id="par_'+full[0]+'"/>';
+                    }
+                },
+                {
+                    targets: 8, render: function (data, type, full, meta) {
+                    return '<input class="exp" type="checkbox" id="exp_'+full[0]+'"/>';
                 }
                 }
             ]
         });
+
+        $("#desAll").on('click', function () {
+            $(".des").each(function(){
+                $(this).prop("checked",!!$("#desAll").prop("checked"));
+            });
+        });
+        $("#parAll").on('click', function () {
+            $(".par").each(function(){
+                $(this).prop("checked",!!$("#parAll").prop("checked"));
+            });
+        });
+        $("#expAll").on('click', function () {
+            $(".exp").each(function(){
+                $(this).prop("checked",!!$("#expAll").prop("checked"));
+            });
+        });
+
+        $(".pri").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                setSelectAllValue("pri");
+            }else{
+                $("#priAll").prop("checked",false);
+            }
+        });
+
+        $(".inc").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                $(".inc").each(function(){
+                    $(this).prop("checked",false);
+                });
+                $(this).prop("checked",true);
+            }
+        });
+
+        $(".tfd").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                $(".tfd").each(function(){
+                    $(this).prop("checked",false);
+                });
+                $(this).prop("checked",true);
+            }
+        });
+
+        $(".des").on('click', function () {
+               var val = $(this).prop("checked");
+               if(val){
+                   setSelectAllValue("des");
+               }else{
+                   $("#desAll").prop("checked",false);
+               }
+        });
+        $(".par").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                setSelectAllValue("par");
+            }else{
+                $("#parAll").prop("checked",false);
+            }
+        });
+        $(".exp").on('click', function () {
+            var val = $(this).prop("checked");
+            if(val){
+                setSelectAllValue("exp");
+            }else{
+                $("#expAll").prop("checked",false);
+            }
+        });
+
+        var fieldArrJson = ${fieldArrJson};
+        var jsonArr = eval(fieldArrJson);
+        var id =0;
+        $.each(jsonArr, function() {
+            id++;
+            if(this.pri==1)
+                $("#pri_"+id).attr("checked",true);
+            if(this.inc==1)
+                $("#inc_"+id).attr("checked",true);
+            if(this.tfd==1)
+                $("#tfd_"+id).attr("checked",true);
+            if(this.par==1)
+                $("#par_"+id).attr("checked",true);
+            if(this.des==1)
+                $("#des_"+id).attr("checked",true);
+            if(this.exp==1)
+                $("#exp_"+id).attr("checked",true);
+        });
+        setSelectAllValue("pri");
+        setSelectAllValue("des");
+        setSelectAllValue("par");
+        setSelectAllValue("exp");
+
 
         $('#submit_btn').on('click', function () {
             var fieldArrJson = [];
@@ -79,12 +192,15 @@
                 var fieldJson = {};
                 fieldJson['name']=d[1];
                 fieldJson['type']=d[2];
+                fieldJson['pri']=getCheckBoxValue("pri_"+d[0]);
+                fieldJson['inc']=getCheckBoxValue("inc_"+d[0]);
+                fieldJson['tfd']=getCheckBoxValue("tfd_"+d[0]);
                 fieldJson['des']=getCheckBoxValue("des_"+d[0]);
                 fieldJson['par']=getCheckBoxValue("par_"+d[0]);
                 fieldJson['exp']=getCheckBoxValue("exp_"+d[0]);
                 fieldArrJson.push(fieldJson);
             });
-            var url     = '${CONTEXT_PATH}/job/selectField';
+            var url     = '${CONTEXT_PATH}/jobsource/selectField';
             var data = { jobId : ${id},
                          table : '${table}',
                          fields  :  JSON.stringify(fieldArrJson)};
@@ -99,6 +215,7 @@
                 }
             });
         });
+
     });
     function getCheckBoxValue(id){
         var checkBox = $("#"+id)
@@ -106,6 +223,15 @@
                 return 1;
         else
                 return 0;
+    }
+
+    function setSelectAllValue(name){
+        var flag = true
+        $("."+name).each(function(){
+            if(!($(this).is(":checked")))
+                flag = false;
+        });
+        $("#"+name+"All").prop("checked", flag);
     }
 </script>
 #end

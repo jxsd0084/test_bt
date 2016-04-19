@@ -1,5 +1,5 @@
-#set(title="数据源")
-#set(navbar="dataSource")
+#set(title="作业源")
+#set(navbar="jobSource")
 #tag layout_block("headContent")
 <style>
 </style>
@@ -9,12 +9,14 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源配置  </font></a></li>
-        <li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="#808080">作业管理</font></a></li>
-	</ol>
+		<li class="active"><a href="${CONTEXT_PATH}/ds/list?bizId=${bizId}&bizName=${bizName}"><font color="blue">数据源管理  </font></a></li>
+        <li class="active"><font color="#808080">作业_源</font></li>
+        <li class="active"><a href="${CONTEXT_PATH}/jobtarget/listJobTarget?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业_目标 </font></a></li>
+        <li class="active"><a href="${CONTEXT_PATH}/jobinfo/listJobInfo?bizId=${bizId}&bizName=${bizName}"><font color="blue">作业管理 </font></a></li>
+    </ol>
 </div>
 <div class="row" style="padding:9px 0px 5px 25px;">
-    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业" onclick="window.location.href='${CONTEXT_PATH}/job/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
+    <input id="submit_btn" class="btn btn-primary" type="button" value="新建作业源" onclick="window.location.href='${CONTEXT_PATH}/jobsource/create?bizId=${bizId}&bizName=${bizName}&tag=add'"/>
 </div>
 <br/>
 <div class="row">
@@ -23,7 +25,7 @@
 			<thead>
 			<tr>
                 <th>编号</th>
-                <th>作业名称</th>
+                <th>名称</th>
                 <th>数据源</th>
                 <th>备注</th>
                 <th>操作</th>
@@ -49,7 +51,7 @@
             fixedHeader: fixedHeaderObject,
             language: lang,
             dom: bootstrapDom,
-            order: [[2, 'desc'], [3, 'desc']],
+            order: [[0, 'desc'],[1, 'desc']],
             lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
             data: data,
             columnDefs: [
@@ -60,7 +62,7 @@
                 },
                 {
                     targets: 2, render: function (data, type, full, meta) {
-                    return '<a href="${CONTEXT_PATH}/job/ds_show?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >'+full[5]+'</a>';
+                    return '<a href="${CONTEXT_PATH}/jobsource/ds_show?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >'+full[5]+'</a>';
                     }
                 },
                 {
@@ -70,8 +72,8 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/job/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
-                                ');">删除</a> | <a href="${CONTEXT_PATH}/job/tblsIndex?id=' + full[0] + '&dbSourceId=' + full[4] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">选择数据</a>';
+                        return '<a href="${CONTEXT_PATH}/jobsource/edit?id=' + full[0] + '&bizId=' + full[1] + '&bizName=' + full[2] + '&tag=modify" >修改</a> | <a href="javascript:js_method(' + full[0] +
+                                ');">删除</a> | <a href="${CONTEXT_PATH}/jobsource/tblsIndex?id=' + full[0] + '&dbSourceId=' + full[4] + '&bizId=' + full[1] + '&bizName=' + full[2] + '">选择数据</a>';
                     }
                 }
             ]
@@ -82,7 +84,7 @@
     var js_method   = function(id){
         var bizId   = '${bizId}';
         var bizName = '${bizName}';
-        var url     = "${CONTEXT_PATH}/job/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
+        var url     = "${CONTEXT_PATH}/jobsource/delete?id=" + id +"&bizId=" + bizId + "&bizName=" + bizName;
         if(confirm("是否确定删除?")){
             window.location.href = url;
         }

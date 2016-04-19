@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
 		<li><a href="${CONTEXT_PATH}/"><span class="glyphicon glyphicon-home"></span></a>
 		</li>
-		<li class="active"><a href="${CONTEXT_PATH}/job/listJob?bizId=${bizId}&bizName=${bizName}"><font color="blue">返回 上一级</font></a></li>
+		<li class="active"><a href="${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}"><font color="blue">返回 上一级</font></a></li>
 	</ol>
 </div>
 <br/>
@@ -66,7 +66,7 @@
                 },
                 {
                     targets: 4, render: function (data, type, full, meta) {
-                       return '<a id ="a_'+full[0]+'" href="${CONTEXT_PATH}/job/fldsIndex?dbSourceId=' + '${obj.id}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + full[2] +'&id='+'${jobId}'+ '">'+data+'</a>';
+                       return '<a id ="a_'+full[0]+'" href="${CONTEXT_PATH}/jobsource/fldsIndex?dbSourceId=' + '${obj.id}'+ '&bizId=' + '${obj.bizId}'+ '&bizName=' + '${obj.bizName}' + '&tableName=' + full[2] +'&id='+'${jobId}'+ '">'+data+'</a>';
                     }
                 }
             ]
@@ -81,7 +81,7 @@
                 }
             });
             table_s = table_s.substr(0,table_s.length-1)
-            var url     = '${CONTEXT_PATH}/job/selectTable';
+            var url     = '${CONTEXT_PATH}/jobsource/selectTable';
             var data = {tables : table_s,
                         jobId  :  ${jobId}};
             $.ajax({
@@ -109,6 +109,12 @@
                 thisCell.data('<input type="checkbox" checked="checked"/>').draw();
                 var rowx = thisCell.index()['row']+1;
                 $("#a_" + rowx).css('display', '');
+
+                var flag = true
+                $.each(data, function (n, value) {
+                    if(value[3]=='<input type="checkbox" />') flag = false;
+                });
+                $("#selectAll").prop("checked", flag);
             }
         } );
 

@@ -1,0 +1,160 @@
+#set(title="作业编辑")
+#set(navbar="dataSourceEdit")
+#tag layout_block("bodyContent")
+<div class="container">
+
+  <legend>新建作业源</legend>
+
+  <form id="form1" class="form-horizontal" role="form" action="${CONTEXT_PATH}/create/config/" method="POST">
+    <fieldset>
+
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">作业源名称</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" value="${obj.name}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">数据源</label>
+        <div class="col-md-3 col-lg-3">
+            <select name="name2" id="name2" style="width: 140px">
+                <option value="" default> - 必选 - </option>
+            <select/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+
+      <div class="form-group">
+        <label for="profile" class="col-md-2 control-label">备注</label>
+        <div class="col-md-3 col-lg-3">
+          <input type="text" class="form-control" name="name3" id="name3" placeholder="选填" value="${obj.memo}"/>
+        </div>
+        <p class="help-block col-md-offset-2"></p>
+      </div>
+      <!-- 确认按钮 -->
+      <div class="form-group well well-sm">
+        <div class="col-md-offset-2 col-md-10 col-lg-8">
+          <p align="lefts" class="hide" id="resultInfo"></p>
+          <input id="cancel_btn" class="btn" type="button" value="返回"/>
+          <input type="button" class="btn btn-primary" id="confirm" value="确认"></input>
+        </div>
+      </div>
+
+    </fieldset>
+  </form>
+</div>
+#end
+#tag layout_block("scriptContent")
+<script>
+
+    var GLOBAL_URL = '${CONTEXT_PATH}/jobsource/listJobSource?bizId=${bizId}&bizName=${bizName}';
+
+    var myValidator = function(){
+        var msg = '';
+        var result = true;
+
+        var value1 = $("#name1").val();
+        var value2 = $("#name2").val();
+        var value3 = $("#name3").val();
+
+        if(value1 == '' ||
+           value2 == '' ||
+           value3 == ''
+        ){
+           msg = '必填项不能为空值!'
+           result = false;
+        }
+
+        if(!result){
+           showResult(msg);
+        }
+
+        return result;
+    }
+
+    $(document).ready(function () {
+        var selid = $("#name2");
+        var dss1 = '${dss}';
+        var dss = $.parseJSON(dss1);
+        $.each(dss,function(i,item){
+            selid.append("<option value='"+item.key+"'>"+item.value+"</option>");
+        });
+
+       var dbSourceId =  '${obj.dbSourceId}';
+        selid.val(dbSourceId);
+
+        $("#confirm").on('click', function () {
+
+            var tag     = '${tag}';
+            var url     = '${CONTEXT_PATH}/jobsource/' + tag;
+            var data    = '';
+            var id      = '${id}';
+            var bizId   = '${bizId}';
+            var bizName = '${bizName}';
+            var msg     = '';
+
+            var value1 = $("#name1").val();
+            var value2 = $("#name2").val();
+            var value3 = $("#name3").val();
+            var value4 = "";
+
+            $.each(dss,function(i,item){
+                if(item.key==value2)
+                    value4 = item.value;
+            });
+
+            if(tag == 'modify'){
+                msg  = '修改';
+                data = {
+                    bizId               :bizId,
+                    bizName             :bizName,
+                    name                :value1,
+                    dbSourceId          :value2,
+                    dbSourceName        :value4,
+                    memo                :value3,
+                    id                  :id
+                };
+            }else if(tag == 'add'){     // 新增不需要指定主键ID
+                msg  = '添加';
+                data = {
+                    bizId               :bizId,
+                    bizName             :bizName,
+                    name                :value1,
+                    dbSourceId          :value2,
+                    dbSourceName        :value4,
+                    memo                :value3
+                };
+            }
+
+            if(myValidator()){
+                $.ajax({
+                    url                 :url,
+                    contentType         :"application/json",
+                    data                :data,
+                    dataType            :"text",
+                    type                :"GET",
+                    success:function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            forward(msg + "成功!", GLOBAL_URL);
+                        } else {
+                            showResult("警告：" + json.info, false);
+                        }
+                    }
+                });
+            }
+
+        })
+
+        $("#cancel_btn").on('click', function () {
+            window.location.href = GLOBAL_URL;
+        })
+
+    });
+
+</script>
+#end
+#include("/include/form-layout.jetx")
