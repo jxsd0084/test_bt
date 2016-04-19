@@ -156,6 +156,7 @@ public class AnalyzeLogService {
 
         if (Strings.isNullOrEmpty(val)) {
             err="字段值为空ornull";
+            rt.add(0,"");
             rt.add(1,err);
             return rt;
         }
@@ -254,10 +255,13 @@ public class AnalyzeLogService {
 //        List<Map<String,List<String>>> output=new ArrayList<Map<String, List<String>>>(jsonArray.size());
         List<Map<String,List<String>>> output=new ArrayList<Map<String, List<String>>>();
 
+        Map<String,List<String>> extra=new HashMap<>();
+
         try {
             for (int i = 0; i < jsonArray.size(); i++) {
                 LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {
                 });
+
 
                 Map<String, List<String>> map = new HashMap<String, List<String>>();
 
@@ -320,6 +324,7 @@ public class AnalyzeLogService {
                             }
 
                             if (buriedTwoMap.containsKey(enterKey)) {
+
                                 tagTwoMap = buriedTwoMap.get(enterKey);
 
                                 keySets = tagTwoMap.keySet();
@@ -334,25 +339,45 @@ public class AnalyzeLogService {
 
                                     filterSets.add(key2);
 
+
+
+
                                     desc2 = tagTwoMap.get(k).get("desc");
                                     type2 = tagTwoMap.get(k).get("type");
                                     regex2 = tagTwoMap.get(k).get("regex");
 
+
+
+
+                                    if(!map.containsKey(key2)){
+                                        List<String> list = new ArrayList<String>();
+                                        list.add(key2);
+                                        list.add(desc2);
+                                        list.add(type2);
+                                        list.add(regex2);
+
+                                        map.put(key2, list);
+
+
+                                        if(!extra.containsKey(key2)){
+                                            extra.put(key2,list);
+                                        }
+
+                                    }
+
                                     if (jsonMap2.containsKey(key2)) {
                                         val2 = jsonMap2.get(key2);
+
+
 
                                         hfResult = handleField(val2, type2, regex2);
                                         err = hfResult.get(1);
                                         val2 = hfResult.get(0);
                                         if (!err.equals("")) {
-
                                             map.get(key2).add(val2);
                                             map.get(key2).add(err);
                                         } else {
-//                                            System.out.println(map.toString());
-//                                            System.out.println(key2);
-
-                                            map.get(key2).add("");
+                                            map.get(key2).add(val2);
                                             map.get(key2).add("");
                                         }
                                     } else {
@@ -368,6 +393,11 @@ public class AnalyzeLogService {
                                             list.add("");
                                             list.add("表中字段不存在");
                                             map.put(key2, list);
+
+
+                                            if(!extra.containsKey(key2)){
+                                                extra.put(key2,list);
+                                            }
 
                                         }
                                     }
@@ -408,9 +438,7 @@ public class AnalyzeLogService {
 
 
                             tagTwoMap = buriedTwoMap.get(enterKey);
-//                            System.out.println(enterKey);
-//                            System.out.println(tagTwoMap.toString());
-//                            System.out.println(tagTwoMap.keySet());
+
 
                             if (tagTwoMap == null) {
                                 tagTwoMap = new HashMap<String, Map<String, String>>();
@@ -432,6 +460,20 @@ public class AnalyzeLogService {
                                     regex2 = tagTwoMap.get(k).get("regex");
 
 
+                                    if(!map.containsKey(key2)){
+                                        List<String> list = new ArrayList<String>();
+                                        list.add(key2);
+                                        list.add(desc2);
+                                        list.add(type2);
+                                        list.add(regex2);
+
+                                        map.put(key2, list);
+                                        if(!extra.containsKey(key2)){
+                                            extra.put(key2,list);
+                                        }
+
+                                    }
+
                                     hfResult = handleField(val2, type2, regex2);
                                     err = hfResult.get(1);
                                     val2 = hfResult.get(0);
@@ -439,7 +481,7 @@ public class AnalyzeLogService {
                                         map.get(key2).add(val2);
                                         map.get(key2).add(err);
                                     } else {
-                                        map.get(key2).add("");
+                                        map.get(key2).add(val2);
                                         map.get(key2).add("");
                                     }
                                 } else {
@@ -471,6 +513,17 @@ public class AnalyzeLogService {
                     type3 = bVal.get("type");
                     isChecked3 = bVal.get("ischeck");
                     regex3 = bVal.get("regex");
+
+
+                    if(!extra.containsKey(bKey)){
+                        List<String> list = new ArrayList<String>();
+                        list.add(bKey);
+                        list.add(desc3);
+                        list.add(type3);
+                        list.add(regex3);
+                        extra.put(bKey,list);
+                    }
+
 
                     if (bKey.equals(MobileDevEnterPre)) {
                         val3 = "";
@@ -507,6 +560,36 @@ public class AnalyzeLogService {
             LOG.warn(jsonArray.toJSONString());
         }
 
+
+        int count=0;
+        for(Map<String,List<String>> m:output) {
+            for(Map.Entry<String,List<String>> m2:extra.entrySet()){
+                String key5=m2.getKey();
+                if(!m.containsKey(key5)){
+                    List<String> list = new ArrayList<String>();
+
+
+                    key = m2.getValue().get(0);
+                    desc = m2.getValue().get(1);
+                    //isChecked = val.get("ischeck");
+                    type = m2.getValue().get(2);
+                    regex=m2.getValue().get(3);
+
+                    list.add(key);
+                    list.add(desc);
+                    list.add(type);
+                    list.add(regex);
+                    list.add("");
+                    list.add("");
+
+                    output.get(count).put(key, list);
+                }
+            }
+
+            count++;
+        }
+
+
         return output;
     }
 
@@ -516,11 +599,13 @@ public class AnalyzeLogService {
 
         List<Map<String,List<String>>> output=process(Target);
 
+
         JSONArray ja1 = new JSONArray();
 
         Map<String,JSONArray> rt=new HashMap<String, JSONArray>();
 
         for(Map<String,List<String>> m:output){
+
             for(Map.Entry<String,List<String>> m2:m.entrySet()){
                 JSONArray ja2 = new JSONArray();
                 JSONArray ja3 = new JSONArray();
@@ -547,6 +632,7 @@ public class AnalyzeLogService {
                     ja2.add(ja3);
 
                     rt.put(key4,ja2);
+
                 }else{
                     if(err4.equals("")){
                         ja3.add(true);
@@ -561,6 +647,8 @@ public class AnalyzeLogService {
 
             }
         }
+
+
 
         for(Map.Entry<String,JSONArray> m2:rt.entrySet()) {
             String key4 = m2.getKey();
@@ -706,6 +794,7 @@ public class AnalyzeLogService {
                     message = buffer.toString();
 
                     SendLogCheckMonitor.sendPostRequest(navName,message);
+                    LOG.info("monitor message:"+message);
                     LOG.info("####################sendMonitorByNavName  send monitor##################");
             }
             buffer.setLength(0);

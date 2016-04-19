@@ -222,6 +222,7 @@ public class CEPTraceController {
 
         String target =  cepService.getServerLog( str1,str2 ).toString();
 
+        //target="[{\"realip\":\"172.28.0.10\",\"M1\":\"0\",\"M99.M3\":\"com.facishare.fs.biz_function.webview.JsApiWebActivity\",\"M2\":\"1335\",\"M99.M2\":\"onstart\",\"M3\":\"352621066268480\",\"M99.M1\":\"lifecycle\",\"M4\":\"Android\",\"_ip\":\"172.31.103.120\",\"M5\":\"5.0\",\"M6\":\"5.2.0.26816\",\"M7\":\"26816\",\"M97\":\"7\",\"M8\":\"samsung/SM-G9006V/armeabi-v7a/armeabi\",\"M96\":\"wifi\",\"M98\":\"1461053910127\",\"_time\":\"2016-04-19 16:18:59.208\"},{\"realip\":\"172.28.0.10\",\"M1\":\"0\",\"M99.M3\":\"com.facishare.fs.contacts_fs.SelectEmpActivity\",\"M2\":\"1335\",\"M99.M2\":\"oncreate\",\"M3\":\"352621066268480\",\"M99.M1\":\"lifecycle\",\"M4\":\"Android\",\"_ip\":\"172.31.103.120\",\"M5\":\"5.0\",\"M6\":\"5.2.0.26816\",\"M7\":\"26816\",\"M97\":\"7\",\"M8\":\"samsung/SM-G9006V/armeabi-v7a/armeabi\",\"M96\":\"wifi\",\"M98\":\"1461053886958\",\"_time\":\"2016-04-19 16:18:59.207\"},{\"realip\":\"172.29.0.3\",\"M99.target\":\"application\",\"M1\":\"fsfte2a\",\"M2\":\"1089\",\"M3\":\"3c723c59f90a8bd83c7f6c42a2d01283\",\"M99.M1\":\"lifecycle\",\"M4\":\"iPhone OS\",\"_ip\":\"172.31.103.120\",\"M5\":\"9.3\",\"M6\":\"5.3\",\"M7\":\"100155\",\"M97\":9,\"M8\":\"Simulator\",\"M96\":\"WIFI\",\"M98\":1460982536871,\"M99.method\":\"onstop\",\"_time\":\"2016-04-19 16:18:59.558\"},{\"realip\":\"172.28.0.10\",\"M1\":\"0\",\"M99.M3\":\"com.facishare.fs.contacts_fs.SelectEmpActivity\",\"M2\":\"1335\",\"M99.M2\":\"onstart\",\"M3\":\"352621066268480\",\"M99.M1\":\"lifecycle\",\"M4\":\"Android\",\"_ip\":\"172.31.103.120\",\"M5\":\"5.0\",\"M6\":\"5.2.0.26816\",\"M7\":\"26816\",\"M97\":\"7\",\"M8\":\"samsung/SM-G9006V/armeabi-v7a/armeabi\",\"M96\":\"wifi\",\"M98\":\"1461053886975\",\"_time\":\"2016-04-19 16:18:59.207\"},{\"realip\":\"172.28.0.10\",\"M1\":\"0\",\"M99.M3\":\"com.facishare.fs.biz_function.webview.JsApiWebActivity\",\"M2\":\"1335\",\"M99.M2\":\"onstop\",\"M3\":\"352621066268480\",\"M99.M1\":\"lifecycle\",\"M4\":\"Android\",\"_ip\":\"172.31.103.120\",\"M5\":\"5.0\",\"M6\":\"5.2.0.26816\",\"M7\":\"26816\",\"M97\":\"7\",\"M8\":\"samsung/SM-G9006V/armeabi-v7a/armeabi\",\"M96\":\"wifi\",\"M98\":\"1461053887494\",\"_time\":\"2016-04-19 16:18:59.208\"}]";
         JSONArray rt=analyzeLogService.formatLog(navName,target);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
@@ -230,6 +231,7 @@ public class CEPTraceController {
         jsonObj.put("target",target.replace("},","},\n"));
         jsonObj.put("tableData",rt);
 
+        System.out.println(jsonObj.toJSONString());
         return jsonObj.toJSONString();
     }
 
