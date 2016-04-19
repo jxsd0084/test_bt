@@ -22,6 +22,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.trace.utils.SendLogCheckMonitor;
+
 /**
  * Created by wangjiezhao on 2016/4/13.
  */
@@ -249,92 +251,190 @@ public class AnalyzeLogService {
         List<String>  hfResult;
 
         //List<List<String>> output=new ArrayList<List<String>>();
-        List<Map<String,List<String>>> output=new ArrayList<Map<String, List<String>>>(jsonArray.size());
+//        List<Map<String,List<String>>> output=new ArrayList<Map<String, List<String>>>(jsonArray.size());
+        List<Map<String,List<String>>> output=new ArrayList<Map<String, List<String>>>();
 
-        for (int i = 0; i < jsonArray.size(); i++) {
-            LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {});
+        try {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {
+                });
 
-            Map<String,List<String>> map=new HashMap<String, List<String>>();
+                Map<String, List<String>> map = new HashMap<String, List<String>>();
 
-            for(Map.Entry<String, Map<String,String>> entry1:buriedMap.entrySet()) {
-                List<String> list=new ArrayList<String>();
+                for (Map.Entry<String, Map<String, String>> entry1 : buriedMap.entrySet()) {
+                    List<String> list = new ArrayList<String>();
 
-                key = entry1.getKey();
-                val = entry1.getValue();
-                desc = val.get("desc");
-                type = val.get("type");
-                //isChecked = val.get("ischeck");
-                regex = val.get("regex");
+                    key = entry1.getKey();
+                    val = entry1.getValue();
+                    desc = val.get("desc");
+                    type = val.get("type");
+                    //isChecked = val.get("ischeck");
+                    regex = val.get("regex");
 
-                list.add(key);
-                list.add(desc);
-                list.add(type);
-                list.add(regex);
+                    list.add(key);
+                    list.add(desc);
+                    list.add(type);
+                    list.add(regex);
 
-                map.put(key,list);
-            }
+                    map.put(key, list);
+                }
 
-            //Sets.SetView<String> diff=Sets.difference(jsonMap2.keySet(),buriedMap.keySet());
+                //Sets.SetView<String> diff=Sets.difference(jsonMap2.keySet(),buriedMap.keySet());
 
-            String enter="";
+                String enter = "";
 
-            String err="";
+                String err = "";
 
-            Map<String,Map<String,String>>  tagTwoMap;
+                Map<String, Map<String, String>> tagTwoMap;
 
-            Set<String> keySets;
-            Set<String> filterSets=new HashSet<String>();
+                Set<String> keySets;
+                Set<String> filterSets = new HashSet<String>();
 
-            String enterKey;
+                String enterKey;
 
-            if(jsonMap2.containsKey(MobileDevEnterKey)&&jsonMap2.get(MobileDevEnterKey).matches(MobileDevEnterVal)){
-                map.get(MobileDevEnterKey).add(jsonMap2.get(MobileDevEnterKey));
-                map.get(MobileDevEnterKey).add("");
+                if (jsonMap2.containsKey(MobileDevEnterKey) && jsonMap2.get(MobileDevEnterKey).matches(MobileDevEnterVal)) {
+                    map.get(MobileDevEnterKey).add(jsonMap2.get(MobileDevEnterKey));
+                    map.get(MobileDevEnterKey).add("");
 
-                filterSets.add(MobileDevEnterKey);
-                filterSets.add(MobileDevEnterPre);
+                    filterSets.add(MobileDevEnterKey);
+                    filterSets.add(MobileDevEnterPre);
 
-                if(jsonMap2.containsKey(MobileDevEnter)){
+                    if (jsonMap2.containsKey(MobileDevEnter)) {
 
-                    filterSets.add(MobileDevEnter);
+                        filterSets.add(MobileDevEnter);
 
-                    enterKey=jsonMap2.get(MobileDevEnter);
-                    if(enterKey.equals("")){
-                        err="事件赋值为空";
-                        map.get(MobileDevEnter).add("");
-                        map.get(MobileDevEnter).add(err);
-                    }else {
-                        err = handleTag(enterKey);
-
-                        if (!err.equals("")) {
-                            map.get(MobileDevEnter).add(enterKey);
+                        enterKey = jsonMap2.get(MobileDevEnter);
+                        if (enterKey.equals("")) {
+                            err = "事件赋值为空";
+                            map.get(MobileDevEnter).add("");
                             map.get(MobileDevEnter).add(err);
                         } else {
-                            map.get(MobileDevEnter).add(enterKey);
-                            map.get(MobileDevEnter).add("");
-                        }
+                            err = handleTag(enterKey);
 
-                        if(buriedTwoMap.containsKey(enterKey)) {
+                            if (!err.equals("")) {
+                                map.get(MobileDevEnter).add(enterKey);
+                                map.get(MobileDevEnter).add(err);
+                            } else {
+                                map.get(MobileDevEnter).add(enterKey);
+                                map.get(MobileDevEnter).add("");
+                            }
+
+                            if (buriedTwoMap.containsKey(enterKey)) {
+                                tagTwoMap = buriedTwoMap.get(enterKey);
+
+                                keySets = tagTwoMap.keySet();
+
+                                for (String k : keySets) {
+
+                                    if (k == null) {
+                                        LOG.warn("ks is null:" + enterKey);
+                                        continue;
+                                    }
+                                    key2 = MobileDevEnterPre + "." + k;
+
+                                    filterSets.add(key2);
+
+                                    desc2 = tagTwoMap.get(k).get("desc");
+                                    type2 = tagTwoMap.get(k).get("type");
+                                    regex2 = tagTwoMap.get(k).get("regex");
+
+                                    if (jsonMap2.containsKey(key2)) {
+                                        val2 = jsonMap2.get(key2);
+
+                                        hfResult = handleField(val2, type2, regex2);
+                                        err = hfResult.get(1);
+                                        val2 = hfResult.get(0);
+                                        if (!err.equals("")) {
+
+                                            map.get(key2).add(val2);
+                                            map.get(key2).add(err);
+                                        } else {
+//                                            System.out.println(map.toString());
+//                                            System.out.println(key2);
+
+                                            map.get(key2).add("");
+                                            map.get(key2).add("");
+                                        }
+                                    } else {
+                                        try {
+                                            map.get(key2).add("");
+                                            map.get(key2).add("字段不存在");
+                                        } catch (NullPointerException e) {
+                                            List<String> list = new ArrayList<String>();
+                                            list.add(key2);
+                                            list.add(desc2);
+                                            list.add(type2);
+                                            list.add(regex2);
+                                            list.add("");
+                                            list.add("表中字段不存在");
+                                            map.put(key2, list);
+
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    } else {
+                        err = "事件入口不存在";
+                        map.get(MobileDevEnterKey).add("");
+                        map.get(MobileDevEnterKey).add(err);
+                    }
+
+
+                } else if (jsonMap2.containsKey(NonMobileDevEnter)) {
+
+                    map.get(NonMobileDevEnter).add(NonMobileDevEnter);
+                    map.get(NonMobileDevEnter).add("");
+
+                    filterSets.add(NonMobileDevEnter);
+
+                    if (jsonMap2.containsKey(NonMobileDevEnter)) {
+                        enterKey = jsonMap2.get(NonMobileDevEnter);
+
+                        if (enterKey.equals("")) {
+                            err = "事件赋值为空";
+                            map.get(NonMobileDevEnter).add("");
+                            map.get(NonMobileDevEnter).add(err);
+                        } else {
+                            err = handleTag(enterKey);
+                            if (!err.equals("")) {
+                                map.get(NonMobileDevEnter).add(enterKey);
+                                map.get(NonMobileDevEnter).add(err);
+                            } else {
+                                map.get(NonMobileDevEnter).add(enterKey);
+                                map.get(NonMobileDevEnter).add("");
+                            }
+
+
                             tagTwoMap = buriedTwoMap.get(enterKey);
+//                            System.out.println(enterKey);
+//                            System.out.println(tagTwoMap.toString());
+//                            System.out.println(tagTwoMap.keySet());
+
+                            if (tagTwoMap == null) {
+                                tagTwoMap = new HashMap<String, Map<String, String>>();
+                            }
 
                             keySets = tagTwoMap.keySet();
 
                             for (String k : keySets) {
+                                //if(k.equals(NonMobileDevEnter)){filterSets.add(NonMobileDevEnter);continue;}
 
-                                key2 = MobileDevEnterPre + "." + k;
+                                key2 = k;
+                                val2 = jsonMap2.get(key2);
 
                                 filterSets.add(key2);
 
-                                desc2 = tagTwoMap.get(k).get("desc");
-                                type2 = tagTwoMap.get(k).get("type");
-                                regex2 = tagTwoMap.get(k).get("regex");
+                                if (jsonMap2.containsKey(k)) {
+                                    desc2 = tagTwoMap.get(k).get("desc");
+                                    type2 = tagTwoMap.get(k).get("type");
+                                    regex2 = tagTwoMap.get(k).get("regex");
 
-                                if (jsonMap2.containsKey(key2)) {
-                                    val2 = jsonMap2.get(key2);
 
                                     hfResult = handleField(val2, type2, regex2);
-                                    err=hfResult.get(1);
-                                    val2=hfResult.get(0);
+                                    err = hfResult.get(1);
+                                    val2 = hfResult.get(0);
                                     if (!err.equals("")) {
                                         map.get(key2).add(val2);
                                         map.get(key2).add(err);
@@ -343,158 +443,69 @@ public class AnalyzeLogService {
                                         map.get(key2).add("");
                                     }
                                 } else {
-                                    try {
-                                        map.get(key2).add("");
-                                        map.get(key2).add("字段不存在");
-                                    } catch (NullPointerException e) {
-                                        List<String> list = new ArrayList<String>();
-                                        list.add(key2);
-                                        list.add(desc2);
-                                        list.add(type2);
-                                        list.add(regex2);
-                                        list.add("");
-                                        list.add("表中字段不存在");
-                                        map.put(key2, list);
-
-                                    }
+                                    map.get(key2).add("");
+                                    map.get(key2).add("字段不存在");
                                 }
                             }
-
                         }
+                    } else {
+                        err = "事件入口不存在";
+                        map.get(MobileDevEnterKey).add("");
+                        map.get(MobileDevEnterKey).add(err);
                     }
-                }else{
-                    err="事件入口不存在";
-                    map.get(MobileDevEnterKey).add("");
-                    map.get(MobileDevEnterKey).add(err);
+
                 }
 
-
-            }else if(jsonMap2.containsKey(NonMobileDevEnter)){
-
-                map.get(NonMobileDevEnter).add(NonMobileDevEnter);
-                map.get(NonMobileDevEnter).add("");
-
-                filterSets.add(NonMobileDevEnter);
-
-                if(jsonMap2.containsKey(NonMobileDevEnter)){
-                    enterKey=jsonMap2.get(NonMobileDevEnter);
-
-                    if(enterKey.equals("")){
-                        err="事件赋值为空";
-                        map.get(NonMobileDevEnter).add("");
-                        map.get(NonMobileDevEnter).add(err);
-                    }else {
-                        err = handleTag(enterKey);
-                        if (!err.equals("")) {
-                            map.get(NonMobileDevEnter).add(enterKey);
-                            map.get(NonMobileDevEnter).add(err);
-                        } else {
-                            map.get(NonMobileDevEnter).add(enterKey);
-                            map.get(NonMobileDevEnter).add("");
-                        }
+                Set<String> bSets = new HashSet<String>(buriedMap.keySet());
+                bSets.removeAll(filterSets);
 
 
+                if (map.containsKey(MobileDevEnterPre)) {
+                    map.get(MobileDevEnterPre).add("");
+                    map.get(MobileDevEnterPre).add("");
+                }
+                for (String bKey : bSets) {
+                    Map<String, String> bVal = buriedMap.get(bKey);
+                    val3 = jsonMap2.get(bKey);
+                    desc3 = bVal.get("desc");
+                    type3 = bVal.get("type");
+                    isChecked3 = bVal.get("ischeck");
+                    regex3 = bVal.get("regex");
 
-                        tagTwoMap=buriedTwoMap.get(enterKey);
-//                            System.out.println(enterKey);
-//                            System.out.println(tagTwoMap.toString());
-//                            System.out.println(tagTwoMap.keySet());
-
-                        if(tagTwoMap==null){
-                            tagTwoMap=new HashMap<String,Map<String,String>>();
-                        }
-
-                        keySets=tagTwoMap.keySet();
-
-                        for(String k:keySets){
-                            //if(k.equals(NonMobileDevEnter)){filterSets.add(NonMobileDevEnter);continue;}
-
-                            key2=k;
-                            val2=jsonMap2.get(key2);
-
-                            filterSets.add(key2);
-
-                            if(jsonMap2.containsKey(k)){
-                                desc2=tagTwoMap.get(k).get("desc");
-                                type2=tagTwoMap.get(k).get("type");
-                                regex2=tagTwoMap.get(k).get("regex");
-
-
-                                hfResult=handleField(val2,type2,regex2);
-                                err=hfResult.get(1);
-                                val2=hfResult.get(0);
-                                if(!err.equals("")){
-                                    map.get(key2).add(val2);
-                                    map.get(key2).add(err);
-                                }else{
-                                    map.get(key2).add("");
-                                    map.get(key2).add("");
-                                }
-                            }else{
-                                map.get(key2).add("");
-                                map.get(key2).add("字段不存在");
-                            }
-                        }
+                    if (bKey.equals(MobileDevEnterPre)) {
+                        val3 = "";
+                        err = "";
+                    } else if (Strings.isNullOrEmpty(val3)) {
+                        val3 = "";
+                        err = "字段不存在";
+                    } else if (isChecked3.equals("1")) {
+                        hfResult = handleField(val3, type3, regex3);
+                        err = hfResult.get(1);
+                        val3 = hfResult.get(0);
+                    } else if (isChecked3.equals("0")) {
+                        //err="";
+                        hfResult = handleField(val3, type3, regex3);
+                        err = hfResult.get(1);
+                        val3 = hfResult.get(0);
+                    } else {
+                        err = "";
                     }
-                }else{
-                    err="事件入口不存在";
-                    map.get(MobileDevEnterKey).add("");
-                    map.get(MobileDevEnterKey).add(err);
+
+                    if (!err.equals("")) {
+                        map.get(bKey).add(val3);
+                        map.get(bKey).add(err);
+                    } else {
+                        map.get(bKey).add(val3);
+                        map.get(bKey).add("");
+                    }
+
                 }
-
+                output.add(map);
             }
-
-            Set<String>  bSets=new HashSet<String>(buriedMap.keySet());
-            bSets.removeAll(filterSets);
-
-
-
-
-            if(map.containsKey(MobileDevEnterPre)) {
-                map.get(MobileDevEnterPre).add("");
-                map.get(MobileDevEnterPre).add("");
-            }
-            for(String bKey:bSets){
-                Map<String,String> bVal=buriedMap.get(bKey);
-                val3=jsonMap2.get(bKey);
-                desc3 = bVal.get("desc");
-                type3 = bVal.get("type");
-                isChecked3 = bVal.get("ischeck");
-                regex3 = bVal.get("regex");
-
-                if(bKey.equals(MobileDevEnterPre)){
-                    val3="";
-                    err="";
-                }else if(Strings.isNullOrEmpty(val3)){
-                    val3="";
-                    err="字段不存在";
-                }else if(isChecked3.equals("1")){
-                    hfResult=handleField(val3,type3,regex3);
-                    err=hfResult.get(1);
-                    val3=hfResult.get(0);
-                }else if(isChecked3.equals("0")){
-                    //err="";
-                    hfResult=handleField(val3,type3,regex3);
-                    err=hfResult.get(1);
-                    val3=hfResult.get(0);
-                }else{
-                    err="";
-                }
-
-                if(!err.equals("")){
-                    map.get(bKey).add(val3);
-                    map.get(bKey).add(err);
-                }else{
-                    map.get(bKey).add(val3);
-                    map.get(bKey).add("");
-                }
-
-            }
-            output.add(map);
+        }catch(Exception e){
+            LOG.warn("process log exception:",e);
+            LOG.warn(jsonArray.toJSONString());
         }
-
-
-
 
         return output;
     }
@@ -694,7 +705,7 @@ public class AnalyzeLogService {
             if(isSent) {
                     message = buffer.toString();
 
-                    // SendLogCheckMonitor.sendPostRequest(busiName,message);
+                    SendLogCheckMonitor.sendPostRequest(navName,message);
                     LOG.info("####################sendMonitorByNavName  send monitor##################");
             }
             buffer.setLength(0);

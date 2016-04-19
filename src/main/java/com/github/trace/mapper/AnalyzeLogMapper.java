@@ -43,7 +43,7 @@ public interface AnalyzeLogMapper extends ICrudMapper<AnalyzeLogFields> {
     List<AnalyzeLogFields> getBuriedInfoByBusi(@Param("navName") String navName);
 
 
-    @Select("select  a.level1_field_tag as tag,b.field_name,b.field_desc,b.field_type,b.field_regex from level_two_fields a join m99_fields b on (a.level1_field_id=b.level_one_id and a.id=level_two_id)")
+    @Select("select  a.level1_field_tag as tag,b.field_name,b.field_desc,b.field_type,b.field_regex from level_two_fields a left join m99_fields b on (a.level1_field_id=b.level_one_id and a.id=level_two_id)")
     @Results({
             @Result(property="tag",column="tag"),
             @Result(property="field_name",column="field_name"),
