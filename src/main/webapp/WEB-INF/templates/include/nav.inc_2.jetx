@@ -7,8 +7,8 @@
                 <ul class="nav navbar-nav nav-tabs">
                     <li ><a href="${CONTEXT_PATH}/dataType/listByNavId?navigationId=11&navigationName=iOS">事件行为定义</a></li>
                     <li ><a href="${CONTEXT_PATH}/cep/list?navigationId=11&&topic=dcx.MonitorRequest&&navigationName=iOS">埋点配置与监控</a></li>
-                    <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
-                    <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置</a></li>
+##                    <li ><a href="${CONTEXT_PATH}/ds/list?bizId=1&bizName=企信">数据导入配置</a></li>
+##                    <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置</a></li>
                     <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置</a></li>
                     <li ><a href="${CONTEXT_PATH}/search/list">埋点历史搜索【7天】</a></li>
                 </ul>
