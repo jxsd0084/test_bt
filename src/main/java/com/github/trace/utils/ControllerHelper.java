@@ -2,12 +2,10 @@ package com.github.trace.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.github.trace.entity.DatabaseBiz;
-import com.github.trace.entity.NavigationItem;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.service.CEPService;
-import com.github.trace.service.Navigation0Service;
 import com.google.common.collect.ImmutableMap;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -18,8 +16,6 @@ import java.util.Map;
  */
 public class ControllerHelper {
 
-    @Autowired
-    Navigation0Service navigation0Service;
     // 此处为防止页面刷新之后, 左边导航条的数据丢失
     public static List setLeftNavigationTree(Model model, CEPService cepService, String navFlag){
         List<DatabaseBiz> databaseBizList = cepService.getDataBaseBizList();

@@ -192,4 +192,16 @@ public class LevelTwoFields {
     public void setLevel2FieldDesc(String level2FieldDesc) {
         this.level2FieldDesc = level2FieldDesc == null ? null : level2FieldDesc.trim();
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", level1FieldId=" + level1FieldId +
+                ", level1FieldTag='" + level1FieldTag + '\'' +
+                ", level1FieldName='" + level1FieldName + '\'' +
+                ", level2FieldName='" + level2FieldName + '\'' +
+                ", level2FieldDesc='" + level2FieldDesc + '\'' +
+                '}';
+    }
 }

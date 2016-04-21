@@ -224,7 +224,7 @@
         <dependency>
             <groupId>com.github.colin-lee</groupId>
             <artifactId>core-filter</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>com.fxiaoke.common</groupId>

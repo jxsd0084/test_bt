@@ -50,13 +50,7 @@ public class JsonLogHandler {
       String value = entry.getValue().toString();
 
       if (StringUtils.equals(keyConverted, "stamp")) {
-        DateTime jodaTime = DateTime.now();
-        try {
-          jodaTime = DateTime.parse(value, DATE_TIME_FORMATTER);
-        } catch (Exception e) {
-          LOG.error("Cannot parse date {}, use current date instead", value, e);
-        }
-        long stamp = jodaTime.getMillis();
+        long stamp = parseTimeStamp(value);
         object.put(keyConverted, String.valueOf(stamp));
       } else {
         object.put(keyConverted, value);
@@ -77,6 +71,22 @@ public class JsonLogHandler {
       }
     }
     return originKey;
+  }
+
+  public static long getStampFromLog(String log) {
+    JSONObject json = JSONObject.parseObject(log);
+    String time = json.getString("_time");
+    return parseTimeStamp(time);
+  }
+
+  private static long parseTimeStamp(String value) {
+    DateTime jodaTime = DateTime.now();
+    try {
+      jodaTime = DateTime.parse(value, DATE_TIME_FORMATTER);
+    } catch (Exception e) {
+      LOG.error("Cannot parse date {}, use current date instead", value, e);
+    }
+    return jodaTime.getMillis();
   }
 
 }

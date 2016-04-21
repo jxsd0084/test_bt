@@ -53,7 +53,7 @@ public class SearchController {
 		}
 	    SearchLog sLog = new SearchLog();
 		sLog.setTopic(topic);                                           // 主题
-		sLog.setKeyWord(keyWord);                                       // 搜索关键词
+		sLog.setKeyWord(formateStr(keyWord,navigationItem0.getName())); // 搜索关键词
 		sLog.setTag("stamp");                                           // 暂时写死
 		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
 		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
@@ -66,6 +66,53 @@ public class SearchController {
 	    model.addAttribute("keyWord", keyWord);
 	    return "search/search_list";
     }
+
+	private String formateStr(String key,String name){
+		String value ="";
+		if(key==null||"".equals(key.trim()))
+			return "";
+		String[] strs = key.split(" ");
+		boolean flag = false;
+		for(String str :strs){
+			if(str!=null&&!"".equals(str)){
+				if(str.equalsIgnoreCase("and")) {
+					value += "AND ";
+					flag = true;
+				}
+				else if(str.equalsIgnoreCase("or")) {
+					value += "OR ";
+					flag = true;
+				}
+				else
+					value+=str+" ";
+			}
+		}
+		if(!flag) {
+			strs = value.split(" ");
+			value = "";
+			for (String str : strs) {
+				if (str != null && !"".equals(str)) {
+					value += str+" AND ";
+				}
+			}
+			value = value.substring(0,value.lastIndexOf(" AND"));
+		}
+
+		if("IOS".equalsIgnoreCase(name)){
+			if(value.length()>0)
+				value +=" AND iPhone*";
+			else
+				value = "iPhone*";
+
+		}else if("Android".equals(name)){
+			if(value.length()>0)
+				value +=" AND Android";
+			else
+				value = "Android";
+		}
+
+		return value;
+	}
 
 	private JSONArray getSearchLogList(SearchLog sLog) {
 		List<Map<String, Object>> list = searchService.searchESWithSize(sLog);
@@ -89,21 +136,25 @@ public class SearchController {
 	// 自动缩进
 	private StringBuilder autoIndent(StringBuilder sb) {
 		String  value = sb.toString();
+		value = value.replaceAll("\n","<br/>");
 		String[] vals = value.split("<br/>");
 		StringBuilder valueSb = new StringBuilder();
 		for(String s : vals){
 			s = getStr(s);
-			valueSb.append(s + "<br/>");
+			if(s.endsWith("<br/>"))
+				valueSb.append(s);
+			else
+			    valueSb.append(s + "<br/>");
 		}
 		return valueSb;
 	}
 
 	private String getStr(String str){
-		if(str.length() > 240){
-            String newStr = str.substring(240);
-			return str.substring(0, 240) + "<br/>" + getStr(newStr);
+		if(str.length() > 225){
+            String newStr = str.substring(225);
+			return str.substring(0, 225) + "<br/>" + getStr(newStr);
 		}else{
-			return str;
+			return str+ "<br/>";
 		}
 	}
 
@@ -125,9 +176,16 @@ public class SearchController {
 			}
 		}
 
-		if(temp.equals(keyWord) ||
-		   temp2.equals(keyWord) ||
-		   temp.contains(keyWord)) {
+		String[] strs = keyWord.split(" ");
+		boolean flag = false;
+		for(String str:strs){
+			if(str!=null&&!"".equals(str)&&!"AND".equals(str)&&!"OR".equals(str)&&
+					!"iPhone*".equals(str)&&!"Android".equals(str)&&
+					(temp.equals(str) || temp2.equals(str) ||	temp.contains(str)))
+				flag = true;
+		}
+
+		if(flag) {
 			sb.append("<br/>");
 			sb.append("<font color=\"red\">");
 			sb.append(entryKey + " : " + entryValue);

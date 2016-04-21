@@ -37,7 +37,7 @@
 </div>
 <br/>
 <div class="row">
-    <div>
+    <div style="display:block;width:100%;overflow:scroll;">
         <table id="datatable" class="table table-striped table-bordered table-condensed">
             <thead>
             <tr>
@@ -92,6 +92,18 @@
             return;
         }
         window.location.href = '${CONTEXT_PATH}/search/searchLog?id=' + topic + '&keyWord=' + keyWord;
+    }
+
+    document.onkeyup = function (event) {
+        var e = event || window.event;
+        var keyCode = e.keyCode || e.which;
+        switch (keyCode) {
+            case 13:
+                $("#submit_btn").click();
+                break;
+            default:
+                break;
+        }
     }
 
 </script>

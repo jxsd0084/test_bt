@@ -150,4 +150,16 @@ public class LevelOneFields {
     public void setLevel1FieldDesc(String level1FieldDesc) {
         this.level1FieldDesc = level1FieldDesc == null ? null : level1FieldDesc.trim();
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", level1FieldTag='" + level1FieldTag + '\'' +
+                ", level1FieldName='" + level1FieldName + '\'' +
+                ", level1FieldDesc='" + level1FieldDesc + '\'' +
+                ", m99FieldsCount=" + m99FieldsCount +
+                ", navigationId=" + navigationId +
+                '}';
+    }
 }
