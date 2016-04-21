@@ -210,7 +210,7 @@ public class DataTypeService {
         return res;
     }
 
-    public List<LevelOneFields> queryLevelONeByNavId(int navigationId) {
+    public List<LevelOneFields> queryLevelOneByNavId(int navigationId) {
         return levelOneFieldMapper.queryByNavId(navigationId);
     }
 

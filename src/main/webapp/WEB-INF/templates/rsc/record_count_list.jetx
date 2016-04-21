@@ -26,8 +26,11 @@
             #end
         #end
         </select>
+        <select id="event_sel1" style="width: 205px;display: none;">
+        </select>
+        <select id="event_sel2" style="width: 205px;display: none;">
+        </select>
         <span class="functions">
-                <input id="search_ipt" type="text" placeholder="请输入统计关键字.." value="${keyWord}" onclick="this.select()" style="height: 28px;"/>
             <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="统计" onclick="searchBtnClick();" /> （限制为本日内数据统计）
         </span>
 
@@ -42,7 +45,9 @@
             <thead>
             <tr>
                 <th style="width: 120px">编号</th>
-                <th>日志</th>
+                <th>埋点描述</th>
+                <th>出现频次</th>
+                <th>正确率</th>
             </tr>
             </thead>
             <tbody>
@@ -77,21 +82,119 @@
                         }
                     ]
                 });
+                //查询一级事件定义
+                $("#topic_sel").change(function(){
+                    var value1 = $("#topic_sel").val();
+                    if(value1==''){
+                        $("#event_sel1").hide();
+                        $("#event_sel2").hide();
+                    }else{
+                        $.post('${CONTEXT_PATH}/rsc/searchOneLevel', {
+                                    navigationId: value1
+                                },function(data, textStatus){
+                                    if(textStatus!="success"){
+                                        alert(textStatus);
+                                    }else{
+                                        if(data.length==0){
+                                            alert("该主题无事件行为定义！");
+                                            $("#event_sel1").hide();
+                                        }else {
+                                            var htmlContent = "<option value=''>选择一级事件类型</option>";
+                                            for (var i = 0; i < data.length; i++) {
+                                                htmlContent=htmlContent + "<option value='" + data[i].id + "'>" + data[i].level1FieldName + "</option>";
+                                            }
+                                            $('#event_sel1').html(htmlContent);
+                                            $('#event_sel1').show();
+                                        }
+                                        $('#event_sel2').hide();
+                                    }
+                                }
+                        )
+                    }
+
+                });
+                //查询二级事件定义
+                $("#event_sel1").change(function(){
+                    var value1 = $("#event_sel1").val();
+                    if(value1==''){
+                        $("#event_sel2").hide();
+                    }else{
+                        $.post('${CONTEXT_PATH}/rsc/searchTwoLevel', {
+                                    levelOneId: value1
+                                },function(data, textStatus){
+                                    if(textStatus!="success"){
+                                        alert(textStatus);
+                                    }else{
+                                        if(data.length==0){
+                                            alert("该一级事件定义无二级事件行为定义！");
+                                            $("#event_sel2").hide();
+                                        }else {
+                                            var htmlContent = "<option value=''>选择二级事件类型</option>";
+                                            for (var i = 0; i < data.length; i++) {
+                                                htmlContent=htmlContent + "<option value='" + data[i].id + "'>" + data[i].level2FieldName + "</option>";
+                                            }
+                                            $('#event_sel2').html(htmlContent);
+                                            $('#event_sel2').show();
+                                        }
+                                    }
+                                }
+                        )
+                    }
+
+                });
 
             });
 
     var searchBtnClick = function(){
-        var topic   = $('#topic_sel').val();
-        var keyWord = $('#search_ipt').val();
-        if(topic == ''){
-            alert('请选择主题 !')
+        var value1   = $('#topic_sel').val();
+        var value2 = $('#event_sel1').val();
+        var value3 = $('#event_sel2').val();
+        if(value1 == ''){
+            alert('请选择主题！')
             return;
         }
-        if(keyWord == '') {
-            alert('请填写关键词 !')
+        if(value2 == '') {
+            alert('请选择一级事件定义！')
             return;
         }
-        window.location.href = '${CONTEXT_PATH}/search/searchLog?id=' + topic + '&keyWord=' + keyWord;
+        if(value3 == '') {
+            alert('请选择二级事件定义！')
+            return;
+        }
+        $.post('${CONTEXT_PATH}/rsc/buriedPointCount', {
+                    navigationId: value1,
+                    levelOneId:     value2,
+                    levelTwoId:      value3
+                },function(data, textStatus){
+                    if(textStatus!="success"){
+                        alert(textStatus);
+                    }else{
+                        //重新加载数据前需要做如下操作,否则会报错.
+                        $('#datatable').dataTable().fnDestroy();
+                        $('#datatable').DataTable({
+                            stateSave: true,
+                            searching: true,
+                            autowidth: true,
+                            paging: true,
+                            info: true,
+                            fixedHeader: fixedHeaderObject,
+                            language: lang,
+                            dom: bootstrapDom,
+                            bScrollInfinite: true,
+                            order: [[0, 'asc']],
+                            lengthMenu: [[15, 25, 50, -1], [15, 25, 50, "All"]],
+                            data: data,
+                            bInfo: true,
+                            columnDefs: [
+                                {
+                                    sDefaultContent: ' - ',
+                                    aTargets: [ '_all' ]
+                                }
+                            ]
+                        })
+                    }
+                }
+        )
     }
 
 </script>

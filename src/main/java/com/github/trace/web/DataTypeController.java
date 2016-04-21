@@ -335,7 +335,7 @@ public class DataTypeController {
      * @return
      */
     public JSONArray getLevelOneFieldList(int navigationId) {
-        List<LevelOneFields> list = dataTypeService.queryLevelONeByNavId(navigationId);
+        List<LevelOneFields> list = dataTypeService.queryLevelOneByNavId(navigationId);
         JSONArray jsonArray1 = new JSONArray();
         for (LevelOneFields levelOneFields : list ) {
             JSONArray jsonArray2 = new JSONArray();
