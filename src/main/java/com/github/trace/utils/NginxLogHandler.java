@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import com.alibaba.fastjson.JSON;
-import com.github.autoconf.ConfigFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -44,7 +43,15 @@ public class NginxLogHandler {
     if (StringUtils.isEmpty(log)) {
       return StringUtils.EMPTY;
     }
+    long stamp = getStampFromNginxLog(log);
+    String params = StringUtils.substringBetween(log, ".gif?", " HTTP/1");
+    if (StringUtils.isNotEmpty(params)) {
+      return parseToJson(params, stamp);
+    }
+    return StringUtils.EMPTY;
+  }
 
+  public static long getStampFromNginxLog(String log) {
     DateTime jodaTime = DateTime.now();
     try {
       List<String> paramList = Splitter.on(NGINX_LOG_SPLITTER).omitEmptyStrings().splitToList(log);
@@ -57,13 +64,7 @@ public class NginxLogHandler {
     } catch (Exception e) {
       LOG.error("Cannot parse date from \" {} \", use current date instead", log, e);
     }
-
-    long stamp = jodaTime.getMillis();
-    String params = StringUtils.substringBetween(log, ".gif?", " HTTP/1");
-    if (StringUtils.isNotEmpty(params)) {
-      return parseToJson(params, stamp);
-    }
-    return StringUtils.EMPTY;
+    return jodaTime.getMillis();
   }
 
   private static String parseToJson(String params, long stamp) {

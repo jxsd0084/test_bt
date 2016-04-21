@@ -18,6 +18,7 @@ import com.github.trace.utils.NginxLogHandler;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +52,9 @@ public class Kafka2EsTask {
   private ExecutorService service;
 
   private LinkedHashMultimap<String, String> current = LinkedHashMultimap.create();
+
+  @Autowired
+  private LogStatCollector logStatCollector;
 
   @PostConstruct
   void init() {
@@ -153,6 +157,7 @@ public class Kafka2EsTask {
       try {
         topic = message.topic();
         content = new String(message.message(), Charsets.UTF_8);
+        logStatCollector.report(topic, content);
         current.put(topic, convert(topic, content));
       } catch (Exception e) {
         LOG.error("Cannot consume topic={}, body={}", topic, content, e);
