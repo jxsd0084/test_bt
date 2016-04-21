@@ -86,6 +86,8 @@
                 $("#topic_sel").change(function(){
                     var value1 = $("#topic_sel").val();
                     if(value1==''){
+                        $("#event_sel2").val('');
+                        $("#event_sel1").val('');
                         $("#event_sel1").hide();
                         $("#event_sel2").hide();
                     }else{
@@ -97,6 +99,7 @@
                                     }else{
                                         if(data.length==0){
                                             alert("该主题无事件行为定义！");
+                                            $("#event_sel1").val('');
                                             $("#event_sel1").hide();
                                         }else {
                                             var htmlContent = "<option value=''>选择一级事件类型</option>";
@@ -106,6 +109,7 @@
                                             $('#event_sel1').html(htmlContent);
                                             $('#event_sel1').show();
                                         }
+                                        $("#event_sel2").val('');
                                         $('#event_sel2').hide();
                                     }
                                 }
@@ -117,6 +121,7 @@
                 $("#event_sel1").change(function(){
                     var value1 = $("#event_sel1").val();
                     if(value1==''){
+                        $("#event_sel2").val('');
                         $("#event_sel2").hide();
                     }else{
                         $.post('${CONTEXT_PATH}/rsc/searchTwoLevel', {
@@ -127,6 +132,7 @@
                                     }else{
                                         if(data.length==0){
                                             alert("该一级事件定义无二级事件行为定义！");
+                                            $("#event_sel2").val('');
                                             $("#event_sel2").hide();
                                         }else {
                                             var htmlContent = "<option value=''>选择二级事件类型</option>";
