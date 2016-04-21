@@ -89,11 +89,11 @@ public class SearchController {
 	// 自动缩进
 	private StringBuilder autoIndent(StringBuilder sb) {
 		String  value = sb.toString();
+		value = value.replaceAll("\n","<br/>");
 		String[] vals = value.split("<br/>");
 		StringBuilder valueSb = new StringBuilder();
 		for(String s : vals){
-			s = s.replaceAll("\n","<br/>");
-			s = getStr(s).replaceAll("     "," ");
+			s = getStr(s);
 			valueSb.append(s + "<br/>");
 		}
 		return valueSb;
