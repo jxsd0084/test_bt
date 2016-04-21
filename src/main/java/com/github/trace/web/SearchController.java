@@ -92,7 +92,8 @@ public class SearchController {
 		String[] vals = value.split("<br/>");
 		StringBuilder valueSb = new StringBuilder();
 		for(String s : vals){
-			s = getStr(s);
+			s = s.replaceAll("\n","<br/>");
+			s = getStr(s).replaceAll("     "," ");
 			valueSb.append(s + "<br/>");
 		}
 		return valueSb;
@@ -103,7 +104,7 @@ public class SearchController {
             String newStr = str.substring(240);
 			return str.substring(0, 240) + "<br/>" + getStr(newStr);
 		}else{
-			return str;
+			return str+ "<br/>";
 		}
 	}
 
