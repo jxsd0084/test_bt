@@ -42,6 +42,11 @@ public class AnalyzeLogService {
 
 
     private Map<String,Map<String,String>> buriedMap=new TreeMap<String,Map<String,String>>();
+
+
+    private Map<String,Map<String,Map<String,String>>> buriedMapCache=new HashMap<String,Map<String,Map<String,String>>>();
+    private Map<String,Long> buriedMapCacheTimestamp=new HashMap<>();
+
     private Map<String,Set<String>> tagMap=new TreeMap<String,Set<String>>();
     private Set<String> tagSet=new HashSet<String>();
     private Map<String,Map<String,Map<String,String>>>  buriedTwoMap=new HashMap<String,Map<String,Map<String,String>>>();
@@ -76,20 +81,32 @@ public class AnalyzeLogService {
         }
     }
 
-    public void setBuriedInfoByBusi(String navName){
-        List<AnalyzeLogFields> fields=analyzeLogMapperr.getBuriedInfoByBusi(navName);
+    public Map<String,Map<String,String>> getBuriedInfoByBusi(String navName){
 
-        buriedMap.clear();
-        for(AnalyzeLogFields field:fields){
-            Map<String,String> map=new HashMap<String, String>();
+        if(!buriedMapCache.containsKey(navName)||(buriedMapCache.containsKey(navName)&&(System.currentTimeMillis()-buriedMapCacheTimestamp.getOrDefault(navName,System.currentTimeMillis()))>=3600*1000L)) {
+            List<AnalyzeLogFields> fields = analyzeLogMapperr.getBuriedInfoByBusi(navName);
 
-            map.put("desc",field.getBp_value_desc());
-            map.put("type",field.getBp_value());
-            map.put("ischeck",String.valueOf(field.getIs_checked()));
-            map.put("regex",field.getRegex());
+            System.out.println("get buriedMap from:"+navName);
+            LOG.warn("get buriedMap from:"+navName);
 
-            buriedMap.put(field.getBp_name(),map);
+            Map<String,Map<String,String>> buriedMap=new HashMap<>();
+            buriedMap.clear();
+            for (AnalyzeLogFields field : fields) {
+                Map<String, String> map = new HashMap<String, String>();
+
+                map.put("desc", field.getBp_value_desc());
+                map.put("type", field.getBp_value());
+                map.put("ischeck", String.valueOf(field.getIs_checked()));
+                map.put("regex", field.getRegex());
+
+                buriedMap.put(field.getBp_name(), map);
+            }
+
+            buriedMapCache.put(navName,buriedMap);
+            buriedMapCacheTimestamp.put(navName,System.currentTimeMillis());
         }
+
+        return buriedMapCache.get(navName);
     }
 
     public void setTagGroupInfo(){
@@ -595,7 +612,7 @@ public class AnalyzeLogService {
 
 
     public  JSONArray  formatLog(String busiName,String Target){
-        setBuriedInfoByBusi(busiName);
+        buriedMap=getBuriedInfoByBusi(busiName);
 
         List<Map<String,List<String>>> output=process(Target);
 
@@ -671,7 +688,7 @@ public class AnalyzeLogService {
         return ja1;
     }
     public Set<String> filterToES(String busiName,String Target,boolean isSentMonitor){
-        setBuriedInfoByBusi(busiName);
+        buriedMap=getBuriedInfoByBusi(busiName);
 
         List<Map<String,List<String>>> result=process(Target);
 
@@ -751,7 +768,7 @@ public class AnalyzeLogService {
 
         String Target =  cepService.getServerLog(topic,topicNo).toString();
 
-        setBuriedInfoByBusi(navName);
+        buriedMap=getBuriedInfoByBusi(navName);
 
         List<Map<String,List<String>>> result=process(Target);
 
