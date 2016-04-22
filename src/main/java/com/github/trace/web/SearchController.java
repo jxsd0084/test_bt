@@ -179,6 +179,7 @@ public class SearchController {
 		String[] strs = keyWord.split(" ");
 		boolean flag = false;
 		for(String str:strs){
+			str = str.replaceAll("\\*","");
 			if(str!=null&&!"".equals(str)&&!"AND".equals(str)&&!"OR".equals(str)&&
 					!"iPhone*".equals(str)&&!"Android".equals(str)&&
 					(temp.equals(str) || temp2.equals(str) ||	temp.contains(str)))
