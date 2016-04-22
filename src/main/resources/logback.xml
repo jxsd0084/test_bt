@@ -12,8 +12,8 @@
 
         <!-- 可让每天产生一个日志文件，最多 7 个，自动回滚 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.home}/logs/biz-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
-            <maxHistory>7</maxHistory>
+            <fileNamePattern>${catalina.home}/logs/biz-%d{yyyy-MM-dd-HH}.log.zip</fileNamePattern>
+            <maxHistory>12</maxHistory>
         </rollingPolicy>
 
         <encoder>
@@ -31,20 +31,7 @@
         <appender-ref ref="RollingFile"/>
     </appender>
 
-    <logger name="druid.sql" level="INFO"/>
-
-    <logger name="org.hibernate" level="WARN"/>
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="com.opensymphony" level="WARN"/>
-    <logger name="org.apache" level="WARN"/>
-
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG"/>
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
-    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>
-    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>
-
-    <root level="info">
+    <root level="WARN">
         <appender-ref ref="ASYNC"/>
     </root>
 </configuration>
