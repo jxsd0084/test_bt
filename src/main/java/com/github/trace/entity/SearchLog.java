@@ -7,6 +7,7 @@ public class SearchLog {
 
 	private String topic;
 	private String keyWord;
+	private String highLightKey;
 	private String tag;
 	private long   startTime;
 	private long   endTime;
@@ -35,6 +36,14 @@ public class SearchLog {
 
 	public void setTopic(String topic) {
 		this.topic = topic;
+	}
+
+	public String getHighLightKey() {
+		return highLightKey;
+	}
+
+	public void setHighLightKey(String highLightKey) {
+		this.highLightKey = highLightKey;
 	}
 
 	public String getKeyWord() {
@@ -68,4 +77,5 @@ public class SearchLog {
 	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
+
 }

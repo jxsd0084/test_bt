@@ -54,6 +54,7 @@ public class SearchController {
 	    SearchLog sLog = new SearchLog();
 		sLog.setTopic(topic);                                           // 主题
 		sLog.setKeyWord(formateStr(keyWord,navigationItem0.getName())); // 搜索关键词
+		sLog.setHighLightKey(addWhere(keyWord,navigationItem0.getName()));
 		sLog.setTag("stamp");                                           // 暂时写死
 		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
 		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
@@ -68,6 +69,24 @@ public class SearchController {
     }
 
 	private String formateStr(String key,String name){
+        String value = addWhere(key,name);
+		if("IOS".equalsIgnoreCase(name)){
+			if(value.length()>0)
+				value +=" AND iPhone*";
+			else
+				value = "iPhone*";
+
+		}else if("Android".equals(name)){
+			if(value.length()>0)
+				value +=" AND Android";
+			else
+				value = "Android";
+		}
+
+		return value;
+	}
+
+	private String addWhere(String key,String name){
 		String value ="";
 		if(key==null||"".equals(key.trim()))
 			return "";
@@ -97,20 +116,6 @@ public class SearchController {
 			}
 			value = value.substring(0,value.lastIndexOf(" AND"));
 		}
-
-		if("IOS".equalsIgnoreCase(name)){
-			if(value.length()>0)
-				value +=" AND iPhone*";
-			else
-				value = "iPhone*";
-
-		}else if("Android".equals(name)){
-			if(value.length()>0)
-				value +=" AND Android";
-			else
-				value = "Android";
-		}
-
 		return value;
 	}
 
@@ -160,7 +165,7 @@ public class SearchController {
 
 	// 高亮
 	private void highLight(SearchLog sLog, StringBuilder sb, Map.Entry<String, Object> entry) {
-		String keyWord    = sLog.getKeyWord().trim();
+		String keyWord    = sLog.getHighLightKey().trim();
 		String entryKey   = entry.getKey();
 		String entryValue = entry.getValue().toString();
 		String temp       = entryKey + " : " + entryValue;
