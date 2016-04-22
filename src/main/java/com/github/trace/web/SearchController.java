@@ -186,7 +186,7 @@ public class SearchController {
 		}
 
 		if(flag) {
-			sb.append("<br/>");
+//			sb.append("<br/>");
 			sb.append("<font color=\"red\">");
 			sb.append(entryKey + " : " + entryValue);
 			sb.append("</font>");
@@ -194,7 +194,7 @@ public class SearchController {
 			sb.append("<br/>");
 		}else{
 			sb.append(entryKey + " : " + entryValue);
-			sb.append(",  ");
+			sb.append(",  <br/>");
 		}
 	}
 
