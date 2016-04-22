@@ -274,14 +274,15 @@ public class AnalyzeLogService {
 
         Map<String,List<String>> extra=new HashMap<>();
 
-        try {
+
             for (int i = 0; i < jsonArray.size(); i++) {
+
                 LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {
                 });
 
 
                 Map<String, List<String>> map = new HashMap<String, List<String>>();
-
+                try {
                 for (Map.Entry<String, Map<String, String>> entry1 : buriedMap.entrySet()) {
                     List<String> list = new ArrayList<String>();
 
@@ -313,7 +314,7 @@ public class AnalyzeLogService {
 
                 String enterKey;
 
-                if (jsonMap2.containsKey(MobileDevEnterKey) && jsonMap2.get(MobileDevEnterKey).matches(MobileDevEnterVal)) {
+                if (map.containsKey(MobileDevEnterKey)&&jsonMap2.containsKey(MobileDevEnterKey) && jsonMap2.get(MobileDevEnterKey).matches(MobileDevEnterVal)) {
                     map.get(MobileDevEnterKey).add(jsonMap2.get(MobileDevEnterKey));
                     map.get(MobileDevEnterKey).add("");
 
@@ -429,7 +430,7 @@ public class AnalyzeLogService {
                     }
 
 
-                } else if (jsonMap2.containsKey(NonMobileDevEnter)) {
+                } else if (map.containsKey(NonMobileDevEnter)&&jsonMap2.containsKey(NonMobileDevEnter)) {
 
                     map.get(NonMobileDevEnter).add(NonMobileDevEnter);
                     map.get(NonMobileDevEnter).add("");
@@ -541,6 +542,8 @@ public class AnalyzeLogService {
                         list.add(desc3);
                         list.add(type3);
                         list.add(regex3);
+//                        list.add("");
+//                        list.add("");
                         extra.put(bKey,list);
                     }
 
@@ -574,12 +577,15 @@ public class AnalyzeLogService {
 
                 }
                 output.add(map);
+                }catch(Exception e){
+                    LOG.debug("process log exception:",e);
+                    LOG.debug("navName:"+navName);
+                    LOG.debug("map:"+map);
+                    //LOG.debug(jsonArray.toJSONString());
+                    LOG.debug(jsonArray.get(i).toString());
+                }
             }
-        }catch(Exception e){
-            LOG.warn("process log exception:",e);
-            LOG.warn("navName:"+navName);
-            LOG.warn(jsonArray.toJSONString());
-        }
+
 
 
         int count=0;
@@ -638,7 +644,7 @@ public class AnalyzeLogService {
                 try {
                     val4 = URLDecoder.decode(val4,"UTF-8");
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    LOG.debug("UnsupportedEncodingException:",e);
                 }
                 String err4=m2.getValue().get(5);
 

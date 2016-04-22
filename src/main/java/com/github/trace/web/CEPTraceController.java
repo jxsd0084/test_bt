@@ -227,9 +227,11 @@ public class CEPTraceController {
 //        target="[{\"Action\":\"FHE/EM1AOPEN/Messenger/CheckAppUpdated\",   \"Platform\":1303,\"DeviceID\":\"a87cc192-e0d7-4fb0-a1f1-d0e59e0559a3\",\"IP\":\"58.251.156.12\",\"_ip\":\"172.31.103.121\",\"Time\":   1461226973850,\"Duration\":10,\"ProductVersion\":\"26931\",\"EnterpriseID\":54933,\"UserID\":1763,\"ServiceType\":0,\"OSVersion\":\"4. 4.4\",\"Package\":0,\"BrowserVersion\":\"Android.26931\",\"_time\":\"2016-04-21 16:22:53.850\",\"Browser\":\"Android.26931\"}]";
 //        target=" [{\"realip\":\"10.20.1.23\",\"M1\":\"fsfte2b\",\"M2\":\"1017\",    \"M3\":\"ecf557a77013dafc53b6fd574a80fd7b\",\"M99.M1\":\"unactivite\",\"M4\":\"iPhone OS\",\"_ip\":\"172.31.103.120\",\"M5\":\"9.3.1\",     \"M6\":\"5.3\",\"M7\":\"100155\",\"M97\":9,\"M8\":\"iPhone7,2\",\"M96\":\"WIFI\",\"M98\":1460546078775,\"_time\":\"2016-04-13 19:15:00.825\"}]";
         //navName="CEP";
-//        target="[{\"realip\":\"1.60.160.78\",\"M1\":\"277550\",\"M2\":\"1021\",\"M3\":\"867516025663722\",\"M99.M\n" +
-//                "1\":\"FieldLocation_137\",\"M4\":\"Android\",\"_ip\":\"172.17.43.9\",\"M5\":\"5.0.2\",\"M6\":\"5.2.1\",\"M7\":\"25843\",\"M97\":\"7\",\"M8\":\"Xiaomi/Redmi Note 2/armeabi-v7a/\n" +
-//                "armeabi\",\"M96\":\"3G\",\"M98\":\"1460698956747\",\"_time\":\"2016-04-15 19:06:16.166\"}]";
+
+        //navName="网站";
+        //target="[{\"_platform\":\"android\",\"_t\":\"1461208363759\",\"appid\":\"pkhelper\",\"stamp\":\"1461208367000\",\"actionId\":\"api\",\"_src\":\"h5\",\"appversion\":\"5.2\",\"api\":\"%2FH%2FFeedPk%2FGetPks\",\"time\":\"212\",\"projectId\":\"pkhelper\",\"version\":\"6.0\"}]";
+//        navName="CEP";
+//        target="[{\"Action\":\"FHE/EM1ACRM/HomePage/GetBirthdayList\",\"Platform\":1303,\"DeviceID\":\"3514bdcd-8411-4fe5-b429-31d613f7eafa\",\"IP\":\"117.136.40.224\",\"_ip\":\"172.17.32.160\",\"Time\":1460724187181,\"Duration\":8,\"ProductVersion\":\"25843\",\"EnterpriseID\":82085,\"UserID\":30,\"ServiceType\":0,\"OSVersion\":\"4.4.4\",\"Package\":0,\"BrowserVersion\":\"Android.25843\",\"_time\":\"2016-04-15 20:43:07.181\",\"Browser\":\"Android.25843\"}]";
         JSONArray rt=analyzeLogService.formatLog(navName,target);
 
         ControllerHelper.setLeftNavigationTree(model, cepService, "");
