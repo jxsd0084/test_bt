@@ -634,49 +634,54 @@ public class AnalyzeLogService {
         for(Map<String,List<String>> m:output){
 
             for(Map.Entry<String,List<String>> m2:m.entrySet()){
-                JSONArray ja2 = new JSONArray();
-                JSONArray ja3 = new JSONArray();
-                String key4=m2.getKey();
-                JSONArray ja4=rt.get(key4);
-
-                String  desc4=m2.getValue().get(1);
-                String  val4=m2.getValue().get(4);
                 try {
-                    val4 = URLDecoder.decode(val4,"UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    LOG.debug("UnsupportedEncodingException:",e);
-                }
-                String err4=m2.getValue().get(5);
+                    JSONArray ja2 = new JSONArray();
+                    JSONArray ja3 = new JSONArray();
+                    String key4 = m2.getKey();
+                    JSONArray ja4 = rt.get(key4);
 
-                if(ja4==null) {
-                    ja2.add(key4);
-                    ja2.add(desc4);
+                    String desc4 = m2.getValue().get(1);
+                    String val4 = m2.getValue().get(4);
+                    try {
+                        val4 = URLDecoder.decode(val4, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        LOG.debug("UnsupportedEncodingException:", e);
+                    }
+                    String err4 = m2.getValue().get(5);
 
-                    if(err4.equals("")){
-                        ja3.add(true);
-                    }else{
-                        ja3.add(false);
+                    if (ja4 == null) {
+                        ja2.add(key4);
+                        ja2.add(desc4);
+
+                        if (err4.equals("")) {
+                            ja3.add(true);
+                        } else {
+                            ja3.add(false);
+                        }
+
+                        ja3.add(val4);
+                        ja3.add(err4);
+
+                        ja2.add(ja3);
+
+                        rt.put(key4, ja2);
+
+                    } else {
+                        if (err4.equals("")) {
+                            ja3.add(true);
+                        } else {
+                            ja3.add(false);
+                        }
+                        ja3.add(val4);
+                        ja3.add(err4);
+
+                        rt.get(key4).add(ja3);
                     }
 
-                    ja3.add(val4);
-                    ja3.add(err4);
-
-                    ja2.add(ja3);
-
-                    rt.put(key4,ja2);
-
-                }else{
-                    if(err4.equals("")){
-                        ja3.add(true);
-                    }else{
-                        ja3.add(false);
-                    }
-                    ja3.add(val4);
-                    ja3.add(err4);
-
-                    rt.get(key4).add(ja3);
+                }catch(Exception e){
+                    LOG.debug("Exception e:",e);
+                    LOG.debug(m2.toString());
                 }
-
             }
         }
 
