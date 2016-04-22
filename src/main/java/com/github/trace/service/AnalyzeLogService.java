@@ -257,7 +257,7 @@ public class AnalyzeLogService {
 
     }
 
-    public List<Map<String,List<String>>>  process(String Target) {
+    public List<Map<String,List<String>>>  process(String Target,String navName) {
         JSONArray jsonArray = JSON.parseArray(Target);
         //JSONArray ja1 = new JSONArray();
         String key;
@@ -525,6 +525,9 @@ public class AnalyzeLogService {
                 }
                 for (String bKey : bSets) {
                     Map<String, String> bVal = buriedMap.get(bKey);
+
+                    if(bVal==null){continue;}
+
                     val3 = jsonMap2.get(bKey);
                     desc3 = bVal.get("desc");
                     type3 = bVal.get("type");
@@ -574,6 +577,7 @@ public class AnalyzeLogService {
             }
         }catch(Exception e){
             LOG.warn("process log exception:",e);
+            LOG.warn("navName:"+navName);
             LOG.warn(jsonArray.toJSONString());
         }
 
@@ -614,7 +618,7 @@ public class AnalyzeLogService {
     public  JSONArray  formatLog(String busiName,String Target){
         buriedMap=getBuriedInfoByBusi(busiName);
 
-        List<Map<String,List<String>>> output=process(Target);
+        List<Map<String,List<String>>> output=process(Target,busiName);
 
 
         JSONArray ja1 = new JSONArray();
@@ -690,7 +694,7 @@ public class AnalyzeLogService {
     public Set<String> filterToES(String busiName,String Target,boolean isSentMonitor){
         buriedMap=getBuriedInfoByBusi(busiName);
 
-        List<Map<String,List<String>>> result=process(Target);
+        List<Map<String,List<String>>> result=process(Target,busiName);
 
         StringBuffer buffer=new StringBuffer();
 
@@ -770,7 +774,7 @@ public class AnalyzeLogService {
 
         buriedMap=getBuriedInfoByBusi(navName);
 
-        List<Map<String,List<String>>> result=process(Target);
+        List<Map<String,List<String>>> result=process(Target,navName);
 
         StringBuffer buffer=new StringBuffer();
 
