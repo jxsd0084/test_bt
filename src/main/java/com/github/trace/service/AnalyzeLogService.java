@@ -631,6 +631,11 @@ public class AnalyzeLogService {
 
                 String  desc4=m2.getValue().get(1);
                 String  val4=m2.getValue().get(4);
+                try {
+                    val4 = URLDecoder.decode(val4,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 String err4=m2.getValue().get(5);
 
                 if(ja4==null) {
