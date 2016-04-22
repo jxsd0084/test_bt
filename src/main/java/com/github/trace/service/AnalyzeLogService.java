@@ -350,7 +350,7 @@ public class AnalyzeLogService {
                                 for (String k : keySets) {
 
                                     if (k == null) {
-                                        LOG.warn("ks is null:" + enterKey);
+                                        LOG.debug("ks is null:" + enterKey);
                                         continue;
                                     }
                                     key2 = MobileDevEnterPre + "." + k;
