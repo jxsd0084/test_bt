@@ -49,7 +49,6 @@ public class RecordStatisticsController {
                                                                     @RequestParam("buriedPoint") String buriedPoint){
         NavigationItem0 navigationItem0 = navigation0Service.queryById(navigationId);
         List<Map<String, Object>> result =elasticsearchService.aggregation(navigationItem0.getName(),buriedPoint, System.currentTimeMillis()-3600*24*1000L, System.currentTimeMillis());
-        LOGGER.info("请求参数："+navigationItem0.getName()+buriedPoint+"es查询结果为：" + result.toString());
         return result;
     }
 
@@ -63,14 +62,12 @@ public class RecordStatisticsController {
     @RequestMapping("/searchTwoLevel")
     public @ResponseBody List<LevelTwoFields> searchTwoLevel(@RequestParam("levelOneId") int levelOneId) {
         List<LevelTwoFields> list = dataTypeService.getLevelTwoFieldList(levelOneId);
-        LOGGER.info("查询二级事件结果：" + list.toString());
         return list;
     }
 
     @RequestMapping("/searchBuriedPoint")
     public @ResponseBody List<BuriedPoint0> searchBuriedPoint(@RequestParam("navigationId") int navigationId) {
         List<BuriedPoint0> list = cepService.getBuriedPoint0List(navigationId);
-        LOGGER.info("查询导航下埋点结果：" + list.toString());
         return list;
     }
 }
