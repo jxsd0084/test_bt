@@ -197,7 +197,10 @@ public class AnalyzeLogService {
                 e.printStackTrace();
             }
 
-            Pattern pattern2 = Pattern.compile(patternString2);
+
+            try {
+                Pattern pattern2 = Pattern.compile(patternString2);
+
 
             Matcher matcher2 = pattern2.matcher(val);
             b = matcher2.matches();
@@ -221,6 +224,10 @@ public class AnalyzeLogService {
                 if (!b) {
                     err = "正则不匹配";
                 }
+            }
+            }catch(Exception e){
+                LOG.debug("handleField regex:"+patternString2+"Exception:",e);
+                err="正则表达式格式异常";
             }
 
         }else{
@@ -349,7 +356,7 @@ public class AnalyzeLogService {
                                 for (String k : keySets) {
 
                                     if (k == null) {
-                                        LOG.debug("ks is null:" + enterKey);
+                                        LOG.debug("ks is null:" + enterKey+" navName:"+navName+" source:"+jsonMap2.toString());
                                         continue;
                                     }
                                     key2 = MobileDevEnterPre + "." + k;
