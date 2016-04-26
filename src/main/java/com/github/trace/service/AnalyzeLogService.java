@@ -87,7 +87,7 @@ public class AnalyzeLogService {
             List<AnalyzeLogFields> fields = analyzeLogMapperr.getBuriedInfoByBusi(navName);
 
             //System.out.println("get buriedMap from:"+navName);
-            LOG.warn("get buriedMap from:"+navName);
+            LOG.debug("get buriedMap from:"+navName);
 
             Map<String,Map<String,String>> buriedMap=new HashMap<>();
             buriedMap.clear();
@@ -718,65 +718,65 @@ public class AnalyzeLogService {
     }
     public Set<String> filterToES(String busiName,String Target,boolean isSentMonitor){
         Set<String> esOutput=new HashSet<String>();
-//        buriedMap=getBuriedInfoByBusi(busiName);
-//
-//        List<Map<String,List<String>>> result=process(Target,busiName);
-//
-//        StringBuffer buffer=new StringBuffer();
-//
-//        String message;
-//
-//        String bpName,bpDesc,bpType,bpVal,err;
-//        boolean isSent=false;
-//
-//
-//
-//        for(Map<String,List<String>> ele:result){
-//            buffer.append("测试，请忽略\n[埋点异常   Busi:");
-//            buffer.append(busiName);
-//            buffer.append("]\n");
-//
-//            Map<String,String> map=new HashMap<String, String>();
-//
-//
-//            for(Map.Entry<String,List<String>> m:ele.entrySet()){
-//                bpName=m.getKey();
-//                List<String> val=m.getValue();
-//                bpDesc=val.get(1);
-//                bpType=val.get(2);
-//                bpVal=val.get(4);
-//                err=val.get(5);
-//
-//                if(!err.equals("")) {
-//                    isSent=true;
-//                    buffer.append(bpName);
-//                    buffer.append(":");
-//                    buffer.append(bpVal);
-//                    buffer.append(" Type:");
-//                    buffer.append(bpType);
-//                    buffer.append("  Error:");
-//                    buffer.append(err);
-//                    buffer.append("\n");
-//                }
-//
-//
-//                map.put(bpName,bpVal);
-//
-//
-//            }
-//
-//            if(isSent) {
-//                message = buffer.toString();
-//
-//                if(isSentMonitor) {
-//                    // SendLogCheckMonitor.sendPostRequest(busiName,message);
-//                    LOG.info("####################sent log check monitor##################");
-//                }
-//                esOutput.add(JSON.toJSONString(map));
-//            }
-//            buffer.setLength(0);
-//
-//        }
+        buriedMap=getBuriedInfoByBusi(busiName);
+
+        List<Map<String,List<String>>> result=process(Target,busiName);
+
+        StringBuffer buffer=new StringBuffer();
+
+        String message;
+
+        String bpName,bpDesc,bpType,bpVal,err;
+        boolean isSent=false;
+
+
+
+        for(Map<String,List<String>> ele:result){
+            buffer.append("测试，请忽略\n[埋点异常   Busi:");
+            buffer.append(busiName);
+            buffer.append("]\n");
+
+            Map<String,String> map=new HashMap<String, String>();
+
+
+            for(Map.Entry<String,List<String>> m:ele.entrySet()){
+                bpName=m.getKey();
+                List<String> val=m.getValue();
+                bpDesc=val.get(1);
+                bpType=val.get(2);
+                bpVal=val.get(4);
+                err=val.get(5);
+
+                if(!err.equals("")) {
+                    isSent=true;
+                    buffer.append(bpName);
+                    buffer.append(":");
+                    buffer.append(bpVal);
+                    buffer.append(" Type:");
+                    buffer.append(bpType);
+                    buffer.append("  Error:");
+                    buffer.append(err);
+                    buffer.append("\n");
+                }
+
+
+                map.put(bpName,bpVal);
+
+
+            }
+
+            if(isSent) {
+                message = buffer.toString();
+
+                if(isSentMonitor) {
+                    // SendLogCheckMonitor.sendPostRequest(busiName,message);
+                    LOG.info("####################sent log check monitor##################");
+                }
+                esOutput.add(JSON.toJSONString(map));
+            }
+            buffer.setLength(0);
+
+        }
         return esOutput;
     }
 
