@@ -226,7 +226,7 @@ public class AnalyzeLogService {
                 }
             }
             }catch(Exception e){
-                LOG.debug("handleField regex:"+patternString2+"Exception:",e);
+                LOG.debug("handleField regex:"+patternString2+" Exception:",e);
                 err="正则表达式格式异常";
             }
 
@@ -717,65 +717,66 @@ public class AnalyzeLogService {
         return ja1;
     }
     public Set<String> filterToES(String busiName,String Target,boolean isSentMonitor){
-        buriedMap=getBuriedInfoByBusi(busiName);
-
-        List<Map<String,List<String>>> result=process(Target,busiName);
-
-        StringBuffer buffer=new StringBuffer();
-
-        String message;
-
-        String bpName,bpDesc,bpType,bpVal,err;
-        boolean isSent=false;
-
         Set<String> esOutput=new HashSet<String>();
-
-        for(Map<String,List<String>> ele:result){
-            buffer.append("测试，请忽略\n[埋点异常   Busi:");
-            buffer.append(busiName);
-            buffer.append("]\n");
-
-            Map<String,String> map=new HashMap<String, String>();
-
-
-            for(Map.Entry<String,List<String>> m:ele.entrySet()){
-                bpName=m.getKey();
-                List<String> val=m.getValue();
-                bpDesc=val.get(1);
-                bpType=val.get(2);
-                bpVal=val.get(4);
-                err=val.get(5);
-
-                if(!err.equals("")) {
-                    isSent=true;
-                    buffer.append(bpName);
-                    buffer.append(":");
-                    buffer.append(bpVal);
-                    buffer.append(" Type:");
-                    buffer.append(bpType);
-                    buffer.append("  Error:");
-                    buffer.append(err);
-                    buffer.append("\n");
-                }
-
-
-                map.put(bpName,bpVal);
-
-
-            }
-
-            if(isSent) {
-                message = buffer.toString();
-
-                if(isSentMonitor) {
-                    // SendLogCheckMonitor.sendPostRequest(busiName,message);
-                    LOG.info("####################sent log check monitor##################");
-                }
-                esOutput.add(JSON.toJSONString(map));
-            }
-            buffer.setLength(0);
-
-        }
+//        buriedMap=getBuriedInfoByBusi(busiName);
+//
+//        List<Map<String,List<String>>> result=process(Target,busiName);
+//
+//        StringBuffer buffer=new StringBuffer();
+//
+//        String message;
+//
+//        String bpName,bpDesc,bpType,bpVal,err;
+//        boolean isSent=false;
+//
+//
+//
+//        for(Map<String,List<String>> ele:result){
+//            buffer.append("测试，请忽略\n[埋点异常   Busi:");
+//            buffer.append(busiName);
+//            buffer.append("]\n");
+//
+//            Map<String,String> map=new HashMap<String, String>();
+//
+//
+//            for(Map.Entry<String,List<String>> m:ele.entrySet()){
+//                bpName=m.getKey();
+//                List<String> val=m.getValue();
+//                bpDesc=val.get(1);
+//                bpType=val.get(2);
+//                bpVal=val.get(4);
+//                err=val.get(5);
+//
+//                if(!err.equals("")) {
+//                    isSent=true;
+//                    buffer.append(bpName);
+//                    buffer.append(":");
+//                    buffer.append(bpVal);
+//                    buffer.append(" Type:");
+//                    buffer.append(bpType);
+//                    buffer.append("  Error:");
+//                    buffer.append(err);
+//                    buffer.append("\n");
+//                }
+//
+//
+//                map.put(bpName,bpVal);
+//
+//
+//            }
+//
+//            if(isSent) {
+//                message = buffer.toString();
+//
+//                if(isSentMonitor) {
+//                    // SendLogCheckMonitor.sendPostRequest(busiName,message);
+//                    LOG.info("####################sent log check monitor##################");
+//                }
+//                esOutput.add(JSON.toJSONString(map));
+//            }
+//            buffer.setLength(0);
+//
+//        }
         return esOutput;
     }
 
