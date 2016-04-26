@@ -11,6 +11,7 @@
 ##                    <li ><a href="${CONTEXT_PATH}/param/list">KAFKA主题配置</a></li>
                     <li ><a href="${CONTEXT_PATH}/nav/list">导航树配置</a></li>
                     <li ><a href="${CONTEXT_PATH}/search/list">埋点历史搜索</a></li>
+                    <li ><a href="${CONTEXT_PATH}/rsc/list">埋点数据统计</a></li>
                 </ul>
             </div>
             <div>
