@@ -33,7 +33,7 @@
         <select id="buriedPoint_sel1" style="width: 205px;display: none;">
             </select>
         <span class="functions">
-            <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="统计" onclick="searchBtnClick();" /> （限制为24小时内数据统计）
+            <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="统计" onclick="searchBtnClick();" /> （默认为查询全部行为）
         </span>
 
     </div>
@@ -75,37 +75,6 @@
                 } );
                 //查询一级事件定义
                 $("#topic_sel").change(function(){
-                      /*  var value1 = $("#topic_sel").val();
-                        if(value1==''){
-                        $("#event_sel2").val('');
-                        $("#event_sel1").val('');
-                        $("#event_sel1").hide();
-                        $("#event_sel2").hide();
-                    }else{
-                        $.post('${CONTEXT_PATH}/rsc/searchOneLevel', {
-                                    navigationId: value1
-                                },function(data, textStatus){
-                                    if(textStatus!="success"){
-                                        alert(textStatus);
-                                    }else{
-                                        if(data.length==0){
-                                            alert("该主题无事件行为定义！");
-                                            $("#event_sel1").val('');
-                                            $("#event_sel1").hide();
-                                        }else {
-                                            var htmlContent = "<option value=''>选择一级事件类型</option>";
-                                            for (var i = 0; i < data.length; i++) {
-                                                htmlContent=htmlContent + "<option value='" + data[i].id + "'>" + data[i].level1FieldName + "</option>";
-                                            }
-                                            $('#event_sel1').html(htmlContent);
-                                            $('#event_sel1').show();
-                                        }
-                                        $("#event_sel2").val('');
-                                        $('#event_sel2').hide();
-                                    }
-                                }
-                        )
-                    }*/
                     var value1 = $("#topic_sel").val();
                     if(value1==''){
                         $("#buriedPoint_sel1").val('');
@@ -122,9 +91,13 @@
                                             $("#buriedPoint_sel1").val('');
                                             $("#buriedPoint_sel1").hide();
                                         }else {
-                                            var htmlContent = "<option value=''>选择查询埋点项</option>";
+                                            var htmlContent = "";
                                             for (var i = 0; i < data.length; i++) {
-                                                htmlContent=htmlContent + "<option value='" + data[i].bpName + "'>" + data[i].bpName + "</option>";
+                                                if(data[i].bpName=="M99.M1"||data[i].bpName.toLowerCase()=="actionid") {
+                                                    htmlContent = htmlContent + "<option value='" + data[i].bpName + "' selected='selected'>" + "用户行为统计" + "</option>";
+                                                }else{
+                                                    htmlContent = htmlContent + "<option value='" + data[i].bpName + "'>" + data[i].bpValueDesc + "</option>";
+                                                }
                                             }
                                             $('#buriedPoint_sel1').html(htmlContent);
                                             $('#buriedPoint_sel1').show();
@@ -134,38 +107,6 @@
                         )
                     }
                 });
-                //查询二级事件定义
-                $("#event_sel1").change(function(){
-                    var value1 = $("#event_sel1").val();
-                    if(value1==''){
-                        $("#event_sel2").val('');
-                        $("#event_sel2").hide();
-                    }else{
-                        $.post('${CONTEXT_PATH}/rsc/searchTwoLevel', {
-                                    levelOneId: value1
-                                },function(data, textStatus){
-                                    if(textStatus!="success"){
-                                        alert(textStatus);
-                                    }else{
-                                        if(data.length==0){
-                                            alert("该一级事件定义无二级事件行为定义！");
-                                            $("#event_sel2").val('');
-                                            $("#event_sel2").hide();
-                                        }else {
-                                            var htmlContent = "<option value=''>选择二级事件类型</option>";
-                                            for (var i = 0; i < data.length; i++) {
-                                                htmlContent=htmlContent + "<option value='" + data[i].id + "'>" + data[i].level2FieldName + "</option>";
-                                            }
-                                            $('#event_sel2').html(htmlContent);
-                                            $('#event_sel2').show();
-                                        }
-                                    }
-                                }
-                        )
-                    }
-
-                });
-
             });
 
     var searchBtnClick = function(){

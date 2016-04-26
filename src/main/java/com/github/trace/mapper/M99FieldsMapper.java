@@ -19,4 +19,7 @@ public interface M99FieldsMapper extends ICrudMapper<M99Fields> {
     @Update("UPDATE m99_fields SET m1_name=#{m1Name} WHERE level_one_id=#{m1Id}")
     int updateM99FieldsByM1Id(@Param("m1Name") String m1Name, @Param("m1Id") int m1Id);
 
+    @Select("SELECT count(*) FROM m99_fields WHERE level_two_id = #{level_two_id} AND field_name = #{field_name}")
+    int queryByLevelTwoIdAndTag(@Param("level_two_id") int level_two_id,@Param("field_name") String field_name);
+
 }

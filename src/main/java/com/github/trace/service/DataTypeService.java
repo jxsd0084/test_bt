@@ -36,6 +36,38 @@ public class DataTypeService {
     }
 
     /**
+     * 根据导航字段与一级标签字段验证一级事件重复性
+     *
+     * @param navigationId
+     * @param  LevelOneTag
+     * @return
+     */
+    public int validateLevelOne(int navigationId,String LevelOneTag) {
+        return levelOneFieldMapper.queryByNavIdAndTag(navigationId,LevelOneTag);
+    }
+
+    /**
+     * 根据二级事件字段与M99标签字段判断M99事件重复性
+     *
+     * @param levelTwoId
+     * @param fieldName
+     * @return
+     */
+    public int validateM99(int levelTwoId,String fieldName) {
+        return m99FieldsMapper.queryByLevelTwoIdAndTag(levelTwoId,fieldName);
+    }
+
+    /**
+     * 根据一级事件字段与二级标签字段验证二级事件重复性
+     *
+     * @param levelOneId
+     * @param  levelTwoTag
+     * @return
+     */
+    public int validateLeveTwo(int levelOneId,String levelOneTag) {
+        return levelTwoFieldMapper.queryBylevelOneIdAndTag(levelOneId, levelOneTag);
+    }
+    /**
      * 根据M1字段获取所有M99扩展字段的数量
      *
      * @param m2Id

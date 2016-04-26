@@ -48,7 +48,7 @@ public class RecordStatisticsController {
     public @ResponseBody List<Map<String, Object>> buriedPointCount(@RequestParam("navigationId") int navigationId,
                                                                     @RequestParam("buriedPoint") String buriedPoint){
         NavigationItem0 navigationItem0 = navigation0Service.queryById(navigationId);
-        List<Map<String, Object>> result =elasticsearchService.aggregation(navigationItem0.getName(),buriedPoint, System.currentTimeMillis()-3600*24*1000L, System.currentTimeMillis());
+        List<Map<String, Object>> result =elasticsearchService.aggregation(navigationItem0.getName(),buriedPoint, 0, System.currentTimeMillis());
         return result;
     }
 

@@ -59,6 +59,19 @@ public class ControllerHelper {
         }
     }
 
+    /**
+     * 验证数据重复性
+     * @param res
+     * @return
+     */
+    public static Map returnResponseMsg(int res){
+        if(res == 0){
+            return ImmutableMap.of("code",200, "info", "该命名可以使用");
+        }else{
+            return ImmutableMap.of("code", -1, "info", "该命名已存在，请重新输入");
+        }
+    }
+
 	/**
      * 转换为JSONArray
      * @param list

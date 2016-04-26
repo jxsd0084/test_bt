@@ -11,4 +11,6 @@ public interface LevelOneFieldsMapper extends ICrudMapper<LevelOneFields> {
 
     @Select("SELECT * FROM level_one_fields WHERE navigation_id=#{navigation_id}")
     List<LevelOneFields> queryByNavId(@Param("navigation_id") int navigation_id);
+    @Select("SELECT count(*) FROM level_one_fields WHERE navigation_id = #{navigation_id} AND level1_field_tag = #{level1_field_tag}")
+    int queryByNavIdAndTag(@Param("navigation_id") int navigation_id,@Param("level1_field_tag") String level1_field_tag);
 }

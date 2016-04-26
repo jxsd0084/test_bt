@@ -330,6 +330,27 @@ public class DataTypeController {
 
     }
 
+    @RequestMapping("validateLevelOne")
+    public @ResponseBody Map validateLevelOne(@RequestParam("navigationId") int navigationId,
+                                              @RequestParam("levelOneTag") String levelOneTag){
+        int res = dataTypeService.validateLevelOne(navigationId,levelOneTag);
+        return ControllerHelper.returnResponseMsg(res);
+    }
+
+    @RequestMapping("validateLevelTwo")
+    public @ResponseBody Map validateLevelTwo(@RequestParam("levelOneId") int levelOneId,
+                                              @RequestParam("levelTwoTag") String levelTwoTag){
+        int res = dataTypeService.validateLeveTwo(levelOneId,levelTwoTag);
+        return ControllerHelper.returnResponseMsg(res);
+    }
+
+    @RequestMapping("validateM99")
+    public @ResponseBody Map validateM99(@RequestParam("levelTwoId") int levelTwoId,
+                                              @RequestParam("fieldName") String fieldName){
+        int res = dataTypeService.validateM99(levelTwoId,fieldName);
+        return ControllerHelper.returnResponseMsg(res);
+    }
+
     /**
      * 一级字段列表
      * @return

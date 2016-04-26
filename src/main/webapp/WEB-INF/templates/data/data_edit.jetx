@@ -13,7 +13,7 @@
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name1" id="name1" placeholder="必填" value="${obj.level1FieldTag}"/>
         </div>
-        <p class="help-block col-md-offset-2">如：Register (英文单词)</p>
+        <p class="help-block col-md-offset-2" id = "name1_desc">如：Register (英文单词)</p>
       </div>
 
       <div class="form-group">
@@ -49,21 +49,17 @@
 <script>
 
     var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listByNavId?navigationId=${navigation_id}&navigationName=${navigation_name}';
-
+    var status = 1;
     var myValidator = function(){
-        var msg = '';
-        var result = true;
-
+        var msg = '事件id命名已存在，请重新输入';
+        var result = Boolean(parseInt(status));
         var value1 = $("#name1").val();
         var value2 = $("#name2").val();
 
-        if(value1 == '' ||
-           value2 == ''
-        ){
-           msg = '必填项不能为空值!'
-           result = false;
+        if(value1 == '' || value2 == ''){
+            msg = '必填项不能为空值!'
+            result = false;
         }
-
         if(!result){
            showResult(msg);
         }
@@ -72,6 +68,28 @@
     }
 
     $(document).ready(function () {
+        $('#name1').bind('input propertychange',function(){
+            status = 1;
+            var url = '${CONTEXT_PATH}/dataType/validateLevelOne';
+            var navigation_id='${navigation_id}';
+            var level_one_tag =$("#name1").val();
+            if($('#name1').val()!='') {
+                $.post(url, {
+                    navigationId: navigation_id,
+                    levelOneTag: level_one_tag
+                }, function (data, textStatus) {
+                    if(data.code == 200) {
+                        var str = "<span style='color:#8eda0a'>" + data.info + "</span>";
+                    }else{
+                        status = 0;
+                        var str = "<span style='color:red'>" + data.info + "</span>";
+                    }
+                    $("#name1_desc").html(str);
+                })
+            }else{
+                $("#name1_desc").html("如：Register (英文单词)");
+            }
+        });
 
         $("#confirm").on('click', function () {
 
@@ -108,7 +126,6 @@
                     navigationId        :value4
                 };
             }
-
             if(myValidator()){
                 $.ajax({
                     url                 :url,

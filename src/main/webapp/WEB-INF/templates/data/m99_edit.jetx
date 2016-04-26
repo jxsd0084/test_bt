@@ -20,7 +20,7 @@
         <div class="col-md-3 col-lg-3">
           <input type="text" class="form-control" name="name2" id="name2" placeholder="必填" value="${obj.fieldName}"/>
         </div>
-        <p class="help-block col-md-offset-2">如：移动端(M1、M2、M3...)</p>
+        <p class="help-block col-md-offset-2" id="name2_desc">如：移动端(M1、M2、M3...)</p>
       </div>
 
       <div class="form-group">
@@ -70,10 +70,10 @@
 <script>
 
     var GLOBAL_URL = '${CONTEXT_PATH}/dataType/listM99?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=${L1_id}&L1_tag=${L1_tag}&L1_name=${L1_name}&L2_id=${L2_id}&L2_tag=${L2_tag}';
-
+    var status = 1;
     var myValidator = function(){
-        var msg = '';
-        var result = true;
+        var msg = '命名已存在，请重新输入';
+        var result = Boolean(parseInt(status));
 
 //        var value1 = $("#name1").val();
         var value2 = $("#name2").val();
@@ -98,7 +98,28 @@
     }
 
     $(document).ready(function () {
-
+        $('#name2').bind('input propertychange',function(){
+            status = 1;
+            var url = '${CONTEXT_PATH}/dataType/validateM99';
+            var level_two_id='${L2_id}';
+            var field_name =$("#name2").val();
+            if($('#name2').val()!='') {
+                $.post(url, {
+                    levelTwoId: level_two_id,
+                    fieldName: field_name
+                }, function (data, textStatus) {
+                    if(data.code == 200) {
+                        var str = "<span style='color:#8eda0a'>" + data.info + "</span>";
+                    }else{
+                        status = 0;
+                        var str = "<span style='color:red'>" + data.info + "</span>";
+                    }
+                    $("#name2_desc").html(str);
+                })
+            }else{
+                $("#name2_desc").html("如：移动端(M1、M2、M3...)");
+            }
+        });
         $("#confirm").on('click', function () {
 
             var tag    = '${tag}';
