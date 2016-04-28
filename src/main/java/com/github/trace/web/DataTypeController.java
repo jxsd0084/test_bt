@@ -340,7 +340,7 @@ public class DataTypeController {
     @RequestMapping("validateLevelTwo")
     public @ResponseBody Map validateLevelTwo(@RequestParam("levelOneId") int levelOneId,
                                               @RequestParam("levelTwoTag") String levelTwoTag){
-        int res = dataTypeService.validateLeveTwo(levelOneId,levelTwoTag);
+        int res = dataTypeService.validateLeveTwo(levelTwoTag);
         return ControllerHelper.returnResponseMsg(res);
     }
 
