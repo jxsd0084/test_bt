@@ -31,7 +31,7 @@
         <appender-ref ref="RollingFile"/>
     </appender>
 
-    <root level="WARN">
+    <root level="INFO">
         <appender-ref ref="ASYNC"/>
     </root>
 </configuration>

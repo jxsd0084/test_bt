@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -51,6 +50,7 @@ public class Kafka2EsTask {
   private ConsumerConnector consumerConnector;
   private ExecutorService service;
   private boolean kafkaSwitch;
+  private int mapBulkSize;
 
   private LinkedHashMultimap<String, String> current = LinkedHashMultimap.create();
 
@@ -64,6 +64,7 @@ public class Kafka2EsTask {
     final IChangeableConfig taskConfig = ConfigFactory.getInstance().getConfig("buriedtool-scheduler");
     IChangeListener changeListener = conf -> {
       kafkaSwitch = taskConfig.getBool("kafka-switch", true);
+      mapBulkSize = taskConfig.getInt("mapBulkSize", 1000);
       loadConsumerConfig(consumerConfig);
       loadTopicConfig(topicConfig);
     };
@@ -71,8 +72,8 @@ public class Kafka2EsTask {
     topicConfig.addListener(changeListener);
   }
 
-  @Scheduled(fixedDelay = 500L)
-  void saveToEs() {
+//  @Scheduled(fixedDelay = 500L)
+  private void saveToEs() {
     if (!kafkaSwitch) {
       return;
     }
@@ -171,6 +172,9 @@ public class Kafka2EsTask {
         content = new String(message.message(), Charsets.UTF_8);
         logStatCollector.report(topic, content);
         current.put(topic, convert(topic, content));
+        if (current.size() >= mapBulkSize) {
+          saveToEs();
+        }
       } catch (Exception e) {
         LOG.error("Cannot consume topic={}, body={}", topic, content, e);
       }
