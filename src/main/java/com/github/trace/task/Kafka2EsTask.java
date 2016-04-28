@@ -73,7 +73,7 @@ public class Kafka2EsTask {
   }
 
 //  @Scheduled(fixedDelay = 500L)
-  private void saveToEs() {
+  private synchronized void saveToEs() {
     if (!kafkaSwitch) {
       return;
     }
