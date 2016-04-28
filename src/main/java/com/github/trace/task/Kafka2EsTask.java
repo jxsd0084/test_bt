@@ -51,6 +51,9 @@ public class Kafka2EsTask {
   private ExecutorService service;
   private boolean kafkaSwitch;
   private int mapBulkSize;
+  private long mapBulkInterval;
+
+  private long lastBulkStamp = System.currentTimeMillis();
 
   private LinkedHashMultimap<String, String> current = LinkedHashMultimap.create();
 
@@ -65,9 +68,14 @@ public class Kafka2EsTask {
     IChangeListener changeListener = conf -> {
       kafkaSwitch = taskConfig.getBool("kafka-switch", true);
       mapBulkSize = taskConfig.getInt("mapBulkSize", 1000);
+      mapBulkInterval = taskConfig.getLong("mapBulkInterval", 60000);
+      LOG.info("kafka switch changed to {}", kafkaSwitch);
+      LOG.info("map bulk size changed to {}", mapBulkSize);
+      LOG.info("map bulk interval changed to {}", mapBulkInterval);
       loadConsumerConfig(consumerConfig);
       loadTopicConfig(topicConfig);
     };
+    taskConfig.addListener(changeListener);
     consumerConfig.addListener(changeListener);
     topicConfig.addListener(changeListener);
   }
@@ -132,12 +140,37 @@ public class Kafka2EsTask {
       return;
     }
 
-    ExecutorService executorService = Executors.newCachedThreadPool();
     for (Map.Entry<String, List<KafkaStream<byte[], byte[]>>> entry : consumerMap.entrySet()) {
       List<KafkaStream<byte[], byte[]>> streams = entry.getValue();
       for (final KafkaStream<byte[], byte[]> stream : streams) {
-        executorService.execute(new KafkaConsumerRunnable(stream));
+        for (MessageAndMetadata<byte[], byte[]> message : stream) {
+          consume(message);
+        }
       }
+    }
+  }
+
+  private void consume(MessageAndMetadata<byte[], byte[]> message) {
+    String topic = null;
+    String content = null;
+    try {
+      topic = message.topic();
+      content = new String(message.message(), Charsets.UTF_8);
+      logStatCollector.report(topic, content);
+      current.put(topic, convert(topic, content));
+      if (isTimeToSaveToEs()) {
+        saveToEs();
+      }
+    } catch (Exception e) {
+      LOG.error("Cannot consume topic={}, body={}", topic, content, e);
+    }
+  }
+
+  private String convert(String topic, String content) {
+    if (StringUtils.startsWith(topic, "nginx")) {
+      return NginxLogHandler.parseNginx(content);
+    } else {
+      return JsonLogHandler.convert(content);
     }
   }
 
@@ -148,45 +181,16 @@ public class Kafka2EsTask {
     return consumerConnector.createMessageStreams(topicCountMap);
   }
 
-  private class KafkaConsumerRunnable implements Runnable {
-    private KafkaStream<byte[], byte[]> stream;
-
-    KafkaConsumerRunnable(KafkaStream<byte[], byte[]> stream) {
-      super();
-      this.stream = stream;
+  private boolean isTimeToSaveToEs() {
+    if (current.size() >= mapBulkSize) {
+      return true;
     }
-
-    @Override
-    public void run() {
-      // 逐条处理消息
-      for (MessageAndMetadata<byte[], byte[]> message : stream) {
-        consume(message);
-      }
+    long now = System.currentTimeMillis();
+    if (now - lastBulkStamp >= mapBulkInterval) {
+      lastBulkStamp = now;
+      return true;
     }
-
-    private void consume(MessageAndMetadata<byte[], byte[]> message) {
-      String topic = null;
-      String content = null;
-      try {
-        topic = message.topic();
-        content = new String(message.message(), Charsets.UTF_8);
-        logStatCollector.report(topic, content);
-        current.put(topic, convert(topic, content));
-        if (current.size() >= mapBulkSize) {
-          saveToEs();
-        }
-      } catch (Exception e) {
-        LOG.error("Cannot consume topic={}, body={}", topic, content, e);
-      }
-    }
-
-    private String convert(String topic, String content) {
-      if (StringUtils.startsWith(topic, "nginx")) {
-        return NginxLogHandler.parseNginx(content);
-      } else {
-        return JsonLogHandler.convert(content);
-      }
-    }
+    return false;
   }
 
   @PreDestroy
