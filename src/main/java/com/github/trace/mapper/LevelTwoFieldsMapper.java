@@ -15,4 +15,7 @@ public interface LevelTwoFieldsMapper extends ICrudMapper<LevelTwoFields> {
     @Select("SELECT count(*) FROM level_two_fields WHERE level1_field_id = #{level1_field_id} AND level1_field_tag = #{level1_field_tag}")
     int queryBylevelOneIdAndTag(@Param("level1_field_id") int level1_field_id,@Param("level1_field_tag") String level1_field_tag);
 
+    @Select("SELECT count(*) FROM level_two_fields WHERE level1_field_tag = #{level1_field_tag}")
+    int queryByTag(@Param("level1_field_tag") String level1_field_tag);
+
 }

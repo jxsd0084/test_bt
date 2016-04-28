@@ -58,14 +58,13 @@ public class DataTypeService {
     }
 
     /**
-     * 根据一级事件字段与二级标签字段验证二级事件重复性
+     * 根据二级标签字段验证二级事件重复性
      *
-     * @param levelOneId
      * @param  levelTwoTag
      * @return
      */
-    public int validateLeveTwo(int levelOneId,String levelOneTag) {
-        return levelTwoFieldMapper.queryBylevelOneIdAndTag(levelOneId, levelOneTag);
+    public int validateLeveTwo(String levelTwoTag) {
+        return levelTwoFieldMapper.queryByTag(levelTwoTag);
     }
     /**
      * 根据M1字段获取所有M99扩展字段的数量
