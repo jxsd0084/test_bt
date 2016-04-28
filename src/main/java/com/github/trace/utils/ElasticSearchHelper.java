@@ -86,7 +86,7 @@ public class ElasticSearchHelper {
       if (bulkResponse.hasFailures()) {
         LOG.error("Cannot execute bulkIndex, reason: {}, items: {}", bulkResponse.buildFailureMessage(), items);
       } else {
-        LOG.info("Saved {} items to ElasticSearch in {}", items.size(), index);
+        LOG.info("Saved {} items to ElasticSearch: index={}, type={}", items.size(), index, type);
       }
     }
   }
