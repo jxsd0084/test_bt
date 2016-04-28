@@ -50,6 +50,7 @@ public class Kafka2EsTask {
   private static final String ES_INDEX = "datapt-buriedtool";
   private ConsumerConnector consumerConnector;
   private ExecutorService service;
+  private boolean kafkaSwitch;
 
   private LinkedHashMultimap<String, String> current = LinkedHashMultimap.create();
 
@@ -60,7 +61,9 @@ public class Kafka2EsTask {
   void init() {
     final IChangeableConfig consumerConfig = ConfigFactory.getInstance().getConfig("kafka-consumer");
     final IChangeableConfig topicConfig = ConfigFactory.getInstance().getConfig("buriedtool-kafka2es-topic");
+    final IChangeableConfig taskConfig = ConfigFactory.getInstance().getConfig("buriedtool-scheduler");
     IChangeListener changeListener = conf -> {
+      kafkaSwitch = taskConfig.getBool("kafka-switch", true);
       loadConsumerConfig(consumerConfig);
       loadTopicConfig(topicConfig);
     };
@@ -70,6 +73,9 @@ public class Kafka2EsTask {
 
   @Scheduled(fixedDelay = 500L)
   void saveToEs() {
+    if (!kafkaSwitch) {
+      return;
+    }
     LinkedHashMultimap<String, String> snapshot = current;
     current = LinkedHashMultimap.create();
     for (String topic : snapshot.keySet()) {
@@ -88,6 +94,9 @@ public class Kafka2EsTask {
       consumerConnector.commitOffsets(true);
       consumerConnector.shutdown();
     }
+    if (!kafkaSwitch) {
+      return;
+    }
     consumerConnector = kafka.consumer.Consumer.createJavaConsumerConnector(consumerConfig);
   }
 
@@ -96,8 +105,11 @@ public class Kafka2EsTask {
     ExecutorService old = service;
     ThreadFactory daemonThreadFactory =
         new ThreadFactoryBuilder().setNameFormat("kafka2es-%d").setDaemon(true).build();
-    service = Executors.newSingleThreadExecutor(daemonThreadFactory);
-    service.submit(this::listen);
+    if (kafkaSwitch) {
+      service = Executors.newSingleThreadExecutor(daemonThreadFactory);
+      service.submit(this::listen);
+    }
+
     if (old != null) {
       try {
         old.awaitTermination(1, TimeUnit.MINUTES);
