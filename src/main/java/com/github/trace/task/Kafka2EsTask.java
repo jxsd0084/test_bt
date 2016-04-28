@@ -53,7 +53,7 @@ public class Kafka2EsTask {
   private int mapBulkSize;
   private long mapBulkInterval;
 
-  private long lastBulkStamp = System.currentTimeMillis();
+  private volatile long lastBulkStamp = System.currentTimeMillis();
 
   private LinkedHashMultimap<String, String> current = LinkedHashMultimap.create();
 
@@ -81,10 +81,13 @@ public class Kafka2EsTask {
   }
 
 //  @Scheduled(fixedDelay = 500L)
+
   private synchronized void saveToEs() {
-    if (!kafkaSwitch) {
+    LOG.debug("Begin saving to es...");
+    if (!kafkaSwitch || !isTimeToSaveToEs()) {
       return;
     }
+    LOG.debug("It's time to save..");
     LinkedHashMultimap<String, String> snapshot = current;
     current = LinkedHashMultimap.create();
     for (String topic : snapshot.keySet()) {
@@ -140,17 +143,33 @@ public class Kafka2EsTask {
       return;
     }
 
+    ExecutorService executorService = Executors.newCachedThreadPool();
     for (Map.Entry<String, List<KafkaStream<byte[], byte[]>>> entry : consumerMap.entrySet()) {
       List<KafkaStream<byte[], byte[]>> streams = entry.getValue();
       for (final KafkaStream<byte[], byte[]> stream : streams) {
-        for (MessageAndMetadata<byte[], byte[]> message : stream) {
-          consume(message);
-        }
+        executorService.execute(new KafkaConsumerRunnable(stream));
       }
     }
   }
 
-  private void consume(MessageAndMetadata<byte[], byte[]> message) {
+  private class KafkaConsumerRunnable implements Runnable {
+    private KafkaStream<byte[], byte[]> stream;
+
+    KafkaConsumerRunnable(KafkaStream<byte[], byte[]> stream) {
+      super();
+      this.stream = stream;
+    }
+
+    @Override
+    public void run() {
+      // 逐条处理消息
+      for (MessageAndMetadata<byte[], byte[]> message : stream) {
+        consume(message);
+      }
+    }
+  }
+
+  private synchronized void consume(MessageAndMetadata<byte[], byte[]> message) {
     String topic = null;
     String content = null;
     try {
@@ -158,9 +177,8 @@ public class Kafka2EsTask {
       content = new String(message.message(), Charsets.UTF_8);
       logStatCollector.report(topic, content);
       current.put(topic, convert(topic, content));
-      if (isTimeToSaveToEs()) {
-        saveToEs();
-      }
+      saveToEs();
+
     } catch (Exception e) {
       LOG.error("Cannot consume topic={}, body={}", topic, content, e);
     }
@@ -181,7 +199,7 @@ public class Kafka2EsTask {
     return consumerConnector.createMessageStreams(topicCountMap);
   }
 
-  private boolean isTimeToSaveToEs() {
+  private synchronized boolean isTimeToSaveToEs() {
     if (current.size() >= mapBulkSize) {
       return true;
     }
