@@ -36,7 +36,7 @@ public class ElasticSearchHelper {
   private static long timeout = 10000L;
 
   static {
-    ConfigFactory.getInstance().getConfig("elasticsearch", ElasticSearchHelper::loadConfig);
+    ConfigFactory.getInstance().getConfig("elasticsearch4", ElasticSearchHelper::loadConfig);
   }
 
   private static void loadConfig(IConfig config) {
