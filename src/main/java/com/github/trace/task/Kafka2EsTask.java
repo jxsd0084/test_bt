@@ -113,6 +113,7 @@ public class Kafka2EsTask {
     if (consumerConnector != null) {
       consumerConnector.commitOffsets(true);
       consumerConnector.shutdown();
+      consumerConnector = null;
     }
     if (!kafkaSwitch) {
       return;
