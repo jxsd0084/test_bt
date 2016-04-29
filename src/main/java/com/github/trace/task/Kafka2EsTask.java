@@ -52,6 +52,7 @@ public class Kafka2EsTask {
   private boolean kafkaSwitch;
   private int mapBulkSize;
   private long mapBulkInterval;
+  private long bulkSleepInterval;
 
   private volatile long lastBulkStamp = System.currentTimeMillis();
 
@@ -69,6 +70,8 @@ public class Kafka2EsTask {
       kafkaSwitch = taskConfig.getBool("kafka-switch", true);
       mapBulkSize = taskConfig.getInt("mapBulkSize", 1000);
       mapBulkInterval = taskConfig.getLong("mapBulkInterval", 60000);
+      bulkSleepInterval = taskConfig.getLong("bulkSleepInterval", 10);
+
       LOG.info("kafka switch changed to {}", kafkaSwitch);
       LOG.info("map bulk size changed to {}", mapBulkSize);
       LOG.info("map bulk interval changed to {}", mapBulkInterval);
@@ -93,6 +96,11 @@ public class Kafka2EsTask {
     for (String topic : snapshot.keySet()) {
       Set<String> set = snapshot.get(topic);
       ElasticSearchHelper.bulk(ES_INDEX, topic, set);
+    }
+    try {
+      Thread.sleep(bulkSleepInterval);
+    } catch (InterruptedException e) {
+      LOG.error("Sleep InterruptedException", e);
     }
   }
 

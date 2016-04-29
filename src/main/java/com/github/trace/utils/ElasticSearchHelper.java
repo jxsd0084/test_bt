@@ -77,17 +77,22 @@ public class ElasticSearchHelper {
     if (items == null) {
       return;
     }
-    BulkRequestBuilder bulkRequest = client.prepareBulk();
-    for (String i : items) {
-      bulkRequest.add(client.prepareIndex(index, type).setSource(i));
-    }
-    if (bulkRequest.numberOfActions() > 0) {
-      BulkResponse bulkResponse = bulkRequest.execute().actionGet();
-      if (bulkResponse.hasFailures()) {
-        LOG.error("Cannot execute bulkIndex, reason: {}, items: {}", bulkResponse.buildFailureMessage(), items);
-      } else {
-        LOG.info("Saved {} items to ElasticSearch: index={}, type={}", items.size(), index, type);
+    try {
+      BulkRequestBuilder bulkRequest = client.prepareBulk();
+      for (String i : items) {
+        bulkRequest.add(client.prepareIndex(index, type).setSource(i));
       }
+      if (bulkRequest.numberOfActions() > 0) {
+        BulkResponse bulkResponse = bulkRequest.execute().actionGet();
+        if (bulkResponse.hasFailures()) {
+          LOG.error("Cannot execute bulkIndex, reason: {}, items: {}",
+                    bulkResponse.buildFailureMessage(), items);
+        } else {
+          LOG.info("Saved {} items to ElasticSearch: index={}, type={}", items.size(), index, type);
+        }
+      }
+    } catch (Exception e) {
+      LOG.error("Cannot save to elasticsearch: index={}, type={}. items: {}", index, type, items, e);
     }
   }
 

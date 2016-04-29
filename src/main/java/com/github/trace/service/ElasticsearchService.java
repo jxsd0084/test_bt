@@ -52,11 +52,15 @@ public class ElasticsearchService {
    */
   public List<Map<String, Object>> search(String topic, String keyword, String timeParam,
                                           long timeFrom, long timeTo, int from, int size) {
-
-    SearchRequestBuilder builder = build(topic, keyword, timeParam, timeFrom, timeTo, from, size);
-    SearchResponse response = ElasticSearchHelper.search(builder);
-
     List<Map<String, Object>> results = Lists.newArrayList();
+    SearchResponse response;
+    try {
+      SearchRequestBuilder builder = build(topic, keyword, timeParam, timeFrom, timeTo, from, size);
+      response = ElasticSearchHelper.search(builder);
+    } catch (Exception e) {
+      LOG.error("Cannot search for keyword {}", keyword, e);
+      return results;
+    }
     if (response != null && response.getHits() != null) {
       SearchHit[] hits = response.getHits().getHits();
       for (SearchHit hit : hits) {
@@ -111,10 +115,15 @@ public class ElasticsearchService {
         .subAggregation(failCountAgg);
 
     SearchRequestBuilder builder = ElasticSearchHelper.newBuilder(LOG_STATISTIC_INDEX);
-    SearchResponse response = builder.setQuery(boolQuery)
-        .addAggregation(aggBuilder)
-        .get();
-
+    SearchResponse response;
+    try {
+      response = builder.setQuery(boolQuery)
+          .addAggregation(aggBuilder)
+          .get();
+    } catch (Exception e) {
+      LOG.error("Cannot get aggregations for nav {} and key {}", nav, key, e);
+      return aggList;
+    }
     if (response != null) {
       Terms agg = response.getAggregations().get("stat");
       for (Terms.Bucket bucket : agg.getBuckets()) {
