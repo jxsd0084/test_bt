@@ -6,6 +6,7 @@ import com.github.trace.entity.M99Fields;
 import com.github.trace.mapper.LevelOneFieldsMapper;
 import com.github.trace.mapper.LevelTwoFieldsMapper;
 import com.github.trace.mapper.M99FieldsMapper;
+import com.github.trace.utils.GuavaCacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,6 +161,16 @@ public class DataTypeService {
      */
     public LevelTwoFields getLevelTwoFieldById(int id) {
         return levelTwoFieldMapper.findById(id);
+    }
+
+    /**
+     * 根据二级字段ID查询 二级字段
+     *
+     * @param navgationId 导航字段ID
+     * @return 二级字段
+     */
+    public List<LevelTwoFields> getLevelTwoFieldByNavId(int navgationId) {
+        return levelTwoFieldMapper.queryAll(navgationId);
     }
 
     /**

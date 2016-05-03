@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +51,13 @@ public class RecordStatisticsController {
     public @ResponseBody List<Map<String, Object>> buriedPointCount(@RequestParam("navigationId") int navigationId,
                                                                     @RequestParam("buriedPoint") String buriedPoint){
         NavigationItem0 navigationItem0 = navigation0Service.queryById(navigationId);
+        List<LevelTwoFields> levelTwoFieldses = null;
+        if("M99.M1".equals(buriedPoint)||"actionid".equals(buriedPoint.toLowerCase())) {
+            levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(navigationId);
+        }
         List<Map<String, Object>> result =elasticsearchService.aggregation(navigationItem0.getName(),buriedPoint, 0, System.currentTimeMillis());
-        return result;
+        List<Map<String, Object>> list = mergeData(levelTwoFieldses,result);
+        return list;
     }
 
     @RequestMapping("/searchOneLevel")
@@ -68,6 +76,64 @@ public class RecordStatisticsController {
     @RequestMapping("/searchBuriedPoint")
     public @ResponseBody List<BuriedPoint0> searchBuriedPoint(@RequestParam("navigationId") int navigationId) {
         List<BuriedPoint0> list = cepService.getBuriedPoint0List(navigationId);
+        return list;
+    }
+
+    /**
+     * 查询数据与本地数据进行合并
+     * @param list1
+     * @param list2
+     * @return
+     */
+    private List<Map<String,Object>> mergeData(List<LevelTwoFields> list1,List<Map<String,Object>> list2){
+        List<Map<String,Object>> list = new ArrayList<>();
+        if(list1!=null) {
+            LOGGER.info("二级事件数据：" + list1.toString());
+            /**
+             * 检查本地库漏掉埋点项
+             */
+            for (LevelTwoFields levelTwoFields : list1) {
+                Map<String, Object> map = new HashMap<>();
+                if (!list2.toString().contains(levelTwoFields.getLevel1FieldTag())) {
+                    map.put("id",list.size()+1);
+                    map.put("value", levelTwoFields.getLevel1FieldTag() + "(" + levelTwoFields.getLevel2FieldName() + ")");
+                    map.put("totalCount", 0.0);
+                    map.put("failCount", 0.0);
+                    map.put("successCount", 0.0);
+                    map.put("type", -1);
+                    list.add(map);
+                }
+            }
+            /**
+             * 现查es中多出埋点项
+             */
+            for (Map<String, Object> map : list2) {
+                if (!list1.toString().contains(map.get("value").toString())) {
+                    map.put("id",list.size()+1);
+                    map.put("type", 0);
+                    list.add(map);
+                }
+            }
+            /**
+             * 正确项
+             */
+            for (Map<String, Object> map : list2) {
+                for (LevelTwoFields levelTwoFields : list1) {
+                    if (map.get("value").toString().equals(levelTwoFields.getLevel1FieldTag())) {
+                        map.put("id",list.size()+1);
+                        map.put("value", levelTwoFields.getLevel1FieldTag() + "(" + levelTwoFields.getLevel2FieldName() + ")");
+                        map.put("type", 1);
+                        list.add(map);
+                    }
+                }
+            }
+        }else{
+            for (Map<String, Object> map : list2) {
+                map.put("id",list.size()+1);
+                map.put("type", 1);
+                list.add(map);
+            }
+        }
         return list;
     }
 }
