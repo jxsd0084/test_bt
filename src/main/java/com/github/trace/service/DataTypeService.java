@@ -6,7 +6,6 @@ import com.github.trace.entity.M99Fields;
 import com.github.trace.mapper.LevelOneFieldsMapper;
 import com.github.trace.mapper.LevelTwoFieldsMapper;
 import com.github.trace.mapper.M99FieldsMapper;
-import com.github.trace.utils.GuavaCacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
