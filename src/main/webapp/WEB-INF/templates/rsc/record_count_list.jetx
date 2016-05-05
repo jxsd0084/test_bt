@@ -95,7 +95,7 @@
                                             var htmlContent = "";
                                             for (var i = 0; i < data.length; i++) {
                                                 if(data[i].bpName=="M99.M1"||data[i].bpName.toLowerCase()=="actionid") {
-                                                    htmlContent = htmlContent + "<option value='" + data[i].bpName + "' selected='selected'>" + "用户行为统计" + "</option>";
+                                                    htmlContent = htmlContent + "<option value='" + data[i].bpName + "' selected='selected'>" + "事件行为统计" + "</option>";
                                                 }else{
                                                     htmlContent = htmlContent + "<option value='" + data[i].bpName + "'>" + data[i].bpValueDesc + "</option>";
                                                 }
