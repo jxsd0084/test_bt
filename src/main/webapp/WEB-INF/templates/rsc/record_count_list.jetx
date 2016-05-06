@@ -33,6 +33,7 @@
         <select id="buriedPoint_sel1" style="width: 205px;display: none;">
             </select>
         <span class="functions">
+            <input id="version" type="text" placeholder="请输入企信版本号（可不填）" style="height: 28px;display: none"/>
             <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="统计" onclick="searchBtnClick();" /> （默认为查询全部行为）
         </span>
 
@@ -74,12 +75,14 @@
 
                     ]
                 } );
-                //查询一级事件定义
+                //查询二级事件定义
                 $("#topic_sel").change(function(){
                     var value1 = $("#topic_sel").val();
                     if(value1==''){
                         $("#buriedPoint_sel1").val('');
                         $("#buriedPoint_sel1").hide();
+                        $("#version").val("");
+                        $("#version").hide();
                     }else{
                         $.post('${CONTEXT_PATH}/rsc/searchBuriedPoint', {
                                     navigationId: value1
@@ -91,6 +94,8 @@
                                             alert("该主题无埋点数据定义！");
                                             $("#buriedPoint_sel1").val('');
                                             $("#buriedPoint_sel1").hide();
+                                            $("#version").val("");
+                                            $("#version").hide();
                                         }else {
                                             var htmlContent = "";
                                             for (var i = 0; i < data.length; i++) {
@@ -102,18 +107,33 @@
                                             }
                                             $('#buriedPoint_sel1').html(htmlContent);
                                             $('#buriedPoint_sel1').show();
+                                            if($('#buriedPoint_sel1').val()=="M99.M1"){
+                                                $("#version").val("");
+                                                $("#version").show();
+                                            };
                                         }
                                     }
                                 }
                         )
                     }
                 });
+                //是否显示版本号
+                $("#buriedPoint_sel1").change(function(){
+                    var value1 = $("#buriedPoint_sel1").val();
+                    if(value1=='M99.M1'){
+                        $("#version").show();
+                    }else{
+                        $("#version").val("");
+                        $("#version").hide();
+                    }
+                });
+
             });
 
     var searchBtnClick = function(){
         var value1   = $('#topic_sel').val();
         var value2 = $('#event_sel1').val();
-        var value3 = $('#event_sel2').val();
+        var value3 = $('#version').val();
         var value4 = $('#buriedPoint_sel1').val();
         if(value1 == ''){
             alert('请选择主题！')
@@ -135,7 +155,7 @@
         $.post('${CONTEXT_PATH}/rsc/buriedPointCount', {
                     navigationId: value1,
 //                    levelOneId:     value2,
-//                    levelTwoId:      value3
+                    version:      value3,
                     buriedPoint:  value4
                 },function(data, textStatus){
                     if(textStatus!="success"){

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,15 +50,25 @@ public class RecordStatisticsController {
 
     @RequestMapping("/buriedPointCount")
     public @ResponseBody List<Map<String, Object>> buriedPointCount(@RequestParam("navigationId") int navigationId,
-                                                                    @RequestParam("buriedPoint") String buriedPoint){
+                                                                    @RequestParam("buriedPoint") String buriedPoint,
+                                                                    @RequestParam("version") String version){
         NavigationItem0 navigationItem0 = navigation0Service.queryById(navigationId);
         List<LevelTwoFields> levelTwoFieldses = null;
+        List<Map<String, Object>> result = null;
         if("M99.M1".equals(buriedPoint)||"actionid".equals(buriedPoint.toLowerCase())) {
             levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(navigationId);
         }
-        List<Map<String, Object>> result =elasticsearchService.aggregation(navigationItem0.getName(),buriedPoint, 0, System.currentTimeMillis());
-        List<Map<String, Object>> list = mergeData(levelTwoFieldses,result);
-        return list;
+        if(StringUtils.isEmpty(version)) {
+            result = elasticsearchService.aggregation(navigationItem0.getName(), buriedPoint, 0, System.currentTimeMillis());
+        }else{
+            if("iOS".equals(navigationItem0.getName())){
+                result = elasticsearchService.searchBySql("iphone OS",version,0,System.currentTimeMillis());
+            }else{
+                result = elasticsearchService.searchBySql("Android",version,0,System.currentTimeMillis());
+            }
+        }
+            List<Map<String, Object>> list = mergeData(levelTwoFieldses, result);
+            return list;
     }
 
     @RequestMapping("/searchOneLevel")

@@ -180,7 +180,7 @@ public class ElasticsearchService {
           int totalCount = b.getInteger("doc_count");
           map.put("value", value);
           map.put("totalCount", totalCount);
-          map.put("successCount", 0);
+          map.put("successCount", totalCount);
           map.put("failCount", 0);
           list.add(map);
         }
