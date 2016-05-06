@@ -69,7 +69,7 @@ public class ElasticsearchServiceTest {
 
   @Test
   public void testSearchBySql2() throws Exception {
-    Map<String, Object> map = esService.searchBySql("iPhone OS", "5.3", 1462498860172L, 1462499860172L);
-    LOG.info(map.toString());
+    List<Map<String, Object>> list = esService.searchBySql("iPhone OS", "5.3", 1462498860172L, 1462499860172L);
+    LOG.info(list.toString());
   }
 }

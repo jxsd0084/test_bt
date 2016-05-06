@@ -155,15 +155,16 @@ public class ElasticsearchService {
    * @param appVersion
    * @param from
    * @param to
-   * @return Map<String, Object>
+   * @return List<Map<String, Object>>
    */
-  public Map<String, Object> searchBySql(String os, String appVersion, long from, long to) {
-    Map<String, Object> map = Maps.newLinkedHashMap();
+  public List<Map<String, Object>> searchBySql(String os, String appVersion, long from, long to) {
+    List<Map<String, Object>> list = Lists.newLinkedList();
+
     String sql = sqlBuilder(os, appVersion, from, to);
     try {
       Response response = searchBySql(sql);
       if (!response.isSuccessful()) {
-        return map;
+        return list;
       }
       String ss = response.body().string();
       JSONObject object = JSON.parseObject(ss);
@@ -174,13 +175,20 @@ public class ElasticsearchService {
         JSONArray buckets = agg.getJSONArray("buckets");
         for (int i = 0; i < buckets.size(); i++) {
           JSONObject b = buckets.getJSONObject(i);
-          map.put(b.get("key").toString(), b.get("doc_count"));
+          String value = b.getString("key");
+          Map<String, Object> map = Maps.newLinkedHashMap();
+          int totalCount = b.getInteger("doc_count");
+          map.put("value", value);
+          map.put("totalCount", totalCount);
+          map.put("successCount", 0);
+          map.put("failCount", 0);
+          list.add(map);
         }
       }
     } catch (Exception e) {
       LOG.error("Cannot search by sql from elasticsearch", e);
     }
-    return map;
+    return list;
   }
 
   public Response searchBySql(String sql) throws IOException {
