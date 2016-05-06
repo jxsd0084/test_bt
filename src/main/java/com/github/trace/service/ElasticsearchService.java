@@ -5,7 +5,13 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.trace.utils.ElasticSearchHelper;
+import com.github.trace.utils.OkHttpUtil;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -24,8 +30,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import jetbrick.util.StringUtils;
 
 /**
  * 处理es相关
@@ -137,6 +147,64 @@ public class ElasticsearchService {
     }
 
     return aggList;
+  }
+
+  /**
+   * 使用sql查询es
+   * @param os   iPhone OS  or  Android
+   * @param appVersion
+   * @param from
+   * @param to
+   * @return Map<String, Object>
+   */
+  public Map<String, Object> searchBySql(String os, String appVersion, long from, long to) {
+    Map<String, Object> map = Maps.newLinkedHashMap();
+    String sql = sqlBuilder(os, appVersion, from, to);
+    try {
+      Response response = searchBySql(sql);
+      if (!response.isSuccessful()) {
+        return map;
+      }
+      String ss = response.body().string();
+      JSONObject object = JSON.parseObject(ss);
+      JSONObject aggs = object.getJSONObject("aggregations");
+      Set<String> aggKeySet = aggs.keySet();
+      for (String aggKey : aggKeySet) {
+        JSONObject agg = aggs.getJSONObject(aggKey);
+        JSONArray buckets = agg.getJSONArray("buckets");
+        for (int i = 0; i < buckets.size(); i++) {
+          JSONObject b = buckets.getJSONObject(i);
+          map.put(b.get("key").toString(), b.get("doc_count"));
+        }
+      }
+    } catch (Exception e) {
+      LOG.error("Cannot search by sql from elasticsearch", e);
+    }
+    return map;
+  }
+
+  public Response searchBySql(String sql) throws IOException {
+    String baseUrl = ElasticSearchHelper.getSqlUrl();
+    String fullUrl = baseUrl + "?sql=" + StringUtils.trim(sql);
+
+    Request request = new Request.Builder().url(fullUrl).build();
+    return OkHttpUtil.execute(request);
+  }
+
+  private String sqlBuilder(String os, String appVersion, long from, long to) {
+    StringBuilder sql = new StringBuilder();
+    sql.append(" SELECT M99_M1, count(*) as count1 from datapt-buriedtool ")
+        .append(" where _type = 'dcx.MonitorRequest' ");
+    sql.append(" and M98 >= ").append(from).append(" and M98 <= ").append(to).append(" ");
+    if (!Strings.isNullOrEmpty(os)) {
+      sql.append(" and M4 = '").append(os.trim()).append("' ");
+    }
+    if (!Strings.isNullOrEmpty(appVersion)) {
+      sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
+    }
+    sql.append(" group by M99_M1 order by count1 desc limit 1000 ");
+    LOG.debug(sql.toString());
+    return sql.toString();
   }
 
   private void getBucketSubAggregationValue(Terms.Bucket bucket, Map<String, Object> fields) {

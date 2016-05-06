@@ -29,19 +29,6 @@
         <appender-ref ref="RollingFile"/>
     </appender>&ndash;&gt;-->
 
-    <logger name="druid.sql" level="INFO"/>
-
-    <logger name="org.hibernate" level="WARN"/>
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="com.opensymphony" level="WARN"/>
-    <logger name="org.apache" level="WARN"/>
-
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
-    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG"/>
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
-    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>
-    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>
-
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>

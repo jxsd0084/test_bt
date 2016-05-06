@@ -33,6 +33,7 @@ public class ElasticSearchHelper {
 
   private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchHelper.class);
   private static Client client = null;
+  private static String sqlUrl;
   private static long timeout = 10000L;
 
   static {
@@ -44,6 +45,7 @@ public class ElasticSearchHelper {
     Preconditions.checkNotNull(serverUrl, "Elasticsearch server url should not be empty!");
     String cluster = config.get("cluster.name");
     timeout = config.getLong("timeoutInMillis", 10000L);
+    sqlUrl = config.get("sqlUrl");
     connectElasticSearch(cluster, serverUrl);
   }
 
@@ -104,4 +106,7 @@ public class ElasticSearchHelper {
     return builder == null ? null : builder.execute().actionGet(timeout, TimeUnit.MILLISECONDS);
   }
 
+  public static String getSqlUrl() {
+    return sqlUrl;
+  }
 }

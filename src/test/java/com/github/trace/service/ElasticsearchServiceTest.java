@@ -1,5 +1,7 @@
 package com.github.trace.service;
 
+import com.squareup.okhttp.Response;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +18,7 @@ import java.util.Map;
  * ElasticsearchServiceTest
  * Created by wzk on 16/4/7.
  */
-//@Ignore
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class ElasticsearchServiceTest {
@@ -55,5 +57,19 @@ public class ElasticsearchServiceTest {
   public void testAggregation() throws Exception {
     List<Map<String, Object>> list = esService.aggregation("iOS", "M99.M1", 0, System.currentTimeMillis());
     LOG.info(list.toString());
+  }
+
+  @Test
+  public void testSearchBySql() throws Exception {
+    String sql = "SELECT M6, count(*) from datapt-buriedtool group by M6 limit 10";
+    Response response = esService.searchBySql(sql);
+    String ss = response.body().string();
+    LOG.info(ss);
+  }
+
+  @Test
+  public void testSearchBySql2() throws Exception {
+    Map<String, Object> map = esService.searchBySql("iPhone OS", "5.3", 1462498860172L, 1462499860172L);
+    LOG.info(map.toString());
   }
 }
