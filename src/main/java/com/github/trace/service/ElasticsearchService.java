@@ -157,10 +157,25 @@ public class ElasticsearchService {
    * @param to
    * @return List<Map<String, Object>>
    */
-  public List<Map<String, Object>> searchBySql(String os, String appVersion, String item, long from, long to) {
+  public List<Map<String, Object>> searchBySql(String os, String appVersion, String item,
+                                               long from, long to) {
+    return searchBySql(os, appVersion, item, from, to, -1);
+  }
+
+  /**
+   * 使用sql查询es
+   * @param os   iPhone OS  or  Android
+   * @param appVersion
+   * @param from
+   * @param to
+   * @param limit
+   * @return List<Map<String, Object>>
+   */
+  public List<Map<String, Object>> searchBySql(String os, String appVersion, String item,
+                                               long from, long to, int limit) {
     List<Map<String, Object>> list = Lists.newLinkedList();
 
-    String sql = sqlBuilder(os, appVersion, item, from, to);
+    String sql = sqlBuilder(os, appVersion, item, from, to, limit);
     try {
       Response response = searchBySql(sql);
       if (!response.isSuccessful()) {
@@ -199,7 +214,8 @@ public class ElasticsearchService {
     return OkHttpUtil.execute(request);
   }
 
-  private String sqlBuilder(String os, String appVersion, String item, long from, long to) {
+  private String sqlBuilder(String os, String appVersion, String item,
+                            long from, long to, int limit) {
     StringBuilder sql = new StringBuilder();
     sql.append(" SELECT " + item + ", count(*) as count1 from datapt-buriedtool ")
         .append(" where _type = 'dcx.MonitorRequest' ");
@@ -210,7 +226,10 @@ public class ElasticsearchService {
     if (!Strings.isNullOrEmpty(appVersion)) {
       sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
     }
-    sql.append(" group by " + item + " order by count1 desc limit 1000 ");
+    sql.append(" group by " + item + " order by count1 desc ");
+    if (limit > 0) {
+      sql.append(" limit ").append(limit);
+    }
     LOG.warn(sql.toString());
     return sql.toString();
   }
