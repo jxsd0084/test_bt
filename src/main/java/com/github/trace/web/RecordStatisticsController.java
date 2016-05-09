@@ -61,10 +61,12 @@ public class RecordStatisticsController {
         if(StringUtils.isEmpty(version)) {
             result = elasticsearchService.aggregation(navigationItem0.getName(), buriedPoint, 0, System.currentTimeMillis());
         }else{
+            String esSearchItem = buriedPoint.replaceAll("\\.","_");
+            LOGGER.info("esSearchItem:" + esSearchItem);
             if("iOS".equals(navigationItem0.getName())){
-                result = elasticsearchService.searchBySql("iPhone OS",version, "M99_M1", 0, System.currentTimeMillis());
+                result = elasticsearchService.searchBySql("iPhone OS",version,esSearchItem, 0, System.currentTimeMillis());
             }else{
-                result = elasticsearchService.searchBySql("Android",version, "M99_M1", 0, System.currentTimeMillis());
+                result = elasticsearchService.searchBySql("Android",version,esSearchItem, 0, System.currentTimeMillis());
             }
         }
             List<Map<String, Object>> list = mergeData(levelTwoFieldses, result);

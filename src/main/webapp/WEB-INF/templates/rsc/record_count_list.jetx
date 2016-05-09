@@ -107,26 +107,20 @@
                                             }
                                             $('#buriedPoint_sel1').html(htmlContent);
                                             $('#buriedPoint_sel1').show();
-                                            if($('#buriedPoint_sel1').val()=="M99.M1"){
-                                                $("#version").val("");
-                                                $("#version").show();
-                                            };
+                                            $("#version").val("");
+                                            $("#version").show();
                                         }
                                     }
                                 }
                         )
                     }
                 });
-                //是否显示版本号
+                /*//是否显示版本号
                 $("#buriedPoint_sel1").change(function(){
                     var value1 = $("#buriedPoint_sel1").val();
-                    if(value1=='M99.M1'){
-                        $("#version").show();
-                    }else{
-                        $("#version").val("");
-                        $("#version").hide();
-                    }
-                });
+                    $("#version").val("");
+                    $("#version").show();
+                });*/
 
             });
 
