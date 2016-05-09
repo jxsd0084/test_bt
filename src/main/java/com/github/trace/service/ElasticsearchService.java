@@ -157,10 +157,10 @@ public class ElasticsearchService {
    * @param to
    * @return List<Map<String, Object>>
    */
-  public List<Map<String, Object>> searchBySql(String os, String appVersion, long from, long to) {
+  public List<Map<String, Object>> searchBySql(String os, String appVersion, String item, long from, long to) {
     List<Map<String, Object>> list = Lists.newLinkedList();
 
-    String sql = sqlBuilder(os, appVersion, from, to);
+    String sql = sqlBuilder(os, appVersion, item, from, to);
     try {
       Response response = searchBySql(sql);
       if (!response.isSuccessful()) {
@@ -199,9 +199,9 @@ public class ElasticsearchService {
     return OkHttpUtil.execute(request);
   }
 
-  private String sqlBuilder(String os, String appVersion, long from, long to) {
+  private String sqlBuilder(String os, String appVersion, String item, long from, long to) {
     StringBuilder sql = new StringBuilder();
-    sql.append(" SELECT M99_M1, count(*) as count1 from datapt-buriedtool ")
+    sql.append(" SELECT " + item + ", count(*) as count1 from datapt-buriedtool ")
         .append(" where _type = 'dcx.MonitorRequest' ");
     sql.append(" and M98 >= ").append(from).append(" and M98 <= ").append(to).append(" ");
     if (!Strings.isNullOrEmpty(os)) {
@@ -210,8 +210,8 @@ public class ElasticsearchService {
     if (!Strings.isNullOrEmpty(appVersion)) {
       sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
     }
-    sql.append(" group by M99_M1 order by count1 desc limit 1000 ");
-    LOG.debug(sql.toString());
+    sql.append(" group by " + item + " order by count1 desc limit 1000 ");
+    LOG.warn(sql.toString());
     return sql.toString();
   }
 

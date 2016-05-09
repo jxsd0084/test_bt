@@ -69,7 +69,9 @@ public class ElasticsearchServiceTest {
 
   @Test
   public void testSearchBySql2() throws Exception {
-    List<Map<String, Object>> list = esService.searchBySql("iPhone OS", "5.3", 1462498860172L, 1462499860172L);
+    long now = System.currentTimeMillis();
+    long yesterday = now - 24 * 3600 * 1000L;
+    List<Map<String, Object>> list = esService.searchBySql("iPhone OS", "5.2.1.5", "M99_M1", yesterday, now);
     LOG.info(list.toString());
   }
 }

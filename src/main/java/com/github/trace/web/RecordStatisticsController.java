@@ -62,9 +62,9 @@ public class RecordStatisticsController {
             result = elasticsearchService.aggregation(navigationItem0.getName(), buriedPoint, 0, System.currentTimeMillis());
         }else{
             if("iOS".equals(navigationItem0.getName())){
-                result = elasticsearchService.searchBySql("iphone OS",version,0,System.currentTimeMillis());
+                result = elasticsearchService.searchBySql("iPhone OS",version, "M99_M1", 0, System.currentTimeMillis());
             }else{
-                result = elasticsearchService.searchBySql("Android",version,0,System.currentTimeMillis());
+                result = elasticsearchService.searchBySql("Android",version, "M99_M1", 0, System.currentTimeMillis());
             }
         }
             List<Map<String, Object>> list = mergeData(levelTwoFieldses, result);
