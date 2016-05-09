@@ -23,6 +23,8 @@ public class OkHttpUtil {
 
   static {
     mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
+    mOkHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+    mOkHttpClient.setWriteTimeout(30, TimeUnit.SECONDS);
   }
 
   /**
