@@ -227,9 +227,7 @@ public class ElasticsearchService {
       sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
     }
     sql.append(" group by " + item + " order by count1 desc ");
-    if (limit > 0) {
-      sql.append(" limit ").append(limit);
-    }
+    sql.append(" limit ").append(limit > 0 ? limit : 10000);
     LOG.warn(sql.toString());
     return sql.toString();
   }
