@@ -22,7 +22,7 @@ public class OkHttpUtil {
   private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
   static {
-    mOkHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
+    mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
   }
 
   /**
