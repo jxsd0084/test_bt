@@ -56,7 +56,11 @@ public class RecordStatisticsController {
         long now = System.currentTimeMillis();
         long yesterday = now - 7*(24 * 3600 * 1000L);
         if("M99.M1".equals(buriedPoint)||"actionid".equals(buriedPoint.toLowerCase())) {
-            levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(navigationId);
+            if("Android".equals(navigationItem0.getName())){
+                levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(11);
+            }else{
+                levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(navigationId);
+            }
         }
 //        if(StringUtils.isEmpty(version)) {
 //            result = elasticsearchService.aggregation(navigationItem0.getName(), buriedPoint, yesterday, System.currentTimeMillis());
