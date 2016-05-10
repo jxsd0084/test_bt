@@ -14,12 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,9 +64,9 @@ public class RecordStatisticsController {
         String esSearchItem = buriedPoint.replaceAll("\\.","_");
         LOGGER.info("esSearchItem:" + esSearchItem);
         if("iOS".equals(navigationItem0.getName())){
-            result = elasticsearchService.searchBySql("iPhone OS",version,esSearchItem, yesterday, System.currentTimeMillis());
+            result = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", version, esSearchItem, yesterday, System.currentTimeMillis());
         }else{
-            result = elasticsearchService.searchBySql("Android",version,esSearchItem, yesterday, System.currentTimeMillis());
+            result = elasticsearchService.searchBySqlForMonitorRequest("Android", version, esSearchItem, yesterday, System.currentTimeMillis());
         }
 //       }
             List<Map<String, Object>> list = mergeData(levelTwoFieldses, result);

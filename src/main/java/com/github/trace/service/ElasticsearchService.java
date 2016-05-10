@@ -157,9 +157,9 @@ public class ElasticsearchService {
    * @param to
    * @return List<Map<String, Object>>
    */
-  public List<Map<String, Object>> searchBySql(String os, String appVersion, String item,
-                                               long from, long to) {
-    return searchBySql(os, appVersion, item, from, to, -1);
+  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String item,
+                                                                long from, long to) {
+    return searchBySqlForMonitorRequest(os, appVersion, item, from, to, -1);
   }
 
   /**
@@ -171,11 +171,33 @@ public class ElasticsearchService {
    * @param limit
    * @return List<Map<String, Object>>
    */
-  public List<Map<String, Object>> searchBySql(String os, String appVersion, String item,
-                                               long from, long to, int limit) {
-    List<Map<String, Object>> list = Lists.newLinkedList();
+  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String item,
+                                                                long from, long to, int limit) {
+    String sql = sqlBuilderForMonitorRequest(os, appVersion, item, from, to, limit);
+    return sqlSearch(sql);
+  }
 
-    String sql = sqlBuilder(os, appVersion, item, from, to, limit);
+  public List<Map<String, Object>> searchBySqlForOthers(String topic, String item,
+                                                        long from, long to) {
+    return searchBySqlForOthers(topic, item, from, to, -1);
+  }
+
+  public List<Map<String, Object>> searchBySqlForOthers(String topic, String item,
+                                                        long from, long to, int limit) {
+    String sql = sqlBuilderForOthers(topic, item, from, to, limit);
+    return sqlSearch(sql);
+  }
+
+  public Response searchBySql(String sql) throws IOException {
+    String baseUrl = ElasticSearchHelper.getSqlUrl();
+    String fullUrl = baseUrl + "?sql=" + StringUtils.trim(sql);
+
+    Request request = new Request.Builder().url(fullUrl).build();
+    return OkHttpUtil.execute(request);
+  }
+
+  private List<Map<String, Object>> sqlSearch(String sql) {
+    List<Map<String, Object>> list = Lists.newLinkedList();
     try {
       Response response = searchBySql(sql);
       if (!response.isSuccessful()) {
@@ -206,18 +228,10 @@ public class ElasticsearchService {
     return list;
   }
 
-  public Response searchBySql(String sql) throws IOException {
-    String baseUrl = ElasticSearchHelper.getSqlUrl();
-    String fullUrl = baseUrl + "?sql=" + StringUtils.trim(sql);
-
-    Request request = new Request.Builder().url(fullUrl).build();
-    return OkHttpUtil.execute(request);
-  }
-
-  private String sqlBuilder(String os, String appVersion, String item,
-                            long from, long to, int limit) {
+  private String sqlBuilderForMonitorRequest(String os, String appVersion, String item,
+                                             long from, long to, int limit) {
     StringBuilder sql = new StringBuilder();
-    sql.append(" SELECT " + item + ", count(*) as count1 from datapt-buriedtool ")
+    sql.append(" SELECT ").append(item).append(", count(*) as count1 from datapt-buriedtool ")
         .append(" where _type = 'dcx.MonitorRequest' ");
     sql.append(" and M98 >= ").append(from).append(" and M98 <= ").append(to).append(" ");
     if (!Strings.isNullOrEmpty(os)) {
@@ -226,10 +240,21 @@ public class ElasticsearchService {
     if (!Strings.isNullOrEmpty(appVersion)) {
       sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
     }
-    sql.append(" group by " + item + " order by count1 desc ");
+    sql.append(" group by ").append(item).append(" order by count1 desc ");
     sql.append(" limit ").append(limit > 0 ? limit : 10000);
-    LOG.warn(sql.toString());
+    LOG.debug(sql.toString());
     return sql.toString();
+  }
+
+  private String sqlBuilderForOthers(String topic, String item, long from, long to, int limit) {
+    StringBuilder sql1 = new StringBuilder();
+    sql1.append(" SELECT ").append(item).append(", count(*) as count1 from datapt-buriedtool ")
+        .append(" where _type = '").append(topic).append("' ")
+        .append(" and stamp >= ").append(from).append(" and stamp <= ").append(to).append(" ")
+        .append(" group by ").append(item).append(" order by count1 desc ")
+        .append(" limit ").append(limit > 0 ? limit : 10000);
+    LOG.debug(sql1.toString());
+    return sql1.toString();
   }
 
   private void getBucketSubAggregationValue(Terms.Bucket bucket, Map<String, Object> fields) {
