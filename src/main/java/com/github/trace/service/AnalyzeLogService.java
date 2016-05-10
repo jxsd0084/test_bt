@@ -83,7 +83,7 @@ public class AnalyzeLogService {
 
     public Map<String,Map<String,String>> getBuriedInfoByBusi(String navName){
 
-        if(!buriedMapCache.containsKey(navName)||(buriedMapCache.containsKey(navName)&&(System.currentTimeMillis()-buriedMapCacheTimestamp.getOrDefault(navName,System.currentTimeMillis()))>=3600*1000L)) {
+//        if(!buriedMapCache.containsKey(navName)||(buriedMapCache.containsKey(navName)&&(System.currentTimeMillis()-buriedMapCacheTimestamp.getOrDefault(navName,System.currentTimeMillis()))>=3600*1000L)) {
             List<AnalyzeLogFields> fields = analyzeLogMapperr.getBuriedInfoByBusi(navName);
 
             //System.out.println("get buriedMap from:"+navName);
@@ -101,12 +101,12 @@ public class AnalyzeLogService {
 
                 buriedMap.put(field.getBp_name(), map);
             }
-
-            buriedMapCache.put(navName,buriedMap);
-            buriedMapCacheTimestamp.put(navName,System.currentTimeMillis());
-        }
-
-        return buriedMapCache.get(navName);
+            return buriedMap;
+//            buriedMapCache.put(navName,buriedMap);
+//            buriedMapCacheTimestamp.put(navName,System.currentTimeMillis());
+//        }
+//
+//        return buriedMapCache.get(navName);
     }
 
     public void setTagGroupInfo(){
