@@ -33,7 +33,7 @@
         <select id="buriedPoint_sel1" style="width: 205px;display: none;">
             </select>
         <span class="functions">
-            <input id="version" type="text" placeholder="请输入企信版本号（可不填）" style="height: 28px;display: none"/>
+            <input id="version" type="text" placeholder="请输入版本号(可不填)" style="height: 28px;display: none"/>
             <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="统计" onclick="searchBtnClick();" /> （默认为查询全部行为）
         </span>
 
