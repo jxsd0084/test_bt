@@ -66,11 +66,18 @@ public class RecordStatisticsController {
 //            result = elasticsearchService.aggregation(navigationItem0.getName(), buriedPoint, yesterday, System.currentTimeMillis());
 //        }else{
         String esSearchItem = buriedPoint.replaceAll("\\.","_");
+        String appVersion = null;
+        String innerVersion = null;
+        if(version.contains(".")){
+            appVersion = version;
+        }else{
+            innerVersion = version;
+        }
         LOGGER.info("esSearchItem:" + esSearchItem);
         if("iOS".equals(navigationItem0.getName())){
-            result = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", version, "", esSearchItem, yesterday, now);
+            result = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", appVersion, innerVersion, esSearchItem, yesterday, now);
         }else if("Android".equals(navigationItem0.getName())){
-            result = elasticsearchService.searchBySqlForMonitorRequest("Android", version, "", esSearchItem, yesterday, now);
+            result = elasticsearchService.searchBySqlForMonitorRequest("Android", appVersion, innerVersion, esSearchItem, yesterday, now);
         }else{
             result = elasticsearchService.searchBySqlForOthers(navigationItem0.getTopic(),buriedPoint,yesterday,now);
         }
