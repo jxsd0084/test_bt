@@ -68,9 +68,9 @@ public class RecordStatisticsController {
         String esSearchItem = buriedPoint.replaceAll("\\.","_");
         LOGGER.info("esSearchItem:" + esSearchItem);
         if("iOS".equals(navigationItem0.getName())){
-            result = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", version, esSearchItem, yesterday, now);
+            result = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", version, "", esSearchItem, yesterday, now);
         }else if("Android".equals(navigationItem0.getName())){
-            result = elasticsearchService.searchBySqlForMonitorRequest("Android", version, esSearchItem, yesterday, now);
+            result = elasticsearchService.searchBySqlForMonitorRequest("Android", version, "", esSearchItem, yesterday, now);
         }else{
             result = elasticsearchService.searchBySqlForOthers(navigationItem0.getTopic(),buriedPoint,yesterday,now);
         }

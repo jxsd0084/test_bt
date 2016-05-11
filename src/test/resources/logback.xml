@@ -29,7 +29,7 @@
         <appender-ref ref="RollingFile"/>
     </appender>&ndash;&gt;-->
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

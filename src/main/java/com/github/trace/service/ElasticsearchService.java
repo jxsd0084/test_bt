@@ -153,27 +153,29 @@ public class ElasticsearchService {
    * 使用sql查询es
    * @param os   iPhone OS  or  Android
    * @param appVersion
+   * @param innerAppVersion  app内部版本
    * @param from
    * @param to
    * @return List<Map<String, Object>>
    */
-  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String item,
-                                                                long from, long to) {
-    return searchBySqlForMonitorRequest(os, appVersion, item, from, to, -1);
+  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String innerAppVersion,
+                                                                String item, long from, long to) {
+    return searchBySqlForMonitorRequest(os, appVersion, innerAppVersion, item, from, to, -1);
   }
 
   /**
    * 使用sql查询es
    * @param os   iPhone OS  or  Android
    * @param appVersion
+   * @param innerAppVersion  app内部版本
    * @param from
    * @param to
    * @param limit
    * @return List<Map<String, Object>>
    */
-  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String item,
-                                                                long from, long to, int limit) {
-    String sql = sqlBuilderForMonitorRequest(os, appVersion, item, from, to, limit);
+  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String innerAppVersion,
+                                                                String item, long from, long to, int limit) {
+    String sql = sqlBuilderForMonitorRequest(os, appVersion, innerAppVersion, item, from, to, limit);
     return sqlSearch(sql);
   }
 
@@ -228,8 +230,8 @@ public class ElasticsearchService {
     return list;
   }
 
-  private String sqlBuilderForMonitorRequest(String os, String appVersion, String item,
-                                             long from, long to, int limit) {
+  private String sqlBuilderForMonitorRequest(String os, String appVersion, String innerAppVersion,
+                                             String item, long from, long to, int limit) {
     StringBuilder sql = new StringBuilder();
     sql.append(" SELECT ").append(item).append(", count(*) as count1 from datapt-buriedtool ")
         .append(" where _type = 'dcx.MonitorRequest' ");
@@ -240,9 +242,12 @@ public class ElasticsearchService {
     if (!Strings.isNullOrEmpty(appVersion)) {
       sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
     }
+    if (!Strings.isNullOrEmpty(innerAppVersion)) {
+      sql.append(" and M7 = '").append(innerAppVersion.trim()).append("' ");
+    }
     sql.append(" group by ").append(item).append(" order by count1 desc ");
     sql.append(" limit ").append(limit > 0 ? limit : 10000);
-    LOG.debug(sql.toString());
+    LOG.info(sql.toString());
     return sql.toString();
   }
 
@@ -253,7 +258,7 @@ public class ElasticsearchService {
         .append(" and stamp >= ").append(from).append(" and stamp <= ").append(to).append(" ")
         .append(" group by ").append(item).append(" order by count1 desc ")
         .append(" limit ").append(limit > 0 ? limit : 10000);
-    LOG.debug(sql1.toString());
+    LOG.info(sql1.toString());
     return sql1.toString();
   }
 
