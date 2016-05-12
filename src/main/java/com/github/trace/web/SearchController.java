@@ -56,7 +56,7 @@ public class SearchController {
 		sLog.setKeyWord(formateStr(keyWord,navigationItem0.getName())); // 搜索关键词
 		sLog.setHighLightKey(addWhere(keyWord,navigationItem0.getName()));
 		sLog.setTag("stamp");                                           // 暂时写死
-		sLog.setStartTime(System.currentTimeMillis() - 24*3600*1000L);  // 24h时间戳
+		sLog.setStartTime(System.currentTimeMillis() - 3*24*3600*1000L);  // 72h时间戳
 		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
 		sLog.setPageStart(0);
 		sLog.setPageSize(1000);                                         // 默认1000条

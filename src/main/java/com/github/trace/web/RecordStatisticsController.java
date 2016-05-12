@@ -54,7 +54,7 @@ public class RecordStatisticsController {
         List<LevelTwoFields> levelTwoFieldses = null;
         List<Map<String, Object>> result = null;
         long now = System.currentTimeMillis();
-        long yesterday = now - 7*(24 * 3600 * 1000L);
+        long yesterday = now - 3*(24 * 3600 * 1000L);
         if("M99.M1".equals(buriedPoint)||"actionid".equals(buriedPoint.toLowerCase())) {
             if("Android".equals(navigationItem0.getName())){
                 levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(11);
