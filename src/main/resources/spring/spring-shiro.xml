@@ -27,6 +27,8 @@
             <value>
                 /shiro-cas = casFilter
                 /logout = anon
+                /dataType/** = roles[dataplatform],perms["bt"]
+                /cep/** = roles[dataplatform],perms["bt"]
                 /** = user
             </value>
         </property>
