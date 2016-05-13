@@ -115,7 +115,7 @@
                                                 }
                                             }
                                             if(appVersionList!=null&&appVersionList.length>0){
-                                                for(var i = 0;i<appVersionList.length;i++) {
+                                                for(var i = appVersionList.length - 1;i>=0;i--) {
                                                     appVersionContent = appVersionContent + "<option value='" + appVersionList[i].value + "'>应用版本号：" + appVersionList[i].value + "</option>";
                                                 }
                                             }
