@@ -1,5 +1,6 @@
 package com.github.trace.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.BuriedPoint0;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
@@ -9,6 +10,7 @@ import com.github.trace.service.DataTypeService;
 import com.github.trace.service.ElasticsearchService;
 import com.github.trace.service.Navigation0Service;
 import com.github.trace.utils.ControllerHelper;
+import com.github.trace.utils.GuavaCacheHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ public class RecordStatisticsController {
         List<LevelTwoFields> levelTwoFieldses = null;
         List<Map<String, Object>> result = null;
         long now = System.currentTimeMillis();
-        long yesterday = now - 7*(24 * 3600 * 1000L);
+        long yesterday = now - 3*(24 * 3600 * 1000L);
         if("M99.M1".equals(buriedPoint)||"actionid".equals(buriedPoint.toLowerCase())) {
             if("Android".equals(navigationItem0.getName())){
                 levelTwoFieldses = dataTypeService.getLevelTwoFieldByNavId(11);
@@ -100,9 +102,37 @@ public class RecordStatisticsController {
     }
 
     @RequestMapping("/searchBuriedPoint")
-    public @ResponseBody List<BuriedPoint0> searchBuriedPoint(@RequestParam("navigationId") int navigationId) {
-        List<BuriedPoint0> list = cepService.getBuriedPoint0List(navigationId);
-        return list;
+    public @ResponseBody String searchBuriedPoint(@RequestParam("navigationId") int navigationId) {
+        Map<String,Object> map = new HashMap<>();
+        long now = System.currentTimeMillis();
+        long yesterday = now - 3*(24 * 3600 * 1000L);
+        List<Map<String, Object>> appVersionList = null;
+        List<Map<String, Object>> innerVersionList = null;
+        List<BuriedPoint0> buriedPointlist = cepService.getBuriedPoint0List(navigationId);
+        if(navigationId==11){
+            if(GuavaCacheHelper.getVersion("IosVersion")!=null){
+                map = (Map<String,Object>)GuavaCacheHelper.getVersion("IosVersion");
+            }else {
+                appVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M6", yesterday, now);
+                innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M7", yesterday, now);
+                map.put("appVersionList",GuavaCacheHelper.sort(appVersionList));
+                map.put("innerVersionList",GuavaCacheHelper.sort(innerVersionList));
+                GuavaCacheHelper.put("IosVersion",map);
+            }
+        }else if(navigationId == 12){
+            if(GuavaCacheHelper.getVersion("AndroidVersion")!=null){
+                map = (Map<String,Object>)GuavaCacheHelper.getVersion("AndroidVersion");
+            }else {
+                appVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M6", yesterday, now);
+                innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M7", yesterday, now);
+                map.put("appVersionList",GuavaCacheHelper.sort(appVersionList));
+                map.put("innerVersionList",GuavaCacheHelper.sort(innerVersionList));
+                GuavaCacheHelper.put("AndroidVersion",map);
+            }
+        }
+        map.put("buriedPointlist",buriedPointlist);
+        LOGGER.info("一级事件与版本号：" + map.toString());
+        return JSONObject.toJSONString(map);
     }
 
     /**

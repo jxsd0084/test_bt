@@ -16,4 +16,20 @@
     <task:annotation-driven executor="myExecutor" scheduler="myScheduler"/>
     <task:executor id="myExecutor" pool-size="5-50" queue-capacity="10" rejection-policy="CALLER_RUNS"/>
     <task:scheduler id="myScheduler" pool-size="5"/>
+
+    <bean id="versionSyncSchedule" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+        <!-- wait 20 seconds before starting repeated execution -->
+        <property name="delay" value="20000" />
+        <!-- run every 1 hours -->
+        <property name="period" value="3600000" />
+        <property name="runnable" ref="versionSyncTask" />
+    </bean>
+    <bean id="scheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean" lazy-init="false" >
+        <property name="scheduledExecutorTasks">
+            <list>
+                <ref bean="versionSyncSchedule"/>
+            </list>
+        </property>
+        <property name="continueScheduledExecutionAfterException" value="true"/>
+    </bean>
 </beans>
