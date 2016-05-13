@@ -27,8 +27,15 @@
             <value>
                 /shiro-cas = casFilter
                 /logout = anon
-                /dataType/** = roles[dataplatform],perms["bt"]
-                /cep/** = roles[dataplatform],perms["bt"]
+                /dataType/new = roles[dataplatform],perms["bt"]
+                /dataType/editLevelOne = roles[dataplatform],perms["bt"]
+                /dataType/editLevelTwo = roles[dataplatform],perms["bt"]
+                /dataType/newM99 = roles[dataplatform],perms["bt"]
+                /dataType/editM99 = roles[dataplatform],perms["bt"]
+                /dataType/deleteM99 = roles[dataplatform],perms["bt"]
+                /cep/newConifg = roles[dataplatform],perms["bt"]
+                /cep/new = roles[dataplatform],perms["bt"]
+                /cep/delete = roles[dataplatform],perms["bt"]
                 /** = user
             </value>
         </property>
