@@ -83,11 +83,11 @@ public class AnalyzeLogService {
 
     public Map<String,Map<String,String>> getBuriedInfoByBusi(String navName){
 
-        if(!buriedMapCache.containsKey(navName)||(buriedMapCache.containsKey(navName)&&(System.currentTimeMillis()-buriedMapCacheTimestamp.getOrDefault(navName,System.currentTimeMillis()))>=3600*1000L)) {
+//        if(!buriedMapCache.containsKey(navName)||(buriedMapCache.containsKey(navName)&&(System.currentTimeMillis()-buriedMapCacheTimestamp.getOrDefault(navName,System.currentTimeMillis()))>=3600*1000L)) {
             List<AnalyzeLogFields> fields = analyzeLogMapperr.getBuriedInfoByBusi(navName);
 
-            System.out.println("get buriedMap from:"+navName);
-            LOG.warn("get buriedMap from:"+navName);
+            //System.out.println("get buriedMap from:"+navName);
+            LOG.debug("get buriedMap from:"+navName);
 
             Map<String,Map<String,String>> buriedMap=new HashMap<>();
             buriedMap.clear();
@@ -101,12 +101,12 @@ public class AnalyzeLogService {
 
                 buriedMap.put(field.getBp_name(), map);
             }
-
-            buriedMapCache.put(navName,buriedMap);
-            buriedMapCacheTimestamp.put(navName,System.currentTimeMillis());
-        }
-
-        return buriedMapCache.get(navName);
+            return buriedMap;
+//            buriedMapCache.put(navName,buriedMap);
+//            buriedMapCacheTimestamp.put(navName,System.currentTimeMillis());
+//        }
+//
+//        return buriedMapCache.get(navName);
     }
 
     public void setTagGroupInfo(){
@@ -178,8 +178,6 @@ public class AnalyzeLogService {
             return rt;
         }
 
-
-
         if (type.equals("文本")) {
             patternString = ".*";
         }
@@ -199,7 +197,10 @@ public class AnalyzeLogService {
                 e.printStackTrace();
             }
 
-            Pattern pattern2 = Pattern.compile(patternString2);
+
+            try {
+                Pattern pattern2 = Pattern.compile(patternString2);
+
 
             Matcher matcher2 = pattern2.matcher(val);
             b = matcher2.matches();
@@ -224,6 +225,10 @@ public class AnalyzeLogService {
                     err = "正则不匹配";
                 }
             }
+            }catch(Exception e){
+                LOG.debug("handleField regex:"+patternString2+" Exception:",e);
+                err="正则表达式格式异常";
+            }
 
         }else{
             Pattern pattern = Pattern.compile(patternString);
@@ -233,7 +238,6 @@ public class AnalyzeLogService {
             if(type.equals("日期")&&b){
                 long nowTimestamp=new Date().getTime();
                 long logTimestamp=Long.parseLong(val);
-
 
                 try {
                     Date date = new Date(Long.parseLong(val));
@@ -257,7 +261,7 @@ public class AnalyzeLogService {
 
     }
 
-    public List<Map<String,List<String>>>  process(String Target) {
+    public List<Map<String,List<String>>>  process(String Target,String navName) {
         JSONArray jsonArray = JSON.parseArray(Target);
         //JSONArray ja1 = new JSONArray();
         String key;
@@ -274,14 +278,15 @@ public class AnalyzeLogService {
 
         Map<String,List<String>> extra=new HashMap<>();
 
-        try {
+
             for (int i = 0; i < jsonArray.size(); i++) {
+
                 LinkedHashMap<String, String> jsonMap2 = JSON.parseObject(jsonArray.get(i).toString(), new TypeReference<LinkedHashMap<String, String>>() {
                 });
 
 
                 Map<String, List<String>> map = new HashMap<String, List<String>>();
-
+                try {
                 for (Map.Entry<String, Map<String, String>> entry1 : buriedMap.entrySet()) {
                     List<String> list = new ArrayList<String>();
 
@@ -296,6 +301,8 @@ public class AnalyzeLogService {
                     list.add(desc);
                     list.add(type);
                     list.add(regex);
+                    list.add("");
+                    list.add("");
 
                     map.put(key, list);
                 }
@@ -313,7 +320,7 @@ public class AnalyzeLogService {
 
                 String enterKey;
 
-                if (jsonMap2.containsKey(MobileDevEnterKey) && jsonMap2.get(MobileDevEnterKey).matches(MobileDevEnterVal)) {
+                if (map.containsKey(MobileDevEnterKey)&&jsonMap2.containsKey(MobileDevEnterKey) && jsonMap2.get(MobileDevEnterKey).matches(MobileDevEnterVal)) {
                     map.get(MobileDevEnterKey).add(jsonMap2.get(MobileDevEnterKey));
                     map.get(MobileDevEnterKey).add("");
 
@@ -327,17 +334,17 @@ public class AnalyzeLogService {
                         enterKey = jsonMap2.get(MobileDevEnter);
                         if (enterKey.equals("")) {
                             err = "事件赋值为空";
-                            map.get(MobileDevEnter).add("");
-                            map.get(MobileDevEnter).add(err);
+                            map.get(MobileDevEnter).add(4,"");
+                            map.get(MobileDevEnter).add(5,err);
                         } else {
                             err = handleTag(enterKey);
 
                             if (!err.equals("")) {
-                                map.get(MobileDevEnter).add(enterKey);
-                                map.get(MobileDevEnter).add(err);
+                                map.get(MobileDevEnter).add(4,enterKey);
+                                map.get(MobileDevEnter).add(5,err);
                             } else {
-                                map.get(MobileDevEnter).add(enterKey);
-                                map.get(MobileDevEnter).add("");
+                                map.get(MobileDevEnter).add(4,enterKey);
+                                map.get(MobileDevEnter).add(5,"");
                             }
 
                             if (buriedTwoMap.containsKey(enterKey)) {
@@ -349,7 +356,7 @@ public class AnalyzeLogService {
                                 for (String k : keySets) {
 
                                     if (k == null) {
-                                        LOG.warn("ks is null:" + enterKey);
+                                        LOG.debug("ks is null:" + enterKey+" navName:"+navName+" source:"+jsonMap2.toString());
                                         continue;
                                     }
                                     key2 = MobileDevEnterPre + "." + k;
@@ -372,6 +379,8 @@ public class AnalyzeLogService {
                                         list.add(desc2);
                                         list.add(type2);
                                         list.add(regex2);
+                                        list.add("");
+                                        list.add("");
 
                                         map.put(key2, list);
 
@@ -391,16 +400,16 @@ public class AnalyzeLogService {
                                         err = hfResult.get(1);
                                         val2 = hfResult.get(0);
                                         if (!err.equals("")) {
-                                            map.get(key2).add(val2);
-                                            map.get(key2).add(err);
+                                            map.get(key2).add(4,val2);
+                                            map.get(key2).add(5,err);
                                         } else {
-                                            map.get(key2).add(val2);
-                                            map.get(key2).add("");
+                                            map.get(key2).add(4,val2);
+                                            map.get(key2).add(5,"");
                                         }
                                     } else {
                                         try {
-                                            map.get(key2).add("");
-                                            map.get(key2).add("字段不存在");
+                                            map.get(key2).add(4,"");
+                                            map.get(key2).add(5,"字段不存在");
                                         } catch (NullPointerException e) {
                                             List<String> list = new ArrayList<String>();
                                             list.add(key2);
@@ -424,15 +433,15 @@ public class AnalyzeLogService {
                         }
                     } else {
                         err = "事件入口不存在";
-                        map.get(MobileDevEnterKey).add("");
-                        map.get(MobileDevEnterKey).add(err);
+                        map.get(MobileDevEnterKey).add(4,"");
+                        map.get(MobileDevEnterKey).add(5,err);
                     }
 
 
-                } else if (jsonMap2.containsKey(NonMobileDevEnter)) {
+                } else if (map.containsKey(NonMobileDevEnter)&&jsonMap2.containsKey(NonMobileDevEnter)) {
 
-                    map.get(NonMobileDevEnter).add(NonMobileDevEnter);
-                    map.get(NonMobileDevEnter).add("");
+                    map.get(NonMobileDevEnter).add(4,NonMobileDevEnter);
+                    map.get(NonMobileDevEnter).add(5,"");
 
                     filterSets.add(NonMobileDevEnter);
 
@@ -441,16 +450,16 @@ public class AnalyzeLogService {
 
                         if (enterKey.equals("")) {
                             err = "事件赋值为空";
-                            map.get(NonMobileDevEnter).add("");
-                            map.get(NonMobileDevEnter).add(err);
+                            map.get(NonMobileDevEnter).add(4,"");
+                            map.get(NonMobileDevEnter).add(5,err);
                         } else {
                             err = handleTag(enterKey);
                             if (!err.equals("")) {
-                                map.get(NonMobileDevEnter).add(enterKey);
-                                map.get(NonMobileDevEnter).add(err);
+                                map.get(NonMobileDevEnter).add(4,enterKey);
+                                map.get(NonMobileDevEnter).add(5,err);
                             } else {
-                                map.get(NonMobileDevEnter).add(enterKey);
-                                map.get(NonMobileDevEnter).add("");
+                                map.get(NonMobileDevEnter).add(4,enterKey);
+                                map.get(NonMobileDevEnter).add(5,"");
                             }
 
 
@@ -483,6 +492,8 @@ public class AnalyzeLogService {
                                         list.add(desc2);
                                         list.add(type2);
                                         list.add(regex2);
+                                        list.add("");
+                                        list.add("");
 
                                         map.put(key2, list);
                                         if(!extra.containsKey(key2)){
@@ -495,22 +506,22 @@ public class AnalyzeLogService {
                                     err = hfResult.get(1);
                                     val2 = hfResult.get(0);
                                     if (!err.equals("")) {
-                                        map.get(key2).add(val2);
-                                        map.get(key2).add(err);
+                                        map.get(key2).add(4,val2);
+                                        map.get(key2).add(5,err);
                                     } else {
-                                        map.get(key2).add(val2);
-                                        map.get(key2).add("");
+                                        map.get(key2).add(4,val2);
+                                        map.get(key2).add(5,"");
                                     }
                                 } else {
-                                    map.get(key2).add("");
-                                    map.get(key2).add("字段不存在");
+                                    map.get(key2).add(4,"");
+                                    map.get(key2).add(5,"字段不存在");
                                 }
                             }
                         }
                     } else {
                         err = "事件入口不存在";
-                        map.get(MobileDevEnterKey).add("");
-                        map.get(MobileDevEnterKey).add(err);
+                        map.get(MobileDevEnterKey).add(4,"");
+                        map.get(MobileDevEnterKey).add(5,err);
                     }
 
                 }
@@ -520,27 +531,34 @@ public class AnalyzeLogService {
 
 
                 if (map.containsKey(MobileDevEnterPre)) {
-                    map.get(MobileDevEnterPre).add("");
-                    map.get(MobileDevEnterPre).add("");
+                    map.get(MobileDevEnterPre).add(4,"");
+                    map.get(MobileDevEnterPre).add(5,"");
                 }
                 for (String bKey : bSets) {
                     Map<String, String> bVal = buriedMap.get(bKey);
+
+                    if(bVal==null){continue;}
+
                     val3 = jsonMap2.get(bKey);
                     desc3 = bVal.get("desc");
                     type3 = bVal.get("type");
                     isChecked3 = bVal.get("ischeck");
                     regex3 = bVal.get("regex");
 
-
-                    if(!extra.containsKey(bKey)){
+                    if(!map.containsKey(bKey)){
                         List<String> list = new ArrayList<String>();
                         list.add(bKey);
                         list.add(desc3);
                         list.add(type3);
                         list.add(regex3);
-                        extra.put(bKey,list);
-                    }
+                        list.add("");
+                        list.add("");
+                        map.put(bKey,list);
 
+                        if(!extra.containsKey(bKey)){
+                            extra.put(bKey,list);
+                        }
+                    }
 
                     if (bKey.equals(MobileDevEnterPre)) {
                         val3 = "";
@@ -562,20 +580,24 @@ public class AnalyzeLogService {
                     }
 
                     if (!err.equals("")) {
-                        map.get(bKey).add(val3);
-                        map.get(bKey).add(err);
+                        map.get(bKey).add(4,val3);
+                        map.get(bKey).add(5,err);
                     } else {
-                        map.get(bKey).add(val3);
-                        map.get(bKey).add("");
+                        map.get(bKey).add(4,val3);
+                        map.get(bKey).add(5,"");
                     }
 
                 }
                 output.add(map);
+                }catch(Exception e){
+                    LOG.debug("process log exception:",e);
+                    LOG.debug("navName:"+navName);
+                    LOG.debug("map:"+map);
+                    //LOG.debug(jsonArray.toJSONString());
+                    LOG.debug(jsonArray.get(i).toString());
+                }
             }
-        }catch(Exception e){
-            LOG.warn("process log exception:",e);
-            LOG.warn(jsonArray.toJSONString());
-        }
+
 
 
         int count=0;
@@ -596,8 +618,8 @@ public class AnalyzeLogService {
                     list.add(desc);
                     list.add(type);
                     list.add(regex);
-                    list.add("");
-                    list.add("");
+                    list.add(4,"");
+                    list.add(5,"");
 
                     output.get(count).put(key, list);
                 }
@@ -614,8 +636,7 @@ public class AnalyzeLogService {
     public  JSONArray  formatLog(String busiName,String Target){
         buriedMap=getBuriedInfoByBusi(busiName);
 
-        List<Map<String,List<String>>> output=process(Target);
-
+        List<Map<String,List<String>>> output=process(Target,busiName);
 
         JSONArray ja1 = new JSONArray();
 
@@ -624,58 +645,61 @@ public class AnalyzeLogService {
         for(Map<String,List<String>> m:output){
 
             for(Map.Entry<String,List<String>> m2:m.entrySet()){
-                JSONArray ja2 = new JSONArray();
-                JSONArray ja3 = new JSONArray();
-                String key4=m2.getKey();
-                JSONArray ja4=rt.get(key4);
-
-                String  desc4=m2.getValue().get(1);
-                String  val4=m2.getValue().get(4);
                 try {
-                    val4 = URLDecoder.decode(val4,"UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    LOG.error("The Exception is {}",e.getMessage());
-                }
-                String err4=m2.getValue().get(5);
+                    JSONArray ja2 = new JSONArray();
+                    JSONArray ja3 = new JSONArray();
+                    String key4 = m2.getKey();
+                    JSONArray ja4 = rt.get(key4);
 
-                if(ja4==null) {
-                    ja2.add(key4);
-                    ja2.add(desc4);
+                    String desc4 = m2.getValue().get(1);
+                    String val4 = m2.getValue().get(4);
+                    try {
+                        val4 = URLDecoder.decode(val4, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        LOG.debug("UnsupportedEncodingException:", e);
+                    }
+                    String err4 = m2.getValue().get(5);
 
-                    if(err4.equals("")){
-                        ja3.add(true);
-                    }else{
-                        ja3.add(false);
+                    if (ja4 == null) {
+                        ja2.add(key4);
+                        ja2.add(desc4);
+
+                        if (err4.equals("")) {
+                            ja3.add(true);
+                        } else {
+                            ja3.add(false);
+                        }
+
+                        ja3.add(val4);
+                        ja3.add(err4);
+
+                        ja2.add(ja3);
+
+                        rt.put(key4, ja2);
+
+                    } else {
+                        if (err4.equals("")) {
+                            ja3.add(true);
+                        } else {
+                            ja3.add(false);
+                        }
+                        ja3.add(val4);
+                        ja3.add(err4);
+
+                        rt.get(key4).add(ja3);
                     }
 
-                    ja3.add(val4);
-                    ja3.add(err4);
-
-                    ja2.add(ja3);
-
-                    rt.put(key4,ja2);
-
-                }else{
-                    if(err4.equals("")){
-                        ja3.add(true);
-                    }else{
-                        ja3.add(false);
-                    }
-                    ja3.add(val4);
-                    ja3.add(err4);
-
-                    rt.get(key4).add(ja3);
+                }catch(Exception e){
+                    LOG.debug("Exception e:",e);
+                    LOG.debug(m.toString());
+                    LOG.debug(m2.toString());
                 }
-
             }
         }
-
-
 
         for(Map.Entry<String,JSONArray> m2:rt.entrySet()) {
             String key4 = m2.getKey();
             JSONArray ja4 = rt.get(key4);
-
 
             if(ja4.size()!=7){
                 for(int i=ja4.size();i<7;i++) {
@@ -693,9 +717,10 @@ public class AnalyzeLogService {
         return ja1;
     }
     public Set<String> filterToES(String busiName,String Target,boolean isSentMonitor){
+        Set<String> esOutput=new HashSet<String>();
         buriedMap=getBuriedInfoByBusi(busiName);
 
-        List<Map<String,List<String>>> result=process(Target);
+        List<Map<String,List<String>>> result=process(Target,busiName);
 
         StringBuffer buffer=new StringBuffer();
 
@@ -704,7 +729,7 @@ public class AnalyzeLogService {
         String bpName,bpDesc,bpType,bpVal,err;
         boolean isSent=false;
 
-        Set<String> esOutput=new HashSet<String>();
+
 
         for(Map<String,List<String>> ele:result){
             buffer.append("测试，请忽略\n[埋点异常   Busi:");
@@ -766,7 +791,6 @@ public class AnalyzeLogService {
             return;
         }
 
-
         LOG.warn("sendMonitorByNavName topic:"+topic);
 
         int topicNo=5;
@@ -775,7 +799,7 @@ public class AnalyzeLogService {
 
         buriedMap=getBuriedInfoByBusi(navName);
 
-        List<Map<String,List<String>>> result=process(Target);
+        List<Map<String,List<String>>> result=process(Target,navName);
 
         StringBuffer buffer=new StringBuffer();
 
