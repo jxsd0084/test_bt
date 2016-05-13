@@ -10,6 +10,7 @@ import com.github.trace.service.DataTypeService;
 import com.github.trace.service.ElasticsearchService;
 import com.github.trace.service.Navigation0Service;
 import com.github.trace.utils.ControllerHelper;
+import com.github.trace.utils.GuavaCacheHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,15 +110,27 @@ public class RecordStatisticsController {
         List<Map<String, Object>> innerVersionList = null;
         List<BuriedPoint0> buriedPointlist = cepService.getBuriedPoint0List(navigationId);
         if(navigationId==11){
-            appVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M6", yesterday, now);
-            innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M7", yesterday, now);
+            if(GuavaCacheHelper.getVersion("IosVersion")!=null){
+                map = (Map<String,Object>)GuavaCacheHelper.getVersion("IosVersion");
+            }else {
+                appVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M6", yesterday, now);
+                innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M7", yesterday, now);
+                map.put("appVersionList",GuavaCacheHelper.sort(appVersionList));
+                map.put("innerVersionList",GuavaCacheHelper.sort(innerVersionList));
+                GuavaCacheHelper.put("IosVersion",map);
+            }
         }else if(navigationId == 12){
-            appVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M6", yesterday, now);
-            innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M7", yesterday, now);
+            if(GuavaCacheHelper.getVersion("AndroidVersion")!=null){
+                map = (Map<String,Object>)GuavaCacheHelper.getVersion("AndroidVersion");
+            }else {
+                appVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M6", yesterday, now);
+                innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M7", yesterday, now);
+                map.put("appVersionList",GuavaCacheHelper.sort(appVersionList));
+                map.put("innerVersionList",GuavaCacheHelper.sort(innerVersionList));
+                GuavaCacheHelper.put("AndroidVersion",map);
+            }
         }
         map.put("buriedPointlist",buriedPointlist);
-        map.put("appVersionList",appVersionList);
-        map.put("innerVersionList",innerVersionList);
         LOGGER.info("一级事件与版本号：" + map.toString());
         return JSONObject.toJSONString(map);
     }
