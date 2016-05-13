@@ -32,8 +32,10 @@
 ##     </select>
         <select id="buriedPoint_sel1" style="width: 205px;display: none;">
             </select>
+        <select id="version" style="width: 205px;display: none;">
+        </select>
         <span class="functions">
-            <input id="version" type="text" placeholder="请输入版本号(可不填)" style="height: 28px;display: none"/>
+##            <input id="version" type="text" placeholder="请输入版本号(可不填)" style="height: 28px;display: none"/>
             <input id="submit_btn" class="btn btn-primary" style="height: 28px; margin-top:-10px;" type="button" value="统计" onclick="searchBtnClick();" /> （默认为查询全部行为）
         </span>
 
@@ -90,7 +92,11 @@
                                     if(textStatus!="success"){
                                         alert(textStatus);
                                     }else{
-                                        if(data.length==0){
+                                        var json = JSON.parse(data);
+                                        var buriedPointList = json.buriedPointlist;
+                                        var appVersionList = json.appVersionList;
+                                        var innerVersionList = json.innerVersionList;
+                                        if(buriedPointList.length==0){
                                             alert("该主题无埋点数据定义！");
                                             $("#buriedPoint_sel1").val('');
                                             $("#buriedPoint_sel1").hide();
@@ -98,16 +104,30 @@
                                             $("#version").hide();
                                         }else {
                                             var htmlContent = "";
-                                            for (var i = 0; i < data.length; i++) {
-                                                if(data[i].bpName=="M99.M1"||data[i].bpName.toLowerCase()=="actionid") {
-                                                    htmlContent = htmlContent + "<option value='" + data[i].bpName + "' selected='selected'>" + "事件行为统计" + "</option>";
+                                            var versionContent = "<option value=''>请选择版本号</option>";
+                                            var appVersionContent="";
+                                            var innerVersionContent = "";
+                                            for (var i = 0; i < buriedPointList.length; i++) {
+                                                if(buriedPointList[i].bpName=="M99.M1"||buriedPointList[i].bpName.toLowerCase()=="actionid") {
+                                                    htmlContent = htmlContent + "<option value='" + buriedPointList[i].bpName + "' selected='selected'>" + "事件行为统计" + "</option>";
                                                 }else{
-                                                    htmlContent = htmlContent + "<option value='" + data[i].bpName + "'>" + data[i].bpValueDesc + "</option>";
+                                                    htmlContent = htmlContent + "<option value='" + buriedPointList[i].bpName + "'>" + buriedPointList[i].bpValueDesc + "</option>";
                                                 }
                                             }
+                                            if(appVersionList!=null&&appVersionList.length>0){
+                                                for(var i = 0;i<appVersionList.length;i++) {
+                                                    appVersionContent = appVersionContent + "<option value='" + appVersionList[i].value + "'>应用版本号：" + appVersionList[i].value + "</option>";
+                                                }
+                                            }
+                                            if(innerVersionList!=null&&innerVersionList.length>0){
+                                                for(var i = 0;i<innerVersionList.length;i++) {
+                                                    innerVersionContent = innerVersionContent + "<option value='" + innerVersionList[i].value + "'>内测版本号：" + innerVersionList[i].value + "</option>";
+                                                }
+                                            }
+                                            versionContent = versionContent + appVersionContent + innerVersionContent;
                                             $('#buriedPoint_sel1').html(htmlContent);
                                             $('#buriedPoint_sel1').show();
-                                            $("#version").val("");
+                                            $("#version").html(versionContent);
                                             $("#version").show();
                                         }
                                     }

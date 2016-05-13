@@ -1,5 +1,6 @@
 package com.github.trace.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.BuriedPoint0;
 import com.github.trace.entity.LevelOneFields;
 import com.github.trace.entity.LevelTwoFields;
@@ -100,9 +101,25 @@ public class RecordStatisticsController {
     }
 
     @RequestMapping("/searchBuriedPoint")
-    public @ResponseBody List<BuriedPoint0> searchBuriedPoint(@RequestParam("navigationId") int navigationId) {
-        List<BuriedPoint0> list = cepService.getBuriedPoint0List(navigationId);
-        return list;
+    public @ResponseBody String searchBuriedPoint(@RequestParam("navigationId") int navigationId) {
+        Map<String,Object> map = new HashMap<>();
+        long now = System.currentTimeMillis();
+        long yesterday = now - 3*(24 * 3600 * 1000L);
+        List<Map<String, Object>> appVersionList = null;
+        List<Map<String, Object>> innerVersionList = null;
+        List<BuriedPoint0> buriedPointlist = cepService.getBuriedPoint0List(navigationId);
+        if(navigationId==11){
+            appVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M6", yesterday, now);
+            innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("iPhone OS", null, null, "M7", yesterday, now);
+        }else if(navigationId == 12){
+            appVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M6", yesterday, now);
+            innerVersionList = elasticsearchService.searchBySqlForMonitorRequest("Android", null, null, "M7", yesterday, now);
+        }
+        map.put("buriedPointlist",buriedPointlist);
+        map.put("appVersionList",appVersionList);
+        map.put("innerVersionList",innerVersionList);
+        LOGGER.info("一级事件与版本号：" + map.toString());
+        return JSONObject.toJSONString(map);
     }
 
     /**
