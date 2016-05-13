@@ -1,11 +1,10 @@
 package com.github.trace.utils;
 
-import com.github.trace.service.DataTypeService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import jetbrick.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -46,8 +45,10 @@ public class GuavaCacheHelper {
         List<String> strList = new ArrayList<>();
         for(Map<String,Object> map:list){
             String key = map.get("value").toString();
-            strList.add(key);
-            tempMap.put(key,map);
+            if(StringUtils.isNotEmpty(key)) {
+                strList.add(key);
+                tempMap.put(key, map);
+            }
         }
         Collections.sort(strList);
         list.clear();
