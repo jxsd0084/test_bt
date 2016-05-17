@@ -3,6 +3,7 @@ package com.github.trace.service;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -17,10 +18,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -66,7 +71,39 @@ public class KafkaService {
     });
   }
 
+  public long getLastMessageTimestamp(String topic) {
+    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1);
+    if (fetchedData == null || fetchedData.isEmpty()) {
+      return System.currentTimeMillis();
+    }
+
+    boolean isNginx = StringUtils.startsWith(topic, "nginx");
+
+    List<Long> list = fetchedData.stream().map(k -> {
+      String message = k.getMessage();
+      return isNginx ? NginxLogHandler.getStampFromNginxLog(message)
+                     : JsonLogHandler.getStampFromLog(message);
+    }).collect(Collectors.toList());
+    LOGGER.info(list.toString());
+    Collections.sort(list, (t1, t2) -> Objects.equals(t1, t2) ? 0 : (t1 < t2 ? 1 : -1));
+
+    return list.get(0);
+  }
+
   public Set<String> getMessages(String topic, int count) {
+    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, count);
+
+    Set<String> results = Sets.newHashSet();
+    for (KafkaMessageAndOffset messageAndOffset : fetchedData) {
+      if (results.size() > count) {
+        break;
+      }
+      results.add(messageAndOffset.getMessage());
+    }
+    return parse(results, topic);
+  }
+
+  private Set<KafkaMessageAndOffset> fetchData(String topic, int count) {
     Set<KafkaMessageAndOffset> fetchedData = Sets.newHashSet();
 
     TreeMap<Integer, PartitionMetadata> metaDatas = KafkaUtil.findLeader(brokers, port, topic);
@@ -78,22 +115,14 @@ public class KafkaService {
       SimpleConsumer consumer = new SimpleConsumer(leadBroker, port,
                                                    connectTimeout, bufferSize, clientName);
       long lastOffset = KafkaUtil.getLastOffset(consumer, topic, partition,
-                                            kafka.api.OffsetRequest.LatestTime(), clientName);
+                                                kafka.api.OffsetRequest.LatestTime(), clientName);
       if (lastOffset > 0) {
         fetchedData.addAll(KafkaUtil.fetchData(consumer, topic, partition,
                                                clientName, lastOffset - count, fetchSize));
       }
       consumer.close();
     }
-
-    Set<String> results = Sets.newHashSet();
-    for (KafkaMessageAndOffset messageAndOffset : fetchedData) {
-      if (results.size() > count) {
-        break;
-      }
-      results.add(messageAndOffset.getMessage());
-    }
-    return parse(results, topic);
+    return fetchedData;
   }
 
   private Set<String> parse(Set<String> logs, String topic) {
