@@ -255,4 +255,21 @@ public class DataTypeService {
         return levelOneFieldMapper.queryByNavId(navigationId);
     }
 
+    public boolean queryLevelTwoByLevelOneId(int id) {
+        boolean result = false;
+        List<LevelTwoFields> list = levelTwoFieldMapper.queryBylevelOneId(id);
+        if(list.isEmpty()){
+            result = true;
+        }
+        return result;
+    }
+
+    public boolean queryM99ByLevelTwoId(int id) {
+        boolean result = false;
+        List<M99Fields> list = m99FieldsMapper.queryByLevelTwoId(id);
+        if(list.isEmpty()){
+            result = true;
+        }
+        return result;
+    }
 }

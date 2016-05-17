@@ -29,6 +29,7 @@
 				<th>事件分类id</th>
                 <th>分类名称</th>
 				<th>分类描述</th>
+                <th>负责人</th>
 				<th>操作</th>
 			</tr>
 			</thead>
@@ -64,15 +65,42 @@
                 },
                 {
                     targets: 0, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=' + full[3] + '&L1_tag=' + full[0] + '&L1_name=' + full[1] + '">' + data + '</a>';
+                        return '<a href="${CONTEXT_PATH}/dataType/listLevelTwo?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=' + full[4] + '&L1_tag=' + full[0] + '&L1_name=' + full[1] + '">' + data + '</a>';
                     }
                 },
                 {
                     targets: 3, render: function (data, type, full, meta) {
-                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=' + full[3] + '&tag=modify" >修改</a>';
+                    return full[3];
+                }
+                },
+                {
+                    targets: 4, render: function (data, type, full, meta) {
+                        return '<a href="${CONTEXT_PATH}/dataType/editLevelOne?navigationId=${navigation_id}&navigationName=${navigation_name}&L1_id=' + full[4] + '&tag=modify" >修改</a>&nbsp;&nbsp;&nbsp;' +
+                                '|&nbsp;&nbsp;&nbsp;<a id ="' + full[4] + '" name = "delete" style="width: 40px;cursor:pointer;">刪除</a>';
                     }
                 }
             ]
+        });
+
+        $("[name='delete']").on('click', function () {
+            //       window.location.href='${CONTEXT_PATH}/nav/delete?id='+this.id;
+            if(confirm("是否确认删除？")) {
+                $.ajax({
+                    url: "${CONTEXT_PATH}/dataType/deleteLevelOne",
+                    contentType: "application/json",
+                    data: {id: this.id},
+                    dataType: "text",
+                    type: "GET",
+                    success: function (data) {
+                        var json = JSON.parse(data);
+                        if (json.code == 200) {
+                            location.reload();
+                        } else {
+                            alert("警告：" + json.info);
+                        }
+                    }
+                });
+            }
         });
 
     });

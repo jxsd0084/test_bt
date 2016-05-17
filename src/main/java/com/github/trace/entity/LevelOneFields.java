@@ -39,6 +39,12 @@ public class LevelOneFields {
     //导航栏ID
     private Integer navigationId;
 
+    private String creator;
+
+    private String modifier;
+
+    private int status = 1;
+
     public Integer getNavigationId() {
         return navigationId;
     }
@@ -151,15 +157,42 @@ public class LevelOneFields {
         this.level1FieldDesc = level1FieldDesc == null ? null : level1FieldDesc.trim();
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "{" +
+        return "LevelOneFields{" +
                 "id=" + id +
                 ", level1FieldTag='" + level1FieldTag + '\'' +
                 ", level1FieldName='" + level1FieldName + '\'' +
                 ", level1FieldDesc='" + level1FieldDesc + '\'' +
                 ", m99FieldsCount=" + m99FieldsCount +
                 ", navigationId=" + navigationId +
+                ", creator='" + creator + '\'' +
+                ", modifier='" + modifier + '\'' +
+                ", status=" + status +
                 '}';
     }
 }
