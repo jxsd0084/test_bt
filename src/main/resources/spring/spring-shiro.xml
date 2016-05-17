@@ -32,6 +32,8 @@
                 /dataType/editLevelTwo = roles[dataplatform],perms["bt"]
                 /dataType/newM99 = roles[dataplatform],perms["bt"]
                 /dataType/editM99 = roles[dataplatform],perms["bt"]
+                /dataType/deleteLevelOne = roles[dataplatform],perms["bt"]
+                /dataType/deleteLevelTwo = roles[dataplatform],perms["bt"]
                 /dataType/deleteM99 = roles[dataplatform],perms["bt"]
                 /cep/newConifg = roles[dataplatform],perms["bt"]
                 /cep/new = roles[dataplatform],perms["bt"]
