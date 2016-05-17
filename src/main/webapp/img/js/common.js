@@ -12,3 +12,13 @@
         alert(msg);
         window.location.href = url;
     }
+
+
+    $(".user-menu").on('click', function () {
+        var obj = $("#dropdown-menu");
+        if(obj.css("display")=="none"){
+            obj.css("display","block");
+        }else{
+            obj.css("display","none");
+        }
+    })
