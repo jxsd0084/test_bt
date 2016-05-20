@@ -19,4 +19,7 @@ public interface NavigationItem0Mapper extends ICrudMapper<NavigationItem0> {
   @Select("SELECT * FROM navigation_item0 WHERE name=#{name}")
   NavigationItem0 findByName(@Param("name") String name);
 
+  @Select("SELECT * FROM navigation_item0 WHERE item_type =#{itemType}")
+  List<NavigationItem0> findByType(@Param("itemType")int itemType);
+
 }

@@ -119,4 +119,9 @@ public class NavigationController {
        analyzeLogService.sendMonitorByNavName(navigationName);
         return ControllerHelper.returnResponseVal(1, "报警");
     }
+    @RequestMapping("/getUserInfo")
+    public @ResponseBody String getUserInfo(@RequestParam(name = "username") String username){
+        String userInfo = navigation0Service.getUserInfo(username);
+        return userInfo;
+    }
 }

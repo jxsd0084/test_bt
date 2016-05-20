@@ -74,7 +74,7 @@ public class KafkaService {
   public long getLastMessageTimestamp(String topic) {
     Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1);
     if (fetchedData == null || fetchedData.isEmpty()) {
-      return System.currentTimeMillis();
+      return 0L;
     }
 
     boolean isNginx = StringUtils.startsWith(topic, "nginx");

@@ -5,19 +5,30 @@ package com.github.trace.utils;
  */
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OkHttpUtil {
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(OkHttpUtil.class);
   private static final String CHARSET_NAME = "UTF-8";
   private static final OkHttpClient mOkHttpClient = new OkHttpClient();
 
@@ -101,5 +112,34 @@ public class OkHttpUtil {
    */
   public static String attachHttpGetParams(String url, List<BasicNameValuePair> params) {
     return url + "?" + formatParams(params);
+  }
+
+  public static HttpEntity postData(HttpPost httpPost,List<NameValuePair> formParams) {
+    HttpClient httpclient = new DefaultHttpClient();
+    HttpEntity entity = null;
+    UrlEncodedFormEntity uefEntity=null;
+    try {
+      uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+      httpPost.setEntity(uefEntity);
+      HttpResponse response = httpclient.execute(httpPost);
+      entity = response.getEntity();
+    } catch (Exception e) {
+      LOGGER.error("访问出错：" + e);
+    }
+    return entity;
+  }
+
+  public static HttpEntity getData(String url) {
+    HttpClient httpclient = new DefaultHttpClient();
+    HttpEntity entity = null;
+    HttpGet request = new HttpGet();
+    try {
+      request.setURI(new URI(url));
+      HttpResponse response = httpclient.execute(request);
+      entity = response.getEntity();
+    } catch (Exception e) {
+      LOGGER.error("访问出错：" + e);
+    }
+    return entity;
   }
 }

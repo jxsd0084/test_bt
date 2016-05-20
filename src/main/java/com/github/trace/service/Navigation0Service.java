@@ -1,11 +1,25 @@
 package com.github.trace.service;
 
+import com.github.autoconf.helper.ConfigHelper;
+import com.github.trace.entity.NavigationItem;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.mapper.NavigationItem0Mapper;
 
+import com.github.trace.utils.OkHttpUtil;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,9 +27,15 @@ import java.util.List;
  */
 @Service
 public class Navigation0Service {
-
+  private final static Logger LOGGER = LoggerFactory.getLogger(Navigation0Service.class);
   @Autowired
   private NavigationItem0Mapper navigationItem0Mapper;
+  @Autowired
+  private KafkaService kafkaService;
+
+  private final static String TOPIC_ERROR = ConfigHelper.getApplicationConfig().get("process.profile")+",kafka消费主题无效或数据无日志";
+
+  private final static String LOG_ERROR = ConfigHelper.getApplicationConfig().get("process.profile")+",数据异常（过长时间内无数据访问)";
 
   /**
    * 获取所有节点
@@ -67,4 +87,70 @@ public class Navigation0Service {
   public NavigationItem0 queryByName(String name) {
     return navigationItem0Mapper.findByName(name);
   }
+
+  public String getUserInfo(String username) {
+    String url = ConfigHelper.getApplicationConfig().get("qinxin.user.url");
+    url = url + "?r=user/json-header-user-id&q="+username;
+
+    HttpEntity entity = OkHttpUtil.getData(url);
+    String result = null;
+    try {
+      if(entity!=null) {
+        result = EntityUtils.toString(entity, "UTF-8");
+      }
+    } catch (Exception e) {
+      LOGGER.error("获取entity数据出错："+e);
+    }
+
+    return result;
+  }
+
+  public void checkDataSource(long compareTime){
+    boolean result = false;
+    String message = "";
+    List<NavigationItem0> navigationItem0List = navigationItem0Mapper.findByType(1);
+    if(navigationItem0List!=null){
+      long nowTime = System.currentTimeMillis();
+      for(NavigationItem0 navigationItem0:navigationItem0List){
+         long lastTime = kafkaService.getLastMessageTimestamp(navigationItem0.getTopic());
+        LOGGER.debug("测试数据，" + navigationItem0.getName() +"," +navigationItem0.getTopic()+"," +lastTime);
+         if(lastTime==0) {
+            message = navigationItem0.getName() + ":" +TOPIC_ERROR;
+            sendWarnMessage(navigationItem0.getName(),navigationItem0.getManager(),navigationItem0.getManager(),message);
+         }else {
+             long timeInterval = nowTime - lastTime;
+             if (timeInterval >= compareTime) {
+                message = navigationItem0.getName() +":" + LOG_ERROR;
+                sendWarnMessage(navigationItem0.getName(),navigationItem0.getManager(),navigationItem0.getManager(),message);
+             }
+         }
+      }
+    }
+  }
+
+  public void sendWarnMessage(String title,String names,String ids,String content){
+    String status = "告警失败";
+    String url = ConfigHelper.getApplicationConfig().get("qinxin.message.url");
+    HttpPost httpPost = new HttpPost(url);
+    List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+    formParams.add(new BasicNameValuePair("title", title));
+    formParams.add(new BasicNameValuePair("content", content));
+    formParams.add(new BasicNameValuePair("ids", "5458;3719"));
+    formParams.add(new BasicNameValuePair("names", "王海利;武靖"));
+    formParams.add(new BasicNameValuePair("id", "201"));
+
+    HttpEntity entity = OkHttpUtil.postData(httpPost,formParams);
+    String result = "";
+    try {
+      if(entity!=null) {
+        result = EntityUtils.toString(entity, "UTF-8");
+      }
+    } catch (Exception e) {
+      LOGGER.error("获取entity数据出错："+e);
+    }
+    if(result.contains("ok")){
+       status = "告警成功";
+    }
+  }
+
 }

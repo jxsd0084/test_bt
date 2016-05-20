@@ -24,10 +24,19 @@
         <property name="period" value="3600000" />
         <property name="runnable" ref="versionSyncTask" />
     </bean>
+
+    <bean id="sourceDataSyncSchedule" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+        <!-- wait 20 seconds before starting repeated execution -->
+        <property name="delay" value="20000" />
+        <!-- run every 1 hours -->
+        <property name="period" value="3600000" />
+        <property name="runnable" ref="dataSourceMonitorTask" />
+    </bean>
     <bean id="scheduledExecutorFactoryBean" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean" lazy-init="false" >
         <property name="scheduledExecutorTasks">
             <list>
                 <ref bean="versionSyncSchedule"/>
+                <ref bean="sourceDataSyncSchedule"/>
             </list>
         </property>
         <property name="continueScheduledExecutionAfterException" value="true"/>
