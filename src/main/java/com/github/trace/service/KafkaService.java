@@ -71,6 +71,14 @@ public class KafkaService {
     });
   }
 
+  public long getOffsetSum(String topic) {
+    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1);
+    if (fetchedData == null || fetchedData.isEmpty()) {
+      return 0L;
+    }
+    return fetchedData.stream().mapToLong(KafkaMessageAndOffset::getOffset).sum();
+  }
+
   public long getLastMessageTimestamp(String topic) {
     Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1);
     if (fetchedData == null || fetchedData.isEmpty()) {

@@ -33,4 +33,11 @@ public class KafkaServiceTest {
 //    long ret = service.getLastMessageTimestamp("nginx.reverse");
     log.info(ret + "");
   }
+
+  @Test
+  public void testGetOffsetSum() throws Exception {
+    long offset = service.getOffsetSum("dcx.MonitorRequest");
+    log.info("Sum of offset: {}", offset);
+  }
+
 }
