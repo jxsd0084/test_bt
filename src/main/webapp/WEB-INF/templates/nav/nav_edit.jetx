@@ -35,10 +35,27 @@
         </div>
       </div>
       <div class="form-group">
-          <label for="profile" class="col-md-2 control-label">负责人</label>
+          <p class="col-md-offset-2">输入负责人的名字、拼音简写等信息搜索，并点选添加</p>
+          <label for="profile" class="col-md-2 control-label">选择负责人</label>
           <div class="col-md-3 col-lg-3">
-              <input type="text" class="form-control" name="manager" id="manager" placeholder="必填" value="${obj.manager}"/>
+            <span>
+                <input type="text" class="form-control" style="width:71%" name="" id="manager" placeholder="必填" value=""/>
+                <input type="button" id="add" value="添加"/>
+            </span>
           </div>
+      </div>
+      <div class="form-group">
+          <label for="profile" class="col-md-2 control-label">负责人列表</label>
+          <div class="col-md-3 col-lg-3">
+              <input type="text" class="form-control" name="managerNames" id="managerNames" placeholder="必填" value="${obj.manager}"/>
+          </div>
+      </div>
+      <div class="form-group">
+          <label for="profile" class="col-md-2 control-label">负责人ID列表</label>
+          <div class="col-md-3 col-lg-3">
+              <input type="text" class="form-control" name="managerIds" id="managerIds" placeholder="必填" value="${obj.manageId}" />
+          </div>
+          <p class="help-block col-md-offset-2"></p>
       </div>
       #end
       <!-- 确认按钮 -->
@@ -70,6 +87,8 @@
         var name = $("#name").val();
         var item_type = $("#item_type").val();
         var topic = $("#topic").val();
+        var managerNames = $("#managerNames").val();
+        var manageId = $("#managerIds").val();
         if (item_type == '0') {
             if (name == '') {
                 msg = '节点名称不能为空';
@@ -84,6 +103,14 @@
                 msg = '叶子节点主题不能为空';
                 result = false;
             }
+            if (managerNames == '') {
+                msg = '负责人列表不能为空';
+                result = false;
+            }
+            if (manageId == '') {
+                msg = '负责人Id不能为空';
+                result = false;
+            }
         }
 
         if(!result){
@@ -94,6 +121,41 @@
     }
 
     $(document).ready(function () {
+        $('#manager').bind('input propertychange',function(){
+            var url = '${CONTEXT_PATH}/nav/getUserInfo';
+            var rvalue = 'user/json-header-user-id';
+            var qvalue = $('#manager').val();
+            if(qvalue!='') {
+                $.post(url, {
+                    username       :qvalue
+                },function (data,textStatus) {
+                    var json = JSON.parse(data);
+                    if(json.length>=0){
+                        var nameArray = new Array(json.length);
+                        uidData = json;
+                        for(var i=0;i<json.length;i++){
+                            nameArray[i]=json[i].data;
+                        }
+                        inputSuggestData = nameArray;
+                        var managerSuggest = new InputSuggest({
+                            input: document.getElementById('manager'),
+                            data:inputSuggestData
+                        });
+                    };
+
+                });
+
+//                $.getJSON(url, {
+//                    r       :rvalue,
+//                    q       :qvalue
+//                },function (data,textStatus,jqZHR) {
+//                        alert(textStatus);
+//                });
+
+
+
+            }
+        });
         $("#confirm").on('click', function () {
 
             var value4 = $('#parent_id').val();
@@ -103,7 +165,8 @@
             var value1 = $("#name").val();
             var value2 = $("#item_type").val();
             var value3 = $("#topic").val();
-            var value6 = $("#manager").val();
+            var value6 = $("#managerNames").val();
+            var value7 = $("#managerIds").val();
 
             // 新增不需要指定主键ID
             data = {
@@ -112,7 +175,8 @@
                 itemType            :value2,
                 manager             :value6,
                 topic               :value3,
-                parentId            :value4
+                parentId            :value4,
+                manageId           :value7
             };
 
             if(myValidator()){
@@ -133,7 +197,28 @@
                 });
             }
 
-       })
+       });
+        $("#add").on("click",function () {
+            var manager = $('#manager').val();
+            var managerNames = $('#managerNames').val();
+            var managerIds = $('#managerIds').val();
+            var managerId = '';
+            if(manager!=""){
+                for(var i=0;i<uidData.length;i++){
+                    if(uidData[i].data==manager){
+                        managerId = uidData[i].id;
+                        break;
+                    }
+                }
+                if(managerNames!=""){
+                    $("#managerNames").val(managerNames+";"+manager);
+                    $("#managerIds").val(managerIds+";"+managerId);
+                }else{
+                    $("#managerNames").val(manager);
+                    $("#managerIds").val(managerId);
+                }
+            }
+        });
 
     });
 

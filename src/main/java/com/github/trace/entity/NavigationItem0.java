@@ -18,6 +18,8 @@ public class NavigationItem0 {
     //关联本表中的id
     private int parentId = 0;
 
+    private String manageId;
+
     public String getManager() {
         return manager;
     }
@@ -66,6 +68,14 @@ public class NavigationItem0 {
         this.id = id;
     }
 
+    public String getManageId() {
+        return manageId;
+    }
+
+    public void setManageId(String manageId) {
+        this.manageId = manageId;
+    }
+
     @Override
     public String toString() {
         return "NavigationItem0{" +
@@ -75,6 +85,7 @@ public class NavigationItem0 {
                 ", topic='" + topic + '\'' +
                 ", manager='" + manager + '\'' +
                 ", parentId=" + parentId +
+                ", manageId='" + manageId + '\'' +
                 '}';
     }
 }

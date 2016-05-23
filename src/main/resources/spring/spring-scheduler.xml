@@ -36,7 +36,7 @@
         <property name="scheduledExecutorTasks">
             <list>
                 <ref bean="versionSyncSchedule"/>
-                <ref bean="sourceDataSyncSchedule"/>
+                <!--<ref bean="sourceDataSyncSchedule"/>-->
             </list>
         </property>
         <property name="continueScheduledExecutionAfterException" value="true"/>

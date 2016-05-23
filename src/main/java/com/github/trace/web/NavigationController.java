@@ -50,13 +50,15 @@ public class NavigationController {
                       @RequestParam(name = "name") String name,
                       @RequestParam(name = "manager") String manager,
                       @RequestParam(name = "itemType") int itemType,
-                      @RequestParam(name = "topic") String topic){
+                      @RequestParam(name = "topic") String topic,
+                      @RequestParam(name="manageId") String manageId){
         NavigationItem0 navigationItem0 = new NavigationItem0();
         navigationItem0.setParentId(parentId);
         navigationItem0.setItemType(itemType);
         navigationItem0.setName(name);
         navigationItem0.setTopic(topic);
         navigationItem0.setManager(manager);
+        navigationItem0.setManageId(manageId);
         int res = navigation0Service.insert(navigationItem0);
         return ControllerHelper.returnResponseVal(res, "添加");
     }
@@ -67,9 +69,11 @@ public class NavigationController {
                          @RequestParam(name = "name") String name,
                          @RequestParam(name = "manager") String manager,
                          @RequestParam(name = "itemType") int itemType,
-                         @RequestParam(name = "topic") String topic){
+                         @RequestParam(name = "topic") String topic,
+                      @RequestParam(name="manageId") String manageId){
         NavigationItem0 navigationItem0 = new NavigationItem0();
         navigationItem0.setId(id);
+        navigationItem0.setManageId(manageId);
         navigationItem0.setParentId(parentId);
         navigationItem0.setItemType(itemType);
         navigationItem0.setName(name);

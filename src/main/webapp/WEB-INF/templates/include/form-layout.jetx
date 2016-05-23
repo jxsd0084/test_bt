@@ -17,6 +17,22 @@
       font-family: "Helvetica Neue", Helvetica, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
     }
 
+    .suggest-container {
+        background-color: white;
+        border: 1px solid #c1c1c1;
+        visibility: hidden;
+        filter:alpha(opacity=100);
+        opacity:1;
+
+    }
+    .suggest-item {
+        padding: 3px 2px;
+    }
+    .suggest-active {
+        background: #33ccff none repeat scroll 0 0;
+        color: white;
+        padding: 3px 2px;
+    }
     .row {
       max-width: 1440px;
     }
