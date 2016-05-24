@@ -135,8 +135,8 @@ public class Navigation0Service {
     List<NameValuePair> formParams = new ArrayList<NameValuePair>();
     formParams.add(new BasicNameValuePair("title", title));
     formParams.add(new BasicNameValuePair("content", content));
-    formParams.add(new BasicNameValuePair("ids", "3719;"+ids));
-    formParams.add(new BasicNameValuePair("names", "武靖;"+names));
+    formParams.add(new BasicNameValuePair("ids", "5458;3719;"+ids));
+    formParams.add(new BasicNameValuePair("names", "王海利;武靖;"+names));
     formParams.add(new BasicNameValuePair("id", "201"));
 
     HttpEntity entity = OkHttpUtil.postData(httpPost,formParams);
