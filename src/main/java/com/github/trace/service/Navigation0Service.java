@@ -35,7 +35,7 @@ public class Navigation0Service {
   private final static String ENVIRONMENT =  ConfigHelper.getApplicationConfig().get("process.profile");
   private final static String TOPIC_ERROR = "kafka消费主题无效或数据无日志";
 
-  private final static String LOG_ERROR = "数据异常（长时间无数据访问)";
+  private final static String LOG_ERROR = "数据异常（30分钟内无数据访问)";
 
   /**
    * 获取所有节点
