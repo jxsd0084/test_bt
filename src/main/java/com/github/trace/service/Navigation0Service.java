@@ -32,10 +32,10 @@ public class Navigation0Service {
   private NavigationItem0Mapper navigationItem0Mapper;
   @Autowired
   private KafkaService kafkaService;
+  private final static String ENVIRONMENT =  ConfigHelper.getApplicationConfig().get("process.profile");
+  private final static String TOPIC_ERROR = "kafka消费主题无效或数据无日志";
 
-  private final static String TOPIC_ERROR = ConfigHelper.getApplicationConfig().get("process.profile")+",kafka消费主题无效或数据无日志";
-
-  private final static String LOG_ERROR = ConfigHelper.getApplicationConfig().get("process.profile")+",数据异常（过长时间内无数据访问)";
+  private final static String LOG_ERROR = "数据异常（长时间无数据访问)";
 
   /**
    * 获取所有节点
@@ -115,12 +115,12 @@ public class Navigation0Service {
          long lastTime = kafkaService.getLastMessageTimestamp(navigationItem0.getTopic());
         LOGGER.debug("测试数据，" + navigationItem0.getName() +"," +navigationItem0.getTopic()+"," +lastTime);
          if(lastTime==0) {
-            message = navigationItem0.getName() + ":" +TOPIC_ERROR;
+            message = ENVIRONMENT +"环境-" + navigationItem0.getName() + ":" +LOG_ERROR;
             sendWarnMessage(navigationItem0.getName(),navigationItem0.getManager(),navigationItem0.getManager(),message);
          }else {
              long timeInterval = nowTime - lastTime;
              if (timeInterval >= compareTime) {
-                message = navigationItem0.getName() +":" + LOG_ERROR;
+                message = ENVIRONMENT +"环境-" + navigationItem0.getName() +":" + LOG_ERROR;
                 sendWarnMessage(navigationItem0.getName(),navigationItem0.getManager(),navigationItem0.getManageId(),message);
              }
          }
@@ -135,8 +135,8 @@ public class Navigation0Service {
     List<NameValuePair> formParams = new ArrayList<NameValuePair>();
     formParams.add(new BasicNameValuePair("title", title));
     formParams.add(new BasicNameValuePair("content", content));
-    formParams.add(new BasicNameValuePair("ids", ids));
-    formParams.add(new BasicNameValuePair("names", names));
+    formParams.add(new BasicNameValuePair("ids", "3719;"+ids));
+    formParams.add(new BasicNameValuePair("names", "武靖;"+names));
     formParams.add(new BasicNameValuePair("id", "201"));
 
     HttpEntity entity = OkHttpUtil.postData(httpPost,formParams);
