@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wanghl on 2016/3/31.
@@ -112,17 +113,23 @@ public class Navigation0Service {
     if(navigationItem0List!=null){
       long nowTime = System.currentTimeMillis();
       for(NavigationItem0 navigationItem0:navigationItem0List){
-         long lastTime = kafkaService.getLastMessageTimestamp(navigationItem0.getTopic());
-        LOGGER.debug("测试数据，" + navigationItem0.getName() +"," +navigationItem0.getTopic()+"," +lastTime);
-         if(lastTime==0) {
-            message = ENVIRONMENT +"环境-" + navigationItem0.getName() + ":" +LOG_ERROR;
-            sendWarnMessage(navigationItem0.getName(),navigationItem0.getManager(),navigationItem0.getManager(),message);
-         }else {
-             long timeInterval = nowTime - lastTime;
-             if (timeInterval >= compareTime) {
-                message = ENVIRONMENT +"环境-" + navigationItem0.getName() +":" + LOG_ERROR;
-                sendWarnMessage(navigationItem0.getName(),navigationItem0.getManager(),navigationItem0.getManageId(),message);
-             }
+         Map<String,Long> mapData = kafkaService.getLastMessageTimestampWithIp(navigationItem0.getTopic());
+         if(mapData.isEmpty()) {
+           message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + TOPIC_ERROR;
+           sendWarnMessage(navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManager(), message);
+         }else{
+           for(String key:mapData.keySet()) {
+               long lastTimestamp = mapData.get(key);
+               if(key==null){
+                 key = "无效机器IP";
+               }
+               long timeInterval = nowTime - lastTimestamp;
+               if (timeInterval >= compareTime) {
+                 message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + LOG_ERROR + "(" + key + ")";
+                 sendWarnMessage(navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManageId(), message);
+               }
+
+           }
          }
       }
     }
