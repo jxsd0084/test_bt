@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -31,7 +33,15 @@ public class KafkaServiceTest {
   public void testGetLastMessageTimestamp() throws Exception {
     long ret = service.getLastMessageTimestamp("dcx.WebRequest");
 //    long ret = service.getLastMessageTimestamp("nginx.reverse");
-    log.info(ret + "");
+    log.info("ret: {}", ret);
+  }
+
+  @Test
+  public void testGetLastMessageTimestampWithIp() throws Exception {
+    Map<String, Long> map = service.getLastMessageTimestampWithIp("dcx.MonitorRequest");
+    log.info("==========================");
+    log.info("result: {}", map);
+    log.info("==========================");
   }
 
   @Test

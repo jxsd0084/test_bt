@@ -1,6 +1,7 @@
 package com.github.trace.utils;
 
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * nginx日志处理
@@ -67,6 +69,15 @@ public class NginxLogHandler {
     return jodaTime.getMillis();
   }
 
+  public static String getIpFromNginxLog(String log) {
+    if (Strings.isNullOrEmpty(log)) {
+      return "";
+    }
+    List<String> logs = Splitter.on(NGINX_LOG_SPLITTER).omitEmptyStrings().splitToList(log).stream()
+        .map(NginxLogHandler::clearLog).collect(Collectors.toList());
+    return logs.get(0);
+  }
+
   private static String parseToJson(String params, long stamp) {
     Map<String, String> map = Maps.newHashMap();
     map.put("stamp", String.valueOf(stamp));
@@ -82,4 +93,13 @@ public class NginxLogHandler {
     return JSON.toJSONString(map);
   }
 
+  private static String clearLog(String log) {
+    if (Strings.isNullOrEmpty(log) || StringUtils.equals(log, "-")) {
+      return log;
+    }
+    if (log.charAt(0) == '"' && log.charAt(log.length() - 1) == '"') {
+      return log.substring(1, log.length() - 1);
+    }
+    return log;
+  }
 }

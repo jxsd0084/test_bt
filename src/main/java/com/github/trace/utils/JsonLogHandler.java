@@ -79,6 +79,11 @@ public class JsonLogHandler {
     return parseTimeStamp(time);
   }
 
+  public static String getIpFromLog(String log) {
+    JSONObject json = JSONObject.parseObject(log);
+    return json.getString("_ip");
+  }
+
   private static long parseTimeStamp(String value) {
     DateTime jodaTime = DateTime.now();
     try {

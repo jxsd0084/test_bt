@@ -3,8 +3,8 @@ package com.github.trace.service;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import com.github.autoconf.ConfigFactory;
@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -77,6 +76,41 @@ public class KafkaService {
       return 0L;
     }
     return fetchedData.stream().mapToLong(KafkaMessageAndOffset::getOffset).sum();
+  }
+
+  public Map<String, Long> getLastMessageTimestampWithIp(String topic) {
+    Map<String, Long> ret = Maps.newHashMap();
+    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1000);
+    if (fetchedData == null || fetchedData.isEmpty()) {
+      return ret;
+    }
+
+    boolean isNginx = StringUtils.startsWith(topic, "nginx");
+
+    for (KafkaMessageAndOffset k : fetchedData) {
+      String message = k.getMessage();
+      String ip;
+      long stamp;
+
+      if (isNginx) {
+        ip = NginxLogHandler.getIpFromNginxLog(message);
+        stamp = NginxLogHandler.getStampFromNginxLog(message);
+      } else {
+        ip = JsonLogHandler.getIpFromLog(message);
+        stamp = JsonLogHandler.getStampFromLog(message);
+      }
+
+      if (ret.containsKey(ip)) {
+        long lastStamp = ret.get(ip);
+        if (stamp > lastStamp) {
+          ret.put(ip, stamp);
+        }
+      } else {
+        ret.put(ip, stamp);
+      }
+    }
+
+    return ret;
   }
 
   public long getLastMessageTimestamp(String topic) {
