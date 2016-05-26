@@ -123,6 +123,9 @@ public class Navigation0Service {
                if(key==null){
                  key = "无效机器IP";
                }
+               if("fs-warehouse.file_statistics".equals(navigationItem0.getTopic())){
+                 compareTime = 86400000;
+               }
                long timeInterval = nowTime - lastTimestamp;
                if (timeInterval >= compareTime) {
                  message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + LOG_ERROR + "(" + key + ")";
