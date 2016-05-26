@@ -123,7 +123,7 @@ public class Navigation0Service {
                if(key==null){
                  key = "无效机器IP";
                }
-               if("fs-warehouse.file_statistics".equals(navigationItem0.getTopic())){
+               if("ibss-data.enterprisePayStatus".equals(navigationItem0.getTopic())){
                  compareTime = 86400000;
                }
                long timeInterval = nowTime - lastTimestamp;
