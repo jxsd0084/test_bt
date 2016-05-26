@@ -333,8 +333,11 @@
             <version>18.0</version>
         </dependency>
 
-
-
+        <dependency>
+            <groupId>com.github.colin-lee</groupId>
+            <artifactId>config-admin-api</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 
     </dependencies>
 

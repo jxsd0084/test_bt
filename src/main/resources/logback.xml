@@ -10,10 +10,10 @@
             <level>TRACE</level>
         </filter>
 
-        <!-- 可让每天产生一个日志文件，最多 7 个，自动回滚 -->
+        <!-- 可让每天产生一个日志文件，最多 5 个，自动回滚 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${catalina.home}/logs/biz-%d{yyyy-MM-dd-HH}.log.zip</fileNamePattern>
-            <maxHistory>12</maxHistory>
+            <fileNamePattern>${catalina.home}/logs/biz-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>5</maxHistory>
         </rollingPolicy>
 
         <encoder>
