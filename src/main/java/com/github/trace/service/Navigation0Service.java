@@ -1,5 +1,7 @@
 package com.github.trace.service;
 
+import com.github.autoconf.ConfigFactory;
+import com.github.autoconf.api.IChangeableConfig;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 
@@ -11,6 +13,9 @@ import com.github.autoconf.helper.ConfigHelper;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.mapper.NavigationItem0Mapper;
 import com.github.trace.utils.OkHttpUtil;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.HierarchicalINIConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
@@ -24,6 +29,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +53,7 @@ public class Navigation0Service {
   private final static String ENVIRONMENT =  ConfigHelper.getApplicationConfig().get("process.profile");
   private final static String TOPIC_ERROR = "kafka消费主题无效或数据无日志";
   private final static String LOG_ERROR = "数据异常（30分钟内无数据访问)";
+  private static HierarchicalINIConfiguration iniConfiguration = new HierarchicalINIConfiguration();
 
   private static final String CONFIG_TOKEN = "E5C7079581FC27BE39CE191A1A252C20";
   private static final String KAFKA2ES_TOPIC_CONFIG = "buriedtool-kafka2es-topic";
@@ -121,14 +132,23 @@ public class Navigation0Service {
     return result;
   }
 
-  public void checkDataSource(long compareTime){
+  public void checkDataSource(String timeKey){
     boolean result = false;
     String message = "";
+    if(iniConfiguration.getInt("allMonitorStatus",0)==0){
+      LOGGER.info("topic监控总开关为关闭状态");
+      return;
+    }
     List<NavigationItem0> navigationItem0List = navigationItem0Mapper.findByType(1);
     if(navigationItem0List!=null){
       long nowTime = System.currentTimeMillis();
       for(NavigationItem0 navigationItem0:navigationItem0List){
          Map<String,Long> mapData = kafkaService.getLastMessageTimestampWithIp(navigationItem0.getTopic());
+         long intervalTime = getIntervalTime(navigationItem0.getTopic(),timeKey);
+         if(intervalTime==0){
+           LOGGER.info("topic："+navigationItem0.getTopic()+"监控开关为关闭状态");
+           continue;
+         }
          if(mapData.isEmpty()) {
            message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + TOPIC_ERROR;
            sendWarnMessage(navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManager(), message);
@@ -138,11 +158,8 @@ public class Navigation0Service {
                if(key==null){
                  key = "无效机器IP";
                }
-               if("ibss-data.enterprisePayStatus".equals(navigationItem0.getTopic())){
-                 compareTime = 86400000;
-               }
                long timeInterval = nowTime - lastTimestamp;
-               if (timeInterval >= compareTime) {
+               if (timeInterval >= intervalTime) {
                  message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + LOG_ERROR + "(" + key + ")";
                  sendWarnMessage(navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManageId(), message);
                }
@@ -152,6 +169,21 @@ public class Navigation0Service {
       }
     }
   }
+
+  private long getIntervalTime(String topic,String key){
+    long intervalTime = 0;
+    long defaultValue = iniConfiguration.getLong(key+".default",30);
+    SubnodeConfiguration sectionConfig = iniConfiguration.getSection(topic);
+    if(sectionConfig!=null){
+      if(sectionConfig.getInt("monitorStatus",0)!=0) {
+        intervalTime = sectionConfig.getLong(key, defaultValue);
+      }
+    }else{
+      intervalTime = defaultValue;
+    }
+    return intervalTime*60000;
+  }
+
 
   public void sendWarnMessage(String title,String names,String ids,String content){
     String status = "告警失败";
@@ -176,6 +208,20 @@ public class Navigation0Service {
     if(result.contains("ok")){
        status = "告警成功";
     }
+  }
+  @PostConstruct
+  public void initTopicConfig(){
+    ConfigFactory.getInstance().getConfig("buried-topic-monitor").addListener(config ->{
+      byte[] content = config.getContent();
+      InputStream inputStream = new ByteArrayInputStream(content);
+      try {
+        iniConfiguration.clear();
+        iniConfiguration.load(inputStream);
+        iniConfiguration.setThrowExceptionOnMissing(false);
+      } catch (Exception e) {
+        LOGGER.error("读取主题读取远程配置文件失败");
+      }
+    });
   }
 
   public void updateConfig() {

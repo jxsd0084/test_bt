@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * KafkaServiceTest
  * Created by wzk on 16/3/23.
  */
-@Ignore
+//@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 @Slf4j
@@ -38,7 +38,7 @@ public class KafkaServiceTest {
 
   @Test
   public void testGetLastMessageTimestampWithIp() throws Exception {
-    Map<String, Long> map = service.getLastMessageTimestampWithIp("dcx.MonitorRequest");
+    Map<String, Long> map = service.getLastMessageTimestampWithIp("sfsfsfsf");
     log.info("==========================");
     log.info("result: {}", map);
     log.info("==========================");

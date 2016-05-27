@@ -40,7 +40,7 @@
             </set>
         </property>
     </bean>
-
+    <bean class="com.fxiaoke.metrics.MetricsConfiguration"/>
     <!-- 启用@AspectJ注解 -->
     <aop:aspectj-autoproxy/>
 

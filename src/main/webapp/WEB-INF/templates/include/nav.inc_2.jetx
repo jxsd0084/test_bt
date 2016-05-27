@@ -33,7 +33,7 @@
 <div class="tree">
 <ul>
     #for(item : navigationItemList)
-    #if(item.parentId==0 && item.name=="前端埋点")
+    #if(item.parentId==0)
     <li>
         <span id="${item.id}"><i class="icon-folder-open"></i>${item.name}</span>
     <ul>

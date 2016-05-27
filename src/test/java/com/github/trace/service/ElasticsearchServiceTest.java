@@ -18,7 +18,7 @@ import java.util.Map;
  * ElasticsearchServiceTest
  * Created by wzk on 16/4/7.
  */
-@Ignore
+//@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class ElasticsearchServiceTest {

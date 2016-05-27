@@ -43,9 +43,9 @@ public class SendLogCheckMonitor {
 
             setFormParams(title,content);
             UrlEncodedFormEntity uefEntity;
-            try {
-                uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+            try {uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
                 httpPost.setEntity(uefEntity);
+
                 System.out.println("executing request " + httpPost.getURI());
                 CloseableHttpResponse response = httpclient.execute(httpPost);
 

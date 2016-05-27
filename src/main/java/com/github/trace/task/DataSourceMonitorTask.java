@@ -18,9 +18,9 @@ import java.util.Date;
 public class DataSourceMonitorTask implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceMonitorTask.class);
 
-    private final static long NIGHTINTERVAL = ConfigHelper.getApplicationConfig().getLong("night.interval");
+    private final static String NIGHTINTERVAL = "night.interval";
 
-    private static final long MORNINGINTERVAL = ConfigHelper.getApplicationConfig().getLong("morning.interval");
+    private static final String MORNINGINTERVAL = "morning.interval";
     @Autowired
     private Navigation0Service navigation0Service;
 
