@@ -153,7 +153,7 @@ public class Navigation0Service {
                }
                long timeInterval = nowTime - lastTimestamp;
                if (timeInterval >= intervalTime) {
-                 message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + LOG_ERROR + "(" + key + ")";
+                 message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":数据异常（"+intervalTime/60000+"分钟内无数据访问)(" + key + ")";
                  sendWarnMessage(navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManageId(), message);
                }
 
