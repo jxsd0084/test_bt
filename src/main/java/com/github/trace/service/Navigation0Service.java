@@ -1,19 +1,15 @@
 package com.github.trace.service;
 
 import com.github.autoconf.ConfigFactory;
-import com.github.autoconf.api.IChangeableConfig;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 
-import com.github.autoconf.ConfigFactory;
 import com.github.autoconf.admin.ConfigAdminClient;
 import com.github.autoconf.admin.api.IConfigAdmin;
-import com.github.autoconf.api.IConfigFactory;
 import com.github.autoconf.helper.ConfigHelper;
 import com.github.trace.entity.NavigationItem0;
 import com.github.trace.mapper.NavigationItem0Mapper;
 import com.github.trace.utils.OkHttpUtil;
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.SubnodeConfiguration;
 
@@ -23,7 +19,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.elasticsearch.common.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +26,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +168,7 @@ public class Navigation0Service {
     long defaultValue = iniConfiguration.getLong(key+".default",30);
     SubnodeConfiguration sectionConfig = iniConfiguration.getSection(topic);
     if(sectionConfig!=null){
-      if(sectionConfig.getInt("monitorStatus",0)!=0) {
+      if(sectionConfig.getInt("monitorStatus",1)!=0) {
         intervalTime = sectionConfig.getLong(key, defaultValue);
       }
     }else{

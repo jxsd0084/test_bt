@@ -21,6 +21,7 @@ public class DataSourceMonitorTask implements Runnable {
     private final static String NIGHTINTERVAL = "night.interval";
 
     private static final String MORNINGINTERVAL = "morning.interval";
+
     @Autowired
     private Navigation0Service navigation0Service;
 
