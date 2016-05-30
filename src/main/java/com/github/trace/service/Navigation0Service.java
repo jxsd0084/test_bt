@@ -165,7 +165,7 @@ public class Navigation0Service {
 
   private long getIntervalTime(String topic,String key){
     long intervalTime = 0;
-    long defaultValue = iniConfiguration.getLong(key+".default",30);
+    long defaultValue = iniConfiguration.getLong(key+"-default",30);
     SubnodeConfiguration sectionConfig = iniConfiguration.getSection(topic);
     if(sectionConfig!=null){
       if(sectionConfig.getInt("monitorStatus",1)!=0) {
