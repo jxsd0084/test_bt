@@ -26,80 +26,88 @@ import java.util.stream.Collectors;
  */
 public class NginxLogHandler {
 
-  private static final Logger LOG = LoggerFactory.getLogger(NginxLogHandler.class);
-  private static final String NGINX_LOG_SPLITTER = "\u0001";
-  private static final String DATEFORMAT = "dd/MMM/yyyy:HH:mm:ss Z";
-  private static final DateTimeFormatter DATE_TIME_FORMATTER =
-      DateTimeFormat.forPattern(DATEFORMAT).withLocale(Locale.US);
+	private static final Logger LOG = LoggerFactory.getLogger( NginxLogHandler.class );
 
-  private NginxLogHandler() {
-  }
+	private static final String            NGINX_LOG_SPLITTER  = "\u0001";
+	private static final String            DATEFORMAT          = "dd/MMM/yyyy:HH:mm:ss Z";
+	private static final DateTimeFormatter DATE_TIME_FORMATTER =
+			DateTimeFormat.forPattern( DATEFORMAT ).withLocale( Locale.US );
 
-  public static Set<String> batchParse(Set<String> logs) {
-    Set<String> results = Sets.newHashSet();
-    logs.forEach(log -> results.add(parseNginx(log)));
-    return results;
-  }
+	private NginxLogHandler() {
 
-  public static String parseNginx(String log) {
-    if (StringUtils.isEmpty(log)) {
-      return StringUtils.EMPTY;
-    }
-    long stamp = getStampFromNginxLog(log);
-    String params = StringUtils.substringBetween(log, ".gif?", " HTTP/1");
-    if (StringUtils.isNotEmpty(params)) {
-      return parseToJson(params, stamp);
-    }
-    return StringUtils.EMPTY;
-  }
+	}
 
-  public static long getStampFromNginxLog(String log) {
-    DateTime jodaTime = DateTime.now();
-    try {
-      List<String> paramList = Splitter.on(NGINX_LOG_SPLITTER).omitEmptyStrings().splitToList(log);
-      if (!paramList.isEmpty()) {
-        String nginxTime = paramList.get(2);
-        if (StringUtils.contains(nginxTime, " +0800")) {
-          jodaTime = DateTime.parse(nginxTime, DATE_TIME_FORMATTER);
-        }
-      }
-    } catch (Exception e) {
-      LOG.error("Cannot parse date from \" {} \", use current date instead", log, e);
-    }
-    return jodaTime.getMillis();
-  }
+	public static Set< String > batchParse( Set< String > logs ) {
 
-  public static String getIpFromNginxLog(String log) {
-    if (Strings.isNullOrEmpty(log)) {
-      return "";
-    }
-    List<String> logs = Splitter.on(NGINX_LOG_SPLITTER).omitEmptyStrings().splitToList(log).stream()
-        .map(NginxLogHandler::clearLog).collect(Collectors.toList());
-    return logs.get(0);
-  }
+		Set< String > results = Sets.newHashSet();
+		logs.forEach( log -> results.add( parseNginx( log ) ) );
+		return results;
+	}
 
-  private static String parseToJson(String params, long stamp) {
-    Map<String, String> map = Maps.newHashMap();
-    map.put("stamp", String.valueOf(stamp));
-    List<String> paramList = Splitter.on("&").omitEmptyStrings().splitToList(params);
-    paramList.forEach(param -> {
-      List<String> kv = Splitter.on("=").omitEmptyStrings().splitToList(param);
-      if (kv.size() == 2) {
-        String key = JsonLogHandler.convertFieldName(kv.get(0));
-        String value = kv.get(1);
-        map.put(key, value);
-      }
-    });
-    return JSON.toJSONString(map);
-  }
+	public static String parseNginx( String log ) {
 
-  private static String clearLog(String log) {
-    if (Strings.isNullOrEmpty(log) || StringUtils.equals(log, "-")) {
-      return log;
-    }
-    if (log.charAt(0) == '"' && log.charAt(log.length() - 1) == '"') {
-      return log.substring(1, log.length() - 1);
-    }
-    return log;
-  }
+		if ( StringUtils.isEmpty( log ) ) {
+			return StringUtils.EMPTY;
+		}
+		long   stamp  = getStampFromNginxLog( log );
+		String params = StringUtils.substringBetween( log, ".gif?", " HTTP/1" );
+		if ( StringUtils.isNotEmpty( params ) ) {
+			return parseToJson( params, stamp );
+		}
+		return StringUtils.EMPTY;
+	}
+
+	public static long getStampFromNginxLog( String log ) {
+
+		DateTime jodaTime = DateTime.now();
+		try {
+			List< String > paramList = Splitter.on( NGINX_LOG_SPLITTER ).omitEmptyStrings().splitToList( log );
+			if ( !paramList.isEmpty() ) {
+				String nginxTime = paramList.get( 2 );
+				if ( StringUtils.contains( nginxTime, " +0800" ) ) {
+					jodaTime = DateTime.parse( nginxTime, DATE_TIME_FORMATTER );
+				}
+			}
+		} catch ( Exception e ) {
+			LOG.error( "Cannot parse date from \" {} \", use current date instead", log, e );
+		}
+		return jodaTime.getMillis();
+	}
+
+	public static String getIpFromNginxLog( String log ) {
+
+		if ( Strings.isNullOrEmpty( log ) ) {
+			return "";
+		}
+		List< String > logs = Splitter.on( NGINX_LOG_SPLITTER ).omitEmptyStrings().splitToList( log ).stream()
+				.map( NginxLogHandler:: clearLog ).collect( Collectors.toList() );
+		return logs.get( 0 );
+	}
+
+	private static String parseToJson( String params, long stamp ) {
+
+		Map< String, String > map = Maps.newHashMap();
+		map.put( "stamp", String.valueOf( stamp ) );
+		List< String > paramList = Splitter.on( "&" ).omitEmptyStrings().splitToList( params );
+		paramList.forEach( param -> {
+			List< String > kv = Splitter.on( "=" ).omitEmptyStrings().splitToList( param );
+			if ( kv.size() == 2 ) {
+				String key   = JsonLogHandler.convertFieldName( kv.get( 0 ) );
+				String value = kv.get( 1 );
+				map.put( key, value );
+			}
+		} );
+		return JSON.toJSONString( map );
+	}
+
+	private static String clearLog( String log ) {
+
+		if ( Strings.isNullOrEmpty( log ) || StringUtils.equals( log, "-" ) ) {
+			return log;
+		}
+		if ( log.charAt( 0 ) == '"' && log.charAt( log.length() - 1 ) == '"' ) {
+			return log.substring( 1, log.length() - 1 );
+		}
+		return log;
+	}
 }

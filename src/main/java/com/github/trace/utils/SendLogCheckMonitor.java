@@ -22,66 +22,70 @@ import java.util.List;
  * Created by wangjiezhao on 2016/4/12.
  */
 public class SendLogCheckMonitor {
-        private static final Logger LOG = LoggerFactory.getLogger(SendLogCheckMonitor.class);
-        // 创建httppost
-        private static HttpPost httpPost;
 
-        // 创建参数队列
-        private static List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+	private static final Logger LOG = LoggerFactory.getLogger( SendLogCheckMonitor.class );
+	// 创建httppost
+	private static HttpPost httpPost;
 
-        public static  void setFormParams(String title,String content) {
-            formParams.add(new BasicNameValuePair("title", title));
-            formParams.add(new BasicNameValuePair("content", content));
-        }
+	// 创建参数队列
+	private static List< NameValuePair > formParams = new ArrayList< NameValuePair >();
 
-        public static  boolean sendPostRequest(String title,String content) {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
+	public static void setFormParams( String title, String content ) {
 
-            String url="http://172.17.0.35/qixin/send_qixin_for_sp.php";
-            httpPost=new HttpPost(url);
-            //httpPost=new HttpPost("http://172.17.0.35/qixin/send_qixin.php");
+		formParams.add( new BasicNameValuePair( "title", title ) );
+		formParams.add( new BasicNameValuePair( "content", content ) );
+	}
 
-            setFormParams(title,content);
-            UrlEncodedFormEntity uefEntity;
-            try {uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
-                httpPost.setEntity(uefEntity);
+	public static boolean sendPostRequest( String title, String content ) {
 
-                System.out.println("executing request " + httpPost.getURI());
-                CloseableHttpResponse response = httpclient.execute(httpPost);
+		CloseableHttpClient httpclient = HttpClients.createDefault();
 
-                try {
-                    if (response.getStatusLine().getStatusCode() == 200) {
-                        HttpEntity entity = response.getEntity();
-                        if (entity != null) {
-                            System.out.println("--------------------------------------");
-                            System.out.println("Response content: " + EntityUtils.toString(entity, "UTF-8"));
-                            System.out.println(response.getEntity());
-                            System.out.println("--------------------------------------");
-                        }
-                        return true;
-                    }else{
-                        return false;
-                    }
-                }finally{
-                    response.close();
-                }
-            } catch (ClientProtocolException e) {
-                LOG.warn("Exception:",e);
-                return false;
-            } catch (UnsupportedEncodingException e) {
-                LOG.warn("Exception:",e);
-                return false;
-            } catch (IOException e) {
-                LOG.warn("Exception:",e);
-                return false;
-            } finally {
-                try {
-                    httpclient.close();
-                } catch (IOException e) {
-                    LOG.warn("Exception:",e);
-                }
-            }
-        }
+		String url = "http://172.17.0.35/qixin/send_qixin_for_sp.php";
+		httpPost = new HttpPost( url );
+		//httpPost=new HttpPost("http://172.17.0.35/qixin/send_qixin.php");
+
+		setFormParams( title, content );
+		UrlEncodedFormEntity uefEntity;
+		try {
+			uefEntity = new UrlEncodedFormEntity( formParams, "UTF-8" );
+			httpPost.setEntity( uefEntity );
+
+			System.out.println( "executing request " + httpPost.getURI() );
+			CloseableHttpResponse response = httpclient.execute( httpPost );
+
+			try {
+				if ( response.getStatusLine().getStatusCode() == 200 ) {
+					HttpEntity entity = response.getEntity();
+					if ( entity != null ) {
+						System.out.println( "--------------------------------------" );
+						System.out.println( "Response content: " + EntityUtils.toString( entity, "UTF-8" ) );
+						System.out.println( response.getEntity() );
+						System.out.println( "--------------------------------------" );
+					}
+					return true;
+				} else {
+					return false;
+				}
+			} finally {
+				response.close();
+			}
+		} catch ( ClientProtocolException e ) {
+			LOG.warn( "Exception:", e );
+			return false;
+		} catch ( UnsupportedEncodingException e ) {
+			LOG.warn( "Exception:", e );
+			return false;
+		} catch ( IOException e ) {
+			LOG.warn( "Exception:", e );
+			return false;
+		} finally {
+			try {
+				httpclient.close();
+			} catch ( IOException e ) {
+				LOG.warn( "Exception:", e );
+			}
+		}
+	}
 
 //        public static void main(String... args){
 //            sendPostRequest();

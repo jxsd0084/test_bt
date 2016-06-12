@@ -19,52 +19,58 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class GuavaCacheHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GuavaCacheHelper.class);
-    private static Cache<String,Object> cache = CacheBuilder.newBuilder().concurrencyLevel(5).expireAfterWrite(3600, TimeUnit.SECONDS).maximumSize(100).build();
+	private static final Logger LOGGER = LoggerFactory.getLogger( GuavaCacheHelper.class );
 
-    public static void put(String key,Object value){
-        cache.put(key,value);
-    }
+	private static Cache< String, Object > cache = CacheBuilder.newBuilder().concurrencyLevel( 5 ).expireAfterWrite( 3600, TimeUnit.SECONDS ).maximumSize( 100 ).build();
 
-    public static Object getVersion(String key){
-        try {
-            return cache.get(key, new Callable<Object>() {
-                    @Override
-                    public Object call() throws Exception {
-                    return null;
-                }
-            });
-        } catch (Exception e) {
-            LOGGER.error("从guava缓存中读取数据出现异常： " + e);
-            return null;
-        }
-    }
+	public static void put( String key, Object value ) {
 
-    public static List<Map<String,Object>> sort(List<Map<String,Object>> list){
-        Map<String,Map<String,Object>> tempMap = new HashMap<>();
-        List<String> strList = new ArrayList<>();
-        for(Map<String,Object> map:list){
-            String key = map.get("value").toString();
-            if(StringUtils.isNotEmpty(key)) {
-                strList.add(key);
-                tempMap.put(key, map);
-            }
-        }
-        Collections.sort(strList);
-        list.clear();
-        for(String key:strList){
-            list.add(tempMap.get(key));
-        }
-        return list;
-    }
+		cache.put( key, value );
+	}
 
-    public static boolean isNum(String str) {
+	public static Object getVersion( String key ) {
 
-        try {
-            new BigDecimal(str);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+		try {
+			return cache.get( key, new Callable< Object >() {
+				@Override
+				public Object call() throws Exception {
+
+					return null;
+				}
+			} );
+		} catch ( Exception e ) {
+			LOGGER.error( "从guava缓存中读取数据出现异常： " + e );
+			return null;
+		}
+	}
+
+	public static List< Map< String, Object > > sort( List< Map< String, Object > > list ) {
+
+		Map< String, Map< String, Object > > tempMap = new HashMap<>();
+		List< String >                       strList = new ArrayList<>();
+		for ( Map< String, Object > map : list ) {
+			String key = map.get( "value" ).toString();
+			if ( StringUtils.isNotEmpty( key ) ) {
+				strList.add( key );
+				tempMap.put( key, map );
+			}
+		}
+		Collections.sort( strList );
+		list.clear();
+		for ( String key : strList ) {
+			list.add( tempMap.get( key ) );
+		}
+		return list;
+	}
+
+	public static boolean isNum( String str ) {
+
+		try {
+			new BigDecimal( str );
+			return true;
+		} catch ( Exception e ) {
+			return false;
+		}
+	}
+
 }

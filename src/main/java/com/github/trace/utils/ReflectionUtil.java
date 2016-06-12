@@ -15,26 +15,27 @@ import java.lang.reflect.Method;
  */
 public class ReflectionUtil {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ReflectionUtil.class);
+	private static Logger LOGGER = LoggerFactory.getLogger( ReflectionUtil.class );
 
-    public static JSONArray convertToJSON(Object obj) {
-        JSONArray jsonArray = new JSONArray();
-        Class clazz = obj.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-            try {
-                for (Field field : fields) {
-                    PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), clazz);
-                    Method getMethod = descriptor.getReadMethod();
-                    jsonArray.add(getMethod.invoke(obj));
-                }
-            } catch (IntrospectionException e){
-                LOGGER.error("IntrospectionException...", e);
-            } catch (IllegalAccessException e) {
-                LOGGER.error("IllegalAccessException... ", e);
-            } catch (InvocationTargetException e) {
-                LOGGER.error("InvocationTargetException... ", e);
-            }
-        return jsonArray;
-    }
+	public static JSONArray convertToJSON( Object obj ) {
+
+		JSONArray jsonArray = new JSONArray();
+		Class     clazz     = obj.getClass();
+		Field[]   fields    = clazz.getDeclaredFields();
+		try {
+			for ( Field field : fields ) {
+				PropertyDescriptor descriptor = new PropertyDescriptor( field.getName(), clazz );
+				Method             getMethod  = descriptor.getReadMethod();
+				jsonArray.add( getMethod.invoke( obj ) );
+			}
+		} catch ( IntrospectionException e ) {
+			LOGGER.error( "IntrospectionException...", e );
+		} catch ( IllegalAccessException e ) {
+			LOGGER.error( "IllegalAccessException... ", e );
+		} catch ( InvocationTargetException e ) {
+			LOGGER.error( "InvocationTargetException... ", e );
+		}
+		return jsonArray;
+	}
 
 }
