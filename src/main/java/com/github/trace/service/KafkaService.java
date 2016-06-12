@@ -1,45 +1,28 @@
 package com.github.trace.service;
 
+import com.github.autoconf.ConfigFactory;
+import com.github.trace.entity.KafkaMessageAndOffset;
+import com.github.trace.intern.KafkaUtil;
+import com.github.trace.utils.JsonLogHandler;
+import com.github.trace.utils.NginxLogHandler;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
-import com.github.autoconf.ConfigFactory;
-import com.github.trace.entity.KafkaMessageAndOffset;
-import com.github.trace.intern.KafkaUtil;
-import com.github.trace.utils.JsonLogHandler;
-import com.github.trace.utils.NginxLogHandler;
-
+import kafka.javaapi.PartitionMetadata;
+import kafka.javaapi.consumer.SimpleConsumer;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeMap;
+import javax.annotation.PostConstruct;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
-import kafka.javaapi.PartitionMetadata;
-import kafka.javaapi.consumer.SimpleConsumer;
-
-import static com.github.trace.intern.KafkaPropertyConstant.BOOSTRAP_SERVERS;
-import static com.github.trace.intern.KafkaPropertyConstant.CONSUMER_BUFFER_SIZE;
-import static com.github.trace.intern.KafkaPropertyConstant.CONSUMER_BUFFER_SIZE_DEFAULT;
-import static com.github.trace.intern.KafkaPropertyConstant.CONSUMER_CONNECT_TIMEOUT;
-import static com.github.trace.intern.KafkaPropertyConstant.CONSUMER_CONNECT_TIMEOUT_DEFAULT;
-import static com.github.trace.intern.KafkaPropertyConstant.FETCH_SIZE;
-import static com.github.trace.intern.KafkaPropertyConstant.FETCH_SIZE_DEFAULT;
-import static com.github.trace.intern.KafkaPropertyConstant.SERVER_PORT;
-import static com.github.trace.intern.KafkaPropertyConstant.SERVER_PORT_DEFAULT;
+import static com.github.trace.intern.KafkaPropertyConstant.*;
 
 /**
  * 根据topic获取kafka中最新N条数据
@@ -48,137 +31,145 @@ import static com.github.trace.intern.KafkaPropertyConstant.SERVER_PORT_DEFAULT;
 @Service
 public class KafkaService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(KafkaService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger( KafkaService.class );
 
-  private static List<String> brokers = Lists.newArrayList();
-  private static int port;
-  private static int connectTimeout;
-  private static int bufferSize;
-  private static int fetchSize;
+	private static List< String > brokers = Lists.newArrayList();
 
-  @PostConstruct
-  void init() {
-    ConfigFactory.getInstance().getConfig("kafka-simple-consumer", config -> {
-      Preconditions.checkNotNull(config.get(BOOSTRAP_SERVERS));
+	private static int port;
+	private static int connectTimeout;
+	private static int bufferSize;
+	private static int fetchSize;
 
-      String servers = config.get(BOOSTRAP_SERVERS);
-      brokers = Splitter.on(",").splitToList(servers);
-      port = config.getInt(SERVER_PORT, SERVER_PORT_DEFAULT);
-      connectTimeout = config.getInt(CONSUMER_CONNECT_TIMEOUT, CONSUMER_CONNECT_TIMEOUT_DEFAULT);
-      bufferSize = config.getInt(CONSUMER_BUFFER_SIZE, CONSUMER_BUFFER_SIZE_DEFAULT);
-      fetchSize = config.getInt(FETCH_SIZE, FETCH_SIZE_DEFAULT);
-    });
-  }
+	@PostConstruct
+	void init() {
 
-  public long getOffsetSum(String topic) {
-    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1);
-    if (fetchedData == null || fetchedData.isEmpty()) {
-      return 0L;
-    }
-    return fetchedData.stream().mapToLong(KafkaMessageAndOffset::getOffset).sum();
-  }
+		ConfigFactory.getInstance().getConfig( "kafka-simple-consumer", config -> {
+			Preconditions.checkNotNull( config.get( BOOSTRAP_SERVERS ) );
 
-  public Map<String, Long> getLastMessageTimestampWithIp(String topic) {
-    Map<String, Long> ret = Maps.newHashMap();
-    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1000);
-    if (fetchedData == null || fetchedData.isEmpty()) {
-      return ret;
-    }
+			String servers = config.get( BOOSTRAP_SERVERS );
+			brokers = Splitter.on( "," ).splitToList( servers );
+			port = config.getInt( SERVER_PORT, SERVER_PORT_DEFAULT );
+			connectTimeout = config.getInt( CONSUMER_CONNECT_TIMEOUT, CONSUMER_CONNECT_TIMEOUT_DEFAULT );
+			bufferSize = config.getInt( CONSUMER_BUFFER_SIZE, CONSUMER_BUFFER_SIZE_DEFAULT );
+			fetchSize = config.getInt( FETCH_SIZE, FETCH_SIZE_DEFAULT );
+		} );
+	}
 
-    boolean isNginx = StringUtils.startsWith(topic, "nginx");
+	public long getOffsetSum( String topic ) {
 
-    for (KafkaMessageAndOffset k : fetchedData) {
-      String message = k.getMessage();
-      String ip;
-      long stamp;
+		Set< KafkaMessageAndOffset > fetchedData = fetchData( topic, 1 );
+		if ( fetchedData == null || fetchedData.isEmpty() ) {
+			return 0L;
+		}
+		return fetchedData.stream().mapToLong( KafkaMessageAndOffset:: getOffset ).sum();
+	}
 
-      if (isNginx) {
-        ip = NginxLogHandler.getIpFromNginxLog(message);
-        stamp = NginxLogHandler.getStampFromNginxLog(message);
-      } else {
-        ip = JsonLogHandler.getIpFromLog(message);
-        stamp = JsonLogHandler.getStampFromLog(message);
-      }
+	public Map< String, Long > getLastMessageTimestampWithIp( String topic ) {
 
-      if (ret.containsKey(ip)) {
-        long lastStamp = ret.get(ip);
-        if (stamp > lastStamp) {
-          ret.put(ip, stamp);
-        }
-      } else {
-        ret.put(ip, stamp);
-      }
-    }
+		Map< String, Long >          ret         = Maps.newHashMap();
+		Set< KafkaMessageAndOffset > fetchedData = fetchData( topic, 1000 );
+		if ( fetchedData == null || fetchedData.isEmpty() ) {
+			return ret;
+		}
 
-    return ret;
-  }
+		boolean isNginx = StringUtils.startsWith( topic, "nginx" );
 
-  public long getLastMessageTimestamp(String topic) {
-    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, 1);
-    if (fetchedData == null || fetchedData.isEmpty()) {
-      return 0L;
-    }
+		for ( KafkaMessageAndOffset k : fetchedData ) {
+			String message = k.getMessage();
+			String ip;
+			long   stamp;
 
-    boolean isNginx = StringUtils.startsWith(topic, "nginx");
+			if ( isNginx ) {
+				ip = NginxLogHandler.getIpFromNginxLog( message );
+				stamp = NginxLogHandler.getStampFromNginxLog( message );
+			} else {
+				ip = JsonLogHandler.getIpFromLog( message );
+				stamp = JsonLogHandler.getStampFromLog( message );
+			}
 
-    List<Long> list = fetchedData.stream().map(k -> {
-      String message = k.getMessage();
-      return isNginx ? NginxLogHandler.getStampFromNginxLog(message)
-                     : JsonLogHandler.getStampFromLog(message);
-    }).collect(Collectors.toList());
-    LOGGER.info(list.toString());
-    Collections.sort(list, (t1, t2) -> Objects.equals(t1, t2) ? 0 : (t1 < t2 ? 1 : -1));
+			if ( ret.containsKey( ip ) ) {
+				long lastStamp = ret.get( ip );
+				if ( stamp > lastStamp ) {
+					ret.put( ip, stamp );
+				}
+			} else {
+				ret.put( ip, stamp );
+			}
+		}
 
-    return list.get(0);
-  }
+		return ret;
+	}
 
-  public Set<String> getMessages(String topic, int count) {
-    Set<KafkaMessageAndOffset> fetchedData = fetchData(topic, count);
+	public long getLastMessageTimestamp( String topic ) {
 
-    Set<String> results = Sets.newHashSet();
-    for (KafkaMessageAndOffset messageAndOffset : fetchedData) {
-      if (results.size() > count) {
-        break;
-      }
-      results.add(messageAndOffset.getMessage());
-    }
-    return parse(results, topic);
-  }
+		Set< KafkaMessageAndOffset > fetchedData = fetchData( topic, 1 );
+		if ( fetchedData == null || fetchedData.isEmpty() ) {
+			return 0L;
+		}
 
-  private Set<KafkaMessageAndOffset> fetchData(String topic, int count) {
-    Set<KafkaMessageAndOffset> fetchedData = Sets.newHashSet();
+		boolean isNginx = StringUtils.startsWith( topic, "nginx" );
 
-    TreeMap<Integer, PartitionMetadata> metaDatas = KafkaUtil.findLeader(brokers, port, topic);
-    for (Map.Entry<Integer, PartitionMetadata> entry : metaDatas.entrySet()) {
-      int partition = entry.getKey();
-      String leadBroker = entry.getValue().leader().host();
-      String clientName = "Client_" + topic + "_" + partition;
+		List< Long > list = fetchedData.stream().map( k -> {
+			String message = k.getMessage();
+			return isNginx ? NginxLogHandler.getStampFromNginxLog( message )
+					: JsonLogHandler.getStampFromLog( message );
+		} ).collect( Collectors.toList() );
+		LOGGER.info( list.toString() );
+		Collections.sort( list, ( t1, t2 ) -> Objects.equals( t1, t2 ) ? 0 : ( t1 < t2 ? 1 : -1 ) );
 
-      SimpleConsumer consumer = new SimpleConsumer(leadBroker, port,
-                                                   connectTimeout, bufferSize, clientName);
-      long lastOffset = KafkaUtil.getLastOffset(consumer, topic, partition,
-                                                kafka.api.OffsetRequest.LatestTime(), clientName);
-      if (lastOffset > 0) {
-        fetchedData.addAll(KafkaUtil.fetchData(consumer, topic, partition,
-                                               clientName, lastOffset - count, fetchSize));
-      }
-      consumer.close();
-    }
-    return fetchedData;
-  }
+		return list.get( 0 );
+	}
 
-  private Set<String> parse(Set<String> logs, String topic) {
-    Set<String> results = Sets.newHashSet();
-    if (logs == null || logs.isEmpty() || Strings.isNullOrEmpty(topic)) {
-      return results;
-    }
+	public Set< String > getMessages( String topic, int count ) {
 
-    if (StringUtils.startsWith(topic, "nginx")) {
-      results = NginxLogHandler.batchParse(logs);
-    } else {
-      results = logs;
-    }
-    return results;
-  }
+		Set< KafkaMessageAndOffset > fetchedData = fetchData( topic, count );
+
+		Set< String > results = Sets.newHashSet();
+		for ( KafkaMessageAndOffset messageAndOffset : fetchedData ) {
+			if ( results.size() > count ) {
+				break;
+			}
+			results.add( messageAndOffset.getMessage() );
+		}
+		return parse( results, topic );
+	}
+
+	private Set< KafkaMessageAndOffset > fetchData( String topic, int count ) {
+
+		Set< KafkaMessageAndOffset > fetchedData = Sets.newHashSet();
+
+		TreeMap< Integer, PartitionMetadata > metaDatas = KafkaUtil.findLeader( brokers, port, topic );
+		for ( Map.Entry< Integer, PartitionMetadata > entry : metaDatas.entrySet() ) {
+			int    partition  = entry.getKey();
+			String leadBroker = entry.getValue().leader().host();
+			String clientName = "Client_" + topic + "_" + partition;
+
+			SimpleConsumer consumer = new SimpleConsumer( leadBroker, port,
+					connectTimeout, bufferSize, clientName );
+			long lastOffset = KafkaUtil.getLastOffset( consumer, topic, partition,
+					kafka.api.OffsetRequest.LatestTime(), clientName );
+			if ( lastOffset > 0 ) {
+				fetchedData.addAll( KafkaUtil.fetchData( consumer, topic, partition,
+						clientName, lastOffset - count, fetchSize ) );
+			}
+			consumer.close();
+		}
+		return fetchedData;
+	}
+
+	private Set< String > parse( Set< String > logs, String topic ) {
+
+		Set< String > results = Sets.newHashSet();
+		if ( logs == null || logs.isEmpty() || Strings.isNullOrEmpty( topic ) ) {
+			return results;
+		}
+
+		if ( StringUtils.startsWith( topic, "nginx" ) ) {
+			results = NginxLogHandler.batchParse( logs );
+		} else {
+			results = logs;
+		}
+		return results;
+	}
 
 }

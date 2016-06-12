@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class NavigationService {
 
-    @Autowired
-    private NavigationItemMapper navigationItemMapper;
+	@Autowired
+	private NavigationItemMapper navigationItemMapper;
 
-    /**
-     * 获取所有的 节点 列表
-     */
+	/**
+	 * 获取所有的 节点 列表
+	 */
 
 }

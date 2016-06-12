@@ -14,15 +14,17 @@ import java.util.List;
 @Service
 public class ParamService {
 
-  @Autowired
-  private BpJobMapper bpJobMapper;
+	@Autowired
+	private BpJobMapper bpJobMapper;
 
-  public List<BpJob> getBpJobList() {
-    return bpJobMapper.findAll();
-  }
+	public List< BpJob > getBpJobList() {
 
-  public BpJob getBpJobById(int id){
-    return bpJobMapper.findById(id);
-  }
+		return bpJobMapper.findAll();
+	}
+
+	public BpJob getBpJobById( int id ) {
+
+		return bpJobMapper.findById( id );
+	}
 
 }

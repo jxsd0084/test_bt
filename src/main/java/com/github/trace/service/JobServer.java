@@ -20,139 +20,166 @@ import java.util.List;
 @Service
 public class JobServer {
 
-    private static final Logger LOG = LoggerFactory.getLogger( JobServer.class );
+	private static final Logger LOG = LoggerFactory.getLogger( JobServer.class );
 
-    @Autowired
-    private JobSourceMapper jobSourceMapper;
+	@Autowired
+	private JobSourceMapper jobSourceMapper;
+	@Autowired
+	private JobTargetMapper jobTargetMapper;
+	@Autowired
+	private JobInfoMapper   jobInfoMapper;
 
-    @Autowired
-    private JobTargetMapper jobTargetMapper;
+	/**
+	 * 根据bizId查询 作业_源列表
+	 */
+	public List< JobSource > getJobSouListByBizId( int id ) {
 
-    @Autowired
-    private JobInfoMapper jobInfoMapper;
-    /**
-     * 根据bizId查询 作业_源列表
-     */
-    public List<JobSource> getJobSouListByBizId(int id){
-        return jobSourceMapper.findJobListByBizId(id);
-    }
+		return jobSourceMapper.findJobListByBizId( id );
+	}
 
-    /**
-     * 根据Id查询 作业_源
-     * @param id
-     */
-    public JobSource getJobSouById(int id) {
-        return jobSourceMapper.findById(id);
-    }
+	/**
+	 * 根据Id查询 作业_源
+	 *
+	 * @param id
+	 */
+	public JobSource getJobSouById( int id ) {
 
-    /**
-     * 根据Id更新 作业_源
-     * @param jobSource
-     * @return
-     */
-    public int updateJobSou(JobSource jobSource) {
-        return jobSourceMapper.update(jobSource);
-    }
+		return jobSourceMapper.findById( id );
+	}
 
-    /**
-     * 根据Id删除 作业_源
-     * @param id
-     * @return
-     */
-    public int deleteJobSouById(int id) {
-        return jobSourceMapper.deleteById(id);
-    }
+	/**
+	 * 根据Id更新 作业_源
+	 *
+	 * @param jobSource
+	 * @return
+	 */
+	public int updateJobSou( JobSource jobSource ) {
 
-    /**
-     * 插入 作业_源
-     * @param jobSource
-     */
-    public int addJobSou(JobSource jobSource) {
-        return jobSourceMapper.insert(jobSource);
-    }
+		return jobSourceMapper.update( jobSource );
+	}
+
+	/**
+	 * 根据Id删除 作业_源
+	 *
+	 * @param id
+	 * @return
+	 */
+	public int deleteJobSouById( int id ) {
+
+		return jobSourceMapper.deleteById( id );
+	}
+
+	/**
+	 * 插入 作业_源
+	 *
+	 * @param jobSource
+	 */
+	public int addJobSou( JobSource jobSource ) {
+
+		return jobSourceMapper.insert( jobSource );
+	}
 
 
-    /**
-     * 根据bizId查询 作业_目标列表
-     */
-    public List<JobTarget> getJobTarListByBizId(int id){
-        return jobTargetMapper.findJobListByBizId(id);
-    }
+	/**
+	 * 根据bizId查询 作业_目标列表
+	 */
+	public List< JobTarget > getJobTarListByBizId( int id ) {
 
-    /**
-     * 根据Id查询 作业_目标
-     * @param id
-     */
-    public JobTarget getJobTarById(int id) {
-        return jobTargetMapper.findById(id);
-    }
+		return jobTargetMapper.findJobListByBizId( id );
+	}
 
-    /**
-     * 根据Id更新 作业_目标
-     * @param jobTarget
-     * @return
-     */
-    public int updateJobTar(JobTarget jobTarget) {
-        return jobTargetMapper.update(jobTarget);
-    }
+	/**
+	 * 根据Id查询 作业_目标
+	 *
+	 * @param id
+	 */
+	public JobTarget getJobTarById( int id ) {
 
-    /**
-     * 根据Id删除 作业_目标
-     * @param id
-     * @return
-     */
-    public int deleteJobTarById(int id) {
-        return jobTargetMapper.deleteById(id);
-    }
+		return jobTargetMapper.findById( id );
+	}
 
-    /**
-     * 插入 作业_目标
-     * @param jobTarget
-     */
-    public int addJobTar(JobTarget jobTarget) {
-        return jobTargetMapper.insert(jobTarget);
-    }
+	/**
+	 * 根据Id更新 作业_目标
+	 *
+	 * @param jobTarget
+	 * @return
+	 */
+	public int updateJobTar( JobTarget jobTarget ) {
 
-    /**
-     * 根据bizId查询 作业
-     */
-    public List<JobInfo> getJobInfoListByBizId(int id){
-        return jobInfoMapper.findJobInfoListByBizId(id);
-    }
+		return jobTargetMapper.update( jobTarget );
+	}
 
-    /**
-     * 根据Id查询 作业
-     * @param id
-     */
-    public JobInfo getJobInfoById(int id) {
-        return jobInfoMapper.findById(id);
-    }
+	/**
+	 * 根据Id删除 作业_目标
+	 *
+	 * @param id
+	 * @return
+	 */
+	public int deleteJobTarById( int id ) {
 
-    /**
-     * 根据Id更新 作业
-     * @param jobInfo
-     * @return
-     */
-    public int updateJobInfo(JobInfo jobInfo) {
-        return jobInfoMapper.update(jobInfo);
-    }
+		return jobTargetMapper.deleteById( id );
+	}
 
-    /**
-     * 根据Id删除 作业
-     * @param id
-     * @return
-     */
-    public int deleteJobInfoById(int id) {
-        return jobInfoMapper.deleteById(id);
-    }
+	/**
+	 * 插入 作业_目标
+	 *
+	 * @param jobTarget
+	 */
+	public int addJobTar( JobTarget jobTarget ) {
 
-    /**
-     * 插入 作业
-     * @param jobInfo
-     */
-    public int addJobInfo(JobInfo jobInfo) {
-        return jobInfoMapper.insert(jobInfo);
-    }
+		return jobTargetMapper.insert( jobTarget );
+	}
+
+	/**
+	 * 根据bizId查询 作业
+	 */
+	public List< JobInfo > getJobInfoListByBizId( int id ) {
+
+		return jobInfoMapper.findJobInfoListByBizId( id );
+	}
+
+	/**
+	 * 根据Id查询 作业
+	 *
+	 * @param id
+	 */
+	public JobInfo getJobInfoById( int id ) {
+
+		return jobInfoMapper.findById( id );
+	}
+
+	/**
+	 * 根据Id更新 作业
+	 *
+	 * @param jobInfo
+	 * @return
+	 */
+	public int updateJobInfo( JobInfo jobInfo ) {
+
+		return jobInfoMapper.update( jobInfo );
+	}
+
+	/**
+	 * 根据Id删除 作业
+	 *
+	 * @param id
+	 * @return
+	 */
+	public int deleteJobInfoById( int id ) {
+
+		return jobInfoMapper.deleteById( id );
+	}
+
+	/**
+	 * 插入 作业
+	 *
+	 * @param jobInfo
+	 */
+	public int addJobInfo( JobInfo jobInfo ) {
+
+		return jobInfoMapper.insert( jobInfo );
+	}
+
 }
 
 

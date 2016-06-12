@@ -15,37 +15,39 @@ import java.util.Map;
 @Service
 public class SearchService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( SearchService.class );
+	private static final Logger LOGGER = LoggerFactory.getLogger( SearchService.class );
 
 	@Autowired
 	private ElasticsearchService esService;
 
-	public List<Map<String, Object>> searchES(SearchLog slog) {
-		List<Map<String, Object>> results = null;
+	public List< Map< String, Object > > searchES( SearchLog slog ) {
+
+		List< Map< String, Object > > results = null;
 		try {
-			results = esService.search(slog.getTopic(),
-				                       slog.getKeyWord(),
-                                       slog.getTag(),
-				                       slog.getStartTime(),
-                                       slog.getEndTime());
-		} catch (Exception e) {
-			LOGGER.error("search ElasticSearch failed !", e);
+			results = esService.search( slog.getTopic(),
+					slog.getKeyWord(),
+					slog.getTag(),
+					slog.getStartTime(),
+					slog.getEndTime() );
+		} catch ( Exception e ) {
+			LOGGER.error( "search ElasticSearch failed !", e );
 		}
 		return results;
 	}
 
-	public List<Map<String, Object>> searchESWithSize(SearchLog slog) {
-		List<Map<String, Object>> results = null;
+	public List< Map< String, Object > > searchESWithSize( SearchLog slog ) {
+
+		List< Map< String, Object > > results = null;
 		try {
-			results = esService.search(slog.getTopic(),
-				                       slog.getKeyWord(),
-                                       slog.getTag(),
-				                       slog.getStartTime(),
-				                       slog.getEndTime(),
-                                       slog.getPageStart(),
-                                       slog.getPageSize());
-		} catch (Exception e) {
-			LOGGER.error("search ElasticSearch failed !", e);
+			results = esService.search( slog.getTopic(),
+					slog.getKeyWord(),
+					slog.getTag(),
+					slog.getStartTime(),
+					slog.getEndTime(),
+					slog.getPageStart(),
+					slog.getPageSize() );
+		} catch ( Exception e ) {
+			LOGGER.error( "search ElasticSearch failed !", e );
 		}
 		return results;
 	}

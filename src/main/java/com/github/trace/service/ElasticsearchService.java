@@ -1,18 +1,17 @@
 package com.github.trace.service;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.trace.utils.ElasticSearchHelper;
 import com.github.trace.utils.OkHttpUtil;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
+import jetbrick.util.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -35,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jetbrick.util.StringUtils;
-
 /**
  * 处理es相关
  * Created by wzk on 16/4/5.
@@ -44,274 +41,293 @@ import jetbrick.util.StringUtils;
 @Service
 public class ElasticsearchService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ElasticsearchService.class);
-  private static final String INDEX = "datapt-buriedtool";
-  private static final String LOG_STATISTIC_INDEX = "datapt-logstatistic";
+	private static final Logger LOG = LoggerFactory.getLogger( ElasticsearchService.class );
+
+	private static final String INDEX               = "datapt-buriedtool";
+	private static final String LOG_STATISTIC_INDEX = "datapt-logstatistic";
 
 
-  /**
-   * 必须同时满足keyword和时间范围
-   * @param topic        topic, 即es中的type
-   * @param keyword      关键词
-   * @param timeParam    使用的时间字段
-   * @param timeFrom     起始时间戳
-   * @param timeTo       截止时间戳
-   * @param from         item起始
-   * @param size         item条数
-   * @return  结果的list
-   */
-  public List<Map<String, Object>> search(String topic, String keyword, String timeParam,
-                                          long timeFrom, long timeTo, int from, int size) {
-    List<Map<String, Object>> results = Lists.newArrayList();
-    SearchResponse response;
-    try {
-      SearchRequestBuilder builder = build(topic, keyword, timeParam, timeFrom, timeTo, from, size);
-      response = ElasticSearchHelper.search(builder);
-    } catch (Exception e) {
-      LOG.error("Cannot search for keyword {}", keyword, e);
-      return results;
-    }
-    if (response != null && response.getHits() != null) {
-      SearchHit[] hits = response.getHits().getHits();
-      for (SearchHit hit : hits) {
-        results.add(hit.getSource());
-      }
-    }
-    LOG.info("Got {} hits for keyword [{}] in topic [{}]", results.size(), keyword, topic);
-    return results;
-  }
+	/**
+	 * 必须同时满足keyword和时间范围
+	 *
+	 * @param topic     topic, 即es中的type
+	 * @param keyword   关键词
+	 * @param timeParam 使用的时间字段
+	 * @param timeFrom  起始时间戳
+	 * @param timeTo    截止时间戳
+	 * @param from      item起始
+	 * @param size      item条数
+	 * @return 结果的list
+	 */
+	public List< Map< String, Object > > search( String topic, String keyword, String timeParam,
+	                                             long timeFrom, long timeTo, int from, int size ) {
 
-  /**
-   * 必须同时满足keyword和时间范围, 默认返回10条
-   * @param topic        topic, 即es中的type
-   * @param keyword      关键词
-   * @param timeParam    使用的时间字段
-   * @param timeFrom     起始时间戳
-   * @param timeTo       截止时间戳
-   */
-  public List<Map<String, Object>> search(String topic, String keyword, String timeParam,
-                                          long timeFrom, long timeTo) {
-    return search(topic, keyword, timeParam, timeFrom, timeTo, 0, 10);
-  }
+		List< Map< String, Object > > results = Lists.newArrayList();
+		SearchResponse                response;
+		try {
+			SearchRequestBuilder builder = build( topic, keyword, timeParam, timeFrom, timeTo, from, size );
+			response = ElasticSearchHelper.search( builder );
+		} catch ( Exception e ) {
+			LOG.error( "Cannot search for keyword {}", keyword, e );
+			return results;
+		}
+		if ( response != null && response.getHits() != null ) {
+			SearchHit[] hits = response.getHits().getHits();
+			for ( SearchHit hit : hits ) {
+				results.add( hit.getSource() );
+			}
+		}
+		LOG.info( "Got {} hits for keyword [{}] in topic [{}]", results.size(), keyword, topic );
+		return results;
+	}
 
-  public List<Map<String, Object>> aggregation(String nav, String key, long timeFrom, long timeTo) {
-    Preconditions.checkNotNull(key, "Key should not be empty!");
+	/**
+	 * 必须同时满足keyword和时间范围, 默认返回10条
+	 *
+	 * @param topic     topic, 即es中的type
+	 * @param keyword   关键词
+	 * @param timeParam 使用的时间字段
+	 * @param timeFrom  起始时间戳
+	 * @param timeTo    截止时间戳
+	 */
+	public List< Map< String, Object > > search( String topic, String keyword, String timeParam,
+	                                             long timeFrom, long timeTo ) {
 
-    List<Map<String, Object>> aggList = Lists.newLinkedList();
+		return search( topic, keyword, timeParam, timeFrom, timeTo, 0, 10 );
+	}
 
-    // 聚合前进行查询, 先过滤出需要的内容
-    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+	public List< Map< String, Object > > aggregation( String nav, String key, long timeFrom, long timeTo ) {
 
-    // 时间范围
-    RangeQueryBuilder timeRangeBuilder = QueryBuilders.rangeQuery("time").lte(timeTo).gte(timeFrom);
-    boolQuery.filter(timeRangeBuilder);
-    // 必须匹配nav和key
-    if (! Strings.isNullOrEmpty(nav)) {
-      boolQuery.must(QueryBuilders.termQuery("nav", nav));
-    }
-    boolQuery.must(QueryBuilders.termQuery("key", key));
+		Preconditions.checkNotNull( key, "Key should not be empty!" );
 
-    SumBuilder totalCountAgg = AggregationBuilders.sum("totalCount").field("totalCount");
-    SumBuilder successCountAgg = AggregationBuilders.sum("successCount").field("successCount");
-    SumBuilder failCountAgg = AggregationBuilders.sum("failCount").field("failCount");
+		List< Map< String, Object > > aggList = Lists.newLinkedList();
 
-    TermsBuilder aggBuilder = AggregationBuilders
-        .terms("stat")
-        .field("value")
-        .size(0)
-        .order(Terms.Order.aggregation("totalCount", false))
-        .subAggregation(totalCountAgg)
-        .subAggregation(successCountAgg)
-        .subAggregation(failCountAgg);
+		// 聚合前进行查询, 先过滤出需要的内容
+		BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-    SearchRequestBuilder builder = ElasticSearchHelper.newBuilder(LOG_STATISTIC_INDEX);
-    SearchResponse response;
-    try {
-      response = builder.setQuery(boolQuery)
-          .addAggregation(aggBuilder)
-          .get();
-    } catch (Exception e) {
-      LOG.error("Cannot get aggregations for nav {} and key {}", nav, key, e);
-      return aggList;
-    }
-    if (response != null) {
-      Terms agg = response.getAggregations().get("stat");
-      for (Terms.Bucket bucket : agg.getBuckets()) {
-        Map<String, Object> fields = Maps.newHashMap();
-        String aggKey = bucket.getKeyAsString();
-        fields.put("value", aggKey);
-        getBucketSubAggregationValue(bucket, fields);
+		// 时间范围
+		RangeQueryBuilder timeRangeBuilder = QueryBuilders.rangeQuery( "time" ).lte( timeTo ).gte( timeFrom );
+		boolQuery.filter( timeRangeBuilder );
+		// 必须匹配nav和key
+		if ( !Strings.isNullOrEmpty( nav ) ) {
+			boolQuery.must( QueryBuilders.termQuery( "nav", nav ) );
+		}
+		boolQuery.must( QueryBuilders.termQuery( "key", key ) );
 
-        aggList.add(fields);
-      }
-    }
+		SumBuilder totalCountAgg   = AggregationBuilders.sum( "totalCount" ).field( "totalCount" );
+		SumBuilder successCountAgg = AggregationBuilders.sum( "successCount" ).field( "successCount" );
+		SumBuilder failCountAgg    = AggregationBuilders.sum( "failCount" ).field( "failCount" );
 
-    return aggList;
-  }
+		TermsBuilder aggBuilder = AggregationBuilders
+				.terms( "stat" )
+				.field( "value" )
+				.size( 0 )
+				.order( Terms.Order.aggregation( "totalCount", false ) )
+				.subAggregation( totalCountAgg )
+				.subAggregation( successCountAgg )
+				.subAggregation( failCountAgg );
 
-  /**
-   * 使用sql查询es
-   * @param os   iPhone OS  or  Android
-   * @param appVersion
-   * @param innerAppVersion  app内部版本
-   * @param from
-   * @param to
-   * @return List<Map<String, Object>>
-   */
-  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String innerAppVersion,
-                                                                String item, long from, long to) {
-    return searchBySqlForMonitorRequest(os, appVersion, innerAppVersion, item, from, to, -1);
-  }
+		SearchRequestBuilder builder = ElasticSearchHelper.newBuilder( LOG_STATISTIC_INDEX );
+		SearchResponse       response;
+		try {
+			response = builder.setQuery( boolQuery )
+					.addAggregation( aggBuilder )
+					.get();
+		} catch ( Exception e ) {
+			LOG.error( "Cannot get aggregations for nav {} and key {}", nav, key, e );
+			return aggList;
+		}
+		if ( response != null ) {
+			Terms agg = response.getAggregations().get( "stat" );
+			for ( Terms.Bucket bucket : agg.getBuckets() ) {
+				Map< String, Object > fields = Maps.newHashMap();
+				String                aggKey = bucket.getKeyAsString();
+				fields.put( "value", aggKey );
+				getBucketSubAggregationValue( bucket, fields );
 
-  /**
-   * 使用sql查询es
-   * @param os   iPhone OS  or  Android
-   * @param appVersion
-   * @param innerAppVersion  app内部版本
-   * @param from
-   * @param to
-   * @param limit
-   * @return List<Map<String, Object>>
-   */
-  public List<Map<String, Object>> searchBySqlForMonitorRequest(String os, String appVersion, String innerAppVersion,
-                                                                String item, long from, long to, int limit) {
-    String sql = sqlBuilderForMonitorRequest(os, appVersion, innerAppVersion, item, from, to, limit);
-    return sqlSearch(sql);
-  }
+				aggList.add( fields );
+			}
+		}
 
-  public List<Map<String, Object>> searchBySqlForOthers(String topic, String item,
-                                                        long from, long to) {
-    return searchBySqlForOthers(topic, item, from, to, -1);
-  }
+		return aggList;
+	}
 
-  public List<Map<String, Object>> searchBySqlForOthers(String topic, String item,
-                                                        long from, long to, int limit) {
-    String sql = sqlBuilderForOthers(topic, item, from, to, limit);
-    return sqlSearch(sql);
-  }
+	/**
+	 * 使用sql查询es
+	 *
+	 * @param os              iPhone OS  or  Android
+	 * @param appVersion
+	 * @param innerAppVersion app内部版本
+	 * @param from
+	 * @param to
+	 * @return List<Map<String, Object>>
+	 */
+	public List< Map< String, Object > > searchBySqlForMonitorRequest( String os, String appVersion, String innerAppVersion,
+	                                                                   String item, long from, long to ) {
 
-  public Response searchBySql(String sql) throws IOException {
-    String baseUrl = ElasticSearchHelper.getSqlUrl();
-    String fullUrl = baseUrl + "?sql=" + StringUtils.trim(sql);
+		return searchBySqlForMonitorRequest( os, appVersion, innerAppVersion, item, from, to, -1 );
+	}
 
-    Request request = new Request.Builder().url(fullUrl).build();
-    return OkHttpUtil.execute(request);
-  }
+	/**
+	 * 使用sql查询es
+	 *
+	 * @param os              iPhone OS  or  Android
+	 * @param appVersion
+	 * @param innerAppVersion app内部版本
+	 * @param from
+	 * @param to
+	 * @param limit
+	 * @return List<Map<String, Object>>
+	 */
+	public List< Map< String, Object > > searchBySqlForMonitorRequest( String os, String appVersion, String innerAppVersion,
+	                                                                   String item, long from, long to, int limit ) {
 
-  private List<Map<String, Object>> sqlSearch(String sql) {
-    List<Map<String, Object>> list = Lists.newLinkedList();
-    try {
-      Response response = searchBySql(sql);
-      if (!response.isSuccessful()) {
-        return list;
-      }
-      String ss = response.body().string();
-      JSONObject object = JSON.parseObject(ss);
-      JSONObject aggs = object.getJSONObject("aggregations");
-      Set<String> aggKeySet = aggs.keySet();
-      for (String aggKey : aggKeySet) {
-        JSONObject agg = aggs.getJSONObject(aggKey);
-        JSONArray buckets = agg.getJSONArray("buckets");
-        for (int i = 0; i < buckets.size(); i++) {
-          JSONObject b = buckets.getJSONObject(i);
-          String value = b.getString("key");
-          Map<String, Object> map = Maps.newLinkedHashMap();
-          int totalCount = b.getInteger("doc_count");
-          map.put("value", value);
-          map.put("totalCount", totalCount);
-          map.put("successCount", totalCount);
-          map.put("failCount", 0);
-          list.add(map);
-        }
-      }
-    } catch (Exception e) {
-      LOG.error("Cannot search by sql from elasticsearch", e);
-    }
-    return list;
-  }
+		String sql = sqlBuilderForMonitorRequest( os, appVersion, innerAppVersion, item, from, to, limit );
+		return sqlSearch( sql );
+	}
 
-  private String sqlBuilderForMonitorRequest(String os, String appVersion, String innerAppVersion,
-                                             String item, long from, long to, int limit) {
-    StringBuilder sql = new StringBuilder();
-    sql.append(" SELECT ").append(item).append(", count(*) as count1 from datapt-buriedtool ")
-        .append(" where _type = 'dcx.MonitorRequest' ");
-    sql.append(" and M98 >= ").append(from).append(" and M98 <= ").append(to).append(" ");
-    if (!Strings.isNullOrEmpty(os)) {
-      sql.append(" and M4 = '").append(os.trim()).append("' ");
-    }
-    if (!Strings.isNullOrEmpty(appVersion)) {
-      sql.append(" and M6 = '").append(appVersion.trim()).append("' ");
-    }
-    if (!Strings.isNullOrEmpty(innerAppVersion)) {
-      sql.append(" and M7 = '").append(innerAppVersion.trim()).append("' ");
-    }
-    sql.append(" group by ").append(item).append(" order by count1 desc ");
-    sql.append(" limit ").append(limit > 0 ? limit : 10000);
-    LOG.info(sql.toString());
-    return sql.toString();
-  }
+	public List< Map< String, Object > > searchBySqlForOthers( String topic, String item,
+	                                                           long from, long to ) {
 
-  private String sqlBuilderForOthers(String topic, String item, long from, long to, int limit) {
-    StringBuilder sql1 = new StringBuilder();
-    sql1.append(" SELECT ").append(item).append(", count(*) as count1 from datapt-buriedtool ")
-        .append(" where _type = '").append(topic).append("' ")
-        .append(" and stamp >= ").append(from).append(" and stamp <= ").append(to).append(" ")
-        .append(" group by ").append(item).append(" order by count1 desc ")
-        .append(" limit ").append(limit > 0 ? limit : 10000);
-    LOG.info(sql1.toString());
-    return sql1.toString();
-  }
+		return searchBySqlForOthers( topic, item, from, to, -1 );
+	}
 
-  private void getBucketSubAggregationValue(Terms.Bucket bucket, Map<String, Object> fields) {
-    Preconditions.checkNotNull(bucket, "Bucket should not be null.");
-    List<Aggregation> aggregations = bucket.getAggregations().asList();
+	public List< Map< String, Object > > searchBySqlForOthers( String topic, String item,
+	                                                           long from, long to, int limit ) {
 
-    if (aggregations == null || aggregations.isEmpty()) {
-      return;
-    }
-    aggregations.stream()
-        .filter(agg -> agg instanceof InternalSum)
-        .forEach(agg -> {
-          String key = agg.getName();
-          double value = ((InternalSum) agg).getValue();
-          fields.put(key, value);
-        });
-  }
+		String sql = sqlBuilderForOthers( topic, item, from, to, limit );
+		return sqlSearch( sql );
+	}
 
-  /**
-   * 必须同时满足keyword和时间范围
-   * @param topic        topic, 即es中的type
-   * @param keyword      关键词
-   * @param timeParam    使用的时间字段
-   * @param timeFrom     起始时间戳
-   * @param timeTo       截止时间戳
-   * @param from         item起始
-   * @param size         item条数
-   * @return  {@link SearchRequestBuilder}
-   */
-  private SearchRequestBuilder build(String topic, String keyword, String timeParam, long timeFrom,
-                                     long timeTo, int from, int size) {
-    SearchRequestBuilder builder = ElasticSearchHelper.newBuilder(INDEX);
-    if (!Strings.isNullOrEmpty(topic)) {
-      builder.setTypes(topic);
-    }
+	public Response searchBySql( String sql ) throws IOException {
 
-    builder.addSort(timeParam, SortOrder.DESC);
+		String baseUrl = ElasticSearchHelper.getSqlUrl();
+		String fullUrl = baseUrl + "?sql=" + StringUtils.trim( sql );
 
-    BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-    boolQuery.must(QueryBuilders.queryStringQuery(keyword));
+		Request request = new Request.Builder().url( fullUrl ).build();
+		return OkHttpUtil.execute( request );
+	}
 
-    if (!Strings.isNullOrEmpty(timeParam) && timeFrom > 0 && timeTo >= timeFrom) {
-      RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(timeParam);
-      rangeQuery.gte(timeFrom).lte(timeTo);
-      boolQuery.must(rangeQuery);
-    }
+	private List< Map< String, Object > > sqlSearch( String sql ) {
 
-    builder.setFrom(from);
-    builder.setSize(size);
+		List< Map< String, Object > > list = Lists.newLinkedList();
+		try {
+			Response response = searchBySql( sql );
+			if ( !response.isSuccessful() ) {
+				return list;
+			}
+			String        ss        = response.body().string();
+			JSONObject    object    = JSON.parseObject( ss );
+			JSONObject    aggs      = object.getJSONObject( "aggregations" );
+			Set< String > aggKeySet = aggs.keySet();
+			for ( String aggKey : aggKeySet ) {
+				JSONObject agg     = aggs.getJSONObject( aggKey );
+				JSONArray  buckets = agg.getJSONArray( "buckets" );
+				for ( int i = 0; i < buckets.size(); i++ ) {
+					JSONObject            b          = buckets.getJSONObject( i );
+					String                value      = b.getString( "key" );
+					Map< String, Object > map        = Maps.newLinkedHashMap();
+					int                   totalCount = b.getInteger( "doc_count" );
+					map.put( "value", value );
+					map.put( "totalCount", totalCount );
+					map.put( "successCount", totalCount );
+					map.put( "failCount", 0 );
+					list.add( map );
+				}
+			}
+		} catch ( Exception e ) {
+			LOG.error( "Cannot search by sql from elasticsearch", e );
+		}
+		return list;
+	}
 
-    builder.setQuery(boolQuery);
-    return builder;
-  }
+	private String sqlBuilderForMonitorRequest( String os, String appVersion, String innerAppVersion,
+	                                            String item, long from, long to, int limit ) {
+
+		StringBuilder sql = new StringBuilder();
+		sql.append( " SELECT " ).append( item ).append( ", count(*) as count1 from datapt-buriedtool " )
+				.append( " where _type = 'dcx.MonitorRequest' " );
+		sql.append( " and M98 >= " ).append( from ).append( " and M98 <= " ).append( to ).append( " " );
+		if ( !Strings.isNullOrEmpty( os ) ) {
+			sql.append( " and M4 = '" ).append( os.trim() ).append( "' " );
+		}
+		if ( !Strings.isNullOrEmpty( appVersion ) ) {
+			sql.append( " and M6 = '" ).append( appVersion.trim() ).append( "' " );
+		}
+		if ( !Strings.isNullOrEmpty( innerAppVersion ) ) {
+			sql.append( " and M7 = '" ).append( innerAppVersion.trim() ).append( "' " );
+		}
+		sql.append( " group by " ).append( item ).append( " order by count1 desc " );
+		sql.append( " limit " ).append( limit > 0 ? limit : 10000 );
+		LOG.info( sql.toString() );
+		return sql.toString();
+	}
+
+	private String sqlBuilderForOthers( String topic, String item, long from, long to, int limit ) {
+
+		StringBuilder sql1 = new StringBuilder();
+		sql1.append( " SELECT " ).append( item ).append( ", count(*) as count1 from datapt-buriedtool " )
+				.append( " where _type = '" ).append( topic ).append( "' " )
+				.append( " and stamp >= " ).append( from ).append( " and stamp <= " ).append( to ).append( " " )
+				.append( " group by " ).append( item ).append( " order by count1 desc " )
+				.append( " limit " ).append( limit > 0 ? limit : 10000 );
+		LOG.info( sql1.toString() );
+		return sql1.toString();
+	}
+
+	private void getBucketSubAggregationValue( Terms.Bucket bucket, Map< String, Object > fields ) {
+
+		Preconditions.checkNotNull( bucket, "Bucket should not be null." );
+		List< Aggregation > aggregations = bucket.getAggregations().asList();
+
+		if ( aggregations == null || aggregations.isEmpty() ) {
+			return;
+		}
+		aggregations.stream()
+				.filter( agg -> agg instanceof InternalSum )
+				.forEach( agg -> {
+					String key   = agg.getName();
+					double value = ( ( InternalSum ) agg ).getValue();
+					fields.put( key, value );
+				} );
+	}
+
+	/**
+	 * 必须同时满足keyword和时间范围
+	 *
+	 * @param topic     topic, 即es中的type
+	 * @param keyword   关键词
+	 * @param timeParam 使用的时间字段
+	 * @param timeFrom  起始时间戳
+	 * @param timeTo    截止时间戳
+	 * @param from      item起始
+	 * @param size      item条数
+	 * @return {@link SearchRequestBuilder}
+	 */
+	private SearchRequestBuilder build( String topic, String keyword, String timeParam, long timeFrom,
+	                                    long timeTo, int from, int size ) {
+
+		SearchRequestBuilder builder = ElasticSearchHelper.newBuilder( INDEX );
+		if ( !Strings.isNullOrEmpty( topic ) ) {
+			builder.setTypes( topic );
+		}
+
+		builder.addSort( timeParam, SortOrder.DESC );
+
+		BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+		boolQuery.must( QueryBuilders.queryStringQuery( keyword ) );
+
+		if ( !Strings.isNullOrEmpty( timeParam ) && timeFrom > 0 && timeTo >= timeFrom ) {
+			RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery( timeParam );
+			rangeQuery.gte( timeFrom ).lte( timeTo );
+			boolQuery.must( rangeQuery );
+		}
+
+		builder.setFrom( from );
+		builder.setSize( size );
+
+		builder.setQuery( boolQuery );
+		return builder;
+	}
 
 }
