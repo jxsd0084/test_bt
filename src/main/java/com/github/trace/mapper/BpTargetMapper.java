@@ -3,6 +3,6 @@ package com.github.trace.mapper;
 import com.github.mybatis.mapper.ICrudMapper;
 import com.github.trace.entity.BpTarget;
 
-public interface BpTargetMapper extends ICrudMapper<BpTarget> {
+public interface BpTargetMapper extends ICrudMapper< BpTarget > {
 
 }

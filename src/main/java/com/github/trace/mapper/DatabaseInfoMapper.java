@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-public interface DatabaseInfoMapper extends ICrudMapper<DatabaseInfo>{
+public interface DatabaseInfoMapper extends ICrudMapper< DatabaseInfo > {
 
-    @Select("SELECT * FROM database_info WHERE biz_id=#{id}")
-    List<DatabaseInfo> findDatabaseInfoListById(@Param("id") int id);
+	@Select( "SELECT * FROM database_info WHERE biz_id=#{id}" )
+	List< DatabaseInfo > findDatabaseInfoListById( @Param( "id" ) int id );
 
 }

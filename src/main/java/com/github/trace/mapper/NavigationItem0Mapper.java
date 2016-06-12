@@ -11,15 +11,15 @@ import java.util.List;
 /**
  * Created by wanghl on 2016/3/31.
  */
-public interface NavigationItem0Mapper extends ICrudMapper<NavigationItem0> {
+public interface NavigationItem0Mapper extends ICrudMapper< NavigationItem0 > {
 
-  @Select("SELECT * FROM navigation_item0 WHERE parent_id=#{parent_id}")
-  List<NavigationItem0> findByParentId(@Param("parent_id") int parent_id);
+	@Select( "SELECT * FROM navigation_item0 WHERE parent_id=#{parent_id}" )
+	List< NavigationItem0 > findByParentId( @Param( "parent_id" ) int parent_id );
 
-  @Select("SELECT * FROM navigation_item0 WHERE name=#{name}")
-  NavigationItem0 findByName(@Param("name") String name);
+	@Select( "SELECT * FROM navigation_item0 WHERE name=#{name}" )
+	NavigationItem0 findByName( @Param( "name" ) String name );
 
-  @Select("SELECT * FROM navigation_item0 WHERE item_type =#{itemType}")
-  List<NavigationItem0> findByType(@Param("itemType")int itemType);
+	@Select( "SELECT * FROM navigation_item0 WHERE item_type =#{itemType}" )
+	List< NavigationItem0 > findByType( @Param( "itemType" ) int itemType );
 
 }
