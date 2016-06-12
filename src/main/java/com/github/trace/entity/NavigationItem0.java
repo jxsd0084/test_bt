@@ -5,87 +5,103 @@ package com.github.trace.entity;
  * Created by wanghl on 2016/3/31.
  */
 public class NavigationItem0 {
-    private int id;
 
-    private String name;
-    //0：非叶子节点;1：叶子节点
-    private int itemType;
+	private int id;
 
-    private String topic;
+	private String name;
+	//0：非叶子节点;1：叶子节点
+	private int    itemType;
 
-    private String manager;
+	private String topic;
 
-    //关联本表中的id
-    private int parentId = 0;
+	private String manager;
 
-    private String manageId;
+	//关联本表中的id
+	private int parentId = 0;
 
-    public String getManager() {
-        return manager;
-    }
+	private String manageId;
 
-    public void setManager(String manager) {
-        this.manager = manager;
-    }
+	public String getManager() {
 
-    public String getTopic() {
-        return topic;
-    }
+		return manager;
+	}
 
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+	public void setManager( String manager ) {
 
-    public int getItemType() {
-        return itemType;
-    }
+		this.manager = manager;
+	}
 
-    public void setItemType(int itemType) {
-        this.itemType = itemType;
-    }
+	public String getTopic() {
 
-    public String getName() {
-        return name;
-    }
+		return topic;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setTopic( String topic ) {
 
-    public int getParentId() {
-        return parentId;
-    }
+		this.topic = topic;
+	}
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
+	public int getItemType() {
 
-    public int getId() {
-        return id;
-    }
+		return itemType;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setItemType( int itemType ) {
 
-    public String getManageId() {
-        return manageId;
-    }
+		this.itemType = itemType;
+	}
 
-    public void setManageId(String manageId) {
-        this.manageId = manageId;
-    }
+	public String getName() {
 
-    @Override
-    public String toString() {
-        return "NavigationItem0{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", itemType=" + itemType +
-                ", topic='" + topic + '\'' +
-                ", manager='" + manager + '\'' +
-                ", parentId=" + parentId +
-                ", manageId='" + manageId + '\'' +
-                '}';
-    }
+		return name;
+	}
+
+	public void setName( String name ) {
+
+		this.name = name;
+	}
+
+	public int getParentId() {
+
+		return parentId;
+	}
+
+	public void setParentId( int parentId ) {
+
+		this.parentId = parentId;
+	}
+
+	public int getId() {
+
+		return id;
+	}
+
+	public void setId( int id ) {
+
+		this.id = id;
+	}
+
+	public String getManageId() {
+
+		return manageId;
+	}
+
+	public void setManageId( String manageId ) {
+
+		this.manageId = manageId;
+	}
+
+	@Override
+	public String toString() {
+
+		return "NavigationItem0{" +
+		       "id=" + id +
+		       ", name='" + name + '\'' +
+		       ", itemType=" + itemType +
+		       ", topic='" + topic + '\'' +
+		       ", manager='" + manager + '\'' +
+		       ", parentId=" + parentId +
+		       ", manageId='" + manageId + '\'' +
+		       '}';
+	}
 }

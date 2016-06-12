@@ -1,85 +1,104 @@
 package com.github.trace.entity;
 
 public class JobTarget {
-    private Integer id;
-    private Integer bizId;
-    private String bizName;
-    private String name;
-    private String type;
-    private String ip;
-    private int port;
-    private String path;
-    private String memo;
 
-    public Integer getId() {
-        return id;
-    }
+	private Integer id;
+	private Integer bizId;
+	private String  bizName;
+	private String  name;
+	private String  type;
+	private String  ip;
+	private int     port;
+	private String  path;
+	private String  memo;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
 
-    public Integer getBizId() {
-        return bizId;
-    }
+		return id;
+	}
 
-    public void setBizId(Integer bizId) {
-        this.bizId = bizId;
-    }
+	public void setId( Integer id ) {
 
-    public String getBizName() {
-        return bizName;
-    }
+		this.id = id;
+	}
 
-    public void setBizName(String bizName) {
-        this.bizName = bizName;
-    }
+	public Integer getBizId() {
 
-    public String getName() {
-        return name;
-    }
+		return bizId;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setBizId( Integer bizId ) {
 
-    public String getType() {
-        return type;
-    }
+		this.bizId = bizId;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public String getBizName() {
 
-    public String getIp() {
-        return ip;
-    }
+		return bizName;
+	}
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+	public void setBizName( String bizName ) {
 
-    public int getPort() {
-        return port;
-    }
+		this.bizName = bizName;
+	}
 
-    public void setPort(int port) {
-        this.port = port;
-    }
+	public String getName() {
 
-    public String getPath() {
-        return path;
-    }
+		return name;
+	}
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+	public void setName( String name ) {
 
-    public String getMemo() {
-        return memo;
-    }
+		this.name = name;
+	}
 
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
+	public String getType() {
+
+		return type;
+	}
+
+	public void setType( String type ) {
+
+		this.type = type;
+	}
+
+	public String getIp() {
+
+		return ip;
+	}
+
+	public void setIp( String ip ) {
+
+		this.ip = ip;
+	}
+
+	public int getPort() {
+
+		return port;
+	}
+
+	public void setPort( int port ) {
+
+		this.port = port;
+	}
+
+	public String getPath() {
+
+		return path;
+	}
+
+	public void setPath( String path ) {
+
+		this.path = path;
+	}
+
+	public String getMemo() {
+
+		return memo;
+	}
+
+	public void setMemo( String memo ) {
+
+		this.memo = memo;
+	}
 }

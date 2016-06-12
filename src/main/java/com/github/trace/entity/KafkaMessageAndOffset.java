@@ -6,27 +6,32 @@ package com.github.trace.entity;
  */
 public class KafkaMessageAndOffset {
 
-  long offset;
-  String message;
+	long   offset;
+	String message;
 
-  public KafkaMessageAndOffset(long offset, String message) {
-    this.offset = offset;
-    this.message = message;
-  }
+	public KafkaMessageAndOffset( long offset, String message ) {
 
-  public long getOffset() {
-    return offset;
-  }
+		this.offset = offset;
+		this.message = message;
+	}
 
-  public void setOffset(long offset) {
-    this.offset = offset;
-  }
+	public long getOffset() {
 
-  public String getMessage() {
-    return message;
-  }
+		return offset;
+	}
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+	public void setOffset( long offset ) {
+
+		this.offset = offset;
+	}
+
+	public String getMessage() {
+
+		return message;
+	}
+
+	public void setMessage( String message ) {
+
+		this.message = message;
+	}
 }

@@ -5,86 +5,101 @@ package com.github.trace.entity;
  */
 public class BuriedPoint0 {
 
-    private Integer id;
+	private Integer id;
 
-    private String bpName;
+	private String bpName;
 
-    private String bpValue;
+	private String bpValue;
 
-    private String bpValueDesc;
+	private String bpValueDesc;
 
-    private Integer navigationId;
+	private Integer navigationId;
 
-    private Integer isChecked;
+	private Integer isChecked;
 
-    private String regex;
+	private String regex;
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+		return id;
+	}
 
-    public String getBpName() {
-        return bpName;
-    }
+	public void setId( Integer id ) {
 
-    public void setBpName(String bpName) {
-        this.bpName = bpName;
-    }
+		this.id = id;
+	}
 
-    public String getBpValue() {
-        return bpValue;
-    }
+	public String getBpName() {
 
-    public void setBpValue(String bpValue) {
-        this.bpValue = bpValue;
-    }
+		return bpName;
+	}
 
-    public String getBpValueDesc() {
-        return bpValueDesc;
-    }
+	public void setBpName( String bpName ) {
 
-    public void setBpValueDesc(String bpValueDesc) {
-        this.bpValueDesc = bpValueDesc;
-    }
+		this.bpName = bpName;
+	}
 
-    public Integer getNavigationId() {
-        return navigationId;
-    }
+	public String getBpValue() {
 
-    public void setNavigationId(Integer navigationId) {
-        this.navigationId = navigationId;
-    }
+		return bpValue;
+	}
 
-    public Integer getIsChecked() {
-        return isChecked;
-    }
+	public void setBpValue( String bpValue ) {
 
-    public void setIsChecked(Integer isChecked) {
-        this.isChecked = isChecked;
-    }
+		this.bpValue = bpValue;
+	}
 
-    public String getRegex() {
-        return regex;
-    }
+	public String getBpValueDesc() {
 
-    public void setRegex(String regex) {
-        this.regex = regex;
-    }
+		return bpValueDesc;
+	}
 
-    @Override
-    public String toString() {
-        return "BuriedPoint0{" +
-                "id=" + id +
-                ", bpName='" + bpName + '\'' +
-                ", bpValue='" + bpValue + '\'' +
-                ", bpValueDesc='" + bpValueDesc + '\'' +
-                ", navigationId=" + navigationId +
-                ", isChecked=" + isChecked +
-                ", regex='" + regex + '\'' +
-                '}';
-    }
+	public void setBpValueDesc( String bpValueDesc ) {
+
+		this.bpValueDesc = bpValueDesc;
+	}
+
+	public Integer getNavigationId() {
+
+		return navigationId;
+	}
+
+	public void setNavigationId( Integer navigationId ) {
+
+		this.navigationId = navigationId;
+	}
+
+	public Integer getIsChecked() {
+
+		return isChecked;
+	}
+
+	public void setIsChecked( Integer isChecked ) {
+
+		this.isChecked = isChecked;
+	}
+
+	public String getRegex() {
+
+		return regex;
+	}
+
+	public void setRegex( String regex ) {
+
+		this.regex = regex;
+	}
+
+	@Override
+	public String toString() {
+
+		return "BuriedPoint0{" +
+		       "id=" + id +
+		       ", bpName='" + bpName + '\'' +
+		       ", bpValue='" + bpValue + '\'' +
+		       ", bpValueDesc='" + bpValueDesc + '\'' +
+		       ", navigationId=" + navigationId +
+		       ", isChecked=" + isChecked +
+		       ", regex='" + regex + '\'' +
+		       '}';
+	}
 }

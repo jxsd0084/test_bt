@@ -5,24 +5,28 @@ package com.github.trace.entity;
  */
 public class TableField {
 
-    private int id;
-    private String columnName;
-    private String columnType;
+	private int    id;
+	private String columnName;
+	private String columnType;
 
-    public String getColumnName() {
-        return columnName;
-    }
+	public String getColumnName() {
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
+		return columnName;
+	}
 
-    public String getColumnType() {
-        return columnType;
-    }
+	public void setColumnName( String columnName ) {
 
-    public void setColumnType(String columnType) {
-        this.columnType = columnType;
-    }
+		this.columnName = columnName;
+	}
+
+	public String getColumnType() {
+
+		return columnType;
+	}
+
+	public void setColumnType( String columnType ) {
+
+		this.columnType = columnType;
+	}
 
 }

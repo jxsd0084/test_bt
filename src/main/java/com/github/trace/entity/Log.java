@@ -6,53 +6,62 @@ package com.github.trace.entity;
  */
 public class Log {
 
-  private String message;
-  private String content;
-  private String threadName;
-  private String className;
-  private String time;
+	private String message;
+	private String content;
+	private String threadName;
+	private String className;
+	private String time;
 
-  public String getMessage() {
-    return message;
-  }
+	public String getMessage() {
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+		return message;
+	}
 
-  public String getTime() {
-    return time;
-  }
+	public void setMessage( String message ) {
 
-  public void setTime(String time) {
-    this.time = time;
-  }
+		this.message = message;
+	}
 
-  public String getContent() {
-    return content;
-  }
+	public String getTime() {
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+		return time;
+	}
+
+	public void setTime( String time ) {
+
+		this.time = time;
+	}
+
+	public String getContent() {
+
+		return content;
+	}
+
+	public void setContent( String content ) {
+
+		this.content = content;
+	}
 
 
+	public String getClassName() {
 
-  public String getClassName() {
-    return className;
-  }
+		return className;
+	}
 
-  public void setClassName(String className) {
-    this.className = className;
-  }
+	public void setClassName( String className ) {
 
-  public String getThreadName() {
-    return threadName;
-  }
+		this.className = className;
+	}
 
-  public void setThreadName(String threadName) {
-    this.threadName = threadName;
-  }
+	public String getThreadName() {
+
+		return threadName;
+	}
+
+	public void setThreadName( String threadName ) {
+
+		this.threadName = threadName;
+	}
 
 
 }
