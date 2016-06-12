@@ -11,26 +11,28 @@ import java.util.concurrent.ConcurrentMap;
  */
 class LogStatSnapshot {
 
-  private final ConcurrentMap<String, LogStatCounter> statCounterMap = Maps.newConcurrentMap();
-  private static final char SEPARATOR = 0x03;
+	private final        ConcurrentMap< String, LogStatCounter > statCounterMap = Maps.newConcurrentMap();
+	private static final char                                    SEPARATOR      = 0x03;
 
-  public void add(String nav, String key, String value, String desc, boolean status, long stamp) {
-    String counterKey = Joiner.on(SEPARATOR).join(nav, key, value);
-    LogStatCounter counter = statCounterMap.get(counterKey);
-    if (counter == null) {
-      counter = new LogStatCounter(nav, key, value, desc, stamp);
-      LogStatCounter real = statCounterMap.putIfAbsent(counterKey, counter);
-      if (real != null) {
-        counter = null;
-      }
-    }
-    if (counter != null) {
-      counter.report(status);
-    }
-  }
+	public void add( String nav, String key, String value, String desc, boolean status, long stamp ) {
 
-  ConcurrentMap<String, LogStatCounter> getStatCounterMap() {
-    return statCounterMap;
-  }
+		String         counterKey = Joiner.on( SEPARATOR ).join( nav, key, value );
+		LogStatCounter counter    = statCounterMap.get( counterKey );
+		if ( counter == null ) {
+			counter = new LogStatCounter( nav, key, value, desc, stamp );
+			LogStatCounter real = statCounterMap.putIfAbsent( counterKey, counter );
+			if ( real != null ) {
+				counter = null;
+			}
+		}
+		if ( counter != null ) {
+			counter.report( status );
+		}
+	}
+
+	ConcurrentMap< String, LogStatCounter > getStatCounterMap() {
+
+		return statCounterMap;
+	}
 
 }
