@@ -208,9 +208,9 @@ public class JobInfoController {
 
     @RequestMapping("/importDB")
     public void importDB(@RequestParam(name = "id") int id,
-                           @RequestParam(name = "bizId") int bizId,
-                           @RequestParam(name = "bizName") String bizName,
-                           Model model){
+                         @RequestParam(name = "bizId") int bizId,
+                         @RequestParam(name = "bizName") String bizName,
+                         Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         List<DbJob> jobList = jobSchedueService.getDbJobList(id);
         System.out.println("导入完毕");
