@@ -1,7 +1,6 @@
 package com.github.trace.web;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.trace.entity.DbJob;
 import com.github.trace.entity.JobInfo;
 import com.github.trace.entity.JobSource;
@@ -140,10 +139,10 @@ public class JobInfoController {
 
     @RequestMapping("/edit")
     public String edit(@RequestParam(name = "id") int id,
-                         @RequestParam(name = "bizId") int bizId,
-                         @RequestParam(name = "bizName") String bizName,
-                         @RequestParam(name = "tag") String tag,
-                         Model model){
+                       @RequestParam(name = "bizId") int bizId,
+                       @RequestParam(name = "bizName") String bizName,
+                       @RequestParam(name = "tag") String tag,
+                       Model model){
         ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
         JobInfo jobInfo = jobServer.getJobInfoById(id);
 
