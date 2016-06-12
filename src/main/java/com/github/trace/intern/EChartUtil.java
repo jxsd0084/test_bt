@@ -14,266 +14,304 @@ import java.util.Map;
  */
 public class EChartUtil {
 
-  public static void main(String []args){
-    String rpcId = "0.1";
-    String []ids = rpcId.split("\\.");
-    System.out.println(ids[0]);
-  }
+	public static void main( String[] args ) {
 
-  public static EChartTreeItemStyle getItemStyle(String color){
-    EChartTreeItemStyle itemStyle = new EChartTreeItemStyle();
-    EChartTreeItemStyleData itemStyleData = new EChartTreeItemStyleData();
-    itemStyleData.setBorderWidth(0);
-    itemStyleData.setColor(color);
-    EChartTreeItemStyleLabel label = new EChartTreeItemStyleLabel();
-    label.setShow(true);
-    itemStyleData.setLabel(label);
-    itemStyle.setNormal(itemStyleData);
-    return itemStyle;
-  }
+		String   rpcId = "0.1";
+		String[] ids   = rpcId.split( "\\." );
+		System.out.println( ids[ 0 ] );
+	}
 
-  public static String toTreeMapData(List<TraceContext> rpc){
-    String treeData = "";
+	public static EChartTreeItemStyle getItemStyle( String color ) {
 
-    List<EChartTreeNode> rootList = new ArrayList<>();
+		EChartTreeItemStyle     itemStyle     = new EChartTreeItemStyle();
+		EChartTreeItemStyleData itemStyleData = new EChartTreeItemStyleData();
+		itemStyleData.setBorderWidth( 0 );
+		itemStyleData.setColor( color );
+		EChartTreeItemStyleLabel label = new EChartTreeItemStyleLabel();
+		label.setShow( true );
+		itemStyleData.setLabel( label );
+		itemStyle.setNormal( itemStyleData );
+		return itemStyle;
+	}
 
-    EChartTreeNode rootNode = new EChartTreeNode();
-    rootNode.setName("起点");
-    rootNode.setItemStyle(getItemStyle(EnumEChartItemStyleColor.LIGHT.toString()));
+	public static String toTreeMapData( List< TraceContext > rpc ) {
 
-    Map<String,EChartTreeNode> nodeMap = new HashMap<>();
+		String treeData = "";
 
-    for(TraceContext c:rpc){
-      String rpcId = c.getRpcId();
-      String n = rpcId.split("\\.")[0];
-      String root = n+".";
-      if(!nodeMap.containsKey(root)){
-        EChartTreeNode node = new EChartTreeNode();
-        if(root.equals("0.")){
-          node.setName("第"+n+"次Rpc请求");
-        }else{
-          node.setName("第"+n+"次ajax请求");
-        }
-        node.setItemStyle(getItemStyle(EnumEChartItemStyleColor.LIGHT.toString()));
-        nodeMap.put(root,node);
-        if(rootNode.getChildren()==null){
-          List<EChartTreeNode> childs = new ArrayList<>();
-          childs.add(node);
-          rootNode.setChildren(childs);
-        }else{
-          rootNode.getChildren().add(node);
-        }
-      }
-    }
+		List< EChartTreeNode > rootList = new ArrayList<>();
 
-    for(TraceContext c:rpc){
-      String rpcId = c.getRpcId();
-      String pid = rpcId.substring(0,rpcId.length()-1);
-      EChartTreeNode ecNode = new EChartTreeNode();
-      ecNode.setName(c.getIface()+"."+c.getMethod());
-      ecNode.setValue(String.valueOf(c.getCost()));
-      if(c.getCost()>200){
-        ecNode.setItemStyle(getItemStyle(EnumEChartItemStyleColor.SERIOUS.toString()));
-      }else if(c.getCost()>100&&c.getCost()<=200){
-        ecNode.setItemStyle(getItemStyle(EnumEChartItemStyleColor.HEAVY.toString()));
-      }else if(c.getCost()>20&&c.getCost()<=100){
-        ecNode.setItemStyle(getItemStyle(EnumEChartItemStyleColor.MIDDLE.toString()));
-      }else if(c.getCost()<=20){
-        ecNode.setItemStyle(getItemStyle(EnumEChartItemStyleColor.LIGHT.toString()));
-      }
+		EChartTreeNode rootNode = new EChartTreeNode();
+		rootNode.setName( "起点" );
+		rootNode.setItemStyle( getItemStyle( EnumEChartItemStyleColor.LIGHT.toString() ) );
 
-      if(nodeMap.containsKey(pid)){
-        EChartTreeNode n = nodeMap.get(pid);
-        List<EChartTreeNode> childs = n.getChildren();
-        if(childs==null){
-          childs = new ArrayList<>();
-          n.setChildren(childs);
-        }
-        childs.add(ecNode);
-      }
-      nodeMap.put(rpcId,ecNode);
-    }
+		Map< String, EChartTreeNode > nodeMap = new HashMap<>();
+
+		for ( TraceContext c : rpc ) {
+			String rpcId = c.getRpcId();
+			String n     = rpcId.split( "\\." )[ 0 ];
+			String root  = n + ".";
+			if ( !nodeMap.containsKey( root ) ) {
+				EChartTreeNode node = new EChartTreeNode();
+				if ( root.equals( "0." ) ) {
+					node.setName( "第" + n + "次Rpc请求" );
+				} else {
+					node.setName( "第" + n + "次ajax请求" );
+				}
+				node.setItemStyle( getItemStyle( EnumEChartItemStyleColor.LIGHT.toString() ) );
+				nodeMap.put( root, node );
+				if ( rootNode.getChildren() == null ) {
+					List< EChartTreeNode > childs = new ArrayList<>();
+					childs.add( node );
+					rootNode.setChildren( childs );
+				} else {
+					rootNode.getChildren().add( node );
+				}
+			}
+		}
+
+		for ( TraceContext c : rpc ) {
+			String         rpcId  = c.getRpcId();
+			String         pid    = rpcId.substring( 0, rpcId.length() - 1 );
+			EChartTreeNode ecNode = new EChartTreeNode();
+			ecNode.setName( c.getIface() + "." + c.getMethod() );
+			ecNode.setValue( String.valueOf( c.getCost() ) );
+			if ( c.getCost() > 200 ) {
+				ecNode.setItemStyle( getItemStyle( EnumEChartItemStyleColor.SERIOUS.toString() ) );
+			} else if ( c.getCost() > 100 && c.getCost() <= 200 ) {
+				ecNode.setItemStyle( getItemStyle( EnumEChartItemStyleColor.HEAVY.toString() ) );
+			} else if ( c.getCost() > 20 && c.getCost() <= 100 ) {
+				ecNode.setItemStyle( getItemStyle( EnumEChartItemStyleColor.MIDDLE.toString() ) );
+			} else if ( c.getCost() <= 20 ) {
+				ecNode.setItemStyle( getItemStyle( EnumEChartItemStyleColor.LIGHT.toString() ) );
+			}
+
+			if ( nodeMap.containsKey( pid ) ) {
+				EChartTreeNode         n      = nodeMap.get( pid );
+				List< EChartTreeNode > childs = n.getChildren();
+				if ( childs == null ) {
+					childs = new ArrayList<>();
+					n.setChildren( childs );
+				}
+				childs.add( ecNode );
+			}
+			nodeMap.put( rpcId, ecNode );
+		}
 
 
-    rootList.add(rootNode);
+		rootList.add( rootNode );
 
-    treeData = JSON.toJSONString(rootList);
+		treeData = JSON.toJSONString( rootList );
 
-    return treeData;
-  }
+		return treeData;
+	}
 
-  static enum EnumEChartItemStyleColor{
-    LIGHT("#FF88C2"),MIDDLE("#FFA488"),HEAVY("#FF7744 "),SERIOUS("#FF3333");
+	static enum EnumEChartItemStyleColor {
+		LIGHT( "#FF88C2" ), MIDDLE( "#FFA488" ), HEAVY( "#FF7744 " ), SERIOUS( "#FF3333" );
 
-    String value;
+		String value;
 
-    EnumEChartItemStyleColor(String value){
-      this.value = value;
-    }
-    public String toString(){
-      return value;
-    }
-  }
+		EnumEChartItemStyleColor( String value ) {
 
-  static class EChartTreeNode{
+			this.value = value;
+		}
 
-    public String getName() {
-      return name;
-    }
+		public String toString() {
 
-    public void setName(String name) {
-      this.name = name;
-    }
+			return value;
+		}
+	}
 
-    public String getValue() {
-      return value;
-    }
+	static class EChartTreeNode {
 
-    public void setValue(String value) {
-      this.value = value;
-    }
+		public String getName() {
 
-    public String getSymbolSize() {
-      return symbolSize;
-    }
+			return name;
+		}
 
-    public void setSymbolSize(String symbolSize) {
-      this.symbolSize = symbolSize;
-    }
+		public void setName( String name ) {
 
-    public String getSymbol() {
-      return symbol;
-    }
+			this.name = name;
+		}
 
-    public void setSymbol(String symbol) {
-      this.symbol = symbol;
-    }
+		public String getValue() {
 
-    public EChartTreeItemStyle getItemStyle() {
-      return itemStyle;
-    }
+			return value;
+		}
 
-    public void setItemStyle(EChartTreeItemStyle itemStyle) {
-      this.itemStyle = itemStyle;
-    }
+		public void setValue( String value ) {
 
-    public List<EChartTreeNode> getChildren() {
-      return children;
-    }
+			this.value = value;
+		}
 
-    public void setChildren(List<EChartTreeNode> children) {
-      this.children = children;
-    }
+		public String getSymbolSize() {
 
-    String name;
-    String value;
-    String symbolSize;
-    String symbol;
-    EChartTreeItemStyle itemStyle;
-    List<EChartTreeNode> children;
+			return symbolSize;
+		}
 
-  }
+		public void setSymbolSize( String symbolSize ) {
 
-  static class EChartTreeItemStyle {
+			this.symbolSize = symbolSize;
+		}
 
-    public EChartTreeItemStyleData getNormal() {
-      return normal;
-    }
+		public String getSymbol() {
 
-    public void setNormal(EChartTreeItemStyleData normal) {
-      this.normal = normal;
-    }
+			return symbol;
+		}
 
-    public EChartTreeItemStyleData getEmphasis() {
-      return emphasis;
-    }
+		public void setSymbol( String symbol ) {
 
-    public void setEmphasis(EChartTreeItemStyleData emphasis) {
-      this.emphasis = emphasis;
-    }
+			this.symbol = symbol;
+		}
 
-    EChartTreeItemStyleData normal;
-    EChartTreeItemStyleData emphasis;
-  }
+		public EChartTreeItemStyle getItemStyle() {
 
-  static class EChartTreeItemStyleLabel {
+			return itemStyle;
+		}
 
-    public boolean isShow() {
-      return show;
-    }
+		public void setItemStyle( EChartTreeItemStyle itemStyle ) {
 
-    public void setShow(boolean show) {
-      this.show = show;
-    }
+			this.itemStyle = itemStyle;
+		}
 
-    public String getPosition() {
-      return position;
-    }
+		public List< EChartTreeNode > getChildren() {
 
-    public void setPosition(String position) {
-      this.position = position;
-    }
+			return children;
+		}
 
-    public String getFormatter() {
-      return formatter;
-    }
+		public void setChildren( List< EChartTreeNode > children ) {
 
-    public void setFormatter(String formatter) {
-      this.formatter = formatter;
-    }
+			this.children = children;
+		}
 
-    boolean show;
-    String position;
-    String formatter;
-  }
+		String                 name;
+		String                 value;
+		String                 symbolSize;
+		String                 symbol;
+		EChartTreeItemStyle    itemStyle;
+		List< EChartTreeNode > children;
 
-  static class EChartTreeItemStyleData {
+	}
 
-    public String getColor() {
-      return color;
-    }
+	static class EChartTreeItemStyle {
 
-    public void setColor(String color) {
-      this.color = color;
-    }
+		public EChartTreeItemStyleData getNormal() {
 
-    public int getBorderWidth() {
-      return borderWidth;
-    }
+			return normal;
+		}
 
-    public void setBorderWidth(int borderWidth) {
-      this.borderWidth = borderWidth;
-    }
+		public void setNormal( EChartTreeItemStyleData normal ) {
 
-    public String getBorderColor() {
-      return borderColor;
-    }
+			this.normal = normal;
+		}
 
-    public void setBorderColor(String borderColor) {
-      this.borderColor = borderColor;
-    }
+		public EChartTreeItemStyleData getEmphasis() {
 
-    public String getBrushType() {
-      return brushType;
-    }
+			return emphasis;
+		}
 
-    public void setBrushType(String brushType) {
-      this.brushType = brushType;
-    }
+		public void setEmphasis( EChartTreeItemStyleData emphasis ) {
 
-    public EChartTreeItemStyleLabel getLabel() {
-      return label;
-    }
+			this.emphasis = emphasis;
+		}
 
-    public void setLabel(EChartTreeItemStyleLabel label) {
-      this.label = label;
-    }
+		EChartTreeItemStyleData normal;
+		EChartTreeItemStyleData emphasis;
+	}
 
-    String color;
-    int borderWidth;
-    String borderColor;
-    String brushType;
-    EChartTreeItemStyleLabel label;
-  }
+	static class EChartTreeItemStyleLabel {
+
+		public boolean isShow() {
+
+			return show;
+		}
+
+		public void setShow( boolean show ) {
+
+			this.show = show;
+		}
+
+		public String getPosition() {
+
+			return position;
+		}
+
+		public void setPosition( String position ) {
+
+			this.position = position;
+		}
+
+		public String getFormatter() {
+
+			return formatter;
+		}
+
+		public void setFormatter( String formatter ) {
+
+			this.formatter = formatter;
+		}
+
+		boolean show;
+		String  position;
+		String  formatter;
+	}
+
+	static class EChartTreeItemStyleData {
+
+		public String getColor() {
+
+			return color;
+		}
+
+		public void setColor( String color ) {
+
+			this.color = color;
+		}
+
+		public int getBorderWidth() {
+
+			return borderWidth;
+		}
+
+		public void setBorderWidth( int borderWidth ) {
+
+			this.borderWidth = borderWidth;
+		}
+
+		public String getBorderColor() {
+
+			return borderColor;
+		}
+
+		public void setBorderColor( String borderColor ) {
+
+			this.borderColor = borderColor;
+		}
+
+		public String getBrushType() {
+
+			return brushType;
+		}
+
+		public void setBrushType( String brushType ) {
+
+			this.brushType = brushType;
+		}
+
+		public EChartTreeItemStyleLabel getLabel() {
+
+			return label;
+		}
+
+		public void setLabel( EChartTreeItemStyleLabel label ) {
+
+			this.label = label;
+		}
+
+		String                   color;
+		int                      borderWidth;
+		String                   borderColor;
+		String                   brushType;
+		EChartTreeItemStyleLabel label;
+	}
 
 }
