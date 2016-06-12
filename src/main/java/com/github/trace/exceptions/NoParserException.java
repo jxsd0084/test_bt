@@ -6,8 +6,9 @@ package com.github.trace.exceptions;
  */
 public class NoParserException extends RuntimeException {
 
-  public NoParserException(String message) {
-    super(message);
-  }
+	public NoParserException( String message ) {
+
+		super( message );
+	}
 
 }

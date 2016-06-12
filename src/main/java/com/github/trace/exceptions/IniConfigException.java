@@ -6,12 +6,14 @@ package com.github.trace.exceptions;
  */
 public class IniConfigException extends RuntimeException {
 
-  public IniConfigException(String msg) {
-    super(msg);
-  }
+	public IniConfigException( String msg ) {
 
-  public IniConfigException(String msg, Exception e) {
-    super(msg, e);
-  }
+		super( msg );
+	}
+
+	public IniConfigException( String msg, Exception e ) {
+
+		super( msg, e );
+	}
 
 }

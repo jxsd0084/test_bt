@@ -7,8 +7,9 @@ package com.github.trace.exceptions;
  */
 public class NoWriterException extends RuntimeException {
 
-  public NoWriterException(String message) {
-    super(message);
-  }
+	public NoWriterException( String message ) {
+
+		super( message );
+	}
 
 }
