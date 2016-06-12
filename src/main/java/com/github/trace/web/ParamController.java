@@ -20,68 +20,72 @@ import java.util.Map;
  * Created by chenlong on 2016/3/24.
  */
 @Controller
-@RequestMapping("/param")
+@RequestMapping( "/param" )
 public class ParamController {
 
-    @Autowired
-    private CEPService cepService;
-    @Autowired
-    private ParamService paramService;
+	@Autowired
+	private CEPService   cepService;
+	@Autowired
+	private ParamService paramService;
 
-    @RequestMapping("/list")
-    public String listParams(Model model) {
-        ControllerHelper.setLeftNavigationTree(model, cepService, "");
-        List<BpJob> list = paramService.getBpJobList();
+	@RequestMapping( "/list" )
+	public String listParams( Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" );
+		List< BpJob > list = paramService.getBpJobList();
 //        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-        JSONArray jsonArray1 = new JSONArray();
-        for (BpJob job : list){
-            JSONArray jsonArray2 = new JSONArray();
-            jsonArray2.add(job.getId());
-            jsonArray2.add(job.getJobName());
-            jsonArray2.add(job.getBizName());
-            jsonArray2.add(job.getConnection());
+		JSONArray jsonArray1 = new JSONArray();
+		for ( BpJob job : list ) {
+			JSONArray jsonArray2 = new JSONArray();
+			jsonArray2.add( job.getId() );
+			jsonArray2.add( job.getJobName() );
+			jsonArray2.add( job.getBizName() );
+			jsonArray2.add( job.getConnection() );
 //            jsonArray2.add(job.getTableName());
-            jsonArray2.add(job.getTargetName());
-            jsonArray2.add(job.getTargetAddress());
-            jsonArray2.add(job.getTargetPath());
-            jsonArray2.add(job.getExecuteTime());
+			jsonArray2.add( job.getTargetName() );
+			jsonArray2.add( job.getTargetAddress() );
+			jsonArray2.add( job.getTargetPath() );
+			jsonArray2.add( job.getExecuteTime() );
 
-            jsonArray1.add(jsonArray2);
-        }
-        model.addAttribute("data", jsonArray1);
-        return "param/param_list";
-    }
+			jsonArray1.add( jsonArray2 );
+		}
+		model.addAttribute( "data", jsonArray1 );
+		return "param/param_list";
+	}
 
-    @RequestMapping("/new")
-    public String newParam(Model model) {
-        List<NavigationItem> list = ControllerHelper.setLeftNavigationTree(model, cepService, "");
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-        model.addAttribute("data", jsonArray);
-        return "param/param_edit";
-    }
+	@RequestMapping( "/new" )
+	public String newParam( Model model ) {
 
-    @RequestMapping("/edit")
-    public String editParam(@RequestParam(name = "id") int id,
-                            @RequestParam(name = "tag") String tag,
-                            Model model) {
-        NavigationItem navObj = cepService.getConfigById(id);
-        BpJob bpJob = paramService.getBpJobById(id);
+		List< NavigationItem > list      = ControllerHelper.setLeftNavigationTree( model, cepService, "" );
+		JSONArray              jsonArray = ControllerHelper.convertToJSON( list );
+		model.addAttribute( "data", jsonArray );
+		return "param/param_edit";
+	}
 
-        model.addAttribute("id", id);
-        model.addAttribute("tag", tag);
-        model.addAttribute("obj", bpJob);
-        model.addAttribute("navObj", navObj);
-        return "param/param_edit";
-    }
+	@RequestMapping( "/edit" )
+	public String editParam( @RequestParam( name = "id" ) int id,
+	                         @RequestParam( name = "tag" ) String tag,
+	                         Model model ) {
 
-    @RequestMapping("/update")
-    @ResponseBody
-    public Map updateParam(@RequestParam(name = "id") int id,
-                           @RequestParam(name = "topic") String topic) {
-        NavigationItem navObj = cepService.getConfigById(id);
-        navObj.setTopic(topic);
-        int res = cepService.updateConfig(navObj);
-        return ControllerHelper.returnResponseVal(res, "更新");
-    }
+		NavigationItem navObj = cepService.getConfigById( id );
+		BpJob          bpJob  = paramService.getBpJobById( id );
+
+		model.addAttribute( "id", id );
+		model.addAttribute( "tag", tag );
+		model.addAttribute( "obj", bpJob );
+		model.addAttribute( "navObj", navObj );
+		return "param/param_edit";
+	}
+
+	@RequestMapping( "/update" )
+	@ResponseBody
+	public Map updateParam( @RequestParam( name = "id" ) int id,
+	                        @RequestParam( name = "topic" ) String topic ) {
+
+		NavigationItem navObj = cepService.getConfigById( id );
+		navObj.setTopic( topic );
+		int res = cepService.updateConfig( navObj );
+		return ControllerHelper.returnResponseVal( res, "更新" );
+	}
 
 }

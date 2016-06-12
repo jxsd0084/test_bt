@@ -22,108 +22,111 @@ import java.util.*;
  * Created by wujing on 2016/3/11.
  */
 @Controller
-@RequestMapping("/cep")
+@RequestMapping( "/cep" )
 public class CEPTraceController {
 
-    @Autowired
-    private CEPService cepService;
+	@Autowired
+	private CEPService cepService;
 
 
-    @Autowired
-    private AnalyzeLogService analyzeLogService;
+	@Autowired
+	private AnalyzeLogService analyzeLogService;
 
- /*   @RequestMapping("/list")
-    public String callerList(@RequestParam(name = "parent_id") int parent_id,
-                             @RequestParam(name = "child_id") int child_id,
-                             @RequestParam(name = "parent_name") String parent_name,
-                             @RequestParam(name = "topic") String topic,
-                             Model model) {
+	/*   @RequestMapping("/list")
+	   public String callerList(@RequestParam(name = "parent_id") int parent_id,
+								@RequestParam(name = "child_id") int child_id,
+								@RequestParam(name = "parent_name") String parent_name,
+								@RequestParam(name = "topic") String topic,
+								Model model) {
 
-        List<BuriedPoint> caller = cepService.getBuriedPointList(parent_id, child_id);
+		   List<BuriedPoint> caller = cepService.getBuriedPointList(parent_id, child_id);
 
-        JSONArray ja1 = new JSONArray();
+		   JSONArray ja1 = new JSONArray();
 
-        // data, type, full, meta
-        for (BuriedPoint br : caller) {
-            JSONArray ja2 = new JSONArray();
-            //  ja2.add(br.getId());            // 编号
-            ja2.add(br.getBpName());        // 埋点字段
-            ja2.add(br.getBpValue());       // 埋点数据类型
-            ja2.add(br.getRegex());         // 自定义正则表达式
-            ja2.add(br.getBpValueDesc());   // 埋点字段描述
-            ja2.add(br.getIsChecked());     // 是否必填项
-            ja2.add(br.getId());            // 操作
+		   // data, type, full, meta
+		   for (BuriedPoint br : caller) {
+			   JSONArray ja2 = new JSONArray();
+			   //  ja2.add(br.getId());            // 编号
+			   ja2.add(br.getBpName());        // 埋点字段
+			   ja2.add(br.getBpValue());       // 埋点数据类型
+			   ja2.add(br.getRegex());         // 自定义正则表达式
+			   ja2.add(br.getBpValueDesc());   // 埋点字段描述
+			   ja2.add(br.getIsChecked());     // 是否必填项
+			   ja2.add(br.getId());            // 操作
 
-            ja1.add(ja2);
-        }
+			   ja1.add(ja2);
+		   }
 
-        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+		   ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
 
-        model.addAttribute("parent_id", parent_id);
-        model.addAttribute("child_id", child_id);
-        model.addAttribute("parent_name", parent_name);
-        model.addAttribute("topic", topic);
-        model.addAttribute("data", ja1);
-        return "cep/bp_list";
-    }*/
- @RequestMapping("/list")
- public String callerList(@RequestParam(name = "navigationId") int navigationId,
-                          @RequestParam(name = "topic") String topic,
-                          @RequestParam(name = "navigationName") String navigationName,
-                          Model model) {
+		   model.addAttribute("parent_id", parent_id);
+		   model.addAttribute("child_id", child_id);
+		   model.addAttribute("parent_name", parent_name);
+		   model.addAttribute("topic", topic);
+		   model.addAttribute("data", ja1);
+		   return "cep/bp_list";
+	   }*/
 
-     List<BuriedPoint0> caller = cepService.getBuriedPoint0List(navigationId);
 
-     JSONArray ja1 = new JSONArray();
+	@RequestMapping( "/list" )
+	public String callerList( @RequestParam( name = "navigationId" ) int navigationId,
+	                          @RequestParam( name = "topic" ) String topic,
+	                          @RequestParam( name = "navigationName" ) String navigationName,
+	                          Model model ) {
 
-     // data, type, full, meta
-     for (BuriedPoint0 br : caller) {
-         JSONArray ja2 = new JSONArray();
-         //  ja2.add(br.getId());            // 编号
-         ja2.add(br.getBpName());        // 埋点字段
-         ja2.add(br.getBpValue());       // 埋点数据类型
-         ja2.add(br.getRegex());         // 自定义正则表达式
-         ja2.add(br.getBpValueDesc());   // 埋点字段描述
-         ja2.add(br.getIsChecked());     // 是否必填项
-         ja2.add(br.getId());            // 操作
+		List< BuriedPoint0 > caller = cepService.getBuriedPoint0List( navigationId );
 
-         ja1.add(ja2);
-     }
+		JSONArray ja1 = new JSONArray();
 
-     ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
-     model.addAttribute("navigation_name", navigationName);
-     model.addAttribute("navigation_id", navigationId);
-     model.addAttribute("topic", topic);
-     model.addAttribute("data", ja1);
-     return "cep/bp_list";
- }
-    @RequestMapping("/new")
-    public String createConfig(@RequestParam(name = "id") int id,
-                               @RequestParam(name = "tag") String tag,
-                               @RequestParam(name = "navigationId") int navigationId,
-                               @RequestParam(name = "navigationName") String navigationName,
-                               @RequestParam(name = "topic") String topic,
-                               Model model) {
+		// data, type, full, meta
+		for ( BuriedPoint0 br : caller ) {
+			JSONArray ja2 = new JSONArray();
+			//  ja2.add(br.getId());            // 编号
+			ja2.add( br.getBpName() );        // 埋点字段
+			ja2.add( br.getBpValue() );       // 埋点数据类型
+			ja2.add( br.getRegex() );         // 自定义正则表达式
+			ja2.add( br.getBpValueDesc() );   // 埋点字段描述
+			ja2.add( br.getIsChecked() );     // 是否必填项
+			ja2.add( br.getId() );            // 操作
 
-        BuriedPoint0 caller = cepService.getBuriedPoint0(id);
-        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
+			ja1.add( ja2 );
+		}
 
-        model.addAttribute("id", id );
-        model.addAttribute("BpName", caller.getBpName() );
-        model.addAttribute("BpValue", caller.getBpValue() );
-        model.addAttribute("Regex", caller.getRegex() );
-        model.addAttribute("BpValueDesc", caller.getBpValueDesc() );
-        model.addAttribute("IsChecked", caller.getIsChecked() );
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" ); // 左边导航条
+		model.addAttribute( "navigation_name", navigationName );
+		model.addAttribute( "navigation_id", navigationId );
+		model.addAttribute( "topic", topic );
+		model.addAttribute( "data", ja1 );
+		return "cep/bp_list";
+	}
 
- //       model.addAttribute("parent_id", caller.getParentId());
- //       model.addAttribute("child_id", caller.getChildId());
- //       model.addAttribute("parent_name", caller.getParentName());
-        model.addAttribute("navigation_id", navigationId);
-        model.addAttribute("topic", topic);
-        model.addAttribute("navigation_name", navigationName);
-        model.addAttribute("tag", tag);
-        return "func/conf_create";
-    }
+	@RequestMapping( "/new" )
+	public String createConfig( @RequestParam( name = "id" ) int id,
+	                            @RequestParam( name = "tag" ) String tag,
+	                            @RequestParam( name = "navigationId" ) int navigationId,
+	                            @RequestParam( name = "navigationName" ) String navigationName,
+	                            @RequestParam( name = "topic" ) String topic,
+	                            Model model ) {
+
+		BuriedPoint0 caller = cepService.getBuriedPoint0( id );
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" ); // 左边导航条
+
+		model.addAttribute( "id", id );
+		model.addAttribute( "BpName", caller.getBpName() );
+		model.addAttribute( "BpValue", caller.getBpValue() );
+		model.addAttribute( "Regex", caller.getRegex() );
+		model.addAttribute( "BpValueDesc", caller.getBpValueDesc() );
+		model.addAttribute( "IsChecked", caller.getIsChecked() );
+
+		//       model.addAttribute("parent_id", caller.getParentId());
+		//       model.addAttribute("child_id", caller.getChildId());
+		//       model.addAttribute("parent_name", caller.getParentName());
+		model.addAttribute( "navigation_id", navigationId );
+		model.addAttribute( "topic", topic );
+		model.addAttribute( "navigation_name", navigationName );
+		model.addAttribute( "tag", tag );
+		return "func/conf_create";
+	}
 
    /* @RequestMapping("/newConifg")
     public String newConfig(@RequestParam(name = "tag") String tag,
@@ -143,96 +146,97 @@ public class CEPTraceController {
         return "func/conf_create";
     }*/
 
-    @RequestMapping("/newConifg")
-    public String newConfig(@RequestParam(name = "tag") String tag,
-                            @RequestParam(name = "navigationId") int navigationId,
-                            @RequestParam(name = "navigationName") String navigationName,
-                            @RequestParam(name = "topic") String topic,
-                            Model model) {
+	@RequestMapping( "/newConifg" )
+	public String newConfig( @RequestParam( name = "tag" ) String tag,
+	                         @RequestParam( name = "navigationId" ) int navigationId,
+	                         @RequestParam( name = "navigationName" ) String navigationName,
+	                         @RequestParam( name = "topic" ) String topic,
+	                         Model model ) {
 
-        ControllerHelper.setLeftNavigationTree(model, cepService, ""); // 左边导航条
-        model.addAttribute("navigation_id", navigationId);
-        model.addAttribute("topic", topic);
-        model.addAttribute("navigation_name", navigationName);
-        model.addAttribute("tag", tag);
-        return "func/conf_create";
-    }
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" ); // 左边导航条
+		model.addAttribute( "navigation_id", navigationId );
+		model.addAttribute( "topic", topic );
+		model.addAttribute( "navigation_name", navigationName );
+		model.addAttribute( "tag", tag );
+		return "func/conf_create";
+	}
 
-    @RequestMapping("/modify")
-    @ResponseBody
-    public Map modifyConfig(@RequestParam("bp_name") String bp_name,
-                            @RequestParam("bp_value") String bp_value,
-                            @RequestParam("regex") String regex,
-                            @RequestParam("bp_value_desc") String bp_value_desc,
-                            @RequestParam("is_checked") boolean is_checked,
-                            @RequestParam("id") int id) {
+	@RequestMapping( "/modify" )
+	@ResponseBody
+	public Map modifyConfig( @RequestParam( "bp_name" ) String bp_name,
+	                         @RequestParam( "bp_value" ) String bp_value,
+	                         @RequestParam( "regex" ) String regex,
+	                         @RequestParam( "bp_value_desc" ) String bp_value_desc,
+	                         @RequestParam( "is_checked" ) boolean is_checked,
+	                         @RequestParam( "id" ) int id ) {
 
-        BuriedPoint0 buriedPoint = new BuriedPoint0();
-        buriedPoint.setId(id);
-        buriedPoint.setBpName(bp_name);
-        buriedPoint.setBpValue(bp_value);
-        buriedPoint.setRegex(regex);
-        buriedPoint.setBpValueDesc(bp_value_desc);
-        buriedPoint.setIsChecked(is_checked==true?1:0);
+		BuriedPoint0 buriedPoint = new BuriedPoint0();
+		buriedPoint.setId( id );
+		buriedPoint.setBpName( bp_name );
+		buriedPoint.setBpValue( bp_value );
+		buriedPoint.setRegex( regex );
+		buriedPoint.setBpValueDesc( bp_value_desc );
+		buriedPoint.setIsChecked( is_checked == true ? 1 : 0 );
 
 
-        int res = cepService.modifyBuriedPoint0(buriedPoint);
+		int res = cepService.modifyBuriedPoint0( buriedPoint );
 
-        return ControllerHelper.returnResponseVal(res, "更新");
-    }
+		return ControllerHelper.returnResponseVal( res, "更新" );
+	}
 
-    @RequestMapping("/add")
-    @ResponseBody
-    public Map addConfig(@RequestParam("bp_name") String bp_name,
-                         @RequestParam("bp_value") String bp_value,
-                         @RequestParam("regex") String regex,
-                         @RequestParam("bp_value_desc") String bp_value_desc,
-                         @RequestParam("is_checked") boolean is_checked,
-                         @RequestParam(name = "navigationId") int navigation_id
-                        ) {
+	@RequestMapping( "/add" )
+	@ResponseBody
+	public Map addConfig( @RequestParam( "bp_name" ) String bp_name,
+	                      @RequestParam( "bp_value" ) String bp_value,
+	                      @RequestParam( "regex" ) String regex,
+	                      @RequestParam( "bp_value_desc" ) String bp_value_desc,
+	                      @RequestParam( "is_checked" ) boolean is_checked,
+	                      @RequestParam( name = "navigationId" ) int navigation_id
+	) {
 
-        BuriedPoint0 buriedPoint = new BuriedPoint0();
-        buriedPoint.setBpName(bp_name);
-        buriedPoint.setBpValue(bp_value);
-        buriedPoint.setBpValueDesc(bp_value_desc);
-        buriedPoint.setIsChecked(is_checked==true?1:0);
+		BuriedPoint0 buriedPoint = new BuriedPoint0();
+		buriedPoint.setBpName( bp_name );
+		buriedPoint.setBpValue( bp_value );
+		buriedPoint.setBpValueDesc( bp_value_desc );
+		buriedPoint.setIsChecked( is_checked == true ? 1 : 0 );
 //        buriedPoint.setParentId(parent_id);
 //        buriedPoint.setParentName("");
- //       buriedPoint.setChildId(child_id);
+		//       buriedPoint.setChildId(child_id);
 //        buriedPoint.setChildName("");
-        buriedPoint.setRegex(regex);
-        buriedPoint.setNavigationId(navigation_id);
-        int res = cepService.addBuriedPoint0(buriedPoint);
+		buriedPoint.setRegex( regex );
+		buriedPoint.setNavigationId( navigation_id );
+		int res = cepService.addBuriedPoint0( buriedPoint );
 
-        return ControllerHelper.returnResponseVal(res, "添加");
-    }
+		return ControllerHelper.returnResponseVal( res, "添加" );
+	}
 
-    @RequestMapping("/delete")
-    public String deleteBuriedPoint(@RequestParam("id") Integer id) {
-        cepService.deleteById(id);
-        return "func/bp_list";
-    }
+	@RequestMapping( "/delete" )
+	public String deleteBuriedPoint( @RequestParam( "id" ) Integer id ) {
 
-    @RequestMapping("/compare")
-    @ResponseBody
-    public String compare(@RequestParam("navName") String navName,
-                              @RequestParam("str1") String str1,
-                              @RequestParam("str2") int str2,
-                              Model model) {
+		cepService.deleteById( id );
+		return "func/bp_list";
+	}
 
-        String target =  cepService.getServerLog( str1,str2 ).toString();
+	@RequestMapping( "/compare" )
+	@ResponseBody
+	public String compare( @RequestParam( "navName" ) String navName,
+	                       @RequestParam( "str1" ) String str1,
+	                       @RequestParam( "str2" ) int str2,
+	                       Model model ) {
 
-        JSONArray rt=analyzeLogService.formatLog(navName,target);
+		String target = cepService.getServerLog( str1, str2 ).toString();
 
-        ControllerHelper.setLeftNavigationTree(model, cepService, "");
+		JSONArray rt = analyzeLogService.formatLog( navName, target );
 
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put("target",target.replace("},","},\n"));
-        jsonObj.put("tableData",rt);
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" );
 
-        //System.out.println(jsonObj.toJSONString());
-        return jsonObj.toJSONString();
-    }
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put( "target", target.replace( "},", "},\n" ) );
+		jsonObj.put( "tableData", rt );
+
+		//System.out.println(jsonObj.toJSONString());
+		return jsonObj.toJSONString();
+	}
 
 }
 

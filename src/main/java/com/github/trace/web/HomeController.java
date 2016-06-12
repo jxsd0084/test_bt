@@ -18,36 +18,40 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class HomeController {
 
-  @Value("${casServerUrlPrefix}")
-  private String casServerUrlPrefix = "/cas";
+	@Value( "${casServerUrlPrefix}" )
+	private String casServerUrlPrefix = "/cas";
 
-  @Autowired
-  private CEPService cepService;
+	@Autowired
+	private CEPService cepService;
 
-  @RequestMapping("/logout")
-  public String logout(RedirectAttributes r) {
-    SecurityUtils.getSubject().logout();
-    r.addFlashAttribute("message", "您已经安全退出");
-    String redirectUrl = casServerUrlPrefix.substring(0, casServerUrlPrefix.length() - 4);
-    return "redirect:" + casServerUrlPrefix + "/logout?service=" + redirectUrl;
-  }
+	@RequestMapping( "/logout" )
+	public String logout( RedirectAttributes r ) {
 
-  @RequestMapping("/unauthorized")
-  public String unauthorized() {
-    return "unauthorized";
-  }
+		SecurityUtils.getSubject().logout();
+		r.addFlashAttribute( "message", "您已经安全退出" );
+		String redirectUrl = casServerUrlPrefix.substring( 0, casServerUrlPrefix.length() - 4 );
+		return "redirect:" + casServerUrlPrefix + "/logout?service=" + redirectUrl;
+	}
 
-  @RequestMapping("/")
-  public String home(Model model) {
-    ControllerHelper.setLeftNavigationTree(model, cepService, "");
-    return "home";
-  }
+	@RequestMapping( "/unauthorized" )
+	public String unauthorized() {
 
-  @RequestMapping("/username")
-  @ResponseBody
-  public String username() {
-    String username = SecurityUtils.getSubject().getPrincipal().toString();
-    return username;
-  }
+		return "unauthorized";
+	}
+
+	@RequestMapping( "/" )
+	public String home( Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" );
+		return "home";
+	}
+
+	@RequestMapping( "/username" )
+	@ResponseBody
+	public String username() {
+
+		String username = SecurityUtils.getSubject().getPrincipal().toString();
+		return username;
+	}
 
 }

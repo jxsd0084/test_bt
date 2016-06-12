@@ -23,184 +23,196 @@ import java.util.Map;
  * Created by chenlong on 2016/4/8.
  */
 @Controller
-@RequestMapping("/search")
+@RequestMapping( "/search" )
 public class SearchController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger( SearchController.class );
 
 	@Autowired
-	private CEPService cepService;
+	private CEPService         cepService;
 	@Autowired
-	private SearchService searchService;
+	private SearchService      searchService;
 	@Autowired
 	private Navigation0Service navigation0Service;
-    @RequestMapping("/list")
-    public String list(Model model) {
-	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
-        return "search/search_list";
-    }
 
-    @RequestMapping("/searchLog")
-    public String search(@RequestParam(name = "id")   int id,
-                         @RequestParam(name = "keyWord") String keyWord,
-		                 Model model) {
+	@RequestMapping( "/list" )
+	public String list( Model model ) {
 
-	    ControllerHelper.setLeftNavigationTree(model, cepService, "");  // 左边导航条
-		NavigationItem0 navigationItem0 = (navigation0Service.queryById(id));
-		String topic = "";
-		if(navigationItem0!=null){
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" );  // 左边导航条
+		return "search/search_list";
+	}
+
+	@RequestMapping( "/searchLog" )
+	public String search( @RequestParam( name = "id" ) int id,
+	                      @RequestParam( name = "keyWord" ) String keyWord,
+	                      Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "" );  // 左边导航条
+		NavigationItem0 navigationItem0 = ( navigation0Service.queryById( id ) );
+		String          topic           = "";
+		if ( navigationItem0 != null ) {
 			topic = navigationItem0.getTopic();
 		}
-	    SearchLog sLog = new SearchLog();
-		sLog.setTopic(topic);                                           // 主题
-		sLog.setKeyWord(formateStr(keyWord,navigationItem0.getName())); // 搜索关键词
-		sLog.setHighLightKey(addWhere(keyWord,navigationItem0.getName()));
-		sLog.setTag("stamp");                                           // 暂时写死
-		sLog.setStartTime(System.currentTimeMillis() - 3*24*3600*1000L);  // 72h时间戳
-		sLog.setEndTime(System.currentTimeMillis());                    // now时间戳
-		sLog.setPageStart(0);
-		sLog.setPageSize(1000);                                         // 默认1000条
+		SearchLog sLog = new SearchLog();
+		sLog.setTopic( topic );                                           // 主题
+		sLog.setKeyWord( formateStr( keyWord, navigationItem0.getName() ) ); // 搜索关键词
+		sLog.setHighLightKey( addWhere( keyWord, navigationItem0.getName() ) );
+		sLog.setTag( "stamp" );                                           // 暂时写死
+		sLog.setStartTime( System.currentTimeMillis() - 3 * 24 * 3600 * 1000L );  // 72h时间戳
+		sLog.setEndTime( System.currentTimeMillis() );                    // now时间戳
+		sLog.setPageStart( 0 );
+		sLog.setPageSize( 1000 );                                         // 默认1000条
 
-	    JSONArray jsonArray = getSearchLogList(sLog);
-	    model.addAttribute("data", jsonArray);
-	    model.addAttribute("id", id);
-	    model.addAttribute("keyWord", keyWord);
-	    return "search/search_list";
-    }
+		JSONArray jsonArray = getSearchLogList( sLog );
+		model.addAttribute( "data", jsonArray );
+		model.addAttribute( "id", id );
+		model.addAttribute( "keyWord", keyWord );
+		return "search/search_list";
+	}
 
-	private String formateStr(String key,String name){
-        String value = addWhere(key,name);
-		if("IOS".equalsIgnoreCase(name)){
-			if(value.length()>0)
-				value +=" AND iPhone*";
-			else
+	private String formateStr( String key, String name ) {
+
+		String value = addWhere( key, name );
+		if ( "IOS".equalsIgnoreCase( name ) ) {
+			if ( value.length() > 0 ) {
+				value += " AND iPhone*";
+			} else {
 				value = "iPhone*";
+			}
 
-		}else if("Android".equals(name)){
-			if(value.length()>0)
-				value +=" AND Android";
-			else
+		} else if ( "Android".equals( name ) ) {
+			if ( value.length() > 0 ) {
+				value += " AND Android";
+			} else {
 				value = "Android";
+			}
 		}
 
 		return value;
 	}
 
-	private String addWhere(String key,String name){
-		String value ="";
-		if(key==null||"".equals(key.trim()))
+	private String addWhere( String key, String name ) {
+
+		String value = "";
+		if ( key == null || "".equals( key.trim() ) ) {
 			return "";
-		String[] strs = key.split(" ");
-		boolean flag = false;
-		for(String str :strs){
-			if(str!=null&&!"".equals(str)){
-				if(str.equalsIgnoreCase("and")) {
+		}
+		String[] strs = key.split( " " );
+		boolean  flag = false;
+		for ( String str : strs ) {
+			if ( str != null && !"".equals( str ) ) {
+				if ( str.equalsIgnoreCase( "and" ) ) {
 					value += "AND ";
 					flag = true;
-				}
-				else if(str.equalsIgnoreCase("or")) {
+				} else if ( str.equalsIgnoreCase( "or" ) ) {
 					value += "OR ";
 					flag = true;
+				} else {
+					value += str + " ";
 				}
-				else
-					value+=str+" ";
 			}
 		}
-		if(!flag) {
-			strs = value.split(" ");
+		if ( !flag ) {
+			strs = value.split( " " );
 			value = "";
-			for (String str : strs) {
-				if (str != null && !"".equals(str)) {
-					value += str+" AND ";
+			for ( String str : strs ) {
+				if ( str != null && !"".equals( str ) ) {
+					value += str + " AND ";
 				}
 			}
-			value = value.substring(0,value.lastIndexOf(" AND"));
+			value = value.substring( 0, value.lastIndexOf( " AND" ) );
 		}
 		return value;
 	}
 
-	private JSONArray getSearchLogList(SearchLog sLog) {
-		List<Map<String, Object>> list = searchService.searchESWithSize(sLog);
-		JSONArray jsonArray1 = new JSONArray();
-		int cont = 0;
-		if (list != null) {
-			for (Map<String, Object> logMap : list) {
-				JSONArray jsonArray2 = new JSONArray();
-				StringBuilder sb = new StringBuilder();
-				for (Map.Entry<String, Object> entry : logMap.entrySet()) {
+	private JSONArray getSearchLogList( SearchLog sLog ) {
+
+		List< Map< String, Object > > list       = searchService.searchESWithSize( sLog );
+		JSONArray                     jsonArray1 = new JSONArray();
+		int                           cont       = 0;
+		if ( list != null ) {
+			for ( Map< String, Object > logMap : list ) {
+				JSONArray     jsonArray2 = new JSONArray();
+				StringBuilder sb         = new StringBuilder();
+				for ( Map.Entry< String, Object > entry : logMap.entrySet() ) {
 					highLight( sLog, sb, entry );
 				}
-				jsonArray2.add(++ cont);
-				jsonArray2.add( autoIndent(sb).toString() );
-				jsonArray1.add(jsonArray2);
+				jsonArray2.add( ++cont );
+				jsonArray2.add( autoIndent( sb ).toString() );
+				jsonArray1.add( jsonArray2 );
 			}
 		}
 		return jsonArray1;
 	}
 
 	// 自动缩进
-	private StringBuilder autoIndent(StringBuilder sb) {
-		String  value = sb.toString();
-		value = value.replaceAll("\n","<br/>");
-		String[] vals = value.split("<br/>");
+	private StringBuilder autoIndent( StringBuilder sb ) {
+
+		String value = sb.toString();
+		value = value.replaceAll( "\n", "<br/>" );
+		String[]      vals    = value.split( "<br/>" );
 		StringBuilder valueSb = new StringBuilder();
-		for(String s : vals){
-			s = getStr(s);
-			if(s.endsWith("<br/>"))
-				valueSb.append(s);
-			else
-			    valueSb.append(s + "<br/>");
+		for ( String s : vals ) {
+			s = getStr( s );
+			if ( s.endsWith( "<br/>" ) ) {
+				valueSb.append( s );
+			} else {
+				valueSb.append( s + "<br/>" );
+			}
 		}
 		return valueSb;
 	}
 
-	private String getStr(String str){
-		if(str.length() > 225){
-            String newStr = str.substring(225);
-			return str.substring(0, 225) + "<br/>" + getStr(newStr);
-		}else{
-			return str+ "<br/>";
+	private String getStr( String str ) {
+
+		if ( str.length() > 225 ) {
+			String newStr = str.substring( 225 );
+			return str.substring( 0, 225 ) + "<br/>" + getStr( newStr );
+		} else {
+			return str + "<br/>";
 		}
 	}
 
 	// 高亮
-	private void highLight(SearchLog sLog, StringBuilder sb, Map.Entry<String, Object> entry) {
+	private void highLight( SearchLog sLog, StringBuilder sb, Map.Entry< String, Object > entry ) {
+
 		String keyWord    = sLog.getHighLightKey().trim();
 		String entryKey   = entry.getKey();
 		String entryValue = entry.getValue().toString();
 		String temp       = entryKey + " : " + entryValue;
 		String temp2      = entryKey + ":" + entryValue;
 
-		if("stamp".equals(entryKey) ||
-		    "Time".equals(entryKey) ||
-			 "M98".equals(entryKey)) {
-			try{ // 时间戳格式化
-				entryValue = DateUtil.formatYmdHis( Long.parseLong(entryValue) );
-			}catch (NumberFormatException e){
-				LOGGER.error("cast EntryString to long type failed !", e);
+		if ( "stamp".equals( entryKey ) ||
+		     "Time".equals( entryKey ) ||
+		     "M98".equals( entryKey ) ) {
+			try { // 时间戳格式化
+				entryValue = DateUtil.formatYmdHis( Long.parseLong( entryValue ) );
+			} catch ( NumberFormatException e ) {
+				LOGGER.error( "cast EntryString to long type failed !", e );
 			}
 		}
 
-		String[] strs = keyWord.split(" ");
-		boolean flag = false;
-		for(String str:strs){
-			str = str.replaceAll("\\*","");
-			if(str!=null&&!"".equals(str)&&!"AND".equals(str)&&!"OR".equals(str)&&
-					!"iPhone*".equals(str)&&!"Android".equals(str)&&
-					(temp.equals(str) || temp2.equals(str) ||	temp.contains(str)))
+		String[] strs = keyWord.split( " " );
+		boolean  flag = false;
+		for ( String str : strs ) {
+			str = str.replaceAll( "\\*", "" );
+			if ( str != null && !"".equals( str ) && !"AND".equals( str ) && !"OR".equals( str ) &&
+			     !"iPhone*".equals( str ) && !"Android".equals( str ) &&
+			     ( temp.equals( str ) || temp2.equals( str ) || temp.contains( str ) ) ) {
 				flag = true;
+			}
 		}
 
-		if(flag) {
+		if ( flag ) {
 //			sb.append("<br/>");
-			sb.append("<font color=\"red\">");
-			sb.append(entryKey + " : " + entryValue);
-			sb.append("</font>");
-			sb.append(",");
-			sb.append("<br/>");
-		}else{
-			sb.append(entryKey + " : " + entryValue);
-			sb.append(",  <br/>");
+			sb.append( "<font color=\"red\">" );
+			sb.append( entryKey + " : " + entryValue );
+			sb.append( "</font>" );
+			sb.append( "," );
+			sb.append( "<br/>" );
+		} else {
+			sb.append( entryKey + " : " + entryValue );
+			sb.append( ",  <br/>" );
 		}
 	}
 
