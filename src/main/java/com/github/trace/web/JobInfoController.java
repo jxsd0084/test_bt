@@ -25,194 +25,207 @@ import java.util.Map;
  * Created by weilei on 2016/4/1.
  */
 @Controller
-@RequestMapping("/jobinfo")
+@RequestMapping( "/jobinfo" )
 public class JobInfoController {
 
-    @Autowired
-    private CEPService cepService;
-    @Autowired
-    private JobServer jobServer;
-    @Autowired
-    private JobSchedueService jobSchedueService;
+	@Autowired
+	private CEPService        cepService;
+	@Autowired
+	private JobServer         jobServer;
+	@Autowired
+	private JobSchedueService jobSchedueService;
 
-    @RequestMapping("/listJobInfo")
-    public String listJobInfo(@RequestParam(name = "bizId") int bizId,
-                        @RequestParam(name = "bizName") String bizName,
-                        Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        return setCommonParam(bizId, bizName, model, "jobinfo/jobinfo_index");
-    }
+	@RequestMapping( "/listJobInfo" )
+	public String listJobInfo( @RequestParam( name = "bizId" ) int bizId,
+	                           @RequestParam( name = "bizName" ) String bizName,
+	                           Model model ) {
 
-    private String setCommonParam(int bizId, String bizName, Model model, String retPath){
-        List<JobInfo> list = jobServer.getJobInfoListByBizId(bizId);
-        for(JobInfo ji:list){
-            if("0".equals(ji.getExpType()))
-                ji.setExpType("全量");
-            else  if("1".equals(ji.getExpType()))
-                ji.setExpType("增量");
-        }
-        JSONArray jsonArray = ControllerHelper.convertToJSON(list);
-        model.addAttribute("data", jsonArray);
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        return retPath;
-    }
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+		return setCommonParam( bizId, bizName, model, "jobinfo/jobinfo_index" );
+	}
 
-    @RequestMapping("/create")
-    public String create(@RequestParam(name = "bizId") int bizId,
-                         @RequestParam(name = "bizName") String bizName,
-                         @RequestParam(name = "tag") String tag,
-                         Model model) {
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        model.addAttribute("tag", tag);
-        model.addAttribute("souJson",getSouByBizId(bizId));
-        model.addAttribute("tarJson",getTarByBizId(bizId));
-        return "jobinfo/jobinfo_edit";
-    }
+	private String setCommonParam( int bizId, String bizName, Model model, String retPath ) {
 
-    private JSONArray  getSouByBizId(int bizId){
-        Map<Integer,String> map = new HashMap<Integer,String>();
-        List<JobSource> list  = jobServer.getJobSouListByBizId(bizId);
-        for(JobSource jobSou :list){
-            map.put(jobSou.getId(),jobSou.getName());
-        }
-        return getJsonArr(map);
-    }
-    private JSONArray  getTarByBizId(int bizId){
-        Map<Integer,String> map = new HashMap<Integer,String>();
-        List<JobTarget> list  = jobServer.getJobTarListByBizId(bizId);
-        for(JobTarget jobTar :list){
-            map.put(jobTar.getId(),jobTar.getName());
-        }
-        return getJsonArr(map);
-    }
+		List< JobInfo > list = jobServer.getJobInfoListByBizId( bizId );
+		for ( JobInfo ji : list ) {
+			if ( "0".equals( ji.getExpType() ) ) {
+				ji.setExpType( "全量" );
+			} else if ( "1".equals( ji.getExpType() ) ) {
+				ji.setExpType( "增量" );
+			}
+		}
+		JSONArray jsonArray = ControllerHelper.convertToJSON( list );
+		model.addAttribute( "data", jsonArray );
+		model.addAttribute( "bizId", bizId );
+		model.addAttribute( "bizName", bizName );
+		return retPath;
+	}
 
-    private JSONArray getJsonArr(Map<Integer,String> map){
-        JSONArray tarArr = new JSONArray();
-        for(Integer key :map.keySet()){
-            Map tar = new HashMap();
-            tar.put("key",String.valueOf(key));
-            tar.put("value", map.get(key));
-            tarArr.add(tar);
-        }
-        return tarArr;
-    }
+	@RequestMapping( "/create" )
+	public String create( @RequestParam( name = "bizId" ) int bizId,
+	                      @RequestParam( name = "bizName" ) String bizName,
+	                      @RequestParam( name = "tag" ) String tag,
+	                      Model model ) {
 
-    @RequestMapping("/add")
-    @ResponseBody
-    public Map add(@RequestParam(name = "bizId") int bizId,
-                   @RequestParam(name = "bizName") String bizName,
-                   @RequestParam(name = "name") String name,
-                   @RequestParam(name = "souId") int souId,
-                   @RequestParam(name = "souName") String souName,
-                   @RequestParam(name = "tarId") int tarId,
-                   @RequestParam(name = "tarName") String tarName,
-                   @RequestParam(name = "expType") String expType,
-                   @RequestParam(name = "startTime") String startTime,
-                   @RequestParam(name = "endTime") String endTime,
-                   @RequestParam(name = "exeTime") String exeTime,
-                   @RequestParam(name = "memo") String memo,
-                   Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobInfo jobInfo = new JobInfo();
-        jobInfo.setBizId(bizId);
-        jobInfo.setBizName(bizName);
-        jobInfo.setName(name);
-        jobInfo.setSouId(souId);
-        jobInfo.setSouName(souName);
-        jobInfo.setTarId(tarId);
-        jobInfo.setTarName(tarName);
-        jobInfo.setExpType(expType);
-        jobInfo.setStartTime(startTime);
-        jobInfo.setEndTime(endTime);
-        jobInfo.setExeTime(exeTime);
-        jobInfo.setCreateTime(new Date());
-        jobInfo.setMemo(memo);
-        int res = jobServer.addJobInfo(jobInfo);
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+		model.addAttribute( "bizId", bizId );
+		model.addAttribute( "bizName", bizName );
+		model.addAttribute( "tag", tag );
+		model.addAttribute( "souJson", getSouByBizId( bizId ) );
+		model.addAttribute( "tarJson", getTarByBizId( bizId ) );
+		return "jobinfo/jobinfo_edit";
+	}
 
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        return ControllerHelper.returnResponseVal(res, "添加");
-    }
+	private JSONArray getSouByBizId( int bizId ) {
 
-    @RequestMapping("/edit")
-    public String edit(@RequestParam(name = "id") int id,
-                       @RequestParam(name = "bizId") int bizId,
-                       @RequestParam(name = "bizName") String bizName,
-                       @RequestParam(name = "tag") String tag,
-                       Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        JobInfo jobInfo = jobServer.getJobInfoById(id);
+		Map< Integer, String > map  = new HashMap< Integer, String >();
+		List< JobSource >      list = jobServer.getJobSouListByBizId( bizId );
+		for ( JobSource jobSou : list ) {
+			map.put( jobSou.getId(), jobSou.getName() );
+		}
+		return getJsonArr( map );
+	}
 
-        model.addAttribute("id", id);
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        model.addAttribute("tag", tag);
-        model.addAttribute("obj", jobInfo);
-        model.addAttribute("souJson",getSouByBizId(bizId));
-        model.addAttribute("tarJson",getTarByBizId(bizId));
-        return "jobinfo/jobinfo_edit";
-    }
+	private JSONArray getTarByBizId( int bizId ) {
 
-    @RequestMapping("/modify")
-    @ResponseBody
-    public Map modify(@RequestParam(name = "id") int id,
-                      @RequestParam(name = "bizId") int bizId,
-                      @RequestParam(name = "bizName") String bizName,
-                      @RequestParam(name = "name") String name,
-                      @RequestParam(name = "souId") int souId,
-                      @RequestParam(name = "souName") String souName,
-                      @RequestParam(name = "tarId") int tarId,
-                      @RequestParam(name = "tarName") String tarName,
-                      @RequestParam(name = "expType") String expType,
-                      @RequestParam(name = "startTime") String startTime,
-                      @RequestParam(name = "endTime") String endTime,
-                      @RequestParam(name = "exeTime") String exeTime,
-                      @RequestParam(name = "memo") String memo,
-                      Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
+		Map< Integer, String > map  = new HashMap< Integer, String >();
+		List< JobTarget >      list = jobServer.getJobTarListByBizId( bizId );
+		for ( JobTarget jobTar : list ) {
+			map.put( jobTar.getId(), jobTar.getName() );
+		}
+		return getJsonArr( map );
+	}
 
-        JobInfo jobInfo = jobServer.getJobInfoById(id);
-        jobInfo.setBizId(bizId);
-        jobInfo.setBizName(bizName);
-        jobInfo.setName(name);
-        jobInfo.setSouId(souId);
-        jobInfo.setSouName(souName);
-        jobInfo.setTarId(tarId);
-        jobInfo.setTarName(tarName);
-        jobInfo.setExpType(expType);
-        jobInfo.setStartTime(startTime);
-        jobInfo.setEndTime(endTime);
-        jobInfo.setExeTime(exeTime);
-        jobInfo.setUpdateTime(new Date());
-        jobInfo.setMemo(memo);
-        int res = jobServer.updateJobInfo(jobInfo);
+	private JSONArray getJsonArr( Map< Integer, String > map ) {
 
-        model.addAttribute("bizId", bizId);
-        model.addAttribute("bizName", bizName);
-        return ControllerHelper.returnResponseVal(res, "修改");
-    }
+		JSONArray tarArr = new JSONArray();
+		for ( Integer key : map.keySet() ) {
+			Map tar = new HashMap();
+			tar.put( "key", String.valueOf( key ) );
+			tar.put( "value", map.get( key ) );
+			tarArr.add( tar );
+		}
+		return tarArr;
+	}
+
+	@RequestMapping( "/add" )
+	@ResponseBody
+	public Map add( @RequestParam( name = "bizId" ) int bizId,
+	                @RequestParam( name = "bizName" ) String bizName,
+	                @RequestParam( name = "name" ) String name,
+	                @RequestParam( name = "souId" ) int souId,
+	                @RequestParam( name = "souName" ) String souName,
+	                @RequestParam( name = "tarId" ) int tarId,
+	                @RequestParam( name = "tarName" ) String tarName,
+	                @RequestParam( name = "expType" ) String expType,
+	                @RequestParam( name = "startTime" ) String startTime,
+	                @RequestParam( name = "endTime" ) String endTime,
+	                @RequestParam( name = "exeTime" ) String exeTime,
+	                @RequestParam( name = "memo" ) String memo,
+	                Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+		JobInfo jobInfo = new JobInfo();
+		jobInfo.setBizId( bizId );
+		jobInfo.setBizName( bizName );
+		jobInfo.setName( name );
+		jobInfo.setSouId( souId );
+		jobInfo.setSouName( souName );
+		jobInfo.setTarId( tarId );
+		jobInfo.setTarName( tarName );
+		jobInfo.setExpType( expType );
+		jobInfo.setStartTime( startTime );
+		jobInfo.setEndTime( endTime );
+		jobInfo.setExeTime( exeTime );
+		jobInfo.setCreateTime( new Date() );
+		jobInfo.setMemo( memo );
+		int res = jobServer.addJobInfo( jobInfo );
+
+		model.addAttribute( "bizId", bizId );
+		model.addAttribute( "bizName", bizName );
+		return ControllerHelper.returnResponseVal( res, "添加" );
+	}
+
+	@RequestMapping( "/edit" )
+	public String edit( @RequestParam( name = "id" ) int id,
+	                    @RequestParam( name = "bizId" ) int bizId,
+	                    @RequestParam( name = "bizName" ) String bizName,
+	                    @RequestParam( name = "tag" ) String tag,
+	                    Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+		JobInfo jobInfo = jobServer.getJobInfoById( id );
+
+		model.addAttribute( "id", id );
+		model.addAttribute( "bizId", bizId );
+		model.addAttribute( "bizName", bizName );
+		model.addAttribute( "tag", tag );
+		model.addAttribute( "obj", jobInfo );
+		model.addAttribute( "souJson", getSouByBizId( bizId ) );
+		model.addAttribute( "tarJson", getTarByBizId( bizId ) );
+		return "jobinfo/jobinfo_edit";
+	}
+
+	@RequestMapping( "/modify" )
+	@ResponseBody
+	public Map modify( @RequestParam( name = "id" ) int id,
+	                   @RequestParam( name = "bizId" ) int bizId,
+	                   @RequestParam( name = "bizName" ) String bizName,
+	                   @RequestParam( name = "name" ) String name,
+	                   @RequestParam( name = "souId" ) int souId,
+	                   @RequestParam( name = "souName" ) String souName,
+	                   @RequestParam( name = "tarId" ) int tarId,
+	                   @RequestParam( name = "tarName" ) String tarName,
+	                   @RequestParam( name = "expType" ) String expType,
+	                   @RequestParam( name = "startTime" ) String startTime,
+	                   @RequestParam( name = "endTime" ) String endTime,
+	                   @RequestParam( name = "exeTime" ) String exeTime,
+	                   @RequestParam( name = "memo" ) String memo,
+	                   Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+
+		JobInfo jobInfo = jobServer.getJobInfoById( id );
+		jobInfo.setBizId( bizId );
+		jobInfo.setBizName( bizName );
+		jobInfo.setName( name );
+		jobInfo.setSouId( souId );
+		jobInfo.setSouName( souName );
+		jobInfo.setTarId( tarId );
+		jobInfo.setTarName( tarName );
+		jobInfo.setExpType( expType );
+		jobInfo.setStartTime( startTime );
+		jobInfo.setEndTime( endTime );
+		jobInfo.setExeTime( exeTime );
+		jobInfo.setUpdateTime( new Date() );
+		jobInfo.setMemo( memo );
+		int res = jobServer.updateJobInfo( jobInfo );
+
+		model.addAttribute( "bizId", bizId );
+		model.addAttribute( "bizName", bizName );
+		return ControllerHelper.returnResponseVal( res, "修改" );
+	}
 
 
-    @RequestMapping("/delete")
-    public String delete(@RequestParam(name = "id") int id,
-                         @RequestParam(name = "bizId") int bizId,
-                         @RequestParam(name = "bizName") String bizName,
-                         Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        jobServer.deleteJobInfoById(id);
-        return setCommonParam(bizId, bizName, model, "jobinfo/jobinfo_index");
-    }
+	@RequestMapping( "/delete" )
+	public String delete( @RequestParam( name = "id" ) int id,
+	                      @RequestParam( name = "bizId" ) int bizId,
+	                      @RequestParam( name = "bizName" ) String bizName,
+	                      Model model ) {
 
-    @RequestMapping("/importDB")
-    public void importDB(@RequestParam(name = "id") int id,
-                         @RequestParam(name = "bizId") int bizId,
-                         @RequestParam(name = "bizName") String bizName,
-                         Model model){
-        ControllerHelper.setLeftNavigationTree(model, cepService, "ds");
-        List<DbJob> jobList = jobSchedueService.getDbJobList(id);
-        System.out.println("导入完毕");
-    }
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+		jobServer.deleteJobInfoById( id );
+		return setCommonParam( bizId, bizName, model, "jobinfo/jobinfo_index" );
+	}
+
+	@RequestMapping( "/importDB" )
+	public void importDB( @RequestParam( name = "id" ) int id,
+	                      @RequestParam( name = "bizId" ) int bizId,
+	                      @RequestParam( name = "bizName" ) String bizName,
+	                      Model model ) {
+
+		ControllerHelper.setLeftNavigationTree( model, cepService, "ds" );
+		List< DbJob > jobList = jobSchedueService.getDbJobList( id );
+		System.out.println( "导入完毕" );
+	}
 }
