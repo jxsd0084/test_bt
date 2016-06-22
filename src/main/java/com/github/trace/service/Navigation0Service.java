@@ -295,14 +295,21 @@ public class Navigation0Service {
 		} );
 	}
 
+	/**
+	 * 更新配置
+	 */
 	public void updateConfig() {
 
 		try {
-			List< NavigationItem0 > list   = queryAll();
-			Set< String >           topics = Sets.newLinkedHashSet();
 
-			String         blacklistStr = ConfigFactory.getInstance().getConfig( "buriedtool-scheduler" ).get( "es-blacklist", "" );
-			List< String > blacklist    = Splitter.on( "," ).splitToList( blacklistStr );
+			List< NavigationItem0 > list = queryAll();
+
+			Set< String > topics = Sets.newLinkedHashSet();
+
+			String blacklistStr = ConfigFactory.getInstance().getConfig( "buriedtool-scheduler" ).get( "es-blacklist", "" );
+
+			// 获取黑名单列表
+			List< String > blacklist = Splitter.on( "," ).splitToList( blacklistStr );
 
 			list.stream()
 					.filter( i -> i != null )
@@ -310,17 +317,23 @@ public class Navigation0Service {
 					.filter( s -> StringUtils.contains( s, "." ) )
 					.forEach( topics:: add );
 
+
 			StringBuilder configContent = new StringBuilder();
+
 			topics.stream()
 					.sorted( String:: compareTo )
 					.forEach( s -> configContent.append( blacklist.contains( s ) ? "#[" : "[" ).append( s ).append( "]\n" ) );
 
+
+			// 保存信息
 			IConfigAdmin configAdmin = new ConfigAdminClient();
 			String       profile     = ConfigHelper.getProcessInfo().getProfile();
 			configAdmin.save( CONFIG_TOKEN, profile, KAFKA2ES_TOPIC_CONFIG, configContent.toString() );
+
 		} catch ( Exception e ) {
 			LOGGER.error( "Cannot update config for {}", KAFKA2ES_TOPIC_CONFIG, e );
 		}
+
 	}
 
 }
