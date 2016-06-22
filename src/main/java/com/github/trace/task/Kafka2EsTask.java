@@ -45,12 +45,14 @@ public class Kafka2EsTask {
 
 	private static final String GROUP_ID = "buriedtool-kafka2es";
 	private static final String ES_INDEX = "datapt-buriedtool";
+
 	private ConsumerConnector consumerConnector;
 	private ExecutorService   service;
-	private boolean           kafkaSwitch;
-	private int               mapBulkSize;
-	private long              mapBulkInterval;
-	private long              bulkSleepInterval;
+
+	private boolean kafkaSwitch; // Kafka开关
+	private int     mapBulkSize;
+	private long    mapBulkInterval;
+	private long    bulkSleepInterval;
 
 	private volatile long lastBulkStamp = System.currentTimeMillis();
 
@@ -67,6 +69,7 @@ public class Kafka2EsTask {
 		final IChangeableConfig taskConfig     = ConfigFactory.getInstance().getConfig( "buriedtool-scheduler" );
 
 		IChangeListener changeListener = conf -> {
+
 			kafkaSwitch = taskConfig.getBool( "kafka-switch", true );
 			mapBulkSize = taskConfig.getInt( "mapBulkSize", 1000 );
 			mapBulkInterval = taskConfig.getLong( "mapBulkInterval", 60000 );
@@ -75,9 +78,11 @@ public class Kafka2EsTask {
 			LOG.info( "kafka switch changed to {}", kafkaSwitch );
 			LOG.info( "map bulk size changed to {}", mapBulkSize );
 			LOG.info( "map bulk interval changed to {}", mapBulkInterval );
+
 			loadConsumerConfig( consumerConfig );
 			loadTopicConfig( topicConfig );
 		};
+
 		taskConfig.addListener( changeListener );
 		consumerConfig.addListener( changeListener );
 		topicConfig.addListener( changeListener );
@@ -85,65 +90,116 @@ public class Kafka2EsTask {
 
 //  @Scheduled(fixedDelay = 500L)
 
+	/**
+	 * 保存Kafka数据到ElasticSearch中 ( 同步方法 )
+	 */
 	private synchronized void saveToEs() {
 
 		LOG.debug( "Begin saving to es..." );
+
 		if ( !kafkaSwitch || !isTimeToSaveToEs() ) {
+
 			return;
 		}
+
 		LOG.debug( "It's time to save.." );
+
+		// 在此处赋了一次值
 		LinkedHashMultimap< String, String > snapshot = current;
+		// 准备新的容器
 		current = LinkedHashMultimap.create();
+
 		for ( String topic : snapshot.keySet() ) {
+
 			Set< String > set = snapshot.get( topic );
-			ElasticSearchHelper.bulk( ES_INDEX, topic, set );
+			ElasticSearchHelper.bulk( ES_INDEX, topic, set ); // 使用bulk方式将数据插入到ElasticSearch中
 		}
+
 		try {
-			Thread.sleep( bulkSleepInterval );
+
+			Thread.sleep( bulkSleepInterval ); // 让当前线程睡10s
+
 		} catch ( InterruptedException e ) {
 			LOG.error( "Sleep InterruptedException", e );
+
 		}
+
 	}
 
+
+	/**
+	 * 加载"消费者"配置信息的方法
+	 *
+	 * @param config
+	 */
 	private void loadConsumerConfig( IConfig config ) {
 
 		Preconditions.checkNotNull( config.get( "zookeeper.connect" ) );
+
 		Properties kafkaProperties = new Properties();
+
 		kafkaProperties.putAll( config.getAll() );
 		kafkaProperties.put( "group.id", GROUP_ID );
+
 		ConsumerConfig consumerConfig = new ConsumerConfig( kafkaProperties );
+
 		if ( consumerConnector != null ) {
+
 			consumerConnector.commitOffsets( true );
 			consumerConnector.shutdown();
 			consumerConnector = null;
 		}
+
 		if ( !kafkaSwitch ) {
+
 			return;
 		}
+
 		consumerConnector = kafka.consumer.Consumer.createJavaConsumerConnector( consumerConfig );
 	}
 
+
+	/**
+	 * 加载"主题"配置信息的方法
+	 *
+	 * @param config
+	 */
 	private void loadTopicConfig( IConfig config ) {
 
 		KafkaTopicConfig.initTopicConfig( config );
+
 		ExecutorService old = service;
-		ThreadFactory daemonThreadFactory =
-				new ThreadFactoryBuilder().setNameFormat( "kafka2es-%d" ).setDaemon( true ).build();
+
+		ThreadFactory daemonThreadFactory = new ThreadFactoryBuilder()
+				.setNameFormat( "kafka2es-%d" )
+				.setDaemon( true )
+				.build();
+
 		if ( kafkaSwitch ) {
+
+			// 创建一个新的线程
 			service = Executors.newSingleThreadExecutor( daemonThreadFactory );
-			service.submit( this :: listen );
+			service.submit( this :: listen ); // 执行线程
 		}
 
 		if ( old != null ) {
+
 			try {
-				old.awaitTermination( 1, TimeUnit.MINUTES );
+
+				old.awaitTermination( 1, TimeUnit.MINUTES ); // 将之前的线程停下来
+
 			} catch ( InterruptedException e ) {
 				LOG.error( "Cannot shutdown executors", e );
+
 				if ( !old.isShutdown() ) {
 					old.shutdownNow();
+
 				}
+
 			}
+
 		}
+
 	}
 
 	private void listen() {
