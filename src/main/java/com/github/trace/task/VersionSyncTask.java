@@ -18,6 +18,7 @@ import java.util.*;
 public class VersionSyncTask implements Runnable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger( VersionSyncTask.class );
+
 	@Autowired
 	private ElasticsearchService elasticsearchService;
 
@@ -26,15 +27,22 @@ public class VersionSyncTask implements Runnable {
 
 		long now       = System.currentTimeMillis();
 		long beginTime = now - 3 * ( 24 * 3600 * 1000L );
+
 		LOGGER.info( "安卓、苹果应用版本号同步任务开始" );
 		queryAndroidVersion( now, beginTime );
 		queryIOSVersion( now, beginTime );
 		LOGGER.info( "安卓、苹果应用版本号同步任务结束" );
 	}
 
+	/**
+	 * 查询Android版本信息
+	 * @param now
+	 * @param yesterday
+	 */
 	private void queryAndroidVersion( long now, long yesterday ) {
 
-		Map< String, Object >         map              = new HashMap<>();
+		Map< String, Object > map = new HashMap<>();
+
 		List< Map< String, Object > > appVersionList   = null;
 		List< Map< String, Object > > innerVersionList = null;
 
@@ -42,18 +50,28 @@ public class VersionSyncTask implements Runnable {
 		innerVersionList = elasticsearchService.searchBySqlForMonitorRequest( "Android", null, null, "M7", yesterday, now );
 		map.put( "appVersionList", GuavaCacheHelper.sort( appVersionList ) );
 		map.put( "innerVersionList", GuavaCacheHelper.sort( innerVersionList ) );
+
 		GuavaCacheHelper.put( "AndroidVersion", map );
 	}
 
+
+	/**
+	 * 查询iOS版本信息
+	 * @param now
+	 * @param yesterday
+	 */
 	private void queryIOSVersion( long now, long yesterday ) {
 
-		Map< String, Object >         map              = new HashMap<>();
+		Map< String, Object > map = new HashMap<>();
+
 		List< Map< String, Object > > appVersionList   = null;
 		List< Map< String, Object > > innerVersionList = null;
+
 		appVersionList = elasticsearchService.searchBySqlForMonitorRequest( "iPhone OS", null, null, "M6", yesterday, now );
 		innerVersionList = elasticsearchService.searchBySqlForMonitorRequest( "iPhone OS", null, null, "M7", yesterday, now );
 		map.put( "appVersionList", GuavaCacheHelper.sort( appVersionList ) );
 		map.put( "innerVersionList", GuavaCacheHelper.sort( innerVersionList ) );
+
 		GuavaCacheHelper.put( "IosVersion", map );
 	}
 

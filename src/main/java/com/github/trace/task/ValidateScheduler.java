@@ -27,49 +27,62 @@ import java.util.Set;
 @Component
 class ValidateScheduler {
 
-	private static final long           SAMPLE_RATE    = 60000L;
-	private static       int            sampleCount    = 10;
-	private static       boolean        scheduleSwitch = true;
-	private static final String         ES_INDEX       = "datapt-validate";
-	private static       List< String > alterTimes     = Lists.newArrayList();
+	private static final long SAMPLE_RATE = 60000L;
+
+	private static int sampleCount = 10;
+
+	private static boolean scheduleSwitch = true;
+
+	private static final String ES_INDEX = "datapt-validate";
+
+	private static List< String > alterTimes = Lists.newArrayList();
 
 	@Autowired
-	private KafkaService kafkaService;
+	private KafkaService      kafkaService;
 	@Autowired
-	private CEPService   cepService;
-
+	private CEPService        cepService;
 	@Autowired
 	private AnalyzeLogService analyzeLogService;
 
 	// private AnalyzeLog analyzeLog = new AnalyzeLog();
 
+	// 类似于构造方法 ( 依赖注入之后才会执行此方法. )
 	@PostConstruct
 	public void init() {
 
-		ConfigFactory.getInstance().getConfig( "buriedtool-scheduler" ).addListener( config -> {
-			scheduleSwitch = config.getBool( "scheduleSwitch", true );
-			sampleCount = config.getInt( "sampleCount", 10 );
-			String alarmTime = config.get( "alarmTime", "10:00,15:00" );
-			alterTimes = Splitter.on( ',' ).omitEmptyStrings().splitToList( alarmTime );
-		} );
+		ConfigFactory.getInstance().getConfig( "buriedtool-scheduler" ).addListener(
+				config -> {
+					scheduleSwitch = config.getBool( "scheduleSwitch", true );
+					sampleCount = config.getInt( "sampleCount", 10 );
+					String alarmTime = config.get( "alarmTime", "10:00,15:00" );
+					alterTimes = Splitter.on( ',' ).omitEmptyStrings().splitToList( alarmTime );
+				} );
 	}
+
 
 	@Scheduled( fixedDelay = SAMPLE_RATE )
 	void scheduler() {
 
 		if ( !scheduleSwitch ) {
+
 			return;
 		}
-		boolean                 sendMonitor = sendMonitor();
-		List< NavigationItem0 > navs        = cepService.getRootItem();
+
+		boolean sendMonitor = sendMonitor();
+
+		List< NavigationItem0 > navs = cepService.getRootItem();
 		for ( NavigationItem0 nav : navs ) {
+
 			if ( nav.getItemType() == 0 ) {
+
 				continue;
 			}
-			String        topic      = nav.getTopic();
-			String        name       = nav.getName();
+
+			String topic = nav.getTopic();  // 主题名称
+			String name  = nav.getName();   // 业务名称
+
 			Set< String > sampleLogs = kafkaService.getMessages( topic, sampleCount );
-			batchValidate( name, topic, sampleLogs, sendMonitor );
+			batchValidate( name, topic, sampleLogs, sendMonitor ); // 批量更新ElasticSearch的数据
 		}
 	}
 
@@ -98,20 +111,33 @@ class ValidateScheduler {
 		return alterTimes.contains( hourMinute );
 	}
 
+	/**
+	 * 获取小时分钟参数
+	 *
+	 * @return
+	 */
 	private String getHourMinute() {
 
-		StringBuilder sb   = new StringBuilder( 5 );
-		Calendar      c    = Calendar.getInstance();
-		int           hour = c.get( Calendar.HOUR_OF_DAY );
-		if ( hour < 10 ) {
+		StringBuilder sb = new StringBuilder( 5 );
+
+		Calendar c    = Calendar.getInstance();
+		int      hour = c.get( Calendar.HOUR_OF_DAY );
+
+		if ( hour < 10 ) {  // 小于10, 补零
+
 			sb.append( '0' );
 		}
+
 		sb.append( hour ).append( ':' );
+
 		int minute = c.get( Calendar.MINUTE );
-		if ( minute < 10 ) {
+		if ( minute < 10 ) {  // 小于10, 补零
+
 			sb.append( '0' );
 		}
+
 		sb.append( minute );
+
 		return sb.toString();
 	}
 

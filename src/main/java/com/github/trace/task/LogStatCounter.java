@@ -8,17 +8,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * LogStatCounter
  * Created by wzk on 16/4/20.
  */
+
+// 日志计数器对象
+
 class LogStatCounter {
 
 	private String nav;
 	private String key;
 	private String value;
 	private String desc;
-	private long   time;
 
-	private AtomicInteger totalCount   = new AtomicInteger( 0 );
-	private AtomicInteger successCount = new AtomicInteger( 0 );
-	private AtomicInteger failCount    = new AtomicInteger( 0 );
+	private long time;
+
+	// 线程安全的计数器
+	private AtomicInteger totalCount   = new AtomicInteger( 0 ); // 总数量
+	private AtomicInteger successCount = new AtomicInteger( 0 ); // 成功数量
+	private AtomicInteger failCount    = new AtomicInteger( 0 ); // 失败数量
 
 	LogStatCounter( String nav, String key, String value, String desc, long time ) {
 
@@ -31,16 +36,26 @@ class LogStatCounter {
 
 	void report( boolean status ) {
 
-		totalCount.incrementAndGet();
+		totalCount.incrementAndGet();       // 总数量 +1
+
 		if ( status ) {
-			successCount.incrementAndGet();
+			successCount.incrementAndGet(); // 成功 +1
+
 		} else {
-			failCount.incrementAndGet();
+			failCount.incrementAndGet();    // 失败 +1
+
 		}
+
 	}
 
+	/**
+	 * 转为JSON字符串
+	 *
+	 * @return
+	 */
 	String toJson() {
 
+		// alibaba fastjson
 		JSONObject object = new JSONObject();
 		object.put( "nav", nav );
 		object.put( "key", key );
@@ -67,4 +82,5 @@ class LogStatCounter {
 		       ", failCount=" + failCount +
 		       '}';
 	}
+
 }

@@ -31,15 +31,17 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 class LogStatCollector {
 
-	private static final Logger LOG   = LoggerFactory.getLogger( LogStatCollector.class );
+	private static final Logger LOG = LoggerFactory.getLogger( LogStatCollector.class );
+
 	private static final String INDEX = "datapt-logstatistic";
 	private static final String TYPE  = "stat";
 
-	private Map< String, String >              navTopicMap  = Maps.newHashMap();
-	private AtomicReference< LogStatSnapshot > current      = new AtomicReference<>( new LogStatSnapshot() );
-	private long                               counterStamp = 0L;
-	private boolean                            statSwitch   = true;
-	private long                               statInterval = 5 * 60 * 1000L;
+	private Map< String, String >              navTopicMap = Maps.newHashMap();
+	private AtomicReference< LogStatSnapshot > current     = new AtomicReference<>( new LogStatSnapshot() );
+
+	private long    counterStamp = 0L;
+	private boolean statSwitch   = true;
+	private long    statInterval = 5 * 60 * 1000L;
 
 	@Autowired
 	private AnalyzeLogService analyzeLogService;
