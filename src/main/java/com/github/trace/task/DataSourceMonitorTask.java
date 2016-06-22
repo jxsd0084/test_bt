@@ -16,6 +16,7 @@ import java.util.Calendar;
 @Scope( "prototype" )
 public class DataSourceMonitorTask implements Runnable {
 
+
 	private static final Logger LOGGER = LoggerFactory.getLogger( DataSourceMonitorTask.class );
 
 	private final static String NIGHTINTERVAL   = "night-interval";
