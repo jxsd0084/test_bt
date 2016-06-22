@@ -16,11 +16,10 @@ import java.util.Calendar;
 @Scope( "prototype" )
 public class DataSourceMonitorTask implements Runnable {
 
-
 	private static final Logger LOGGER = LoggerFactory.getLogger( DataSourceMonitorTask.class );
 
-	private final static String NIGHTINTERVAL   = "night-interval";
-	private static final String MORNINGINTERVAL = "morning-interval";
+	private final static String NIGHT_INTERVAL   = "night-interval";    // 晚上抽检间隔
+	private static final String MORNING_INTERVAL = "morning-interval";  // 白天抽检间隔
 
 	@Autowired
 	private Navigation0Service navigation0Service;
@@ -29,13 +28,18 @@ public class DataSourceMonitorTask implements Runnable {
 	public void run() {
 
 		LOGGER.info( "数据源监控begin" );
+
 		Calendar now  = Calendar.getInstance();
 		int      hour = now.get( Calendar.HOUR_OF_DAY );
+
 		if ( 7 <= hour && hour <= 20 ) {
-			navigation0Service.checkDataSource( MORNINGINTERVAL );
+			navigation0Service.checkDataSource( MORNING_INTERVAL ); // 白天
+
 		} else {
-			navigation0Service.checkDataSource( NIGHTINTERVAL );
+			navigation0Service.checkDataSource( NIGHT_INTERVAL );   // 晚上
+
 		}
+
 		LOGGER.info( "数据源监控end" + hour );
 	}
 

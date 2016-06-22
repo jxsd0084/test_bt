@@ -138,36 +138,64 @@ public class Navigation0Service {
 		return result;
 	}
 
+
+	/**
+	 * 抽检数据源
+	 *
+	 * @param timeKey
+	 */
 	public void checkDataSource( String timeKey ) {
 
 		boolean result  = false;
 		String  message = "";
+
 		if ( iniConfiguration.getInt( "allMonitorStatus", 0 ) == 0 ) {
-			LOGGER.info( "topic监控总开关为关闭状态" );
+
+			LOGGER.info( "topic监控总开关为 关闭状态 " );
 			return;
 		}
+
 		List< NavigationItem0 > navigationItem0List = navigationItem0Mapper.findByType( 1 );
 		if ( navigationItem0List != null ) {
+
 			long nowTime = System.currentTimeMillis();
+
 			for ( NavigationItem0 navigationItem0 : navigationItem0List ) {
-				Map< String, Long > mapData      = kafkaService.getLastMessageTimestampWithIp( navigationItem0.getTopic() );
-				long                intervalTime = getIntervalTime( navigationItem0.getTopic(), timeKey );
+
+				Map< String, Long > mapData = kafkaService.getLastMessageTimestampWithIp( navigationItem0.getTopic() );
+
+				long intervalTime = getIntervalTime( navigationItem0.getTopic(), timeKey );
 				if ( intervalTime == 0 ) {
-					LOGGER.info( "topic：" + navigationItem0.getTopic() + "监控开关为关闭状态" );
+
+					LOGGER.info( "topic：" + navigationItem0.getTopic() + "监控开关为 关闭状态 " );
 					continue;
 				}
-				if ( mapData.isEmpty() ) {
+
+				if ( mapData.isEmpty() ) { // 如果没有数据
+
 					message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":" + TOPIC_ERROR;
+
+					// 发送报警信息
 					sendWarnMessage( navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManager(), message );
+
 				} else {
+
 					for ( String key : mapData.keySet() ) {
+
 						long lastTimestamp = mapData.get( key );
+
 						if ( key == null ) {
+
 							key = "无效机器IP";
 						}
+
 						long timeInterval = nowTime - lastTimestamp;
+
 						if ( timeInterval >= intervalTime ) {
+
 							message = ENVIRONMENT + "环境-" + navigationItem0.getName() + ":数据异常（" + intervalTime / 60000 + "分钟内无数据访问)(" + key + ")";
+
+							// 发送报警信息
 							sendWarnMessage( navigationItem0.getName(), navigationItem0.getManager(), navigationItem0.getManageId(), message );
 						}
 
@@ -177,44 +205,76 @@ public class Navigation0Service {
 		}
 	}
 
+	/**
+	 * @param topic
+	 * @param key
+	 * @return
+	 */
 	private long getIntervalTime( String topic, String key ) {
 
-		long                 intervalTime  = 0;
-		long                 defaultValue  = iniConfiguration.getLong( key + "-default", 30 );
+		long intervalTime = 0;
+		long defaultValue = iniConfiguration.getLong( key + "-default", 30 );
+
 		SubnodeConfiguration sectionConfig = iniConfiguration.getSection( topic );
+
 		if ( sectionConfig != null ) {
+
 			if ( sectionConfig.getInt( "monitorStatus", 1 ) != 0 ) {
+
 				intervalTime = sectionConfig.getLong( key, defaultValue );
 			}
+
 		} else {
 			intervalTime = defaultValue;
+
 		}
+
 		return intervalTime * 60000;
 	}
 
 
+	/**
+	 * 发送报警信息
+	 *
+	 * @param title
+	 * @param names
+	 * @param ids
+	 * @param content
+	 */
 	public void sendWarnMessage( String title, String names, String ids, String content ) {
 
-		String                status     = "告警失败";
-		String                url        = ConfigHelper.getApplicationConfig().get( "qinxin.message.url" );
+		String status = "告警失败"; // 在最后即使"告警成功", 但是整个字符串也没有返回回去啊~
+
+		String url = ConfigHelper.getApplicationConfig().get( "qinxin.message.url" );
+
 		HttpPost              httpPost   = new HttpPost( url );
 		List< NameValuePair > formParams = new ArrayList< NameValuePair >();
+
 		formParams.add( new BasicNameValuePair( "title", title ) );
 		formParams.add( new BasicNameValuePair( "content", content ) );
 		formParams.add( new BasicNameValuePair( "ids", ids ) );
 		formParams.add( new BasicNameValuePair( "names", names ) );
 		formParams.add( new BasicNameValuePair( "id", "201" ) );
 
+		// 提交POST网络请求
 		HttpEntity entity = OkHttpUtil.postData( httpPost, formParams );
-		String     result = "";
+
+		String result = "";
+
 		try {
+
 			if ( entity != null ) {
+
 				result = EntityUtils.toString( entity, "UTF-8" );
 			}
+
 		} catch ( Exception e ) {
 			LOGGER.error( "获取entity数据出错：" + e );
+
 		}
+
 		if ( result.contains( "ok" ) ) {
+
 			status = "告警成功";
 		}
 	}
