@@ -12,20 +12,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created by wzk on 16/3/24.
  */
 @Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:applicationContext.xml")
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration( "classpath:applicationContext.xml" )
 public class ValidateSchedulerTest {
 
-  @Autowired
-  private ValidateScheduler scheduler;
+	@Autowired
+	private ValidateScheduler scheduler;
 
-  @Test
-  public void testScheduler() throws Exception {
-    scheduler.scheduler();
-  }
+	@Test
+	public void testScheduler() throws Exception {
 
-  @Test
-  public void testSendMonitor() throws Exception {
-    scheduler.sendMonitor("iOS");
-  }
+		scheduler.scheduler();
+	}
+
+	@Test
+	public void testSendMonitor() throws Exception {
+
+		scheduler.sendMonitor( "iOS" );
+	}
+
 }
