@@ -14,11 +14,11 @@
     <!-- blocked autowire -->
     <context:annotation-config/>
 
-<!--    <import resource="classpath:spring/spring-guava.xml"/>-->
+    <import resource="classpath:spring/spring-guava.xml"/>
     <import resource="classpath:spring/spring-db.xml"/>
-    <import resource="classpath:spring/spring-shiro.xml"/>
-    <!--<import resource="classpath:spring/spring-scheduler.xml"/>-->
-    <!--<import resource="classpath:spring/spring-nav.xml"/>-->
+    <!--<import resource="classpath:spring/spring-shiro.xml"/>-->
+    <import resource="classpath:spring/spring-scheduler.xml"/>
+    <import resource="classpath:spring/spring-nav.xml"/>
 
     <!-- 使用全局的日期格式化 -->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
@@ -40,7 +40,9 @@
             </set>
         </property>
     </bean>
+
     <bean class="com.fxiaoke.metrics.MetricsConfiguration"/>
+
     <!-- 启用@AspectJ注解 -->
     <aop:aspectj-autoproxy/>
 

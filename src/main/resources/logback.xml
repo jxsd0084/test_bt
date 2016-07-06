@@ -1,4 +1,5 @@
 <configuration scan="false" scanPeriod="60 seconds" debug="false">
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{12} - %msg%n</pattern>
@@ -48,4 +49,5 @@
         <appender-ref ref="ASYNC"/>
         <appender-ref ref="STDOUT"/>
     </root>
+
 </configuration>
